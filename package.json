@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "antd": "^3.25.0",
     "firebase": "^6.4.0",
     "marked": "^0.7.0",
     "react": "^16.9.0",
