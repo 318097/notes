@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Header from './components/Header';
 import Notes from './components/Notes';
-import AddNote from './components/AddNote';
 
 const App = () => (
   <div>
-    <AddNote />
+    <Header />
     <Notes />
   </div>
 );
