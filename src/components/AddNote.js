@@ -2,7 +2,7 @@ import React, { useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import marked from 'marked';
-import { Modal, Button, Input, Radio, Divider } from 'antd';
+import { Modal, Icon, Input, Radio, Divider, Checkbox } from 'antd';
 import SimpleMDE from "react-simplemde-editor";
 
 import './AddNote.css';
@@ -30,79 +30,117 @@ const CustomContainer = styled.div`
   }
 `;
 
+const AddIcon = styled(Icon)`
+margin: 0 10px;
+transition: .8s;
+background: #e6e3e3;
+border-radius: 50%;
+padding: 5px;
+  &:hover{
+    background: lightgrey;
+    transform: scale(1.1) rotate(270deg);
+  }
+`
+
+const initialState = {
+  type: "DROP",
+  title: "",
+  content: "",
+  tags: []
+};
+
+const tagOptions = [
+  { label: "JAVASCRIPT", value: "javascript" },
+  { label: "REACT", value: "react" }
+];
+
 const AddNote = ({ addNote }) => {
   const [modalVisibility, setModalVisibility] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [previewMode, setPreviewMode] = useState('PREVIEW');
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [note, setNote] = useState(initialState);
 
   const setModalVisibilityStatus = status => () => setModalVisibility(status);
 
+  const setData = (key, value) => setNote(data => ({ ...data, [key]: value }));
+
   const add = () => {
     setLoading(true);
-    addNote({ title, content });
+    addNote({ ...note });
     setLoading(false);
     setModalVisibility(false);
   }
 
   return (
     <Fragment>
-      <Button
+      <AddIcon type="plus"
         onClick={setModalVisibilityStatus(true)}
-      >
-        Add
-      </Button>
-
+      />
       <Modal
         title='Add Note'
+        centered={true}
         visible={modalVisibility}
         okText='Add'
         onOk={add}
         onCancel={setModalVisibilityStatus(false)}
         width="80vw"
-        style={{
-          height: '80vh'
-        }}
       >
         <CustomContainer>
           <form>
+            <Radio.Group
+              buttonStyle="solid"
+              value={note.type}
+              onChange={({ target: { value } }) => setData("type", value)}
+            >
+              <Radio.Button value="POST">POST</Radio.Button>
+              <Radio.Button value="DROP">DROP</Radio.Button>
+            </Radio.Group>
+
             <Input
               autoFocus
               placeholder="Title"
-              value={title}
-              onChange={({ target: { value } }) => setTitle(value)}
+              value={note.title}
+              onChange={({ target: { value } }) => setData('title', value)}
             />
             <SimpleMDE
-              value={content}
-              onChange={value => setContent(value)}
+              value={note.content}
+              onChange={value => setData('content', value)}
               options={{
                 spellChecker: false,
                 placeholder: 'Content...',
                 hideIcons: ["guide", "preview", "fullscreen", "side-by-side"],
               }}
             />
+            <Checkbox.Group
+              options={tagOptions}
+              defaultValue={note.tags}
+              onChange={value => setData("tags", value)}
+            />
           </form>
           {showPreview && (
             <div className="preview">
               <div className="flex space-between">
                 <h3>Preview</h3>
-                <Radio.Group defaultValue={previewMode} buttonStyle="solid" onChange={({ target: { value } }) => setPreviewMode(value)}>
-                  <Radio.Button value="PREVIEW">Preview</Radio.Button>
-                  <Radio.Button value="CODE">Code</Radio.Button>
+                <Radio.Group
+                  defaultValue={previewMode}
+                  buttonStyle="solid"
+                  onChange={({ target: { value } }) => setPreviewMode(value)}
+                >
+                  <Radio.Button value="PREVIEW">PREVIEW</Radio.Button>
+                  <Radio.Button value="CODE">CODE</Radio.Button>
                 </Radio.Group>
               </div>
               <Divider />
               {
                 previewMode === 'PREVIEW' ?
                   <Fragment>
-                    <div dangerouslySetInnerHTML={{ __html: marked(title || '') }}></div>
-                    <div dangerouslySetInnerHTML={{ __html: marked(content || '') }}></div>
+                    <div dangerouslySetInnerHTML={{ __html: marked(note.title || '') }}></div>
+                    <div dangerouslySetInnerHTML={{ __html: marked(note.content || '') }}></div>
                   </Fragment> :
                   <div>
-                    {marked(title)}<br />
-                    {marked(content)}
+                    {marked(note.title)}<br />
+                    {marked(note.content)}
                   </div>
               }
             </div>

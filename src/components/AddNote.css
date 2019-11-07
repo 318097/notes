@@ -6,3 +6,10 @@
 .flex.space-between{
   justify-content: space-between;
 }
+
+.ant-modal-body{
+  padding: 0;
+}
+.CodeMirror{
+  height: 250px !important;
+}
