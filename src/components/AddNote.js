@@ -5,7 +5,7 @@ import marked from 'marked';
 import { Modal, Icon, Input, Radio, Divider, Checkbox } from 'antd';
 import SimpleMDE from "react-simplemde-editor";
 
-import './AddNote.css';
+import './AddNote.scss';
 import { addNote } from '../store/actions';
 
 import "easymde/dist/easymde.min.css";
