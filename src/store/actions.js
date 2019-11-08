@@ -12,6 +12,19 @@ export const addNote = note => async dispatch => {
     .collection('notes')
     .add({ ...note })
   console.log('Result', result);
-  dispatch(setAppLoading(false));
   dispatch({ type: ADD_NOTE, payload: note });
+  dispatch(setAppLoading(false));
+};
+
+export const fetchNotes = () => async dispatch => {
+  dispatch(setAppLoading(true));
+  const querySnapshot = await firestore
+    .collection('notes')
+    .get()
+
+  const data = [];
+  querySnapshot.forEach(doc => data.push({ id: doc.id, ...doc.data() }));
+
+  dispatch({ type: LOAD_NOTES, payload: data })
+  dispatch(setAppLoading(false));
 };

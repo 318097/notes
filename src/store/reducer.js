@@ -13,6 +13,12 @@ const reducer = (state = initialState, action) => {
         appLoading: action.payload
       };
     }
+    case LOAD_NOTES: {
+      return {
+        ...state,
+        notes: [...action.payload]
+      };
+    }
     case ADD_NOTE: {
       return {
         ...state,

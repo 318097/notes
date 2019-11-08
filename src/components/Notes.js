@@ -1,25 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import { firestore } from '../firebase';
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux';
 
+import { fetchNotes } from '../store/actions';
 import NoteView from './NoteView';
 
-const Notes = () => {
-  const [data, setData] = useState([]);
-
+const Notes = ({ fetchNotes, data }) => {
   useEffect(() => {
     fetchNotes();
   }, []);
-
-  const fetchNotes = () => {
-    firestore
-      .collection('notes')
-      .get()
-      .then(querySnapshot => {
-        const data = [];
-        querySnapshot.forEach(doc => data.push({ id: doc.id, ...doc.data() }));
-        setData(data);
-      });
-  };
 
   return (
     <div className="flex">
@@ -28,4 +16,8 @@ const Notes = () => {
   )
 }
 
-export default Notes
+const mapStateToProps = state => ({ data: state.notes });
+
+const mapDispatchToProps = ({ fetchNotes });
+
+export default connect(mapStateToProps, mapDispatchToProps)(Notes);
