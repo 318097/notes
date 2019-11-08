@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { firestore } from '../firebase';
-import marked from 'marked';
-import styled from 'styled-components';
 
-const Note = styled.div`
-p{
-  color: green;
-}
-`;
+import NoteView from './NoteView';
 
 const Notes = () => {
   const [data, setData] = useState([]);
@@ -28,13 +22,8 @@ const Notes = () => {
   };
 
   return (
-    <div>
-      {data.map(note => (
-        <Note key={note.id}>
-          <h3>{note.title}</h3>
-          <div dangerouslySetInnerHTML={{ __html: marked(note.content || '') }}></div>
-        </Note>
-      ))}
+    <div className="flex">
+      {data.map(note => <NoteView key={note.id} note={note} />)}
     </div>
   )
 }
