@@ -35,6 +35,6 @@ const Header = ({ appLoading }) => {
   )
 };
 
-const mapStateToProps = ({ notes }) => ({ appLoading: notes.appLoading });
+const mapStateToProps = state => ({ appLoading: state.appLoading });
 
 export default connect(mapStateToProps)(Header);

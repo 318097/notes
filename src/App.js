@@ -13,6 +13,6 @@ const App = () => (
   </div>
 );
 
-const mapStateToProps = state => ({ notes: state.notes.notes });
+const mapStateToProps = state => ({ notes: state.notes });
 
 export default connect(mapStateToProps)(App);

@@ -12,6 +12,6 @@ export const addNote = note => async dispatch => {
     .collection('notes')
     .add({ ...note })
   console.log('Result', result);
-  // dispatch(setAppLoading(false));
+  dispatch(setAppLoading(false));
   dispatch({ type: ADD_NOTE, payload: note });
 };

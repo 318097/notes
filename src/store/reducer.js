@@ -5,7 +5,7 @@ const initialState = {
   appLoading: false
 };
 
-const notesReducer = (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_APP_LOADING: {
       return {
@@ -24,4 +24,4 @@ const notesReducer = (state = initialState, action) => {
   }
 }
 
-export default notesReducer;
+export default reducer;
