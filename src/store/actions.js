@@ -5,6 +5,6 @@ export const addNote = note => async dispatch => {
   const result = await firestore
     .collection('notes')
     .add({ ...note })
-  console.log(result);
+  console.log('Result', result);
   dispatch({ type: ADD_NOTE, payload: note });
 };
