@@ -1,7 +1,11 @@
 import React from 'react'
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { Spin, Icon } from 'antd';
 
 import AddNote from './AddNote';
+
+const antIcon = <Icon type="loading" spin />;
 
 const Container = styled.header`
   display: flex;
@@ -20,15 +24,17 @@ const Container = styled.header`
   }
 `
 
-const Header = () => {
+const Header = ({ appLoading }) => {
   return (
     <Container>
       <h3>
-        Notes
+        Notes{' '}{appLoading && <Spin indicator={antIcon} />}
       </h3>
       <AddNote />
     </Container>
   )
-}
+};
 
-export default Header
+const mapStateToProps = ({ notes }) => ({ appLoading: notes.appLoading });
+
+export default connect(mapStateToProps)(Header);
