@@ -9,7 +9,7 @@ const antIcon = <Icon type="loading" spin />;
 
 const Container = styled.header`
   display: flex;
-  background: #f7f7f7;
+  // background: #fff;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;

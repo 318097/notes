@@ -6,9 +6,10 @@ import { Tag } from 'antd';
 const Wrapper = styled.div`
 width: 215px;
 height: 115px;
+background: white;
 border: 1px solid lightgrey;
 margin: 7px;
-padding: 10px;
+padding: 5px;
 border-radius: 5px;
 box-shadow: 3px 3px 3px lightgrey;
 overflow: hidden;
@@ -29,7 +30,11 @@ flex-direction: column;
   }
 }
 .tags{
-
+  .ant-tag{
+    margin-right: 3px;
+    padding: 0px 4px;
+    font-size: 9px;
+  }
 }
 `;
 

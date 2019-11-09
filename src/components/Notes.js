@@ -10,7 +10,7 @@ const Notes = ({ fetchNotes, data }) => {
   }, []);
 
   return (
-    <div className="flex">
+    <div className="flex notes-wrapper">
       {data.map(note => <NoteView key={note.id} note={note} />)}
     </div>
   )
