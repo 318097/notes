@@ -18,9 +18,15 @@ const Container = styled.header`
     flex: 1 1 70%;
     margin: 0;
     margin-left: 10px;
-    text-transform: capatilize;
-    font-weight: bold;
+    text-transform: uppercase;
     vertical-align: center;
+    color: #424242;
+    transition: 2s;
+    & > span{
+      font-size: 150%;
+      color: #2b2b2b;
+      font-weight: bold;
+    }
   }
 `
 
@@ -28,7 +34,7 @@ const Header = ({ appLoading }) => {
   return (
     <Container>
       <h3>
-        Notes{' '}{appLoading && <Spin indicator={antIcon} />}
+        <span>N</span>otes{' '}{appLoading && <Spin indicator={antIcon} />}
       </h3>
       <AddNote />
     </Container>
