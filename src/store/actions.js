@@ -1,10 +1,15 @@
 import data from './data';
 
 import { firestore } from '../firebase';
-import { SET_APP_LOADING, LOAD_NOTES, ADD_NOTE, EDIT_NOTE, DELETE_NOTE } from './constants';
+import { SET_APP_LOADING, SET_ADD_NOTE_MODAL_VISIBILITY, LOAD_NOTES, ADD_NOTE, EDIT_NOTE, UPDATE_NOTE, DELETE_NOTE } from './constants';
 
 export const setAppLoading = status => ({
   type: SET_APP_LOADING,
+  payload: status
+});
+
+export const setAddNoteModalVisibility = status => ({
+  type: SET_ADD_NOTE_MODAL_VISIBILITY,
   payload: status
 });
 
@@ -30,3 +35,22 @@ export const addNote = note => async dispatch => {
   dispatch({ type: ADD_NOTE, payload: note });
   dispatch(setAppLoading(false));
 };
+
+export const editNote = id => ({
+  type: EDIT_NOTE,
+  payload: id
+});
+
+export const updateNote = note => async dispatch => {
+  dispatch(setAppLoading(true));
+  const result = await firestore
+    .collection('notes')
+    .doc(note.id)
+    .set({ ...note })
+  console.log('Result', result);
+  dispatch({ type: UPDATE_NOTE, payload: note });
+  dispatch(setAppLoading(false));
+};
+
+export const deleteNote = id => async dispatch => { };
+export const toggleFavoriteNote = id => async dispatch => { };

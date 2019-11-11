@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import marked from 'marked';
@@ -6,7 +6,7 @@ import { Modal, Icon, Input, Radio, Divider, Checkbox } from 'antd';
 import SimpleMDE from "react-simplemde-editor";
 
 import './AddNote.scss';
-import { addNote } from '../store/actions';
+import { addNote, updateNote, setAddNoteModalVisibility } from '../store/actions';
 
 import "easymde/dist/easymde.min.css";
 
@@ -50,26 +50,37 @@ const initialState = {
 };
 
 const tagOptions = [
-  { label: "JAVASCRIPT", value: "javascript" },
-  { label: "REACT", value: "react" }
+  { label: "JAVASCRIPT", value: "JAVASCRIPT" },
+  { label: "REACT", value: "REACT" }
 ];
 
-const AddNote = ({ addNote }) => {
-  const [modalVisibility, setModalVisibility] = useState(false);
+const AddNote = ({ addNote, modalVisibility, setAddNoteModalVisibility, mode, selectedNote }) => {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [previewMode, setPreviewMode] = useState('PREVIEW');
   const [note, setNote] = useState(initialState);
 
-  const setModalVisibilityStatus = status => () => setModalVisibility(status);
+  useEffect(() => {
+    if (mode === 'edit') {
+      setNote({ ...selectedNote });
+    }
+  }, [mode, selectedNote]);
+
+  const setModalVisibilityStatus = status => () => setAddNoteModalVisibility(status);
 
   const setData = (key, value) => setNote(data => ({ ...data, [key]: value }));
 
-  const add = () => {
+  const handleOk = () => {
     setLoading(true);
-    addNote({ ...note });
+
+    if (mode === 'edit')
+      updateNote({ ...note });
+    else
+      addNote({ ...note });
+
+    setNote({ ...initialState });
     setLoading(false);
-    setModalVisibility(false);
+    setAddNoteModalVisibility(false);
   }
 
   return (
@@ -78,11 +89,11 @@ const AddNote = ({ addNote }) => {
         onClick={setModalVisibilityStatus(true)}
       />
       <Modal
-        title='Add Note'
+        title={mode === 'edit' ? 'EDIT NOTE' : 'ADD NOTE'}
         centered={true}
         visible={modalVisibility}
-        okText='Add'
-        onOk={add}
+        okText={mode === 'edit' ? 'UPDATE' : 'ADD'}
+        onOk={handleOk}
         onCancel={setModalVisibilityStatus(false)}
         width="80vw"
       >
@@ -151,6 +162,7 @@ const AddNote = ({ addNote }) => {
   );
 };
 
-const mapDispatchToProps = ({ addNote });
+const mapStateToProps = ({ addNoteModalVisibility, selectedNote, mode }) => ({ modalVisibility: addNoteModalVisibility, selectedNote, mode });
+const mapDispatchToProps = ({ addNote, setAddNoteModalVisibility });
 
-export default connect(null, mapDispatchToProps)(AddNote);
+export default connect(mapStateToProps, mapDispatchToProps)(AddNote);
