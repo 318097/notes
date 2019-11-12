@@ -52,5 +52,14 @@ export const updateNote = note => async dispatch => {
   dispatch(setAppLoading(false));
 };
 
-export const deleteNote = id => async dispatch => { };
+export const deleteNote = id => async dispatch => {
+  dispatch(setAppLoading(true));
+  await firestore
+    .collection('notes')
+    .doc(id)
+    .delete();
+  dispatch({ type: DELETE_NOTE, payload: id });
+  dispatch(setAppLoading(false));
+};
+
 export const toggleFavoriteNote = id => async dispatch => { };

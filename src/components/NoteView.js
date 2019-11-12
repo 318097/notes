@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import marked from 'marked';
 import styled from 'styled-components';
-import { Tag, Icon, Popover } from 'antd';
+import { Tag, Icon, Popover, Popconfirm } from 'antd';
 import { connect } from 'react-redux';
 
-import { editNote } from '../store/actions';
+import { editNote, deleteNote } from '../store/actions';
 
 const Wrapper = styled.div`
 width: 215px;
@@ -59,7 +59,7 @@ const DropdownWrapper = styled.div`
   }
 `
 
-const NoteView = ({ note, editNote }) => {
+const NoteView = ({ note, editNote, deleteNote }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const { title = '', content = '', type = 'DROP', tags = [], id } = note;
@@ -72,6 +72,8 @@ const NoteView = ({ note, editNote }) => {
   };
 
   const handleDelete = () => {
+    deleteNote(id);
+    setShowDropdown(false);
   };
 
   return (
@@ -91,7 +93,15 @@ const NoteView = ({ note, editNote }) => {
             <Icon onClick={handleEdit} type="edit" />
           </Popover>
           <Popover placement="right" content="Delete">
-            <Icon onClick={handleDelete} type="delete" />
+            <Popconfirm
+              title="Delete?"
+              onConfirm={handleDelete}
+              placement="right"
+              okText="Yes"
+              cancelText="No"
+            >
+              <Icon type="delete" />
+            </Popconfirm>
           </Popover>
         </div>)}
       </DropdownWrapper>
@@ -100,6 +110,6 @@ const NoteView = ({ note, editNote }) => {
 };
 
 const mapStateToProps = state => ({ notes: state.notes });
-const mapDispatchToProps = ({ editNote });
+const mapDispatchToProps = ({ editNote, deleteNote });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NoteView);
