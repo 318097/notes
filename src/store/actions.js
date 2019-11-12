@@ -1,4 +1,4 @@
-import data from './data';
+// import data from './data';
 
 import { firestore } from '../firebase';
 import { SET_APP_LOADING, SET_ADD_NOTE_MODAL_VISIBILITY, LOAD_NOTES, ADD_NOTE, EDIT_NOTE, UPDATE_NOTE, DELETE_NOTE } from './constants';
@@ -8,19 +8,19 @@ export const setAppLoading = status => ({
   payload: status
 });
 
-export const setAddNoteModalVisibility = status => ({
+export const setAddNoteModalVisibility = (status, mode) => ({
   type: SET_ADD_NOTE_MODAL_VISIBILITY,
-  payload: status
+  payload: { status, mode }
 });
 
 export const fetchNotes = () => async dispatch => {
   dispatch(setAppLoading(true));
-  // const querySnapshot = await firestore
-  //   .collection('notes')
-  //   .get()
+  const querySnapshot = await firestore
+    .collection('notes')
+    .get()
 
-  // const data = [];
-  // querySnapshot.forEach(doc => data.push({ id: doc.id, ...doc.data() }));
+  const data = [];
+  querySnapshot.forEach(doc => data.push({ id: doc.id, ...doc.data() }));
 
   dispatch({ type: LOAD_NOTES, payload: data })
   dispatch(setAppLoading(false));

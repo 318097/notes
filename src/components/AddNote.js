@@ -5,9 +5,9 @@ import marked from 'marked';
 import { Modal, Icon, Input, Radio, Divider, Checkbox } from 'antd';
 import SimpleMDE from "react-simplemde-editor";
 
-import './AddNote.scss';
 import { addNote, updateNote, setAddNoteModalVisibility } from '../store/actions';
 
+import './AddNote.scss';
 import "easymde/dist/easymde.min.css";
 
 const CustomContainer = styled.div`
@@ -17,7 +17,6 @@ const CustomContainer = styled.div`
 
   form, div.preview{
     padding: 20px 10px;
-    
   }
   form{
     flex: 1 1 59%;
@@ -54,48 +53,49 @@ const tagOptions = [
   { label: "REACT", value: "REACT" }
 ];
 
-const AddNote = ({ addNote, modalVisibility, setAddNoteModalVisibility, mode, selectedNote }) => {
+const AddNote = ({ addNote, updateNote, modalVisibility, setAddNoteModalVisibility, mode, selectedNote }) => {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [previewMode, setPreviewMode] = useState('PREVIEW');
   const [note, setNote] = useState(initialState);
 
   useEffect(() => {
-    if (mode === 'edit') {
-      setNote({ ...selectedNote });
+    if (modalVisibility) {
+      if (mode === 'edit') setNote({ ...selectedNote });
+      else setNote({ ...initialState, tags: [] });
     }
-  }, [mode, selectedNote]);
+  }, [mode, selectedNote, modalVisibility]);
 
-  const setModalVisibilityStatus = status => () => setAddNoteModalVisibility(status);
+  const setModalVisibilityStatus = (status, mode) => async () => setAddNoteModalVisibility(status, mode);
 
   const setData = (key, value) => setNote(data => ({ ...data, [key]: value }));
 
-  const handleOk = () => {
+  const handleOk = async () => {
     setLoading(true);
 
     if (mode === 'edit')
-      updateNote({ ...note });
+      await updateNote({ ...note });
     else
-      addNote({ ...note });
+      await addNote({ ...note });
 
-    setNote({ ...initialState });
     setLoading(false);
-    setAddNoteModalVisibility(false);
-  }
+    setModalVisibilityStatus(false)();
+  };
 
   return (
     <Fragment>
       <AddIcon type="plus"
-        onClick={setModalVisibilityStatus(true)}
+        onClick={setModalVisibilityStatus(true, 'add')}
       />
       <Modal
         title={mode === 'edit' ? 'EDIT NOTE' : 'ADD NOTE'}
         centered={true}
         visible={modalVisibility}
-        okText={mode === 'edit' ? 'UPDATE' : 'ADD'}
+        okText={mode === 'edit' ? 'Update' : 'Add'}
         onOk={handleOk}
         onCancel={setModalVisibilityStatus(false)}
         width="80vw"
+        confirmLoading={loading}
       >
         <CustomContainer>
           <form>
@@ -125,7 +125,7 @@ const AddNote = ({ addNote, modalVisibility, setAddNoteModalVisibility, mode, se
             />
             <Checkbox.Group
               options={tagOptions}
-              defaultValue={note.tags}
+              value={note.tags}
               onChange={value => setData("tags", value)}
             />
           </form>
@@ -163,6 +163,6 @@ const AddNote = ({ addNote, modalVisibility, setAddNoteModalVisibility, mode, se
 };
 
 const mapStateToProps = ({ addNoteModalVisibility, selectedNote, mode }) => ({ modalVisibility: addNoteModalVisibility, selectedNote, mode });
-const mapDispatchToProps = ({ addNote, setAddNoteModalVisibility });
+const mapDispatchToProps = ({ addNote, updateNote, setAddNoteModalVisibility });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNote);

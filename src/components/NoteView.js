@@ -76,7 +76,7 @@ const NoteView = ({ note, editNote }) => {
 
   return (
     <Wrapper>
-      {type === 'POST' && <h3 className="title">{title}</h3>}
+      {type && <h3 className="title">{title}</h3>}
       <div className="content" dangerouslySetInnerHTML={{ __html: marked(content) }}></div>
       <div className="tags">
         {tags.map((tag, index) => <Tag key={index}>{tag.toUpperCase()}</Tag>)}
