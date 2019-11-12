@@ -56,6 +56,9 @@ const DropdownWrapper = styled.div`
     right: -4px;
     top: 19px;
     border-radius: 15px;
+    & > * {
+      margin: 2px 0;
+    }
   }
 `
 

@@ -2,7 +2,7 @@ import firebase from 'firebase';
 require('firebase/firestore');
 
 const fb = firebase.initializeApp({
-  apiKey: "AIzaSyBTfH9en075CKmOwoJuJbTCyqBforggU7g",
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: "notes-5211e.firebaseapp.com",
   databaseURL: "https://notes-5211e.firebaseio.com",
   projectId: "notes-5211e",
