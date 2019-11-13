@@ -1,16 +1,25 @@
 import firebase from 'firebase';
-require('firebase/firestore');
+import 'firebase/firestore';
+import 'firebase/auth';
 
-const fb = firebase.initializeApp({
-  apiKey: process.env.FIREBASE_API_KEY,
+const config = {
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "notes-5211e.firebaseapp.com",
   databaseURL: "https://notes-5211e.firebaseio.com",
   projectId: "notes-5211e",
   storageBucket: "",
   messagingSenderId: "399043506173",
   appId: "1:399043506173:web:41f8346d4bc3c5e0"
-});
+};
 
-const firestore = fb.firestore();
+firebase.initializeApp(config);
 
-export { firestore };
+const firestore = firebase.firestore();
+const auth = firebase.auth();
+
+const provider = new firebase.auth.GoogleAuthProvider();
+provider.setCustomParameters({ prompt: 'select_account' });
+
+const signInWithGoogle = async () => auth.signInWithPopup(provider);
+
+export { firestore, auth, signInWithGoogle };

@@ -2,10 +2,12 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import marked from 'marked';
-import { Modal, Icon, Input, Radio, Divider, Checkbox } from 'antd';
+import { Modal, Input, Radio, Divider, Checkbox } from 'antd';
 import SimpleMDE from "react-simplemde-editor";
 
 import { addNote, updateNote, setAddNoteModalVisibility } from '../store/actions';
+
+import { StyledIcon } from '../styled';
 
 import './AddNote.scss';
 import "easymde/dist/easymde.min.css";
@@ -28,18 +30,6 @@ const CustomContainer = styled.div`
     flex: 1 1 39%;
   }
 `;
-
-const AddIcon = styled(Icon)`
-margin: 0 10px;
-transition: .8s;
-background: #e6e3e3;
-border-radius: 50%;
-padding: 5px;
-  &:hover{
-    background: lightgrey;
-    transform: scale(1.1) rotate(270deg);
-  }
-`
 
 const initialState = {
   type: "DROP",
@@ -84,7 +74,7 @@ const AddNote = ({ addNote, updateNote, modalVisibility, setAddNoteModalVisibili
 
   return (
     <Fragment>
-      <AddIcon type="plus"
+      <StyledIcon type="plus"
         onClick={setModalVisibilityStatus(true, 'add')}
       />
       <Modal

@@ -1,7 +1,14 @@
 // import data from './data';
 
 import { firestore } from '../firebase';
-import { SET_APP_LOADING, SET_ADD_NOTE_MODAL_VISIBILITY, LOAD_NOTES, ADD_NOTE, EDIT_NOTE, UPDATE_NOTE, DELETE_NOTE } from './constants';
+import {
+  SET_SESSION, SET_APP_LOADING, SET_ADD_NOTE_MODAL_VISIBILITY, LOAD_NOTES, ADD_NOTE, EDIT_NOTE, UPDATE_NOTE, DELETE_NOTE
+} from './constants';
+
+export const setSession = session => ({
+  type: SET_SESSION,
+  payload: session
+});
 
 export const setAppLoading = status => ({
   type: SET_APP_LOADING,
