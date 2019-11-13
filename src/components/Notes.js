@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { fetchNotes } from '../store/actions';
 import NoteView from './NoteView';
 
-const Notes = ({ fetchNotes, data, auth }) => {
+const Notes = ({ fetchNotes, data, session }) => {
   useEffect(() => {
-    if (auth) fetchNotes();
-  }, [auth]);
+    if (session) fetchNotes();
+  }, [session]);
 
   return (
     <div className="flex notes-wrapper">
@@ -16,7 +16,7 @@ const Notes = ({ fetchNotes, data, auth }) => {
   )
 }
 
-const mapStateToProps = ({ notes, auth }) => ({ data: notes, auth });
+const mapStateToProps = ({ notes, session }) => ({ data: notes, session });
 
 const mapDispatchToProps = ({ fetchNotes });
 
