@@ -43,7 +43,7 @@ const tagOptions = [
   { label: "REACT", value: "REACT" }
 ];
 
-const AddNote = ({ addNote, updateNote, modalVisibility, setAddNoteModalVisibility, mode, selectedNote }) => {
+const AddNote = ({ addNote, updateNote, modalVisibility, setAddNoteModalVisibility, mode, selectedNote, session }) => {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [previewMode, setPreviewMode] = useState('PREVIEW');
@@ -66,7 +66,7 @@ const AddNote = ({ addNote, updateNote, modalVisibility, setAddNoteModalVisibili
     if (mode === 'edit')
       await updateNote({ ...note });
     else
-      await addNote({ ...note });
+      await addNote({ ...note, userId: session.uid });
 
     setLoading(false);
     setModalVisibilityStatus(false)();
@@ -152,7 +152,7 @@ const AddNote = ({ addNote, updateNote, modalVisibility, setAddNoteModalVisibili
   );
 };
 
-const mapStateToProps = ({ addNoteModalVisibility, selectedNote, mode }) => ({ modalVisibility: addNoteModalVisibility, selectedNote, mode });
+const mapStateToProps = ({ addNoteModalVisibility, selectedNote, mode, session }) => ({ modalVisibility: addNoteModalVisibility, selectedNote, mode, session });
 const mapDispatchToProps = ({ addNote, updateNote, setAddNoteModalVisibility });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNote);

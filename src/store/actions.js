@@ -20,10 +20,12 @@ export const setAddNoteModalVisibility = (status, mode) => ({
   payload: { status, mode }
 });
 
-export const fetchNotes = () => async dispatch => {
+export const fetchNotes = () => async (dispatch, getState) => {
+  const { session: { uid } } = getState();
   dispatch(setAppLoading(true));
   const querySnapshot = await firestore
     .collection('notes')
+    .where("userId", "==", uid)
     .get()
 
   const data = [];
