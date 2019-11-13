@@ -112,7 +112,7 @@ const NoteView = ({ note, editNote, deleteNote }) => {
   )
 };
 
-const mapStateToProps = state => ({ notes: state.notes });
+const mapStateToProps = ({ notes }) => ({ notes });
 const mapDispatchToProps = ({ editNote, deleteNote });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NoteView);

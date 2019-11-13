@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Spin, Icon } from 'antd';
@@ -67,16 +67,18 @@ const Header = ({ dispatch, appLoading, session }) => {
       <div style={{ display: 'flex' }}>
         {
           session ? (
-            <UserInfo>
-              <div className="username">
-                {session.displayName}
-              </div>
-              <ProfileIcon onClick={signOut}><img src={session.photoURL} alt="Profile pic" /></ProfileIcon>
-            </UserInfo>
+            <Fragment>
+              <UserInfo>
+                <div className="username">
+                  {session.displayName}
+                </div>
+                <ProfileIcon onClick={signOut}><img src={session.photoURL} alt="Profile pic" /></ProfileIcon>
+              </UserInfo>
+              <AddNote />
+            </Fragment>
           ) :
             <StyledIcon type="google" onClick={signInWithGoogle} />
         }
-        <AddNote />
       </div>
     </Container>
   );
