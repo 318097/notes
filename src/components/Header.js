@@ -1,9 +1,10 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { Spin, Icon } from 'antd';
+import { Spin, Icon, Divider } from 'antd';
+import { withRouter } from 'react-router-dom';
 
-import { signInWithGoogle, auth } from '../firebase';
+import { auth } from '../firebase';
 import { setSession } from '../store/actions';
 
 import AddNote from './AddNote';
@@ -45,18 +46,20 @@ const Container = styled.header`
     vertical-align: center;
     color: #424242;
     transition: 2s;
+    font-weight: bold;
     & > span{
+      text-decoration: overline;
       font-size: 150%;
       color: #2b2b2b;
-      font-weight: bold;
     }
   }
 `
 
-const Header = ({ dispatch, appLoading, session }) => {
+const Header = ({ history, dispatch, appLoading, session }) => {
   const signOut = async () => {
     await auth.signOut();
     dispatch(setSession(null));
+    return history.push('/signin');
   };
 
   return (
@@ -64,26 +67,31 @@ const Header = ({ dispatch, appLoading, session }) => {
       <h3>
         <span>N</span>otes{' '}{appLoading && <Spin indicator={antIcon} />}
       </h3>
-      <div style={{ display: 'flex' }}>
-        {
-          session ? (
-            <Fragment>
-              <UserInfo>
-                <div className="username">
-                  {session.displayName}
-                </div>
-                <ProfileIcon onClick={signOut}><img src={session.photoURL} alt="Profile pic" /></ProfileIcon>
-              </UserInfo>
-              <AddNote />
-            </Fragment>
-          ) :
-            <StyledIcon type="google" onClick={signInWithGoogle} />
-        }
-      </div>
+      {
+        session && (
+          <div style={{ display: 'flex' }}>
+            <AddNote />
+            <Divider type="vertical" />
+            <UserInfo>
+              <div className="username">
+                {session.name}
+              </div>
+              <ProfileIcon>
+                {
+                  session.photoURL ?
+                    <img src={session.photoURL} alt="Profile pic" /> :
+                    <StyledIcon type="user" />
+                }
+              </ProfileIcon>
+            </UserInfo>
+            <StyledIcon type="logout" onClick={signOut} />
+          </div>
+        )
+      }
     </Container>
   );
 }
 
 const mapStateToProps = ({ appLoading, session }) => ({ appLoading, session });
 
-export default connect(mapStateToProps)(Header);
+export default withRouter(connect(mapStateToProps)(Header));

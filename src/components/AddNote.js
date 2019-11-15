@@ -9,7 +9,6 @@ import { addNote, updateNote, setAddNoteModalVisibility } from '../store/actions
 
 import { StyledIcon } from '../styled';
 
-import './AddNote.scss';
 import "easymde/dist/easymde.min.css";
 
 const CustomContainer = styled.div`
@@ -43,7 +42,15 @@ const tagOptions = [
   { label: "REACT", value: "REACT" }
 ];
 
-const AddNote = ({ addNote, updateNote, modalVisibility, setAddNoteModalVisibility, mode, selectedNote, session }) => {
+const AddNote = ({
+  addNote,
+  updateNote,
+  modalVisibility,
+  setAddNoteModalVisibility,
+  mode,
+  selectedNote,
+  session
+}) => {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [previewMode, setPreviewMode] = useState('PREVIEW');

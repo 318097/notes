@@ -1,4 +1,13 @@
-import { SET_SESSION, SET_APP_LOADING, SET_ADD_NOTE_MODAL_VISIBILITY, LOAD_NOTES, ADD_NOTE, EDIT_NOTE, UPDATE_NOTE, DELETE_NOTE } from './constants';
+import {
+  SET_SESSION,
+  SET_APP_LOADING,
+  SET_ADD_NOTE_MODAL_VISIBILITY,
+  LOAD_NOTES,
+  ADD_NOTE,
+  EDIT_NOTE,
+  UPDATE_NOTE,
+  DELETE_NOTE
+} from './constants';
 
 const initialState = {
   notes: [],
@@ -14,7 +23,8 @@ const reducer = (state = initialState, action) => {
     case SET_SESSION: {
       return {
         ...state,
-        session: action.payload
+        session: action.payload,
+        notes: action.payload ? state.notes : []
       };
     }
     case SET_APP_LOADING: {

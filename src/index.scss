@@ -20,3 +20,10 @@ input, textarea, .ant-input, .ant-radio-group, .simplemde-editor-1-wrapper{
   margin: 2px !important;
   font-family: 'Roboto', sans-serif;
 }
+
+.ant-modal-body{
+  padding: 0;
+}
+.CodeMirror{
+  height: 250px !important;
+}
