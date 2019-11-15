@@ -22,4 +22,9 @@ provider.setCustomParameters({ prompt: 'select_account' });
 
 const signInWithGoogle = async () => auth.signInWithPopup(provider);
 
-export { firestore, auth, signInWithGoogle };
+const createNewFirebaseUser = async ({ email, uid, name }) => await firestore
+  .collection('users')
+  .doc(uid)
+  .set({ email, name });
+
+export { firestore, auth, signInWithGoogle, createNewFirebaseUser };

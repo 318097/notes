@@ -30,4 +30,23 @@ right: -8px;
   }
 `
 
-export { StyledIcon, ProfileIcon };
+const StyledSection = styled.section`
+margin: 0 auto;
+max-width: 350px;
+padding: 20px;
+background: white;
+border-radius: 5px;
+border: 1px solid lightgrey;
+box-shadow: 3px 3px 3px lightgrey;
+position: relative;
+top: 50px;
+h3{
+  text-align: center;
+  font-weight: bold;
+}
+button{
+  margin: 5px 5px 0 0;
+}
+`
+
+export { StyledIcon, ProfileIcon, StyledSection };
