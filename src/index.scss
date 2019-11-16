@@ -6,12 +6,6 @@
   font-family: 'Roboto', sans-serif;
 }
 
-body {
-  margin: 0;
-  font-family: 'Roboto', sans-serif;
-  background: url('./assets/backgrounds/funky-lines.png');
-}
-
 code {
   font-family:monospace;
 }
@@ -21,9 +15,14 @@ input, textarea, .ant-input, .ant-radio-group, .simplemde-editor-1-wrapper{
   font-family: 'Roboto', sans-serif;
 }
 
-.ant-modal-body{
-  padding: 0;
-}
-.CodeMirror{
-  height: 250px !important;
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background: url('./assets/backgrounds/funky-lines.png');
+  .ant-modal-body{
+    padding: 0;
+  }
+  .CodeMirror{
+    height: 250px !important;
+  }
 }

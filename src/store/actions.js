@@ -39,7 +39,7 @@ export const addNote = note => async dispatch => {
   dispatch(setAppLoading(true));
   const result = await firestore
     .collection('notes')
-    .add({ ...note })
+    .add({ ...note, createdAt: new Date().toISOString() })
   console.log('Result', result);
   dispatch({ type: ADD_NOTE, payload: note });
   dispatch(setAppLoading(false));
