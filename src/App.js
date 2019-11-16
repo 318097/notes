@@ -6,6 +6,8 @@ import { auth } from './firebase';
 
 import './App.scss';
 
+import ProtectedRoute from './ProtectedRoute';
+
 import Header from './components/Header';
 import Notes from './components/Notes';
 import Signup from './components/Signup';
@@ -23,12 +25,15 @@ const App = ({ location, history, dispatch, session }) => {
   useEffect(() => {
     auth.onAuthStateChanged(user => {
       if (user) {
-        console.log(user);
+        console.log('Auth user: ', user);
         const { displayName: name, email, photoURL, uid } = user;
         dispatch(setSession({
           name, email, photoURL, uid
         }));
+        sessionStorage.setItem('notes-app', 'logged-in');
         history.push('/home');
+      } else {
+        sessionStorage.clear();
       }
     });
   }, []);
@@ -39,7 +44,7 @@ const App = ({ location, history, dispatch, session }) => {
       <Switch>
         <Route path="/signup" exact component={Signup} />
         <Route path="/signin" exact component={Signin} />
-        <Route path="/home" exact component={Notes} />
+        <ProtectedRoute path="/home" exact component={Notes} />
       </Switch>
     </div>
   );
