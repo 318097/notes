@@ -5,7 +5,7 @@ import { Spin, Icon, Divider } from 'antd';
 import { withRouter } from 'react-router-dom';
 
 import { auth } from '../firebase';
-import { setSession } from '../store/actions';
+import { setSession, toggleSettingsDrawer } from '../store/actions';
 
 import AddNote from './AddNote';
 import { StyledIcon, ProfileIcon } from '../styled';
@@ -84,6 +84,7 @@ const Header = ({ history, dispatch, appLoading, session }) => {
                 }
               </ProfileIcon>
             </UserInfo>
+            <StyledIcon type="setting" onClick={() => { dispatch(toggleSettingsDrawer(true)) }} />
             <StyledIcon type="logout" onClick={signOut} />
           </div>
         )

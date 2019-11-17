@@ -2,7 +2,15 @@
 
 import { firestore } from '../firebase';
 import {
-  SET_SESSION, SET_APP_LOADING, SET_ADD_NOTE_MODAL_VISIBILITY, LOAD_NOTES, ADD_NOTE, EDIT_NOTE, UPDATE_NOTE, DELETE_NOTE
+  SET_SESSION,
+  SET_APP_LOADING,
+  SET_ADD_NOTE_MODAL_VISIBILITY,
+  LOAD_NOTES,
+  ADD_NOTE,
+  EDIT_NOTE,
+  UPDATE_NOTE,
+  DELETE_NOTE,
+  TOGGLE_SETTINGS_DRAWER,
 } from './constants';
 
 export const setSession = session => ({
@@ -18,6 +26,11 @@ export const setAppLoading = status => ({
 export const setAddNoteModalVisibility = (status, mode) => ({
   type: SET_ADD_NOTE_MODAL_VISIBILITY,
   payload: { status, mode }
+});
+
+export const toggleSettingsDrawer = status => ({
+  type: TOGGLE_SETTINGS_DRAWER,
+  payload: status
 });
 
 export const fetchNotes = () => async (dispatch, getState) => {

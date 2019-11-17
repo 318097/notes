@@ -2,6 +2,7 @@ import {
   SET_SESSION,
   SET_APP_LOADING,
   SET_ADD_NOTE_MODAL_VISIBILITY,
+  TOGGLE_SETTINGS_DRAWER,
   LOAD_NOTES,
   ADD_NOTE,
   EDIT_NOTE,
@@ -15,7 +16,10 @@ const initialState = {
   addNoteModalVisibility: false,
   selectedNote: null,
   mode: undefined,
-  session: null
+  session: null,
+  settings: {
+    tags: [],
+  }
 };
 
 const reducer = (state = initialState, action) => {
@@ -38,6 +42,12 @@ const reducer = (state = initialState, action) => {
         ...state,
         addNoteModalVisibility: action.payload.status,
         mode: action.payload.mode
+      };
+    }
+    case TOGGLE_SETTINGS_DRAWER: {
+      return {
+        ...state,
+        settingsDrawerVisibility: action.payload,
       };
     }
     case LOAD_NOTES: {

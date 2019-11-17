@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Fragment } from 'react'
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import { fetchNotes } from '../store/actions';
 import NoteView from './NoteView';
+import Settings from './Settings';
 
 const EmptyWrapper = styled.div`
   font-size: 40px;
@@ -19,15 +20,18 @@ const Notes = ({ fetchNotes, data, session }) => {
   }, [session]);
 
   return (
-    <div className="flex notes-wrapper">
-      {
-        data.length ?
-          data.map(note => <NoteView key={note.id} note={note} />) :
-          <EmptyWrapper>
-            Empty
+    <Fragment>
+      <div className="flex notes-wrapper">
+        {
+          data.length ?
+            data.map(note => <NoteView key={note.id} note={note} />) :
+            <EmptyWrapper>
+              Empty
           </EmptyWrapper>
-      }
-    </div>
+        }
+      </div>
+      <Settings />
+    </Fragment>
   )
 }
 
