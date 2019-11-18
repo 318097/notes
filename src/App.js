@@ -12,6 +12,7 @@ import Header from './components/Header';
 import Notes from './components/Notes';
 import Signup from './components/Signup';
 import Signin from './components/Signin';
+import NotFound from './components/NotFound';
 
 import { setAddNoteModalVisibility, setSession } from './store/actions';
 
@@ -44,8 +45,9 @@ const App = ({ location, history, dispatch, session }) => {
       <Switch>
         <Route path="/signup" exact component={Signup} />
         <Route path="/signin" exact component={Signin} />
-        <Route path="/" exact render={() => <Redirect to="/signin" />} />
         <ProtectedRoute path="/home" exact component={Notes} />
+        <Route path="/" exact render={() => <Redirect to="/signin" />} />
+        <Route component={NotFound} />
       </Switch>
     </div>
   );
