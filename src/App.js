@@ -32,7 +32,9 @@ const App = ({ location, history, dispatch, session }) => {
           name, email, photoURL, uid
         }));
         sessionStorage.setItem('notes-app', 'logged-in');
-        history.push('/home');
+
+        if (history.location.pathname === '/signin')
+          history.push('/home');
       } else {
         sessionStorage.clear();
       }
