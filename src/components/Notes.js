@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import { fetchNotes } from '../store/actions';
-import NoteView from './NoteView';
+import NoteCard from './NoteCard';
 import Settings from './Settings';
 
 const EmptyWrapper = styled.div`
@@ -24,7 +24,7 @@ const Notes = ({ fetchNotes, data, session }) => {
       <div className="flex notes-wrapper">
         {
           data.length ?
-            data.map(note => <NoteView key={note.id} note={note} />) :
+            data.map(note => <NoteCard key={note.id} note={note} />) :
             <EmptyWrapper>
               Empty
           </EmptyWrapper>

@@ -62,7 +62,7 @@ const DropdownWrapper = styled.div`
   }
 `
 
-const NoteView = ({ note, editNote, deleteNote }) => {
+const NoteCard = ({ note, editNote, deleteNote }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const { title = '', content = '', type = 'DROP', tags = [], id } = note;
@@ -115,4 +115,4 @@ const NoteView = ({ note, editNote, deleteNote }) => {
 const mapStateToProps = ({ notes }) => ({ notes });
 const mapDispatchToProps = ({ editNote, deleteNote });
 
-export default connect(mapStateToProps, mapDispatchToProps)(NoteView);
+export default connect(mapStateToProps, mapDispatchToProps)(NoteCard);

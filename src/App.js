@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { withRouter, Route, Switch } from 'react-router-dom';
+import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 import { auth } from './firebase';
 
@@ -44,6 +44,7 @@ const App = ({ location, history, dispatch, session }) => {
       <Switch>
         <Route path="/signup" exact component={Signup} />
         <Route path="/signin" exact component={Signin} />
+        <Route path="/" exact render={() => <Redirect to="/signin" />} />
         <ProtectedRoute path="/home" exact component={Notes} />
       </Switch>
     </div>
