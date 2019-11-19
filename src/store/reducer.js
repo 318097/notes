@@ -4,6 +4,7 @@ import {
   SET_ADD_NOTE_MODAL_VISIBILITY,
   TOGGLE_SETTINGS_DRAWER,
   LOAD_NOTES,
+  GET_NOTE_BY_ID,
   ADD_NOTE,
   EDIT_NOTE,
   UPDATE_NOTE,
@@ -54,6 +55,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         notes: [...action.payload]
+      };
+    }
+    case GET_NOTE_BY_ID: {
+      return {
+        ...state,
+        selectedNote: action.payload
       };
     }
     case ADD_NOTE: {

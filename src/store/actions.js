@@ -6,6 +6,7 @@ import {
   SET_APP_LOADING,
   SET_ADD_NOTE_MODAL_VISIBILITY,
   LOAD_NOTES,
+  GET_NOTE_BY_ID,
   ADD_NOTE,
   EDIT_NOTE,
   UPDATE_NOTE,
@@ -45,6 +46,23 @@ export const fetchNotes = () => async (dispatch, getState) => {
   querySnapshot.forEach(doc => data.push({ id: doc.id, ...doc.data() }));
 
   dispatch({ type: LOAD_NOTES, payload: data })
+  dispatch(setAppLoading(false));
+};
+
+export const getNoteById = noteId => async (dispatch, getState) => {
+  // const { session: { uid } } = getState();
+  dispatch(setAppLoading(true));
+  const querySnapshot = await firestore
+    .collection('notes')
+    .doc(noteId)
+    .get()
+
+  const data = {
+    ...querySnapshot.data(),
+    id: querySnapshot.id
+  };
+
+  dispatch({ type: GET_NOTE_BY_ID, payload: data })
   dispatch(setAppLoading(false));
 };
 

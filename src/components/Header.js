@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Spin, Icon, Divider } from 'antd';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 import { auth } from '../firebase';
 import { setSession, toggleSettingsDrawer } from '../store/actions';
@@ -44,13 +44,15 @@ const Container = styled.header`
     margin-left: 10px;
     text-transform: uppercase;
     vertical-align: center;
-    color: #424242;
     transition: 2s;
     font-weight: bold;
-    & > span{
-      text-decoration: overline;
-      font-size: 150%;
-      color: #2b2b2b;
+    a {
+      color: #424242;
+      & > span{
+        text-decoration: overline;
+        font-size: 150%;
+        color: #2b2b2b;
+      }
     }
   }
 `
@@ -65,7 +67,9 @@ const Header = ({ history, dispatch, appLoading, session }) => {
   return (
     <Container>
       <h3>
-        <span>N</span>otes{' '}{appLoading && <Spin indicator={antIcon} />}
+        <Link to="/home">
+          <span>N</span>otes{' '}{appLoading && <Spin indicator={antIcon} />}
+        </Link>
       </h3>
       {
         session && (

@@ -1,25 +1,36 @@
-import React, { useState } from 'react'
+import React, { useState, Fragment } from 'react'
 import marked from 'marked';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Tag, Icon, Popover, Popconfirm } from 'antd';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import { editNote, deleteNote } from '../store/actions';
 
-const Wrapper = styled.div`
+const CardStyles = css`
 width: 215px;
 height: 115px;
 margin: 7px;
+overflow: hidden;
+cursor: pointer;
+position: relative;
 padding: 5px;
+`;
+
+const ExpandedStyles = css`
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 30px 20px;
+`
+
+const Wrapper = styled.div`
+${(props) => props.view === 'CARD' ? CardStyles : ExpandedStyles}
 background: white;
 border-radius: 5px;
 border: 1px solid lightgrey;
 box-shadow: 3px 3px 3px lightgrey;
-overflow: hidden;
 transition: 1s;
 display: flex;
-position: relative;
-
 flex-direction: column;
 &:hover{
   background: #f7f7f7;
@@ -60,12 +71,12 @@ const DropdownWrapper = styled.div`
       margin: 2px 0;
     }
   }
-`
+`;
 
-const NoteCard = ({ note, editNote, deleteNote }) => {
+const NoteCard = ({ history, note, editNote, deleteNote, view = 'CARD' }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const { title = '', content = '', type = 'DROP', tags = [], id } = note;
+  const { title = '', content = '', type = 'DROP', tags = [], id } = note || {};
 
   const handleFavorite = () => { };
 
@@ -79,34 +90,49 @@ const NoteCard = ({ note, editNote, deleteNote }) => {
     setShowDropdown(false);
   };
 
+  const handleClick = e => {
+    // console.log(e, e.target);
+    if (view === 'CARD')
+      return history.push(`/note/${id}`);
+  };
+
+  if (!note) return <Fragment />
+
   return (
-    <Wrapper>
+    <Wrapper view={view}>
       {type && <h3 className="title">{title}</h3>}
-      <div className="content" dangerouslySetInnerHTML={{ __html: marked(content) }}></div>
+      <div
+        onClick={handleClick}
+        className="content"
+        dangerouslySetInnerHTML={{ __html: marked(content) }}
+      >
+      </div>
       <div className="tags">
         {tags.map((tag, index) => <Tag key={index}>{tag.toUpperCase()}</Tag>)}
       </div>
-      <DropdownWrapper>
+      <DropdownWrapper className="dropdown-wrapper">
         <Icon type="more" onClick={() => setShowDropdown(prevState => !prevState)} />
-        {showDropdown && (<div className="dropdown">
-          <Popover placement="right" content="Favorite">
-            <Icon onClick={handleFavorite} type="heart" />
-          </Popover>
-          <Popover placement="right" content="Edit">
-            <Icon onClick={handleEdit} type="edit" />
-          </Popover>
-          <Popover placement="right" content="Delete">
-            <Popconfirm
-              title="Delete?"
-              onConfirm={handleDelete}
-              placement="right"
-              okText="Yes"
-              cancelText="No"
-            >
-              <Icon type="delete" />
-            </Popconfirm>
-          </Popover>
-        </div>)}
+        {showDropdown && (
+          <div className="dropdown">
+            <Popover placement="right" content="Favorite">
+              <Icon onClick={handleFavorite} type="heart" />
+            </Popover>
+            <Popover placement="right" content="Edit">
+              <Icon onClick={handleEdit} type="edit" />
+            </Popover>
+            <Popover placement="right" content="Delete">
+              <Popconfirm
+                title="Delete?"
+                onConfirm={handleDelete}
+                placement="right"
+                okText="Yes"
+                cancelText="No"
+              >
+                <Icon type="delete" />
+              </Popconfirm>
+            </Popover>
+          </div>
+        )}
       </DropdownWrapper>
     </Wrapper>
   )
@@ -115,4 +141,4 @@ const NoteCard = ({ note, editNote, deleteNote }) => {
 const mapStateToProps = ({ notes }) => ({ notes });
 const mapDispatchToProps = ({ editNote, deleteNote });
 
-export default connect(mapStateToProps, mapDispatchToProps)(NoteCard);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NoteCard));
