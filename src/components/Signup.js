@@ -39,7 +39,7 @@ const Signup = () => {
   };
 
   return (
-    <StyledSection >
+    <StyledSection>
       <h3>Signup</h3>
       <form>
         <Input

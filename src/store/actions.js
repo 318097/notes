@@ -39,11 +39,11 @@ export const fetchNotes = () => async (dispatch, getState) => {
   dispatch(setAppLoading(true));
   const querySnapshot = await firestore
     .collection('notes')
-    .where("userId", "==", uid)
+    // .where("userId", "==", uid)
     .get()
 
   const data = [];
-  querySnapshot.forEach(doc => data.push({ id: doc.id, ...doc.data() }));
+  querySnapshot.forEach(doc => data.push({ ...doc.data(), id: doc.id }));
 
   dispatch({ type: LOAD_NOTES, payload: data })
   dispatch(setAppLoading(false));

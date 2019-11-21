@@ -13,18 +13,25 @@ height: 115px;
 margin: 7px;
 overflow: hidden;
 cursor: pointer;
-position: relative;
 padding: 5px;
 `;
 
 const ExpandedStyles = css`
-  max-width: 400px;
-  margin: 20px auto;
-  padding: 30px 20px;
+max-width: 400px;
+margin: 20px auto;
+padding: 30px 20px;
+`
+
+const UploadDataStyles = css`
+height: 300px;
+width: 300px;
+overflow: auto;
+margin: 10px;
 `
 
 const Wrapper = styled.div`
-${(props) => props.view === 'CARD' ? CardStyles : ExpandedStyles}
+${({ view }) => view === 'CARD' ? CardStyles : (view === 'EXPANDED' ? ExpandedStyles : UploadDataStyles)}
+position: relative;
 background: white;
 border-radius: 5px;
 border: 1px solid lightgrey;
@@ -37,6 +44,8 @@ flex-direction: column;
 }
 .title{
   text-align: center;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 .content{
   flex: 1 1 auto;
@@ -73,7 +82,7 @@ const DropdownWrapper = styled.div`
   }
 `;
 
-const NoteCard = ({ history, note, editNote, deleteNote, view = 'CARD' }) => {
+const NoteCard = ({ history, note, editNote, deleteNote, view = 'CARD', dropdownView }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const { title = '', content = '', type = 'DROP', tags = [], id } = note || {};
@@ -110,30 +119,33 @@ const NoteCard = ({ history, note, editNote, deleteNote, view = 'CARD' }) => {
       <div className="tags">
         {tags.map((tag, index) => <Tag key={index}>{tag.toUpperCase()}</Tag>)}
       </div>
-      <DropdownWrapper className="dropdown-wrapper">
-        <Icon type="more" onClick={() => setShowDropdown(prevState => !prevState)} />
-        {showDropdown && (
-          <div className="dropdown">
-            <Popover placement="right" content="Favorite">
-              <Icon onClick={handleFavorite} type="heart" />
-            </Popover>
-            <Popover placement="right" content="Edit">
-              <Icon onClick={handleEdit} type="edit" />
-            </Popover>
-            <Popover placement="right" content="Delete">
-              <Popconfirm
-                title="Delete?"
-                onConfirm={handleDelete}
-                placement="right"
-                okText="Yes"
-                cancelText="No"
-              >
-                <Icon type="delete" />
-              </Popconfirm>
-            </Popover>
-          </div>
-        )}
-      </DropdownWrapper>
+      {
+        dropdownView &&
+        <DropdownWrapper className="dropdown-wrapper">
+          <Icon type="more" onClick={() => setShowDropdown(prevState => !prevState)} />
+          {showDropdown && (
+            <div className="dropdown">
+              <Popover placement="right" content="Favorite">
+                <Icon onClick={handleFavorite} type="heart" />
+              </Popover>
+              <Popover placement="right" content="Edit">
+                <Icon onClick={handleEdit} type="edit" />
+              </Popover>
+              <Popover placement="right" content="Delete">
+                <Popconfirm
+                  title="Delete?"
+                  onConfirm={handleDelete}
+                  placement="right"
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Icon type="delete" />
+                </Popconfirm>
+              </Popover>
+            </div>
+          )}
+        </DropdownWrapper>
+      }
     </Wrapper>
   )
 };

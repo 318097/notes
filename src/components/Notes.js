@@ -21,15 +21,15 @@ const Notes = ({ fetchNotes, data, session }) => {
 
   return (
     <Fragment>
-      <div className="flex notes-wrapper">
+      <section className="flex center">
         {
           data.length ?
-            data.map(note => <NoteCard key={note.id} note={note} />) :
+            data.map(note => <NoteCard key={note.id} note={note} dropdownView={true} />) :
             <EmptyWrapper>
               Empty
           </EmptyWrapper>
         }
-      </div>
+      </section>
       <Settings />
     </Fragment>
   )

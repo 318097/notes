@@ -13,9 +13,11 @@ const Settings = ({ settings, settingsDrawerVisibility, dispatch }) => {
       onClose={handleClose}
       visible={settingsDrawerVisibility}
     >
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
+      <section>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </section>
     </Drawer>
   );
 }
