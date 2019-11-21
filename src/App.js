@@ -14,6 +14,7 @@ import Signup from './components/Signup';
 import Signin from './components/Signin';
 import NotFound from './components/NotFound';
 import NoteView from './components/NoteView';
+import UploadContent from './components/UploadContent';
 
 import { setAddNoteModalVisibility, setSession } from './store/actions';
 
@@ -50,6 +51,7 @@ const App = ({ location, history, dispatch, session }) => {
         <Route path="/signin" exact component={Signin} />
         <ProtectedRoute path="/home" exact component={Notes} />
         <ProtectedRoute path="/note/:id" exact component={NoteView} />
+        <ProtectedRoute path="/upload" exact component={UploadContent} />
         <Route path="/" exact render={() => <Redirect to="/signin" />} />
         <Route component={NotFound} />
       </Switch>

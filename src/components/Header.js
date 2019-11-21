@@ -88,7 +88,8 @@ const Header = ({ history, dispatch, appLoading, session }) => {
                 }
               </ProfileIcon>
             </UserInfo>
-            <StyledIcon type="setting" onClick={() => { dispatch(toggleSettingsDrawer(true)) }} />
+            <StyledIcon type="setting" onClick={() => dispatch(toggleSettingsDrawer(true))} />
+            <StyledIcon type="upload" onClick={() => history.push('/upload')} />
             <StyledIcon type="logout" onClick={signOut} />
           </div>
         )

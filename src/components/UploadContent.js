@@ -1,0 +1,77 @@
+import React, { useState, useEffect } from 'react'
+import { Upload, Button, Icon, Input } from 'antd';
+import NoteCard from './NoteCard';
+import { connect } from 'react-redux';
+
+import { firestore } from '../firebase';
+
+const UploadContent = ({ dispatch }) => {
+  const [disable, setDisable] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const [rawData, setRawData] = useState(null);
+  const [fileParsing, setFileParsing] = useState({
+    splitter: '===[\r\n\s]',
+  });
+
+  useEffect(() => {
+    if (rawData) {
+      processData();
+      setDisable(false);
+    }
+  }, [rawData]);
+
+  const handleUpload = e => {
+    const [document] = e.target.files;
+
+    if (!document) return;
+
+    const reader = new FileReader();
+    reader.readAsText(document);
+    reader.onload = () => setRawData(reader.result);
+  }
+
+  const processData = () => {
+    const fileContent = rawData
+      .split(new RegExp(fileParsing.splitter))
+      .map((item, index) => {
+        let [title, ...content] = item.trim().split('\n');
+        return {
+          title: title.replace(/#/gi, ''),
+          content: content.join('\n'),
+          id: index
+        }
+      });
+    setData(fileContent);
+  };
+
+  const addData = async () => {
+    setLoading(true);
+    const batch = firestore.batch();
+    data.forEach(({ id, ...item }) => {
+      const ref = firestore.collection('notes').doc();
+      batch.set(ref, { ...item, tags: [], type: 'DROP', createdAt: new Date().toISOString() });
+    });
+    await batch.commit();
+    setRawData(null);
+    setData([]);
+    setLoading(false);
+  };
+
+  const handleInput = type => ({ target: { value } }) => setFileParsing(data => ({ ...data, [type]: value }))
+
+  return (
+    <section>
+      <div className="flex space-between">
+        <input type="file" name='file' onChange={handleUpload} />
+        {/* <Input placeholder="File Splitter" value={fileParsing.splitter} onChange={handleInput('splitter')} /> */}
+        <Button onClick={addData} disabled={disable} loading={loading}>Add</Button>
+      </div>
+      <div className="flex center">
+        {data.map(item => <NoteCard key={item.id} view="UPLOAD" note={item} />)}
+      </div>
+    </section>
+  )
+}
+
+export default connect()(UploadContent);
