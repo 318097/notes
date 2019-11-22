@@ -9,7 +9,7 @@ border-radius: 50%;
 padding: 5px;
   &:hover{
     background: lightgrey;
-    transform: scale(1.1) rotate(360deg);
+    transform: scale(1.1);
   }
 `
 
@@ -43,10 +43,20 @@ top: 50px;
 h3{
   text-align: center;
   font-weight: bold;
+  font-family: LuckiestGuy;
+  text-decoration: underline;
 }
 button{
   margin: 5px 5px 0 0;
 }
 `
+const MessageWrapper = styled.div`
+  font-size: 40px;
+  text-align: center;
+  color: lightgrey;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-family: LuckiestGuy;
+`
 
-export { StyledIcon, ProfileIcon, StyledSection };
+export { StyledIcon, ProfileIcon, StyledSection, MessageWrapper };

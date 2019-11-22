@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import marked from 'marked';
-import { Modal, Input, Radio, Divider, Checkbox } from 'antd';
+import { Modal, Input, Radio, Divider, Checkbox, Popover } from 'antd';
 import SimpleMDE from "react-simplemde-editor";
 
 import { addNote, updateNote, setAddNoteModalVisibility } from '../store/actions';
@@ -81,9 +81,9 @@ const AddNote = ({
 
   return (
     <Fragment>
-      <StyledIcon type="plus"
-        onClick={setModalVisibilityStatus(true, 'add')}
-      />
+      <Popover placement="bottom" content="Add Note">
+        <StyledIcon type="plus" onClick={setModalVisibilityStatus(true, 'add')} />
+      </Popover>
       <Modal
         title={mode === 'edit' ? 'EDIT NOTE' : 'ADD NOTE'}
         centered={true}

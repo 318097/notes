@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { Spin, Icon, Divider } from 'antd';
+import { Spin, Icon, Divider, Popover } from 'antd';
 import { withRouter, Link } from 'react-router-dom';
 
 import { auth } from '../firebase';
@@ -12,6 +12,36 @@ import { StyledIcon, ProfileIcon } from '../styled';
 
 const antIcon = <Icon type="loading" spin />;
 
+const Container = styled.header`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 10px;
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 10;
+  h3{
+    flex: 1 1 70%;
+    margin: 0;
+    margin-left: 10px;
+    text-transform: uppercase;
+    vertical-align: center;
+    transition: 2s;
+    font-weight: bold;
+    a {
+      font-family: LuckiestGuy;
+      color: #424242;
+      & > span{
+        font-family: LuckiestGuy;
+        text-decoration: underline;
+        font-size: 150%;
+        color: #2b2b2b;
+      }
+    }
+  }
+`
 const UserInfo = styled.div`
 display: flex;
 background: #dcdcdc;
@@ -28,33 +58,8 @@ position: relative;
   top: 2px;
   font-size: 13px;
   font-weight: bold;
+  font-family: Saira;
 }
-`
-
-const Container = styled.header`
-  display: flex;
-  // background: #fff;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  padding: 10px;
-  h3{
-    flex: 1 1 70%;
-    margin: 0;
-    margin-left: 10px;
-    text-transform: uppercase;
-    vertical-align: center;
-    transition: 2s;
-    font-weight: bold;
-    a {
-      color: #424242;
-      & > span{
-        text-decoration: overline;
-        font-size: 150%;
-        color: #2b2b2b;
-      }
-    }
-  }
 `
 
 const Header = ({ history, dispatch, appLoading, session }) => {
@@ -75,7 +80,10 @@ const Header = ({ history, dispatch, appLoading, session }) => {
         session && (
           <div style={{ display: 'flex' }}>
             <AddNote />
-            <Divider type="vertical" />
+            <Popover placement="bottom" content="Upload">
+              <StyledIcon type="upload" onClick={() => history.push('/upload')} />
+            </Popover>
+            <Divider style={{ background: 'black', 'position': 'relative', top: '4px' }} type="vertical" />
             <UserInfo>
               <div className="username">
                 {session.name}
@@ -88,9 +96,12 @@ const Header = ({ history, dispatch, appLoading, session }) => {
                 }
               </ProfileIcon>
             </UserInfo>
-            <StyledIcon type="setting" onClick={() => dispatch(toggleSettingsDrawer(true))} />
-            <StyledIcon type="upload" onClick={() => history.push('/upload')} />
-            <StyledIcon type="logout" onClick={signOut} />
+            <Popover placement="bottom" content="Settings">
+              <StyledIcon type="setting" onClick={() => dispatch(toggleSettingsDrawer(true))} />
+            </Popover>
+            <Popover placement="bottom" content="Logout">
+              <StyledIcon type="logout" onClick={signOut} />
+            </Popover>
           </div>
         )
       }

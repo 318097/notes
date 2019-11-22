@@ -14,24 +14,29 @@ margin: 7px;
 overflow: hidden;
 cursor: pointer;
 padding: 5px;
+position: relative;
 `;
 
 const ExpandedStyles = css`
-max-width: 400px;
-margin: 20px auto;
+width: 45vw;
+height: 60vh;
 padding: 30px 20px;
-`
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+`;
 
 const UploadDataStyles = css`
 height: 300px;
 width: 300px;
 overflow: auto;
 margin: 10px;
-`
+position: relative;
+`;
 
 const Wrapper = styled.div`
 ${({ view }) => view === 'CARD' ? CardStyles : (view === 'EXPANDED' ? ExpandedStyles : UploadDataStyles)}
-position: relative;
 background: white;
 border-radius: 5px;
 border: 1px solid lightgrey;
@@ -48,8 +53,16 @@ flex-direction: column;
   font-weight: bold;
 }
 .content{
+  padding: 5px;
+  word-wrap: break-word;
   flex: 1 1 auto;
-  overflow: hidden;
+  width: 100%;
+  overflow-y: ${({ view }) => view === 'EXPANDED' ? 'auto' : 'hidden'};
+  pre{
+    font-size: 14px;
+    margin: 0 auto;
+    border: 1px solid lightgrey;
+  }
   p{
     text-align: center;
   }
@@ -82,7 +95,14 @@ const DropdownWrapper = styled.div`
   }
 `;
 
-const NoteCard = ({ history, note, editNote, deleteNote, view = 'CARD', dropdownView }) => {
+const NoteCard = ({
+  history,
+  note,
+  editNote,
+  deleteNote,
+  view = 'CARD',
+  dropdownView
+}) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const { title = '', content = '', type = 'DROP', tags = [], id } = note || {};
@@ -100,7 +120,6 @@ const NoteCard = ({ history, note, editNote, deleteNote, view = 'CARD', dropdown
   };
 
   const handleClick = e => {
-    // console.log(e, e.target);
     if (view === 'CARD')
       return history.push(`/note/${id}`);
   };
@@ -108,7 +127,7 @@ const NoteCard = ({ history, note, editNote, deleteNote, view = 'CARD', dropdown
   if (!note) return <Fragment />
 
   return (
-    <Wrapper view={view}>
+    <Wrapper view={view} type={type}>
       {type && <h3 className="title">{title}</h3>}
       <div
         onClick={handleClick}

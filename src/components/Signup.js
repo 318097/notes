@@ -20,6 +20,7 @@ const Signup = () => {
     try {
       setLoading(true);
       const { email, password, name } = form;
+
       const { user } = await auth.createUserWithEmailAndPassword(email, password);
       user.updateProfile({
         displayName: name

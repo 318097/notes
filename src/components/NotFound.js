@@ -1,11 +1,6 @@
 import React from 'react'
+import { MessageWrapper } from '../styled';
 
-const NotFound = () => {
-  return (
-    <section>
-      404 - Page not found.
-    </section>
-  )
-}
+const NotFound = () => <MessageWrapper>404 - Page not found.</MessageWrapper>;
 
 export default NotFound;

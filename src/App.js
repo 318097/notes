@@ -44,7 +44,7 @@ const App = ({ location, history, dispatch, session }) => {
   }, []);
 
   return (
-    <div>
+    <div className="container">
       <Header />
       <Switch>
         <Route path="/signup" exact component={Signup} />

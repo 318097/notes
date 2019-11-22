@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Upload, Button, Icon, Input } from 'antd';
+import { Button, message } from 'antd';
 import NoteCard from './NoteCard';
 import { connect } from 'react-redux';
 
 import { firestore } from '../firebase';
 
-const UploadContent = ({ dispatch }) => {
+const UploadContent = ({ dispatch, session }) => {
   const [disable, setDisable] = useState(true);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -47,24 +47,34 @@ const UploadContent = ({ dispatch }) => {
 
   const addData = async () => {
     setLoading(true);
+    const createdAt = new Date().toISOString();
+    const userId = session.uid;
     const batch = firestore.batch();
     data.forEach(({ id, ...item }) => {
       const ref = firestore.collection('notes').doc();
-      batch.set(ref, { ...item, tags: [], type: 'DROP', createdAt: new Date().toISOString() });
+      batch.set(ref,
+        {
+          ...item,
+          tags: [],
+          type: 'DROP',
+          createdAt,
+          userId
+        }
+      );
     });
     await batch.commit();
     setRawData(null);
     setData([]);
+    message.success(`${data.length} notes added successfully.`);
     setLoading(false);
   };
 
-  const handleInput = type => ({ target: { value } }) => setFileParsing(data => ({ ...data, [type]: value }))
+  // const handleInput = type => ({ target: { value } }) => setFileParsing(data => ({ ...data, [type]: value }))
 
   return (
     <section>
       <div className="flex space-between">
         <input type="file" name='file' onChange={handleUpload} />
-        {/* <Input placeholder="File Splitter" value={fileParsing.splitter} onChange={handleInput('splitter')} /> */}
         <Button onClick={addData} disabled={disable} loading={loading}>Add</Button>
       </div>
       <div className="flex center">
@@ -74,4 +84,6 @@ const UploadContent = ({ dispatch }) => {
   )
 }
 
-export default connect()(UploadContent);
+const mapStateToProps = ({ session }) => ({ session });
+
+export default connect(mapStateToProps)(UploadContent);

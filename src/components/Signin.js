@@ -18,7 +18,7 @@ const Signin = () => {
   const handleSignin = async () => {
     setLoading(true);
     const { email, password } = form;
-    const result = await auth.signInWithEmailAndPassword(email, password);
+    await auth.signInWithEmailAndPassword(email, password);
     setLoading(false);
   };
 
