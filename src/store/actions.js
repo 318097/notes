@@ -1,4 +1,5 @@
 // import data from './data';
+import axios from 'axios';
 
 import { firestore } from '../firebase';
 import {
@@ -35,71 +36,107 @@ export const toggleSettingsDrawer = status => ({
 });
 
 export const fetchNotes = () => async (dispatch, getState) => {
-  const { session: { uid } } = getState();
+  const { session: { uid, storage } } = getState();
   dispatch(setAppLoading(true));
-  const querySnapshot = await firestore
-    .collection('notes')
-    // .where("userId", "==", uid)
-    .get()
-
   const data = [];
-  querySnapshot.forEach(doc => data.push({ ...doc.data(), id: doc.id }));
+
+  if (storage === 'FIREBASE') {
+    const querySnapshot = await firestore
+      .collection('notes')
+      // .where("userId", "==", uid)
+      .get()
+
+    querySnapshot.forEach(doc => data.push({ ...doc.data(), _id: doc.id }));
+  } else {
+    const { data: { posts } } = await axios.get('/posts');
+    data.push(...posts);
+  }
 
   dispatch({ type: LOAD_NOTES, payload: data })
   dispatch(setAppLoading(false));
 };
 
 export const getNoteById = noteId => async (dispatch, getState) => {
-  // const { session: { uid } } = getState();
-  dispatch(setAppLoading(true));
-  const querySnapshot = await firestore
-    .collection('notes')
-    .doc(noteId)
-    .get()
+  const { session: { uid, storage } } = getState();
 
-  const data = {
-    ...querySnapshot.data(),
-    id: querySnapshot.id
-  };
+  dispatch(setAppLoading(true));
+  let data = {};
+  if (storage === 'FIREBASE') {
+
+    const querySnapshot = await firestore
+      .collection('notes')
+      .doc(noteId)
+      .get()
+
+    data = {
+      ...querySnapshot.data(),
+      _id: querySnapshot.id
+    };
+  } else {
+    const { data: { post } } = await axios.get(`/posts/${noteId}`);
+    data = { ...post };
+  }
 
   dispatch({ type: GET_NOTE_BY_ID, payload: data })
   dispatch(setAppLoading(false));
 };
 
-export const addNote = note => async dispatch => {
+export const addNote = note => async (dispatch, getState) => {
+  const { session: { storage } } = getState();
+
   dispatch(setAppLoading(true));
-  const result = await firestore
-    .collection('notes')
-    .add({ ...note, createdAt: new Date().toISOString() })
-  console.log('Result', result);
+
+  if (storage === 'FIREBASE') {
+    const result = await firestore
+      .collection('notes')
+      .add({ ...note, createdAt: new Date().toISOString() })
+    console.log('Result', result);
+  } else {
+    await axios.post(`/posts`, { data: note });
+  }
+
   dispatch({ type: ADD_NOTE, payload: note });
   dispatch(setAppLoading(false));
 };
 
-export const editNote = id => ({
+export const editNote = noteId => ({
   type: EDIT_NOTE,
-  payload: id
+  payload: noteId
 });
 
-export const updateNote = note => async dispatch => {
+export const updateNote = note => async (dispatch, getState) => {
+  const { session: { storage } } = getState();
   dispatch(setAppLoading(true));
-  const result = await firestore
-    .collection('notes')
-    .doc(note.id)
-    .set({ ...note })
-  console.log('Result', result);
+
+  if (storage === 'FIREBASE') {
+    const result = await firestore
+      .collection('notes')
+      .doc(note._id)
+      .set({ ...note })
+    console.log('Result', result);
+  } else {
+    await axios.put(`/posts/${note._id}`, { ...note });
+  }
+
   dispatch({ type: UPDATE_NOTE, payload: note });
   dispatch(setAppLoading(false));
 };
 
-export const deleteNote = id => async dispatch => {
+export const deleteNote = noteId => async (dispatch, getState) => {
+  const { session: { storage } } = getState();
   dispatch(setAppLoading(true));
-  await firestore
-    .collection('notes')
-    .doc(id)
-    .delete();
-  dispatch({ type: DELETE_NOTE, payload: id });
+
+  if (storage === 'FIREBASE') {
+    await firestore
+      .collection('notes')
+      .doc(noteId)
+      .delete();
+  } else {
+    await axios.delete(`/posts/${noteId}`);
+  }
+
+  dispatch({ type: DELETE_NOTE, payload: noteId });
   dispatch(setAppLoading(false));
 };
 
-export const toggleFavoriteNote = id => async dispatch => { };
+export const toggleFavoriteNote = noteId => async dispatch => { };

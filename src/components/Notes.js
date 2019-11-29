@@ -19,7 +19,7 @@ const Notes = ({ fetchNotes, data, session, appLoading }) => {
       <section className="flex center">
         {
           data.length ?
-            data.map(note => <NoteCard key={note.id} note={note} dropdownView={true} />) :
+            data.map(note => <NoteCard key={note._id} note={note} dropdownView={true} />) :
             <NoData />
         }
       </section>

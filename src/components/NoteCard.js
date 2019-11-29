@@ -105,23 +105,23 @@ const NoteCard = ({
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const { title = '', content = '', type = 'DROP', tags = [], id } = note || {};
+  const { title = '', content = '', type = 'DROP', tags = [], _id } = note || {};
 
   const handleFavorite = () => { };
 
   const handleEdit = () => {
-    editNote(id);
+    editNote(_id);
     setShowDropdown(false);
   };
 
   const handleDelete = () => {
-    deleteNote(id);
+    deleteNote(_id);
     setShowDropdown(false);
   };
 
   const handleClick = e => {
     if (view === 'CARD')
-      return history.push(`/note/${id}`);
+      return history.push(`/note/${_id}`);
   };
 
   if (!note) return <Fragment />

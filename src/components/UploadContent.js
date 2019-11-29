@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Button, message } from 'antd';
 import NoteCard from './NoteCard';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 import { firestore } from '../firebase';
 
@@ -39,30 +40,38 @@ const UploadContent = ({ dispatch, session }) => {
         return {
           title: title.replace(/#/gi, ''),
           content: content.join('\n'),
-          id: index
+          index
         }
       });
     setData(fileContent);
   };
 
   const addData = async () => {
+    const { storage } = session;
     setLoading(true);
-    const createdAt = new Date().toISOString();
-    const userId = session.uid;
-    const batch = firestore.batch();
-    data.forEach(({ id, ...item }) => {
-      const ref = firestore.collection('notes').doc();
-      batch.set(ref,
-        {
-          ...item,
-          tags: [],
-          type: 'DROP',
-          createdAt,
-          userId
-        }
-      );
-    });
-    await batch.commit();
+
+    if (storage === 'FIREBASE') {
+      const createdAt = new Date().toISOString();
+      const userId = session.uid;
+      const batch = firestore.batch();
+      data.forEach(({ index, ...item }) => {
+        const ref = firestore.collection('notes').doc();
+        batch.set(
+          ref,
+          {
+            ...item,
+            tags: [],
+            type: 'DROP',
+            createdAt,
+            userId
+          }
+        );
+      });
+      await batch.commit();
+    } else {
+      await axios.post('/posts', { data });
+    }
+
     setRawData(null);
     setData([]);
     message.success(`${data.length} notes added successfully.`);
@@ -78,7 +87,7 @@ const UploadContent = ({ dispatch, session }) => {
         <Button onClick={addData} disabled={disable} loading={loading}>Add</Button>
       </div>
       <div className="flex center">
-        {data.map(item => <NoteCard key={item.id} view="UPLOAD" note={item} />)}
+        {data.map(item => <NoteCard key={item.index} view="UPLOAD" note={item} />)}
       </div>
     </section>
   )

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
+import axios from 'axios';
 
 import { auth } from './firebase';
 
@@ -17,6 +18,10 @@ import NoteView from './components/NoteView';
 import UploadContent from './components/UploadContent';
 
 import { setAddNoteModalVisibility, setSession } from './store/actions';
+
+// axios.defaults.baseURL = 'https://bubblegum-server.herokuapp.com/api';
+axios.defaults.baseURL = 'http://localhost:7000/api';
+axios.defaults.headers.common["external-source"] = 'NOTES_APP';
 
 const App = ({ location, history, dispatch, session }) => {
   // const queryString = new URLSearchParams(location.search);
