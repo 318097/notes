@@ -12,7 +12,6 @@ padding: 5px;
 position: relative;
 height: 100%;
 width: 100%;
-overflow: hidden;
 border-radius: 5px;
 border: 1px solid lightgrey;
 box-shadow: 3px 3px 3px lightgrey;
@@ -21,6 +20,7 @@ display: flex;
 flex-direction: column;
 
 .title{
+  font-size: 16px;
   text-align: center;
   margin-bottom: 5px;
 }
@@ -29,7 +29,6 @@ flex-direction: column;
   word-wrap: break-word;
   flex: 1 1 auto;
   width: 100%;
-  overflow-y: ${({ view }) => view === 'EXPANDED' ? 'auto' : 'hidden'};
   pre{
     font-size: 14px;
     margin: 0 auto;
@@ -95,7 +94,7 @@ const NoteCard = ({
   if (!note) return <Fragment />
 
   return (
-    <Wrapper view={view}>
+    <Wrapper className="card">
       {showTitle && <h3 className="title">{title}</h3>}
       {
         showContent &&

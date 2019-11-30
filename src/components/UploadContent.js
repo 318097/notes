@@ -15,9 +15,16 @@ flex-wrap: wrap;
 .card-wrapper{
   height: 300px;
   width: 300px;
-  overflow: auto;
-  margin: 10px;
+  margin: 5px;
   position: relative;
+  .card{
+    .title{
+      margin: 10px;
+    }
+    .content{
+      overflow: auto;
+    }
+  }
 }
 `
 

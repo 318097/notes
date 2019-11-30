@@ -7,20 +7,29 @@ import NoteCard from './NoteCard';
 import { getNoteById } from '../store/actions';
 
 const Wrapper = styled.div`
-width: 45vw;
-height: 60vh;
+max-width: 400px;
+width: 100%;
+height: 80%;
 padding: 30px 20px;
 position: absolute;
 top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
+.card{
+  .title{
+    margin: 10px;
+  }
+  .content{
+      overflow: auto;
+  }
+}
 `
 
 const NoteView = ({ dispatch, match, selectedNote, session }) => {
 
   useEffect(() => {
     if (session) dispatch(getNoteById(match.params.id));
-  }, [session]);
+  }, [session, dispatch, match]);
 
   return <Wrapper><NoteCard view="EXPANDED" note={selectedNote} /></Wrapper>;
 }

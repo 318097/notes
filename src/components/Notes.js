@@ -17,6 +17,21 @@ flex-wrap: wrap;
   height: 115px;
   margin: 7px;
   cursor: pointer;
+  .card{
+    .title, .content{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 13px;
+    }
+    &:hover{
+      background: #efefef;
+    }
+    .content{
+      overflow: hidden;
+    }
+  }
 }
 `
 
