@@ -16,6 +16,7 @@ import Signin from './components/Signin';
 import NotFound from './components/NotFound';
 import NoteView from './components/NoteView';
 import UploadContent from './components/UploadContent';
+import Settings from './components/Settings';
 
 import { setAddNoteModalVisibility, setSession } from './store/actions';
 
@@ -60,6 +61,7 @@ const App = ({ location, history, dispatch, session }) => {
         <Route path="/" exact render={() => <Redirect to="/signin" />} />
         <Route component={NotFound} />
       </Switch>
+      <Settings />
     </div>
   );
 }

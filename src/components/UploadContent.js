@@ -3,8 +3,23 @@ import { Button, message } from 'antd';
 import NoteCard from './NoteCard';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import styled from 'styled-components';
 
 import { firestore } from '../firebase';
+
+
+const Wrapper = styled.div`
+display: flex;
+justify-content: center;
+flex-wrap: wrap;
+.card-wrapper{
+  height: 300px;
+  width: 300px;
+  overflow: auto;
+  margin: 10px;
+  position: relative;
+}
+`
 
 const UploadContent = ({ dispatch, session }) => {
   const [disable, setDisable] = useState(true);
@@ -78,17 +93,19 @@ const UploadContent = ({ dispatch, session }) => {
     setLoading(false);
   };
 
-  // const handleInput = type => ({ target: { value } }) => setFileParsing(data => ({ ...data, [type]: value }))
-
   return (
     <section>
       <div className="flex space-between">
         <input type="file" name='file' onChange={handleUpload} />
         <Button onClick={addData} disabled={disable} loading={loading}>Add</Button>
       </div>
-      <div className="flex center">
-        {data.map(item => <NoteCard key={item.index} view="UPLOAD" note={item} />)}
-      </div>
+      <Wrapper>
+        {data.map(item => (
+          <div className="card-wrapper" key={item.index}>
+            <NoteCard view="UPLOAD" note={item} />
+          </div>
+        ))}
+      </Wrapper>
     </section>
   )
 }

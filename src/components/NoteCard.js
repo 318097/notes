@@ -3,54 +3,26 @@ import marked from 'marked';
 import styled, { css } from 'styled-components';
 import { Tag, Icon, Popover, Popconfirm } from 'antd';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 
 import { editNote, deleteNote } from '../store/actions';
 
-const CardStyles = css`
-width: 215px;
-height: 115px;
-margin: 7px;
-overflow: hidden;
-cursor: pointer;
+const Wrapper = styled.div`
+background: white;
 padding: 5px;
 position: relative;
-`;
-
-const ExpandedStyles = css`
-width: 45vw;
-height: 60vh;
-padding: 30px 20px;
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-`;
-
-const UploadDataStyles = css`
-height: 300px;
-width: 300px;
-overflow: auto;
-margin: 10px;
-position: relative;
-`;
-
-const Wrapper = styled.div`
-${({ view }) => view === 'CARD' ? CardStyles : (view === 'EXPANDED' ? ExpandedStyles : UploadDataStyles)}
-background: white;
+height: 100%;
+width: 100%;
+overflow: hidden;
 border-radius: 5px;
 border: 1px solid lightgrey;
 box-shadow: 3px 3px 3px lightgrey;
 transition: 1s;
 display: flex;
 flex-direction: column;
-&:hover{
-  background: #f7f7f7;
-}
+
 .title{
   text-align: center;
   margin-bottom: 5px;
-  font-weight: bold;
 }
 .content{
   padding: 5px;
@@ -96,7 +68,6 @@ const DropdownWrapper = styled.div`
 `;
 
 const NoteCard = ({
-  history,
   note,
   editNote,
   deleteNote,
@@ -106,6 +77,8 @@ const NoteCard = ({
   const [showDropdown, setShowDropdown] = useState(false);
 
   const { title = '', content = '', type = 'DROP', tags = [], _id } = note || {};
+  const showTitle = type !== 'DROP' || view === 'UPLOAD';
+  const showContent = view === 'UPLOAD' || (view === 'CARD' && type !== 'POST');
 
   const handleFavorite = () => { };
 
@@ -119,22 +92,19 @@ const NoteCard = ({
     setShowDropdown(false);
   };
 
-  const handleClick = e => {
-    if (view === 'CARD')
-      return history.push(`/note/${_id}`);
-  };
-
   if (!note) return <Fragment />
 
   return (
-    <Wrapper view={view} type={type}>
-      {type && <h3 className="title">{title}</h3>}
-      <div
-        onClick={handleClick}
-        className="content"
-        dangerouslySetInnerHTML={{ __html: marked(content) }}
-      >
-      </div>
+    <Wrapper view={view}>
+      {showTitle && <h3 className="title">{title}</h3>}
+      {
+        showContent &&
+        <div
+          className="content"
+          dangerouslySetInnerHTML={{ __html: marked(content) }}
+        >
+        </div>
+      }
       <div className="tags">
         {tags.map((tag, index) => <Tag key={index}>{tag.toUpperCase()}</Tag>)}
       </div>
@@ -172,4 +142,4 @@ const NoteCard = ({
 const mapStateToProps = ({ notes }) => ({ notes });
 const mapDispatchToProps = ({ editNote, deleteNote });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NoteCard));
+export default connect(mapStateToProps, mapDispatchToProps)(NoteCard);
