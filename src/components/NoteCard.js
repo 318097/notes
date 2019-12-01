@@ -30,12 +30,13 @@ flex-direction: column;
   flex: 1 1 auto;
   width: 100%;
   pre{
-    font-size: 14px;
+    font-size: 12px;
     margin: 0 auto;
     border: 1px solid lightgrey;
+    padding: 5px;
   }
   p{
-    text-align: center;
+    text-align: justify;
   }
 }
 .tags{
@@ -77,7 +78,7 @@ const NoteCard = ({
 
   const { title = '', content = '', type = 'DROP', tags = [], _id } = note || {};
   const showTitle = type !== 'DROP' || view === 'UPLOAD';
-  const showContent = view === 'UPLOAD' || (view === 'CARD' && type !== 'POST');
+  const showContent = view === 'UPLOAD' || view === 'EXPANDED' || (view === 'CARD' && type !== 'POST');
 
   const handleFavorite = () => { };
 

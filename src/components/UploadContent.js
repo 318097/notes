@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import { Button, message } from 'antd';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useRef } from 'react'
+import { Button, message, Icon, PageHeader, Radio } from 'antd';
 import NoteCard from './NoteCard';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import styled from 'styled-components';
 
 import { firestore } from '../firebase';
-
 
 const Wrapper = styled.div`
 display: flex;
@@ -25,17 +25,42 @@ flex-wrap: wrap;
       overflow: auto;
     }
   }
+  .index-number{
+    position: absolute;
+    top: 7px;
+    left: 7px;
+    text-decoration: underline;
+    font-style: italics;
+    font-size: 9px;
+  }
+  .delete-icon{
+    position: absolute;
+    top: 10px;
+    right: 8px;
+    cursor: pointer;
+    color: red;
+    transition: 1s;
+    background: #eaeaea;
+    padding: 5px;
+    border-radius: 20px;
+    &:hover{
+      transform:scale(1.2);
+    }
+  }
 }
 `
 
-const UploadContent = ({ dispatch, session }) => {
+const UploadContent = ({ session }) => {
   const [disable, setDisable] = useState(true);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [dataType, setDataType] = useState('POST');
   const [rawData, setRawData] = useState(null);
   const [fileParsing, setFileParsing] = useState({
     splitter: '===[\r\n\s]',
   });
+
+  const inputEl = useRef(null);
 
   useEffect(() => {
     if (rawData) {
@@ -52,7 +77,7 @@ const UploadContent = ({ dispatch, session }) => {
     const reader = new FileReader();
     reader.readAsText(document);
     reader.onload = () => setRawData(reader.result);
-  }
+  };
 
   const processData = () => {
     const fileContent = rawData
@@ -91,30 +116,53 @@ const UploadContent = ({ dispatch, session }) => {
       });
       await batch.commit();
     } else {
-      await axios.post('/posts', { data });
+      const dataset = data.map(({ index, ...item }) => ({
+        ...item,
+        type: dataType
+      }));
+      await axios.post('/posts', { data: dataset });
     }
 
     setRawData(null);
     setData([]);
-    message.success(`${data.length} notes added successfully.`);
     setLoading(false);
+    message.success(`${data.length} notes added successfully.`);
   };
+
+  const removeItem = index => () => setData(prev => prev.filter(item => item.index !== index));
 
   return (
     <section>
-      <div className="flex space-between">
-        <input type="file" name='file' onChange={handleUpload} />
-        <Button onClick={addData} disabled={disable} loading={loading}>Add</Button>
-      </div>
+      <PageHeader title="File Upload"
+        extra={[
+          <Radio.Group
+            buttonStyle="solid"
+            value={dataType}
+            onChange={({ target: { value } }) => setDataType(value)}
+          >
+            <Radio.Button value="POST">POST</Radio.Button>
+            <Radio.Button value="DROP">DROP</Radio.Button>
+          </Radio.Group>,
+          <Button key="select-file" onClick={() => inputEl.current.click()}>
+            Select File
+            </Button>,
+          <Button key="upload-button" onClick={addData} disabled={disable} loading={loading}>
+            Upload <Icon type="upload" />
+          </Button>
+        ]}
+      />
       <Wrapper>
-        {data.map(item => (
+        {data.map((item, i) => (
           <div className="card-wrapper" key={item.index}>
             <NoteCard view="UPLOAD" note={item} />
+            <span className="index-number">#{i + 1}</span>
+            <Icon onClick={removeItem(i)} className="delete-icon" type="delete" />
           </div>
         ))}
       </Wrapper>
+      <input ref={inputEl} type="file" style={{ visibility: 'hidden' }} onChange={handleUpload} />
     </section>
-  )
+  );
 }
 
 const mapStateToProps = ({ session }) => ({ session });
