@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from 'react'
 import { Button, message, Icon, PageHeader, Radio } from 'antd';
-import NoteCard from './NoteCard';
+import Card from './Card';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -154,7 +154,7 @@ const UploadContent = ({ session }) => {
       <Wrapper>
         {data.map((item, i) => (
           <div className="card-wrapper" key={item.index}>
-            <NoteCard view="UPLOAD" note={item} />
+            <Card view="UPLOAD" note={item} />
             <span className="index-number">#{i + 1}</span>
             <Icon onClick={removeItem(i)} className="delete-icon" type="delete" />
           </div>

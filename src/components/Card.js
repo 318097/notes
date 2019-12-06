@@ -1,14 +1,15 @@
 import React, { useState, Fragment } from 'react'
 import marked from 'marked';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { Tag, Icon, Popover, Popconfirm } from 'antd';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import { editNote, deleteNote } from '../store/actions';
 
 const Wrapper = styled.div`
 background: white;
-padding: 5px;
+padding: 5px 0 10px 5px;
 position: relative;
 height: 100%;
 width: 100%;
@@ -18,7 +19,7 @@ box-shadow: 3px 3px 3px lightgrey;
 transition: 1s;
 display: flex;
 flex-direction: column;
-
+justify-content: flex-end;,
 .title{
   font-size: 16px;
   text-align: center;
@@ -36,7 +37,7 @@ flex-direction: column;
     padding: 5px;
   }
   p{
-    text-align: justify;
+    text-align: left;
   }
 }
 .tags{
@@ -46,33 +47,52 @@ flex-direction: column;
     font-size: 9px;
   }
 }
-`;
+.back-icon{
+  position: absolute;
+  background: lightgrey;
+  top: -7px;
+  left: -9px;
+  z-index: 10;
+  padding: 5px;
+  border-radius: 30px;
+  transition: 1s;
+  &:hover{
+    color: grey;
+    transform: scale(1.2);
+  }
+}
+`
 
 const DropdownWrapper = styled.div`
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 4px;
+  right: 4px;
+  .dropdown-icon{
+    padding: 2px;
+    border-radius: 50%;
+  }
   .dropdown{
     display: flex;
     flex-direction: column;
     position: absolute;
     background: lightgrey;
     padding: 5px;
-    right: -4px;
+    right: -3px;
     top: 19px;
     border-radius: 15px;
     & > * {
       margin: 2px 0;
     }
   }
-`;
+`
 
-const NoteCard = ({
+const Card = ({
   note,
   editNote,
   deleteNote,
   view = 'CARD',
-  dropdownView
+  dropdownView,
+  history
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -92,7 +112,16 @@ const NoteCard = ({
     setShowDropdown(false);
   };
 
-  if (!note) return <Fragment />
+  const handleDropdownClick = (e) => {
+    e.stopPropagation();
+    setShowDropdown(prevState => !prevState);
+  };
+
+  const handleTagClick = (e) => {
+    e.stopPropagation();
+  };
+
+  if (!note) return <Fragment />;
 
   return (
     <Wrapper className="card">
@@ -106,14 +135,14 @@ const NoteCard = ({
         </div>
       }
       <div className="tags">
-        {tags.map((tag, index) => <Tag key={index}>{tag.toUpperCase()}</Tag>)}
+        {tags.map((tag, index) => <Tag onClick={handleTagClick} key={index}>{tag.toUpperCase()}</Tag>)}
       </div>
       {
         dropdownView &&
         <DropdownWrapper className="dropdown-wrapper">
-          <Icon type="more" onClick={() => setShowDropdown(prevState => !prevState)} />
+          <Icon className="dropdown-icon" type="more" onClick={handleDropdownClick} />
           {showDropdown && (
-            <div className="dropdown">
+            <div className="dropdown" onClick={e => e.stopPropagation()}>
               <Popover placement="right" content="Favorite">
                 <Icon onClick={handleFavorite} type="heart" />
               </Popover>
@@ -135,11 +164,19 @@ const NoteCard = ({
           )}
         </DropdownWrapper>
       }
+      {
+        view === 'EXPANDED' &&
+        <Icon
+          className="back-icon"
+          onClick={() => history.push('/home')}
+          type="caret-left"
+        />
+      }
     </Wrapper>
-  )
+  );
 };
 
 const mapStateToProps = ({ notes }) => ({ notes });
 const mapDispatchToProps = ({ editNote, deleteNote });
 
-export default connect(mapStateToProps, mapDispatchToProps)(NoteCard);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Card));

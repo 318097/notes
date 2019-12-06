@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import NoteCard from './NoteCard';
+import Card from './Card';
 import { getNoteById } from '../store/actions';
 
 const Wrapper = styled.div`
@@ -31,7 +31,7 @@ const NoteView = ({ dispatch, match, selectedNote, session }) => {
     if (session) dispatch(getNoteById(match.params.id));
   }, [session, dispatch, match]);
 
-  return <Wrapper><NoteCard view="EXPANDED" note={selectedNote} /></Wrapper>;
+  return <Wrapper><Card view="EXPANDED" note={selectedNote} /></Wrapper>;
 }
 
 const mapStateToProps = ({ selectedNote, session }) => ({ selectedNote, session });

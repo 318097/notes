@@ -27,7 +27,6 @@ const Container = styled.header`
     margin: 0;
     margin-left: 10px;
     text-transform: uppercase;
-    vertical-align: center;
     transition: 2s;
     font-weight: bold;
     a {
@@ -40,6 +39,10 @@ const Container = styled.header`
         color: #2b2b2b;
       }
     }
+  }
+  .controls{
+    display: flex;
+    align-items: center;
   }
 `
 const UserInfo = styled.div`
@@ -78,7 +81,7 @@ const Header = ({ history, dispatch, appLoading, session }) => {
       </h3>
       {
         session && (
-          <div style={{ display: 'flex' }}>
+          <div className="controls">
             <AddNote />
             <Popover placement="bottom" content="Upload">
               <StyledIcon type="upload" onClick={() => history.push('/upload')} />

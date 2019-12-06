@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { fetchNotes } from '../store/actions';
-import NoteCard from './NoteCard';
+import Card from './Card';
 
 import { MessageWrapper } from '../styled';
 
@@ -40,7 +40,10 @@ const Notes = ({ fetchNotes, data, session, appLoading, history }) => {
     if (session) fetchNotes();
   }, [session]);
 
-  const handleClick = id => () => history.push(`/note/${id}`);
+  const handleClick = id => e => {
+    e.stopPropagation();
+    history.push(`/note/${id}`);
+  };
 
   const NoData = () => !appLoading && <MessageWrapper>Empty</MessageWrapper>;
 
@@ -55,7 +58,7 @@ const Notes = ({ fetchNotes, data, session, appLoading, history }) => {
                 key={note._id}
                 onClick={handleClick(note._id)}
               >
-                <NoteCard note={note} dropdownView={true} />
+                <Card note={note} dropdownView={true} />
               </div>
             ))}
           </Wrapper> :
