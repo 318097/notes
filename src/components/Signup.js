@@ -65,7 +65,7 @@ const Signup = () => {
           onClick={handleSignup}
           loading={loading}
         >
-          Sign-up
+          Sign up
           </Button>
       </form>
     </StyledSection>

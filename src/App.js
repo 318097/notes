@@ -34,7 +34,7 @@ const App = ({ location, history, dispatch, session }) => {
   useEffect(() => {
     auth.onAuthStateChanged(user => {
       if (user) {
-        console.log('Auth user: ', user);
+        // console.log('Auth user: ', user);
         const { displayName: name, email, photoURL, uid } = user;
         dispatch(setSession({
           name, email, photoURL, uid

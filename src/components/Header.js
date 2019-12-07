@@ -23,7 +23,7 @@ const Container = styled.header`
   background: inherit;
   z-index: 10;
   h3{
-    flex: 1 1 70%;
+    flex: 1 1 auto;
     margin: 0;
     margin-left: 10px;
     text-transform: uppercase;
@@ -41,12 +41,14 @@ const Container = styled.header`
     }
   }
   .controls{
+    flex: 0 0 auto;
     display: flex;
     align-items: center;
   }
 `
 const UserInfo = styled.div`
 display: flex;
+height: 24px;
 background: #dcdcdc;
 padding: 0px 10px;
 margin: 0;

@@ -43,7 +43,7 @@ const Signin = () => {
           onClick={handleSignin}
           loading={loading}
         >
-          Sign-in
+          Sign in
           </Button>
 
         <Button

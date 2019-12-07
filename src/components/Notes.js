@@ -45,7 +45,7 @@ const Notes = ({ fetchNotes, data, session, appLoading, history }) => {
     history.push(`/note/${id}`);
   };
 
-  const NoData = () => !appLoading && <MessageWrapper>Empty</MessageWrapper>;
+  const NoData = () => (!appLoading || !session) && <MessageWrapper>Empty</MessageWrapper>;
 
   return (
     <section>
