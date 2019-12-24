@@ -1,13 +1,19 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { connect } from 'react-redux';
-import styled from 'styled-components';
-import marked from 'marked';
-import { Modal, Input, Radio, Divider, Checkbox, Popover } from 'antd';
+import React, { useState, useEffect, Fragment } from "react";
+import { connect } from "react-redux";
+import styled from "styled-components";
+import marked from "marked";
+import { Modal, Input, Radio, Divider, Checkbox, Popover } from "antd";
 import SimpleMDE from "react-simplemde-editor";
 
-import { addNote, updateNote, setAddNoteModalVisibility } from '../store/actions';
+import {
+  addNote,
+  updateNote,
+  setAddNoteModalVisibility,
+  setUploadNoteStatus,
+  setNoteToEdit
+} from "../store/actions";
 
-import { StyledIcon } from '../styled';
+import { StyledIcon } from "../styled";
 
 import "easymde/dist/easymde.min.css";
 
@@ -16,13 +22,14 @@ const CustomContainer = styled.div`
   align-items: stretch;
   justify-content: space-between;
 
-  form, div.preview{
+  form,
+  div.preview {
     padding: 20px 10px;
   }
-  form{
+  form {
     flex: 1 1 59%;
   }
-  div.preview{
+  div.preview {
     background: #f3f3f3;
     margin: 10px;
     border-radius: 5px;
@@ -49,31 +56,36 @@ const AddNote = ({
   setAddNoteModalVisibility,
   mode,
   selectedNote,
-  session
+  session,
+  setUploadNoteStatus,
+  setNoteToEdit
 }) => {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
-  const [previewMode, setPreviewMode] = useState('PREVIEW');
+  const [previewMode, setPreviewMode] = useState("PREVIEW");
   const [note, setNote] = useState(initialState);
 
   useEffect(() => {
     if (modalVisibility) {
-      if (mode === 'edit') setNote({ ...selectedNote });
-      else setNote({ ...initialState, tags: [] });
+      if (mode === "add") setNote({ ...initialState, tags: [] });
+      else setNote({ ...selectedNote });
     }
   }, [mode, selectedNote, modalVisibility]);
 
-  const setModalVisibilityStatus = (status, mode) => async () => setAddNoteModalVisibility(status, mode);
+  const setModalVisibilityStatus = (status, mode) => async () =>
+    setAddNoteModalVisibility(status, mode);
 
   const setData = (key, value) => setNote(data => ({ ...data, [key]: value }));
 
   const handleOk = async () => {
     setLoading(true);
 
-    if (mode === 'edit')
-      await updateNote({ ...note });
-    else
-      await addNote({ ...note, userId: session.uid });
+    if (mode === "edit") await updateNote({ ...note });
+    else if (mode === "add") await addNote({ ...note, userId: session.uid });
+    else {
+      await setNoteToEdit({ ...note });
+      await setUploadNoteStatus(true);
+    }
 
     setLoading(false);
     setModalVisibilityStatus(false)();
@@ -82,13 +94,16 @@ const AddNote = ({
   return (
     <Fragment>
       <Popover placement="bottom" content="Add Note">
-        <StyledIcon type="plus" onClick={setModalVisibilityStatus(true, 'add')} />
+        <StyledIcon
+          type="plus"
+          onClick={setModalVisibilityStatus(true, "add")}
+        />
       </Popover>
       <Modal
-        title={mode === 'edit' ? 'EDIT NOTE' : 'ADD NOTE'}
+        title={mode === "add" ? "ADD NOTE" : "EDIT NOTE"}
         centered={true}
         visible={modalVisibility}
-        okText={mode === 'edit' ? 'Update' : 'Add'}
+        okText={mode === "add" ? "Add" : "Update"}
         onOk={handleOk}
         onCancel={setModalVisibilityStatus(false)}
         width="80vw"
@@ -109,15 +124,15 @@ const AddNote = ({
               autoFocus
               placeholder="Title"
               value={note.title}
-              onChange={({ target: { value } }) => setData('title', value)}
+              onChange={({ target: { value } }) => setData("title", value)}
             />
             <SimpleMDE
               value={note.content}
-              onChange={value => setData('content', value)}
+              onChange={value => setData("content", value)}
               options={{
                 spellChecker: false,
-                placeholder: 'Content...',
-                hideIcons: ["guide", "preview", "fullscreen", "side-by-side"],
+                placeholder: "Content...",
+                hideIcons: ["guide", "preview", "fullscreen", "side-by-side"]
               }}
             />
             <Checkbox.Group
@@ -140,17 +155,26 @@ const AddNote = ({
                 </Radio.Group>
               </div>
               <Divider />
-              {
-                previewMode === 'PREVIEW' ?
-                  <Fragment>
-                    <div dangerouslySetInnerHTML={{ __html: marked(note.title || '') }}></div>
-                    <div dangerouslySetInnerHTML={{ __html: marked(note.content || '') }}></div>
-                  </Fragment> :
-                  <div>
-                    {marked(note.title)}<br />
-                    {marked(note.content)}
-                  </div>
-              }
+              {previewMode === "PREVIEW" ? (
+                <Fragment>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: marked(note.title || "")
+                    }}
+                  ></div>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: marked(note.content || "")
+                    }}
+                  ></div>
+                </Fragment>
+              ) : (
+                <div>
+                  {marked(note.title)}
+                  <br />
+                  {marked(note.content)}
+                </div>
+              )}
             </div>
           )}
         </CustomContainer>
@@ -159,7 +183,23 @@ const AddNote = ({
   );
 };
 
-const mapStateToProps = ({ addNoteModalVisibility, selectedNote, mode, session }) => ({ modalVisibility: addNoteModalVisibility, selectedNote, mode, session });
-const mapDispatchToProps = ({ addNote, updateNote, setAddNoteModalVisibility });
+const mapStateToProps = ({
+  addNoteModalVisibility,
+  selectedNote,
+  mode,
+  session
+}) => ({
+  modalVisibility: addNoteModalVisibility,
+  selectedNote,
+  mode,
+  session
+});
+const mapDispatchToProps = {
+  addNote,
+  updateNote,
+  setAddNoteModalVisibility,
+  setUploadNoteStatus,
+  setNoteToEdit
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNote);

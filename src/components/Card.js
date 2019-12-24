@@ -1,78 +1,80 @@
-import React, { useState, Fragment } from 'react'
-import marked from 'marked';
-import styled from 'styled-components';
-import { Tag, Icon, Popover, Popconfirm } from 'antd';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import React, { useState, Fragment } from "react";
+import marked from "marked";
+import styled from "styled-components";
+import { Tag, Icon, Popover, Popconfirm } from "antd";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
-import { editNote, deleteNote } from '../store/actions';
+import { editNote, deleteNote } from "../store/actions";
 
 const Wrapper = styled.div`
-background: white;
-padding: 5px 0 10px 5px;
-position: relative;
-height: 100%;
-width: 100%;
-border-radius: 5px;
-border: 1px solid lightgrey;
-box-shadow: 3px 3px 3px lightgrey;
-transition: 1s;
-display: flex;
-flex-direction: column;
-justify-content: flex-end;,
-.title{
-  font-size: 16px;
-  text-align: center;
-  margin-bottom: 5px;
-}
-.content{
-  padding: 5px;
-  word-wrap: break-word;
-  flex: 1 1 auto;
+  background: white;
+  padding: 5px 0 10px 5px;
+  position: relative;
+  height: 100%;
   width: 100%;
-  pre{
-    font-size: 12px;
-    margin: 0 auto;
-    border: 1px solid lightgrey;
-    padding: 5px;
-  }
-  p{
-    text-align: left;
-  }
-}
-.tags{
-  text-align: left;
-  .ant-tag{
-    margin-right: 3px;
-    padding: 0px 4px;
-    font-size: 9px;
-  }
-}
-.back-icon{
-  position: absolute;
-  background: lightgrey;
-  top: -7px;
-  left: -9px;
-  z-index: 10;
-  padding: 5px;
-  border-radius: 30px;
+  border-radius: 5px;
+  border: 1px solid lightgrey;
+  box-shadow: 3px 3px 3px lightgrey;
   transition: 1s;
-  &:hover{
-    color: grey;
-    transform: scale(1.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  ,
+  .title {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 5px;
   }
-}
-`
+  .content {
+    padding: 5px;
+    word-wrap: break-word;
+    flex: 1 1 auto;
+    width: 100%;
+    pre {
+      text-align: left;
+      font-size: 12px;
+      margin: 0 auto;
+      border: 1px solid lightgrey;
+      padding: 5px;
+    }
+    p {
+      text-align: left;
+    }
+  }
+  .tags {
+    text-align: left;
+    .ant-tag {
+      margin-right: 3px;
+      padding: 0px 4px;
+      font-size: 9px;
+    }
+  }
+  .back-icon {
+    position: absolute;
+    background: lightgrey;
+    top: -7px;
+    left: -9px;
+    z-index: 10;
+    padding: 5px;
+    border-radius: 30px;
+    transition: 1s;
+    &:hover {
+      color: grey;
+      transform: scale(1.2);
+    }
+  }
+`;
 
 const DropdownWrapper = styled.div`
   position: absolute;
   top: 4px;
   right: 4px;
-  .dropdown-icon{
+  .dropdown-icon {
     padding: 2px;
     border-radius: 50%;
   }
-  .dropdown{
+  .dropdown {
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -85,23 +87,27 @@ const DropdownWrapper = styled.div`
       margin: 2px 0;
     }
   }
-`
+`;
 
 const Card = ({
   note,
   editNote,
   deleteNote,
-  view = 'CARD',
+  view = "CARD",
   dropdownView,
   history
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const { title = '', content = '', type = 'DROP', tags = [], _id } = note || {};
-  const showTitle = type !== 'DROP' || view === 'UPLOAD';
-  const showContent = view === 'UPLOAD' || view === 'EXPANDED' || (view === 'CARD' && type !== 'POST');
+  const { title = "", content = "", type = "DROP", tags = [], _id } =
+    note || {};
+  const showTitle = type !== "DROP" || view === "UPLOAD";
+  const showContent =
+    view === "UPLOAD" ||
+    view === "EXPANDED" ||
+    (view === "CARD" && type !== "POST");
 
-  const handleFavorite = () => { };
+  const handleFavorite = () => {};
 
   const handleEdit = () => {
     editNote(_id);
@@ -113,12 +119,12 @@ const Card = ({
     setShowDropdown(false);
   };
 
-  const handleDropdownClick = (e) => {
+  const handleDropdownClick = e => {
     e.stopPropagation();
     setShowDropdown(prevState => !prevState);
   };
 
-  const handleTagClick = (e) => {
+  const handleTagClick = e => {
     e.stopPropagation();
   };
 
@@ -127,21 +133,26 @@ const Card = ({
   return (
     <Wrapper className="card">
       {showTitle && <h3 className="title">{title}</h3>}
-      {
-        showContent &&
+      {showContent && (
         <div
           className="content"
           dangerouslySetInnerHTML={{ __html: marked(content) }}
-        >
-        </div>
-      }
+        ></div>
+      )}
       <div className="tags">
-        {tags.map((tag, index) => <Tag onClick={handleTagClick} key={index}>{tag.toUpperCase()}</Tag>)}
+        {tags.map((tag, index) => (
+          <Tag onClick={handleTagClick} key={index}>
+            {tag.toUpperCase()}
+          </Tag>
+        ))}
       </div>
-      {
-        dropdownView &&
+      {dropdownView && (
         <DropdownWrapper className="dropdown-wrapper">
-          <Icon className="dropdown-icon" type="more" onClick={handleDropdownClick} />
+          <Icon
+            className="dropdown-icon"
+            type="more"
+            onClick={handleDropdownClick}
+          />
           {showDropdown && (
             <div className="dropdown" onClick={e => e.stopPropagation()}>
               <Popover placement="right" content="Favorite">
@@ -164,20 +175,19 @@ const Card = ({
             </div>
           )}
         </DropdownWrapper>
-      }
-      {
-        view === 'EXPANDED' &&
+      )}
+      {view === "EXPANDED" && (
         <Icon
           className="back-icon"
-          onClick={() => history.push('/home')}
+          onClick={() => history.push("/home")}
           type="caret-left"
         />
-      }
+      )}
     </Wrapper>
   );
 };
 
 const mapStateToProps = ({ notes }) => ({ notes });
-const mapDispatchToProps = ({ editNote, deleteNote });
+const mapDispatchToProps = { editNote, deleteNote };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Card));

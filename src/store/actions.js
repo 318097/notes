@@ -1,7 +1,7 @@
 // import data from './data';
-import axios from 'axios';
+import axios from "axios";
 
-import { firestore } from '../firebase';
+import { firestore } from "../firebase";
 import {
   SET_SESSION,
   SET_APP_LOADING,
@@ -10,10 +10,12 @@ import {
   GET_NOTE_BY_ID,
   ADD_NOTE,
   EDIT_NOTE,
+  SET_EDIT_NOTE,
+  SET_UPLOAD_NOTE_STATUS,
   UPDATE_NOTE,
   DELETE_NOTE,
-  TOGGLE_SETTINGS_DRAWER,
-} from './constants';
+  TOGGLE_SETTINGS_DRAWER
+} from "./constants";
 
 export const setSession = session => ({
   type: SET_SESSION,
@@ -36,61 +38,70 @@ export const toggleSettingsDrawer = status => ({
 });
 
 export const fetchNotes = () => async (dispatch, getState) => {
-  const { session: { uid, storage } } = getState();
+  const {
+    session: { uid, storage }
+  } = getState();
   dispatch(setAppLoading(true));
   const data = [];
 
-  if (storage === 'FIREBASE') {
+  if (storage === "FIREBASE") {
     const querySnapshot = await firestore
-      .collection('notes')
+      .collection("notes")
       // .where("userId", "==", uid)
-      .get()
+      .get();
 
     querySnapshot.forEach(doc => data.push({ ...doc.data(), _id: doc.id }));
   } else {
-    const { data: { posts } } = await axios.get('/posts');
+    const {
+      data: { posts }
+    } = await axios.get("/posts");
     data.push(...posts);
   }
 
-  dispatch({ type: LOAD_NOTES, payload: data })
+  dispatch({ type: LOAD_NOTES, payload: data });
   dispatch(setAppLoading(false));
 };
 
 export const getNoteById = noteId => async (dispatch, getState) => {
-  const { session: { uid, storage } } = getState();
+  const {
+    session: { uid, storage }
+  } = getState();
 
   dispatch(setAppLoading(true));
   let data = {};
-  if (storage === 'FIREBASE') {
-
+  if (storage === "FIREBASE") {
     const querySnapshot = await firestore
-      .collection('notes')
+      .collection("notes")
       .doc(noteId)
-      .get()
+      .get();
 
     data = {
       ...querySnapshot.data(),
       _id: querySnapshot.id
     };
   } else {
-    const { data: { post } } = await axios.get(`/posts/${noteId}`);
+    const {
+      data: { post }
+    } = await axios.get(`/posts/${noteId}`);
     data = { ...post };
   }
 
-  dispatch({ type: GET_NOTE_BY_ID, payload: data })
+  dispatch({ type: GET_NOTE_BY_ID, payload: data });
   dispatch(setAppLoading(false));
 };
 
 export const addNote = note => async (dispatch, getState) => {
-  const { session: { storage } } = getState();
+  const {
+    session: { storage }
+  } = getState();
 
   dispatch(setAppLoading(true));
 
-  if (storage === 'FIREBASE') {
+  if (storage === "FIREBASE") {
     const result = await firestore
-      .collection('notes')
-      .add({ ...note, createdAt: new Date().toISOString() })
-    console.log('Result', result);
+      .collection("notes")
+      .add({ ...note, createdAt: new Date().toISOString() });
+    console.log("Result", result);
   } else {
     await axios.post(`/posts`, { data: note });
   }
@@ -104,16 +115,28 @@ export const editNote = noteId => ({
   payload: noteId
 });
 
+export const setNoteToEdit = note => ({
+  type: SET_EDIT_NOTE,
+  payload: note
+});
+
+export const setUploadNoteStatus = () => ({
+  type: SET_UPLOAD_NOTE_STATUS,
+  payload: true
+});
+
 export const updateNote = note => async (dispatch, getState) => {
-  const { session: { storage } } = getState();
+  const {
+    session: { storage }
+  } = getState();
   dispatch(setAppLoading(true));
 
-  if (storage === 'FIREBASE') {
+  if (storage === "FIREBASE") {
     const result = await firestore
-      .collection('notes')
+      .collection("notes")
       .doc(note._id)
-      .set({ ...note })
-    console.log('Result', result);
+      .set({ ...note });
+    console.log("Result", result);
   } else {
     await axios.put(`/posts/${note._id}`, { ...note });
   }
@@ -123,12 +146,14 @@ export const updateNote = note => async (dispatch, getState) => {
 };
 
 export const deleteNote = noteId => async (dispatch, getState) => {
-  const { session: { storage } } = getState();
+  const {
+    session: { storage }
+  } = getState();
   dispatch(setAppLoading(true));
 
-  if (storage === 'FIREBASE') {
+  if (storage === "FIREBASE") {
     await firestore
-      .collection('notes')
+      .collection("notes")
       .doc(noteId)
       .delete();
   } else {
@@ -139,4 +164,4 @@ export const deleteNote = noteId => async (dispatch, getState) => {
   dispatch(setAppLoading(false));
 };
 
-export const toggleFavoriteNote = noteId => async dispatch => { };
+export const toggleFavoriteNote = noteId => async dispatch => {};
