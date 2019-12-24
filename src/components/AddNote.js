@@ -13,6 +13,8 @@ import {
   setNoteToEdit
 } from "../store/actions";
 
+import { generateSlug } from "../utils";
+
 import { StyledIcon } from "../styled";
 
 import "easymde/dist/easymde.min.css";
@@ -41,6 +43,7 @@ const initialState = {
   type: "DROP",
   title: "",
   content: "",
+  slug: "",
   tags: []
 };
 
@@ -125,6 +128,13 @@ const AddNote = ({
               placeholder="Title"
               value={note.title}
               onChange={({ target: { value } }) => setData("title", value)}
+              onBlur={() => setData("slug", generateSlug(note.title))}
+            />
+            <Input
+              autoFocus
+              placeholder="Slug"
+              value={note.slug}
+              onChange={({ target: { value } }) => setData("slug", value)}
             />
             <SimpleMDE
               value={note.content}

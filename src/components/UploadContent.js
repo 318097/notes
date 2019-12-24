@@ -10,6 +10,7 @@ import uuid from "uuid";
 import { setNoteToEdit } from "../store/actions";
 import { StyledIcon } from "../styled";
 import { firestore } from "../firebase";
+import { generateSlug } from "../utils";
 
 const Wrapper = styled.div`
   display: flex;
@@ -100,12 +101,14 @@ const UploadContent = ({
       .split(new RegExp(fileParsing.splitter))
       .map(item => {
         let [title, ...content] = item.trim().split("\n");
+        title = title.replace(/#/gi, "");
         return {
           tags: [],
           type: dataType,
-          title: title.replace(/#/gi, ""),
+          title,
           content: content.join("\n"),
-          tempId: uuid()
+          tempId: uuid(),
+          slug: generateSlug(title)
         };
       });
     setData(fileContent);
