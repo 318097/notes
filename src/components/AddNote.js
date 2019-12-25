@@ -48,6 +48,9 @@ const initialState = {
 };
 
 const tagOptions = [
+  { label: "GIT", value: "GIT" },
+  { label: "CSS", value: "CSS" },
+  { label: "SASS", value: "SASS" },
   { label: "JAVASCRIPT", value: "JAVASCRIPT" },
   { label: "REACT", value: "REACT" }
 ];
@@ -131,7 +134,6 @@ const AddNote = ({
               onBlur={() => setData("slug", generateSlug(note.title))}
             />
             <Input
-              autoFocus
               placeholder="Slug"
               value={note.slug}
               onChange={({ target: { value } }) => setData("slug", value)}

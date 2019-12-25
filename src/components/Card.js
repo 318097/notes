@@ -37,6 +37,16 @@ const Wrapper = styled.div`
       margin: 0 auto;
       border: 1px solid lightgrey;
       padding: 5px;
+      & > code {
+        background: initial;
+        padding: initial;
+        border-radius: initial;
+      }
+    }
+    code {
+      background: tomato;
+      padding: 2px 4px;
+      border-radius: 10px;
     }
     p {
       text-align: left;

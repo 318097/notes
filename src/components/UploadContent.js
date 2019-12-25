@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from "react";
-import { Button, message, Icon, PageHeader, Radio } from "antd";
+import { Button, message, Icon, PageHeader, Radio, Input } from "antd";
 import Card from "./Card";
 import { connect } from "react-redux";
 import axios from "axios";
@@ -52,6 +52,29 @@ const Wrapper = styled.div`
   }
 `;
 
+const parseItem = (item, type = "POST") => {
+  let title, content;
+  switch (type) {
+    case "POST":
+      [title, ...content] = item.split("\n");
+      title = title.replace(/#/gi, "");
+      content = content.join("\n");
+      break;
+    case "DROP":
+      [title, content] = item.split("=>");
+      title = title.replace(/-/, "");
+      content = `${title} - ${content}`;
+      title = "";
+      break;
+    default:
+      return;
+  }
+  return {
+    title,
+    content
+  };
+};
+
 const UploadContent = ({
   session,
   dispatch,
@@ -63,11 +86,14 @@ const UploadContent = ({
   const [data, setData] = useState([]);
   const [dataType, setDataType] = useState("POST");
   const [rawData, setRawData] = useState(null);
-  const [fileParsing, setFileParsing] = useState({
-    splitter: "===[\r\ns]"
-  });
+  const [fileParsing, setFileParsing] = useState("===[\r\n]");
 
   const inputEl = useRef(null);
+
+  useEffect(() => {
+    if (dataType === "POST") setFileParsing("===[\r\n]");
+    else if (dataType === "DROP") setFileParsing("[\r\n]");
+  }, [dataType]);
 
   useEffect(() => {
     if (!uploadNoteStatus) return;
@@ -86,8 +112,8 @@ const UploadContent = ({
     }
   }, [rawData]);
 
-  const handleUpload = e => {
-    const [document] = e.target.files;
+  const handleUpload = event => {
+    const [document] = event.target.files;
 
     if (!document) return;
 
@@ -97,20 +123,17 @@ const UploadContent = ({
   };
 
   const processData = () => {
-    const fileContent = rawData
-      .split(new RegExp(fileParsing.splitter))
-      .map(item => {
-        let [title, ...content] = item.trim().split("\n");
-        title = title.replace(/#/gi, "");
-        return {
-          tags: [],
-          type: dataType,
-          title,
-          content: content.join("\n"),
-          tempId: uuid(),
-          slug: generateSlug(title)
-        };
-      });
+    const fileContent = rawData.split(new RegExp(fileParsing)).map(item => {
+      let { title, content } = parseItem(item.trim(), dataType);
+      return {
+        tags: [],
+        type: dataType,
+        title,
+        content,
+        tempId: uuid(),
+        slug: generateSlug(title)
+      };
+    });
     setData(fileContent);
   };
 
@@ -151,7 +174,17 @@ const UploadContent = ({
       <PageHeader
         title="File Upload"
         extra={[
+          <Input
+            key="file-splitter"
+            style={{ width: "110px" }}
+            placeholder="File splitter"
+            value={JSON.stringify(fileParsing)}
+            onChange={({ target: { value } }) =>
+              setFileParsing(JSON.parse(value))
+            }
+          />,
           <Radio.Group
+            key="data-type"
             buttonStyle="solid"
             value={dataType}
             onChange={({ target: { value } }) => setDataType(value)}
