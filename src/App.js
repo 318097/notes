@@ -1,28 +1,28 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import { withRouter, Route, Switch, Redirect } from "react-router-dom";
+import axios from "axios";
 
-import { auth } from './firebase';
+import { auth } from "./firebase";
 
-import './App.scss';
+import "./App.scss";
 
-import ProtectedRoute from './ProtectedRoute';
+import ProtectedRoute from "./ProtectedRoute";
 
-import Header from './components/Header';
-import Notes from './components/Notes';
-import Signup from './components/Signup';
-import Signin from './components/Signin';
-import NotFound from './components/NotFound';
-import NoteView from './components/NoteView';
-import UploadContent from './components/UploadContent';
-import Settings from './components/Settings';
+import Header from "./components/Header";
+import Signup from "./components/Signup";
+import Signin from "./components/Signin";
+import NotFound from "./components/NotFound";
+import Notes from "./components/notes/Notes";
+import NoteView from "./components/notes/NoteView";
+import UploadContent from "./components/notes/UploadContent";
+import Settings from "./components/Settings";
 
-import { setAddNoteModalVisibility, setSession } from './store/actions';
+import { setAddNoteModalVisibility, setSession } from "./store/actions";
 
 // axios.defaults.baseURL = 'https://bubblegum-server.herokuapp.com/api';
-axios.defaults.baseURL = 'http://localhost:7000/api';
-axios.defaults.headers.common["external-source"] = 'NOTES_APP';
+axios.defaults.baseURL = "http://localhost:7000/api";
+axios.defaults.headers.common["external-source"] = "NOTES_APP";
 
 const App = ({ location, history, dispatch, session }) => {
   // const queryString = new URLSearchParams(location.search);
@@ -36,13 +36,17 @@ const App = ({ location, history, dispatch, session }) => {
       if (user) {
         // console.log('Auth user: ', user);
         const { displayName: name, email, photoURL, uid } = user;
-        dispatch(setSession({
-          name, email, photoURL, uid
-        }));
-        sessionStorage.setItem('notes-app', 'logged-in');
+        dispatch(
+          setSession({
+            name,
+            email,
+            photoURL,
+            uid
+          })
+        );
+        sessionStorage.setItem("notes-app", "logged-in");
 
-        if (history.location.pathname === '/signin')
-          history.push('/home');
+        if (history.location.pathname === "/signin") history.push("/home");
       } else {
         sessionStorage.clear();
       }
@@ -64,7 +68,7 @@ const App = ({ location, history, dispatch, session }) => {
       <Settings />
     </div>
   );
-}
+};
 
 const mapStateToProps = ({ notes, session }) => ({ notes, session });
 

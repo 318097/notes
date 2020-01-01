@@ -11,11 +11,11 @@ import {
   setAddNoteModalVisibility,
   setUploadNoteStatus,
   setNoteToEdit
-} from "../store/actions";
+} from "../../store/actions";
 
-import { generateSlug } from "../utils";
+import { generateSlug } from "../../utils";
 
-import { StyledIcon } from "../styled";
+import { StyledIcon } from "../../styled";
 
 import "easymde/dist/easymde.min.css";
 

@@ -7,7 +7,7 @@ import { withRouter, Link } from "react-router-dom";
 import { auth } from "../firebase";
 import { setSession, toggleSettingsDrawer } from "../store/actions";
 
-import AddNote from "./AddNote";
+import AddNote from "./notes/AddNote";
 import { StyledIcon, ProfileIcon } from "../styled";
 
 const antIcon = <Icon type="loading" spin />;

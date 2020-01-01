@@ -5,7 +5,7 @@ import { Tag, Icon, Popover, Popconfirm } from "antd";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
-import { editNote, deleteNote } from "../store/actions";
+import { editNote, deleteNote } from "../../store/actions";
 
 const Wrapper = styled.div`
   background: white;

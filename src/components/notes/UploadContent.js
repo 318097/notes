@@ -7,10 +7,10 @@ import axios from "axios";
 import styled from "styled-components";
 import uuid from "uuid";
 
-import { setNoteToEdit } from "../store/actions";
-import { StyledIcon } from "../styled";
-import { firestore } from "../firebase";
-import { generateSlug } from "../utils";
+import { setNoteToEdit } from "../../store/actions";
+import { StyledIcon } from "../../styled";
+import { firestore } from "../../firebase";
+import { generateSlug } from "../../utils";
 
 const Wrapper = styled.div`
   display: flex;
