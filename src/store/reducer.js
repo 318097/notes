@@ -15,7 +15,7 @@ import {
 
 const initialState = {
   notes: [],
-  appLoading: false,
+  appLoading: true,
   addNoteModalVisibility: false,
   selectedNote: null,
   uploadNoteStatus: false,
@@ -73,7 +73,9 @@ const reducer = (state = initialState, action) => {
       };
     }
     case EDIT_NOTE: {
-      const selectedNote = state.notes.find(note => note.id === action.payload);
+      const selectedNote = state.notes.find(
+        note => note._id === action.payload
+      );
       return {
         ...state,
         mode: "edit",
@@ -102,7 +104,7 @@ const reducer = (state = initialState, action) => {
         mode: undefined,
         selectedNote: null,
         notes: state.notes.map(note => {
-          if (note.id === action.payload.id) return { ...action.payload };
+          if (note._id === action.payload._id) return { ...action.payload };
           return note;
         })
       };
@@ -110,7 +112,7 @@ const reducer = (state = initialState, action) => {
     case DELETE_NOTE: {
       return {
         ...state,
-        notes: state.notes.filter(note => note.id !== action.payload)
+        notes: state.notes.filter(note => note._id !== action.payload)
       };
     }
     default:
