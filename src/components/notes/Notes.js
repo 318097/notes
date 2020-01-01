@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
@@ -41,13 +41,10 @@ const Notes = ({ fetchNotes, data, session, appLoading, history }) => {
     if (session) fetchNotes();
   }, [session]);
 
-  const handleClick = id => e => {
-    e.stopPropagation();
-    history.push(`/note/${id}`);
+  const handleClick = _id => event => {
+    event.stopPropagation();
+    history.push(`/note/${_id}`);
   };
-
-  const NoData = () =>
-    (!appLoading || !session) && <MessageWrapper>Empty</MessageWrapper>;
 
   return (
     <section>
@@ -64,7 +61,7 @@ const Notes = ({ fetchNotes, data, session, appLoading, history }) => {
           ))}
         </Wrapper>
       ) : (
-        <NoData />
+        !appLoading && <MessageWrapper>Empty</MessageWrapper>
       )}
     </section>
   );
