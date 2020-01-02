@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Icon, Divider, Radio } from "antd";
+import { Icon, Divider, Radio, Switch } from "antd";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
@@ -7,7 +7,7 @@ import { updateNote } from "../../store/actions";
 
 const ControlsWrapper = styled.div`
   width: 200px;
-  padding: 15px 5px;
+  padding: 25px 5px;
   position: absolute;
   right: -190px;
   top: 30px;
@@ -51,6 +51,9 @@ const Controls = ({ note, dispatch }) => {
   const changeState = async ({ target: { value } }) =>
     await dispatch(updateNote({ _id: note._id, status: value }));
 
+  const changeVisibility = async value =>
+    await dispatch(updateNote({ _id: note._id, visible: value }));
+
   return (
     <ControlsWrapper>
       <div className="flex space-between align-center">
@@ -72,11 +75,16 @@ const Controls = ({ note, dispatch }) => {
         </div>
         <Radio.Group onChange={changeState} value={note && note.status}>
           {["DRAFT", "READY", "POSTED"].map(state => (
-            <Radio key={state} value={state}>
+            <Radio className="radio-box" key={state} value={state}>
               {state}
             </Radio>
           ))}
         </Radio.Group>
+      </div>
+      <Divider />
+      <div>
+        Visible{" "}
+        <Switch checked={note && note.visible} onChange={changeVisibility} />
       </div>
     </ControlsWrapper>
   );
