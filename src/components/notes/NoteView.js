@@ -27,24 +27,6 @@ const Wrapper = styled.div`
   }
 `;
 
-const ControlsWrapper = styled.div`
-  width: 200px;
-  padding: 15px 5px;
-  position: absolute;
-  right: -190px;
-  top: 30px;
-  background: white;
-  border-radius: 5px;
-  border: 1px solid lightgrey;
-  box-shadow: 3px 3px 3px lightgrey;
-  .hashtag {
-    margin: 1px;
-    padding: 2px;
-    background: #fbfbfb;
-    display: inline-block;
-  }
-`;
-
 const NoteView = ({ dispatch, match, selectedNote, session }) => {
   useEffect(() => {
     if (session) dispatch(getNoteById(match.params.id));
@@ -53,9 +35,7 @@ const NoteView = ({ dispatch, match, selectedNote, session }) => {
   return (
     <Wrapper>
       <Card view="EXPANDED" note={selectedNote} />
-      <ControlsWrapper>
-        <Controls note={selectedNote} />
-      </ControlsWrapper>
+      <Controls note={selectedNote} />
     </Wrapper>
   );
 };
