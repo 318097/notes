@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -30,7 +31,7 @@ const Wrapper = styled.div`
 const NoteView = ({ dispatch, match, selectedNote, session }) => {
   useEffect(() => {
     if (session) dispatch(getNoteById(match.params.id));
-  }, [session, dispatch, match]);
+  }, [match]);
 
   return (
     <Wrapper>

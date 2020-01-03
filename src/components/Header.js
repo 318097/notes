@@ -8,6 +8,8 @@ import { auth } from "../firebase";
 import { setSession, toggleSettingsDrawer } from "../store/actions";
 
 import AddNote from "./notes/AddNote";
+import Filters from "./Filters";
+
 import { StyledIcon, ProfileIcon } from "../styled";
 
 const antIcon = <Icon type="loading" spin />;
@@ -46,6 +48,7 @@ const Container = styled.header`
     align-items: center;
   }
 `;
+
 const UserInfo = styled.div`
   display: flex;
   height: 24px;
@@ -81,6 +84,7 @@ const Header = ({ history, dispatch, appLoading, session }) => {
           <span>N</span>otes {appLoading && <Spin indicator={antIcon} />}
         </Link>
       </h3>
+      <Filters />
       {session && (
         <div className="controls">
           <Popover placement="bottom" content="Home">
@@ -90,10 +94,7 @@ const Header = ({ history, dispatch, appLoading, session }) => {
           <Popover placement="bottom" content="Upload">
             <StyledIcon type="upload" onClick={() => history.push("/upload")} />
           </Popover>
-          <Divider
-            style={{ background: "black", position: "relative", top: "4px" }}
-            type="vertical"
-          />
+          <Divider style={{ background: "black" }} type="vertical" />
           <UserInfo>
             <div className="username">{session.name}</div>
             <ProfileIcon>

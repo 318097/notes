@@ -37,7 +37,7 @@ export const toggleSettingsDrawer = status => ({
   payload: status
 });
 
-export const fetchNotes = () => async (dispatch, getState) => {
+export const fetchNotes = filters => async (dispatch, getState) => {
   const {
     session: { uid, storage }
   } = getState();
@@ -54,7 +54,7 @@ export const fetchNotes = () => async (dispatch, getState) => {
   } else {
     const {
       data: { posts }
-    } = await axios.get("/posts");
+    } = await axios.get("/posts", { params: filters });
     data.push(...posts);
   }
 

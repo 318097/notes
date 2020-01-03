@@ -104,7 +104,8 @@ const reducer = (state = initialState, action) => {
         mode: undefined,
         selectedNote: null,
         notes: state.notes.map(note => {
-          if (note._id === action.payload._id) return { ...action.payload };
+          if (note._id === action.payload._id)
+            return { ...note, ...action.payload };
           return note;
         })
       };

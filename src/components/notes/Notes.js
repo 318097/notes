@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 
-import { fetchNotes } from "../../store/actions";
 import Card from "./Card";
 
 import { MessageWrapper } from "../../styled";
@@ -36,11 +35,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const Notes = ({ fetchNotes, data, session, appLoading, history }) => {
-  useEffect(() => {
-    if (session) fetchNotes();
-  }, [session]);
-
+const Notes = ({ data, appLoading, history }) => {
   const handleClick = _id => event => {
     event.stopPropagation();
     history.push(`/note/${_id}`);
@@ -67,12 +62,9 @@ const Notes = ({ fetchNotes, data, session, appLoading, history }) => {
   );
 };
 
-const mapStateToProps = ({ notes, session, appLoading }) => ({
+const mapStateToProps = ({ notes, appLoading }) => ({
   data: notes,
-  session,
   appLoading
 });
 
-const mapDispatchToProps = { fetchNotes };
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Notes));
+export default withRouter(connect(mapStateToProps)(Notes));
