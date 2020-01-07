@@ -31,7 +31,7 @@ const Wrapper = styled.div`
 const NoteView = ({ dispatch, match, selectedNote, session }) => {
   useEffect(() => {
     if (session) dispatch(getNoteById(match.params.id));
-  }, [match]);
+  }, [match.params]);
 
   return (
     <Wrapper>

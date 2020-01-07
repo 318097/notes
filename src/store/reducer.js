@@ -3,6 +3,7 @@ import {
   SET_APP_LOADING,
   SET_ADD_NOTE_MODAL_VISIBILITY,
   TOGGLE_SETTINGS_DRAWER,
+  UPDATE_FILTER,
   LOAD_NOTES,
   GET_NOTE_BY_ID,
   ADD_NOTE,
@@ -14,9 +15,14 @@ import {
 } from "./constants";
 
 const initialState = {
-  notes: [],
   appLoading: true,
   addNoteModalVisibility: false,
+  filters: {
+    search: "",
+    status: "ALL",
+    page: 1
+  },
+  notes: [],
   selectedNote: null,
   uploadNoteStatus: false,
   mode: undefined,
@@ -52,6 +58,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         settingsDrawerVisibility: action.payload
+      };
+    }
+    case UPDATE_FILTER: {
+      return {
+        ...state,
+        filters: action.payload
       };
     }
     case LOAD_NOTES: {

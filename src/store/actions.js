@@ -6,6 +6,7 @@ import {
   SET_SESSION,
   SET_APP_LOADING,
   SET_ADD_NOTE_MODAL_VISIBILITY,
+  UPDATE_FILTER,
   LOAD_NOTES,
   GET_NOTE_BY_ID,
   ADD_NOTE,
@@ -37,12 +38,22 @@ export const toggleSettingsDrawer = status => ({
   payload: status
 });
 
+export const setFilter = filterUpdate => async (dispatch, getState) => {
+  const { filters } = getState();
+
+  const updatedFiters = { ...filters, ...filterUpdate };
+
+  dispatch({ type: UPDATE_FILTER, payload: updatedFiters });
+  dispatch(fetchNotes(updatedFiters));
+};
+
 export const fetchNotes = filters => async (dispatch, getState) => {
   const {
-    session: { uid, storage }
+    session: { uid, storage },
+    notes = []
   } = getState();
   dispatch(setAppLoading(true));
-  const data = [];
+  const data = [...notes];
 
   if (storage === "FIREBASE") {
     const querySnapshot = await firestore
@@ -53,7 +64,7 @@ export const fetchNotes = filters => async (dispatch, getState) => {
     querySnapshot.forEach(doc => data.push({ ...doc.data(), _id: doc.id }));
   } else {
     const {
-      data: { posts }
+      data: { posts, meta }
     } = await axios.get("/posts", { params: filters });
     data.push(...posts);
   }

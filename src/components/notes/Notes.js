@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
+import { Button } from "antd";
 
 import Card from "./Card";
 
 import { MessageWrapper } from "../../styled";
+import { setFilter, fetchNotes } from "../../store/actions";
 
 const Wrapper = styled.div`
   display: flex;
@@ -35,7 +37,11 @@ const Wrapper = styled.div`
   }
 `;
 
-const Notes = ({ data, appLoading, history }) => {
+const Notes = ({ notes, appLoading, history, dispatch, session, filters }) => {
+  useEffect(() => {
+    if (session) dispatch(fetchNotes());
+  }, [session]);
+
   const handleClick = _id => event => {
     event.stopPropagation();
     history.push(`/note/${_id}`);
@@ -43,9 +49,9 @@ const Notes = ({ data, appLoading, history }) => {
 
   return (
     <section>
-      {data.length ? (
+      {notes.length ? (
         <Wrapper>
-          {data.map(note => (
+          {notes.map(note => (
             <div
               className="card-wrapper"
               key={note._id}
@@ -58,13 +64,25 @@ const Notes = ({ data, appLoading, history }) => {
       ) : (
         !appLoading && <MessageWrapper>Empty</MessageWrapper>
       )}
+      {notes.length && (
+        <div className="flex center">
+          <Button
+            type="danger"
+            onClick={() => dispatch(setFilter({ page: filters.page + 1 }))}
+          >
+            Load
+          </Button>
+        </div>
+      )}
     </section>
   );
 };
 
-const mapStateToProps = ({ notes, appLoading }) => ({
-  data: notes,
-  appLoading
+const mapStateToProps = ({ notes, appLoading, session, filters }) => ({
+  notes,
+  appLoading,
+  session,
+  filters
 });
 
 export default withRouter(connect(mapStateToProps)(Notes));
