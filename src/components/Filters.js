@@ -3,6 +3,8 @@ import { Input, Select } from "antd";
 import { connect } from "react-redux";
 import { setFilter } from "../store/actions";
 
+import { tagList } from "../utils";
+
 const { Search } = Input;
 const { Option } = Select;
 
@@ -28,6 +30,19 @@ const Filters = ({ dispatch, session, filters }) => {
       >
         {status.map(state => (
           <Option key={state}>{state}</Option>
+        ))}
+      </Select>
+      <Select
+        mode="multiple"
+        className="input-width"
+        placeholder="Tags"
+        value={filters.tags}
+        onChange={values => setFilterValues("tags", values)}
+      >
+        {tagList.map(({ label, value }) => (
+          <Option key={value} value={value}>
+            {label}
+          </Option>
         ))}
       </Select>
     </div>

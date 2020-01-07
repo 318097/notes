@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from "react";
 import marked from "marked";
 import styled from "styled-components";
-import { Tag, Icon, Popover, Popconfirm, Divider } from "antd";
+import { Tag, Icon, Popover, Popconfirm } from "antd";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
@@ -20,7 +20,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  ,
   .title {
     font-size: 16px;
     text-align: center;
@@ -143,7 +142,6 @@ const Card = ({
   return (
     <Wrapper className="card">
       {showTitle && <h3 className="title">{title}</h3>}
-      <Divider />
       {showContent && (
         <div
           className="content"

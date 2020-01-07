@@ -13,7 +13,7 @@ import {
   setNoteToEdit
 } from "../../store/actions";
 
-import { generateSlug } from "../../utils";
+import { generateSlug, tagList } from "../../utils";
 
 import { StyledIcon } from "../../styled";
 
@@ -46,14 +46,6 @@ const initialState = {
   slug: "",
   tags: []
 };
-
-const tagOptions = [
-  { label: "GIT", value: "GIT" },
-  { label: "CSS", value: "CSS" },
-  { label: "SASS", value: "SASS" },
-  { label: "JAVASCRIPT", value: "JAVASCRIPT" },
-  { label: "REACT", value: "REACT" }
-];
 
 const AddNote = ({
   addNote,
@@ -148,7 +140,7 @@ const AddNote = ({
               }}
             />
             <Checkbox.Group
-              options={tagOptions}
+              options={tagList}
               value={note.tags}
               onChange={value => setData("tags", value)}
             />

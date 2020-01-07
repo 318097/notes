@@ -53,7 +53,7 @@ export const fetchNotes = filters => async (dispatch, getState) => {
     notes = []
   } = getState();
   dispatch(setAppLoading(true));
-  const data = [...notes];
+  const data = filters && filters.page > 1 ? [...notes] : [];
 
   if (storage === "FIREBASE") {
     const querySnapshot = await firestore
