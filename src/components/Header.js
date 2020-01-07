@@ -42,6 +42,9 @@ const Container = styled.header`
       }
     }
   }
+  .filters {
+    flex: 1 1 auto;
+  }
   .controls {
     flex: 0 0 auto;
     display: flex;
@@ -84,7 +87,7 @@ const Header = ({ history, dispatch, appLoading, session }) => {
           <span>N</span>otes {appLoading && <Spin indicator={antIcon} />}
         </Link>
       </h3>
-      <Filters />
+      <Filters className="filters" />
       {session && (
         <div className="controls">
           <Popover placement="bottom" content="Home">

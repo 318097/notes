@@ -33,8 +33,8 @@ const Filters = ({ dispatch, session, filters }) => {
         ))}
       </Select>
       <Select
+        style={{ minWidth: "150px", margin: "0 2px" }}
         mode="multiple"
-        className="input-width"
         placeholder="Tags"
         value={filters.tags}
         onChange={values => setFilterValues("tags", values)}
