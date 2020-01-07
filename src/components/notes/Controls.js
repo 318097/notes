@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { Icon, Divider, Radio, Switch } from "antd";
+import { Popover, Divider, Radio, Switch } from "antd";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
 import { updateNote } from "../../store/actions";
+import { copyToClipboard } from "../../utils";
+import { StyledIcon } from "../../styled";
 
 const ControlsWrapper = styled.div`
   width: 200px;
   padding: 25px 5px;
   position: absolute;
-  right: -190px;
+  right: -210px;
   top: 30px;
   background: white;
   border-radius: 5px;
   border: 1px solid lightgrey;
   box-shadow: 3px 3px 3px lightgrey;
   .hashtag {
-    margin: 1px;
-    padding: 2px;
-    background: #fbfbfb;
+    margin: 1px 2px;
+    padding: 1px 3px;
+    font-size: 0.7rem;
+    background: #f5f5f5;
     display: inline-block;
   }
 `;
@@ -39,15 +42,6 @@ const Controls = ({ note, dispatch }) => {
     setHashtags([...defaultTags, note.tags.map(tag => `#${tag}`)]);
   }, [note]);
 
-  const copyToClipboard = () => {
-    const textField = document.createElement("textarea");
-    textField.innerText = hashtags.join(" ");
-    document.body.appendChild(textField);
-    textField.select();
-    document.execCommand("copy");
-    textField.remove();
-  };
-
   const changeState = async ({ target: { value } }) =>
     await dispatch(updateNote({ _id: note._id, status: value }));
 
@@ -58,7 +52,12 @@ const Controls = ({ note, dispatch }) => {
     <ControlsWrapper>
       <div className="flex space-between align-center">
         <h4>Hashtags</h4>
-        <Icon onClick={copyToClipboard} type="copy" />
+        <Popover placement="bottom" content="Copy to clipboard">
+          <StyledIcon
+            type="copy"
+            onClick={() => copyToClipboard(hashtags.join(" "))}
+          />
+        </Popover>
       </div>
       <div>
         {note &&

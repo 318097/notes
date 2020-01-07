@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from "react";
 import marked from "marked";
 import styled from "styled-components";
-import { Tag, Icon, Popover, Popconfirm } from "antd";
+import { Tag, Icon, Popover, Popconfirm, Divider } from "antd";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
@@ -129,13 +129,13 @@ const Card = ({
     setShowDropdown(false);
   };
 
-  const handleDropdownClick = e => {
-    e.stopPropagation();
+  const handleDropdownClick = event => {
+    event.stopPropagation();
     setShowDropdown(prevState => !prevState);
   };
 
-  const handleTagClick = e => {
-    e.stopPropagation();
+  const handleTagClick = event => {
+    event.stopPropagation();
   };
 
   if (!note) return <Fragment />;
@@ -143,6 +143,7 @@ const Card = ({
   return (
     <Wrapper className="card">
       {showTitle && <h3 className="title">{title}</h3>}
+      <Divider />
       {showContent && (
         <div
           className="content"
