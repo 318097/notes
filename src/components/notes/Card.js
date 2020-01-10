@@ -163,7 +163,10 @@ const Card = ({
             onClick={handleDropdownClick}
           />
           {showDropdown && (
-            <div className="dropdown" onClick={e => e.stopPropagation()}>
+            <div
+              className="dropdown"
+              onClick={event => event.stopPropagation()}
+            >
               <Popover placement="right" content="Favorite">
                 <Icon onClick={handleFavorite} type="heart" />
               </Popover>
