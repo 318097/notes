@@ -77,16 +77,17 @@ const AddNote = ({
 
   const handleOk = async () => {
     setLoading(true);
-
-    if (mode === "edit") await updateNote({ ...note });
-    else if (mode === "add") await addNote({ ...note, userId: session.uid });
-    else {
-      await setNoteToEdit({ ...note });
-      await setUploadNoteStatus(true);
+    try {
+      if (mode === "edit") await updateNote({ ...note });
+      else if (mode === "add") await addNote({ ...note, userId: session.uid });
+      else {
+        await setNoteToEdit({ ...note });
+        await setUploadNoteStatus(true);
+      }
+    } finally {
+      setLoading(false);
+      setModalVisibilityStatus(false)();
     }
-
-    setLoading(false);
-    setModalVisibilityStatus(false)();
   };
 
   return (
