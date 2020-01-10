@@ -15,7 +15,7 @@ import {
 } from "./constants";
 
 const initialState = {
-  appLoading: true,
+  appLoading: false,
   addNoteModalVisibility: false,
   filters: {
     search: "",
@@ -23,6 +23,7 @@ const initialState = {
     page: 1
   },
   notes: [],
+  meta: null,
   selectedNote: null,
   uploadNoteStatus: false,
   mode: undefined,

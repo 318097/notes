@@ -112,6 +112,10 @@ const UploadContent = ({
     }
   }, [rawData]);
 
+  useEffect(() => {
+    processData();
+  }, [fileParsing]);
+
   const handleUpload = event => {
     const [document] = event.target.files;
 
@@ -123,6 +127,7 @@ const UploadContent = ({
   };
 
   const processData = () => {
+    if (!rawData) return;
     const fileContent = rawData.split(new RegExp(fileParsing)).map(item => {
       let { title, content } = parseItem(item.trim(), dataType);
       return {
