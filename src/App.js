@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import axios from "axios";
 
-import { auth } from "./firebase";
+import { auth, firestore } from "./firebase";
 
 import "./App.scss";
 
@@ -18,13 +18,19 @@ import NoteView from "./components/notes/NoteView";
 import UploadContent from "./components/notes/UploadContent";
 import Settings from "./components/Settings";
 
-import { setAddNoteModalVisibility, setSession } from "./store/actions";
+import {
+  setAddNoteModalVisibility,
+  setSession,
+  setSettings,
+  fetchNotes
+} from "./store/actions";
 
 // axios.defaults.baseURL = 'https://bubblegum-server.herokuapp.com/api';
 axios.defaults.baseURL = "http://localhost:7000/api";
 axios.defaults.headers.common["external-source"] = "NOTES_APP";
 
-const App = ({ location, history, dispatch, session }) => {
+const App = ({ location, history, dispatch, session, settings }) => {
+  const [loading, setLoading] = useState(true);
   // const queryString = new URLSearchParams(location.search);
   // const mode = queryString.get('mode');
   // if (mode === 'add') {
@@ -34,7 +40,6 @@ const App = ({ location, history, dispatch, session }) => {
   useEffect(() => {
     auth.onAuthStateChanged(user => {
       if (user) {
-        // console.log('Auth user: ', user);
         const { displayName: name, email, photoURL, uid } = user;
         dispatch(
           setSession({
@@ -45,7 +50,6 @@ const App = ({ location, history, dispatch, session }) => {
           })
         );
         sessionStorage.setItem("notes-app", "logged-in");
-
         if (history.location.pathname === "/signin") history.push("/home");
       } else {
         sessionStorage.clear();
@@ -53,23 +57,55 @@ const App = ({ location, history, dispatch, session }) => {
     });
   }, []);
 
+  useEffect(() => {
+    const fetchSettings = async email => {
+      const querySnapshot = await firestore
+        .collection("users")
+        .where("email", "==", email)
+        .get();
+
+      querySnapshot.forEach(doc => {
+        console.log(doc.data());
+        dispatch(setSettings(doc.data().settings));
+      });
+    };
+    if (!session) return;
+    fetchSettings(session.email);
+  }, [session]);
+
+  useEffect(() => {
+    if (!settings || !session) return;
+
+    if (settings.server === "server")
+      axios.defaults.baseURL = "https://bubblegum-server.herokuapp.com/api";
+    else axios.defaults.baseURL = "http://localhost:7000/api";
+    setLoading(false);
+    dispatch(fetchNotes({}));
+  }, [settings]);
+
   return (
     <div className="container">
       <Header />
-      <Switch>
-        <Route path="/signup" exact component={Signup} />
-        <Route path="/signin" exact component={Signin} />
-        <ProtectedRoute path="/home" exact component={Notes} />
-        <ProtectedRoute path="/note/:id" exact component={NoteView} />
-        <ProtectedRoute path="/upload" exact component={UploadContent} />
-        <Route path="/" exact render={() => <Redirect to="/signin" />} />
-        <Route component={NotFound} />
-      </Switch>
+      {!loading && (
+        <Switch>
+          <Route path="/signup" exact component={Signup} />
+          <Route path="/signin" exact component={Signin} />
+          <ProtectedRoute path="/home" exact component={Notes} />
+          <ProtectedRoute path="/note/:id" exact component={NoteView} />
+          <ProtectedRoute path="/upload" exact component={UploadContent} />
+          <Route path="/" exact render={() => <Redirect to="/signin" />} />
+          <Route component={NotFound} />
+        </Switch>
+      )}
       <Settings />
     </div>
   );
 };
 
-const mapStateToProps = ({ notes, session }) => ({ notes, session });
+const mapStateToProps = ({ notes, session, settings }) => ({
+  notes,
+  session,
+  settings
+});
 
 export default withRouter(connect(mapStateToProps)(App));

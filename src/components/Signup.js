@@ -1,41 +1,50 @@
 import React, { useState } from "react";
 import { Input, Button, message } from "antd";
+import { withRouter } from "react-router-dom";
 
-import { auth, createNewFirebaseUser } from '../firebase';
-import { StyledSection } from '../styled';
-
+import { auth, createNewFirebaseUser } from "../firebase";
+import { StyledSection } from "../styled";
 const initialState = {
   name: "",
   password: "",
-  email: "",
+  email: ""
 };
 
-const Signup = () => {
+const Signup = ({ history }) => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(initialState);
 
-  const handleInput = key => ({ target: { value } }) => setForm(data => ({ ...data, [key]: value }));
+  const handleInput = key => ({ target: { value } }) =>
+    setForm(data => ({ ...data, [key]: value }));
 
   const handleSignup = async () => {
     try {
       setLoading(true);
       const { email, password, name } = form;
 
-      const { user } = await auth.createUserWithEmailAndPassword(email, password);
+      const { user } = await auth.createUserWithEmailAndPassword(
+        email,
+        password
+      );
       user.updateProfile({
         displayName: name
       });
 
       const { uid } = user;
       await createNewFirebaseUser({
-        email, uid, name
+        email,
+        uid,
+        name
       });
+
+      history.push("/home");
     } catch (err) {
       const { code } = err;
-      if (code === 'auth/email-already-in-use')
-        message.error('This email id already exists.');
+      if (code === "auth/email-already-in-use")
+        message.error("This email id already exists.");
+      else message.error(err);
     } finally {
-      setLoading(true);
+      setLoading(false);
     }
   };
 
@@ -60,16 +69,12 @@ const Signup = () => {
           onPressEnter={handleSignup}
         />
         <br />
-        <Button
-          type="primary"
-          onClick={handleSignup}
-          loading={loading}
-        >
+        <Button type="primary" onClick={handleSignup} loading={loading}>
           Sign up
-          </Button>
+        </Button>
       </form>
     </StyledSection>
   );
-}
+};
 
-export default Signup;
+export default withRouter(Signup);

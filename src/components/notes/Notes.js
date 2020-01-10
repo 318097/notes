@@ -64,7 +64,7 @@ const Notes = ({ notes, appLoading, history, dispatch, session, filters }) => {
       ) : (
         !appLoading && <MessageWrapper>Empty</MessageWrapper>
       )}
-      {notes.length && (
+      {notes.length > 0 && (
         <div className="flex center">
           <Button
             type="danger"

@@ -1,11 +1,15 @@
-import React from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { Spin, Icon, Divider, Popover } from "antd";
+import { Spin, Icon, Divider, Popover, Switch } from "antd";
 import { withRouter, Link } from "react-router-dom";
 
 import { auth } from "../firebase";
-import { setSession, toggleSettingsDrawer } from "../store/actions";
+import {
+  setSession,
+  toggleSettingsDrawer,
+  setSettings
+} from "../store/actions";
 
 import AddNote from "./notes/AddNote";
 import Filters from "./Filters";
@@ -73,7 +77,7 @@ const UserInfo = styled.div`
   }
 `;
 
-const Header = ({ history, dispatch, appLoading, session }) => {
+const Header = ({ history, dispatch, appLoading, session, settings }) => {
   const signOut = async () => {
     await auth.signOut();
     dispatch(setSession(null));
@@ -87,42 +91,65 @@ const Header = ({ history, dispatch, appLoading, session }) => {
           <span>N</span>otes {appLoading && <Spin indicator={antIcon} />}
         </Link>
       </h3>
-      <Filters className="filters" />
       {session && (
-        <div className="controls">
-          <Popover placement="bottom" content="Home">
-            <StyledIcon type="home" onClick={() => history.push("/home")} />
-          </Popover>
-          <AddNote />
-          <Popover placement="bottom" content="Upload">
-            <StyledIcon type="upload" onClick={() => history.push("/upload")} />
-          </Popover>
-          <Divider style={{ background: "black" }} type="vertical" />
-          <UserInfo>
-            <div className="username">{session.name}</div>
-            <ProfileIcon>
-              {session.photoURL ? (
-                <img src={session.photoURL} alt="Profile pic" />
-              ) : (
-                <StyledIcon type="user" />
-              )}
-            </ProfileIcon>
-          </UserInfo>
-          <Popover placement="bottom" content="Settings">
-            <StyledIcon
-              type="setting"
-              onClick={() => dispatch(toggleSettingsDrawer(true))}
-            />
-          </Popover>
-          <Popover placement="bottom" content="Logout">
-            <StyledIcon type="logout" onClick={signOut} />
-          </Popover>
-        </div>
+        <Fragment>
+          <Filters className="filters" />
+          <div className="controls">
+            <div>
+              Server{" "}
+              <Switch
+                checked={settings.server === "server"}
+                onChange={() =>
+                  dispatch(
+                    setSettings({
+                      server:
+                        settings.server === "server" ? "localhost" : "server"
+                    })
+                  )
+                }
+              />
+            </div>
+            <Popover placement="bottom" content="Home">
+              <StyledIcon type="home" onClick={() => history.push("/home")} />
+            </Popover>
+            <AddNote />
+            <Popover placement="bottom" content="Upload">
+              <StyledIcon
+                type="upload"
+                onClick={() => history.push("/upload")}
+              />
+            </Popover>
+            <Divider style={{ background: "black" }} type="vertical" />
+            <UserInfo>
+              <div className="username">{session.name}</div>
+              <ProfileIcon>
+                {session.photoURL ? (
+                  <img src={session.photoURL} alt="Profile pic" />
+                ) : (
+                  <StyledIcon type="user" />
+                )}
+              </ProfileIcon>
+            </UserInfo>
+            <Popover placement="bottom" content="Settings">
+              <StyledIcon
+                type="setting"
+                onClick={() => dispatch(toggleSettingsDrawer(true))}
+              />
+            </Popover>
+            <Popover placement="bottom" content="Logout">
+              <StyledIcon type="logout" onClick={signOut} />
+            </Popover>
+          </div>
+        </Fragment>
       )}
     </Container>
   );
 };
 
-const mapStateToProps = ({ appLoading, session }) => ({ appLoading, session });
+const mapStateToProps = ({ appLoading, session, settings }) => ({
+  appLoading,
+  session,
+  settings
+});
 
 export default withRouter(connect(mapStateToProps)(Header));

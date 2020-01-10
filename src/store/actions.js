@@ -1,9 +1,11 @@
 // import data from './data';
 import axios from "axios";
+import { message } from "antd";
 
 import { firestore } from "../firebase";
 import {
   SET_SESSION,
+  SET_SETTINGS,
   SET_APP_LOADING,
   SET_ADD_NOTE_MODAL_VISIBILITY,
   UPDATE_FILTER,
@@ -22,6 +24,25 @@ export const setSession = session => ({
   type: SET_SESSION,
   payload: session
 });
+
+export const setSettings = updatedSettings => async (dispatch, getState) => {
+  const {
+    settings = {},
+    session: { uid }
+  } = getState();
+
+  const newSettings = { ...settings, ...updatedSettings };
+
+  await firestore
+    .collection("users")
+    .doc(uid)
+    .set({ settings: newSettings }, { merge: true });
+
+  dispatch({
+    type: SET_SETTINGS,
+    payload: newSettings
+  });
+};
 
 export const setAppLoading = status => ({
   type: SET_APP_LOADING,
@@ -48,29 +69,34 @@ export const setFilter = filterUpdate => async (dispatch, getState) => {
 };
 
 export const fetchNotes = filters => async (dispatch, getState) => {
-  const {
-    session: { uid, storage },
-    notes = []
-  } = getState();
-  dispatch(setAppLoading(true));
-  const data = filters && filters.page > 1 ? [...notes] : [];
-
-  if (storage === "FIREBASE") {
-    const querySnapshot = await firestore
-      .collection("notes")
-      // .where("userId", "==", uid)
-      .get();
-
-    querySnapshot.forEach(doc => data.push({ ...doc.data(), _id: doc.id }));
-  } else {
+  try {
     const {
-      data: { posts, meta }
-    } = await axios.get("/posts", { params: filters });
-    data.push(...posts);
-  }
+      session: { uid, storage },
+      notes = []
+    } = getState();
+    dispatch(setAppLoading(true));
+    const data = filters && filters.page > 1 ? [...notes] : [];
 
-  dispatch({ type: LOAD_NOTES, payload: data });
-  dispatch(setAppLoading(false));
+    if (storage === "FIREBASE") {
+      const querySnapshot = await firestore
+        .collection("notes")
+        // .where("userId", "==", uid)
+        .get();
+
+      querySnapshot.forEach(doc => data.push({ ...doc.data(), _id: doc.id }));
+    } else {
+      const {
+        data: { posts, meta }
+      } = await axios.get("/posts", { params: filters });
+      data.push(...posts);
+    }
+
+    dispatch({ type: LOAD_NOTES, payload: data });
+  } catch (err) {
+    console.log(err);
+  } finally {
+    dispatch(setAppLoading(false));
+  }
 };
 
 export const getNoteById = noteId => async (dispatch, getState) => {

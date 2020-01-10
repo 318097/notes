@@ -1,6 +1,6 @@
-import firebase from 'firebase';
-import 'firebase/firestore';
-import 'firebase/auth';
+import firebase from "firebase";
+import "firebase/firestore";
+import "firebase/auth";
 
 const config = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -18,13 +18,22 @@ const firestore = firebase.firestore();
 const auth = firebase.auth();
 
 const provider = new firebase.auth.GoogleAuthProvider();
-provider.setCustomParameters({ prompt: 'select_account' });
+provider.setCustomParameters({ prompt: "select_account" });
 
 const signInWithGoogle = async () => auth.signInWithPopup(provider);
 
-const createNewFirebaseUser = async ({ email, uid, name }) => await firestore
-  .collection('users')
-  .doc(uid)
-  .set({ email, name });
+const createNewFirebaseUser = async ({ email, uid, name }) =>
+  await firestore
+    .collection("users")
+    .doc(uid)
+    .set({
+      email,
+      name,
+      userId: uid,
+      settings: {
+        server: "production",
+        tags: []
+      }
+    });
 
 export { firestore, auth, signInWithGoogle, createNewFirebaseUser };

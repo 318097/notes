@@ -1,5 +1,6 @@
 import {
   SET_SESSION,
+  SET_SETTINGS,
   SET_APP_LOADING,
   SET_ADD_NOTE_MODAL_VISIBILITY,
   TOGGLE_SETTINGS_DRAWER,
@@ -28,9 +29,7 @@ const initialState = {
   uploadNoteStatus: false,
   mode: undefined,
   session: null,
-  settings: {
-    tags: []
-  }
+  settings: {}
 };
 
 const reducer = (state = initialState, action) => {
@@ -40,6 +39,12 @@ const reducer = (state = initialState, action) => {
         ...state,
         session: action.payload,
         notes: action.payload ? state.notes : []
+      };
+    }
+    case SET_SETTINGS: {
+      return {
+        ...state,
+        settings: action.payload
       };
     }
     case SET_APP_LOADING: {
