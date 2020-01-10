@@ -20,6 +20,12 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  .drop-icon {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    z-index: 999;
+  }
   .title {
     font-size: 16px;
     text-align: center;
@@ -141,6 +147,9 @@ const Card = ({
 
   return (
     <Wrapper className="card">
+      {note.type === "DROP" && (
+        <Icon className="drop-icon" type="thunderbolt" />
+      )}
       {showTitle && <h3 className="title">{title}</h3>}
       {showContent && (
         <div

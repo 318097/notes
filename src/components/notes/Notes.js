@@ -35,12 +35,6 @@ const Wrapper = styled.div`
         overflow: hidden;
       }
     }
-    .drop-icon {
-      position: absolute;
-      top: 8px;
-      left: 5px;
-      z-index: 999;
-    }
   }
 `;
 
@@ -65,9 +59,6 @@ const Notes = ({ notes, appLoading, history, dispatch, session, filters }) => {
               onClick={handleClick(note._id)}
             >
               <Card note={note} dropdownView={true} />
-              {note.type === "DROP" && (
-                <Icon className="drop-icon" type="thunderbolt" />
-              )}
             </div>
           ))}
         </Wrapper>
