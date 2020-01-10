@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
-import { Button, Icon } from "antd";
+import { Button } from "antd";
 
 import Card from "./Card";
 
@@ -16,7 +16,7 @@ const Wrapper = styled.div`
   .card-wrapper {
     width: 215px;
     height: 115px;
-    margin: 7px;
+    margin: 4px;
     cursor: pointer;
     position: relative;
     .card {

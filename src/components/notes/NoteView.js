@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Popover } from "antd";
+import { Popover, Icon } from "antd";
 
 import Card from "./Card";
 import Controls from "./Controls";
@@ -41,15 +41,34 @@ const Wrapper = styled.div`
     right: 1px;
     z-index: 999;
   }
+  .back-icon {
+    position: absolute;
+    background: lightgrey;
+    top: -7px;
+    left: -9px;
+    z-index: 10;
+    padding: 5px;
+    border-radius: 30px;
+    transition: 1s;
+    &:hover {
+      color: grey;
+      transform: scale(1.2);
+    }
+  }
 `;
 
-const NoteView = ({ dispatch, match, selectedNote, session }) => {
+const NoteView = ({ dispatch, match, selectedNote, session, history }) => {
   useEffect(() => {
     if (session) dispatch(getNoteById(match.params.id));
   }, [match.params]);
 
   return (
     <Wrapper>
+      <Icon
+        className="back-icon"
+        onClick={() => history.push("/home")}
+        type="caret-left"
+      />
       <Card view="EXPANDED" note={selectedNote} />
       <Popover placement="bottom" content="Copy to clipboard">
         <StyledIcon

@@ -24,7 +24,7 @@ const Wrapper = styled.div`
     position: absolute;
     bottom: 4px;
     left: 4px;
-    z-index: 999;
+    z-index: 2;
   }
   .title {
     font-size: 16px;
@@ -65,20 +65,6 @@ const Wrapper = styled.div`
       font-size: 9px;
     }
   }
-  .back-icon {
-    position: absolute;
-    background: lightgrey;
-    top: -7px;
-    left: -9px;
-    z-index: 10;
-    padding: 5px;
-    border-radius: 30px;
-    transition: 1s;
-    &:hover {
-      color: grey;
-      transform: scale(1.2);
-    }
-  }
 `;
 
 const DropdownWrapper = styled.div`
@@ -104,14 +90,7 @@ const DropdownWrapper = styled.div`
   }
 `;
 
-const Card = ({
-  note,
-  editNote,
-  deleteNote,
-  view = "CARD",
-  dropdownView,
-  history
-}) => {
+const Card = ({ note, editNote, deleteNote, view = "CARD", dropdownView }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const { title = "", content = "", type = "DROP", tags = [], _id } =
@@ -196,13 +175,6 @@ const Card = ({
             </div>
           )}
         </DropdownWrapper>
-      )}
-      {view === "EXPANDED" && (
-        <Icon
-          className="back-icon"
-          onClick={() => history.push("/home")}
-          type="caret-left"
-        />
       )}
     </Wrapper>
   );
