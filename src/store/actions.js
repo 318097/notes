@@ -1,6 +1,5 @@
 // import data from './data';
 import axios from "axios";
-import { message } from "antd";
 
 import { firestore } from "../firebase";
 import {
@@ -17,7 +16,8 @@ import {
   SET_UPLOAD_NOTE_STATUS,
   UPDATE_NOTE,
   DELETE_NOTE,
-  TOGGLE_SETTINGS_DRAWER
+  TOGGLE_SETTINGS_DRAWER,
+  SET_TAGS
 } from "./constants";
 
 export const setSession = session => ({
@@ -209,5 +209,7 @@ export const deleteNote = noteId => async (dispatch, getState) => {
     dispatch(setAppLoading(false));
   }
 };
+
+export const setTags = tags => ({ type: SET_TAGS, payload: tags });
 
 export const toggleFavoriteNote = noteId => async dispatch => {};

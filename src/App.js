@@ -18,15 +18,8 @@ import NoteView from "./components/notes/NoteView";
 import UploadContent from "./components/notes/UploadContent";
 import Settings from "./components/Settings";
 
-import {
-  setAddNoteModalVisibility,
-  setSession,
-  setSettings,
-  fetchNotes
-} from "./store/actions";
+import { setSession, setSettings, fetchNotes } from "./store/actions";
 
-// axios.defaults.baseURL = 'https://bubblegum-server.herokuapp.com/api';
-axios.defaults.baseURL = "http://localhost:7000/api";
 axios.defaults.headers.common["external-source"] = "NOTES_APP";
 
 const App = ({ location, history, dispatch, session, settings }) => {

@@ -12,7 +12,8 @@ import {
   SET_EDIT_NOTE,
   SET_UPLOAD_NOTE_STATUS,
   UPDATE_NOTE,
-  DELETE_NOTE
+  DELETE_NOTE,
+  SET_TAGS
 } from "./constants";
 
 const initialState = {
@@ -29,7 +30,8 @@ const initialState = {
   uploadNoteStatus: false,
   mode: undefined,
   session: null,
-  settings: {}
+  settings: {},
+  tags: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -132,6 +134,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         notes: state.notes.filter(note => note._id !== action.payload)
+      };
+    }
+    case SET_TAGS: {
+      return {
+        ...state,
+        tags: action.payload
       };
     }
     default:
