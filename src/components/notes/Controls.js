@@ -9,10 +9,12 @@ import { StyledIcon } from "../../styled";
 
 const ControlsWrapper = styled.div`
   width: 200px;
-  padding: 25px 5px;
+  height: 100%;
+  overflow: auto;
+  padding: 10px 5px;
   position: absolute;
+  top: 0;
   right: -210px;
-  top: 30px;
   background: white;
   border-radius: 5px;
   border: 1px solid lightgrey;
@@ -23,6 +25,9 @@ const ControlsWrapper = styled.div`
     font-size: 0.7rem;
     background: #f5f5f5;
     display: inline-block;
+  }
+  .ant-divider {
+    margin: 15px 0;
   }
 `;
 
@@ -42,8 +47,8 @@ const Controls = ({ note, dispatch }) => {
     setHashtags([...defaultTags, note.tags.map(tag => `#${tag}`)]);
   }, [note]);
 
-  const changeState = async ({ target: { value } }) =>
-    await dispatch(updateNote({ _id: note._id, status: value }));
+  const changeState = key => async ({ target: { value } }) =>
+    await dispatch(updateNote({ _id: note._id, [key]: value }));
 
   const changeVisibility = async value =>
     await dispatch(updateNote({ _id: note._id, visible: value }));
@@ -72,8 +77,27 @@ const Controls = ({ note, dispatch }) => {
         <div className="flex space-between align-center">
           <h4>Status</h4>
         </div>
-        <Radio.Group onChange={changeState} value={note && note.status}>
+        <Radio.Group
+          onChange={changeState("status")}
+          value={note && note.status}
+        >
           {["DRAFT", "READY", "POSTED"].map(state => (
+            <Radio className="radio-box" key={state} value={state}>
+              {state}
+            </Radio>
+          ))}
+        </Radio.Group>
+      </div>
+      <Divider />
+      <div>
+        <div className="flex space-between align-center">
+          <h4>Social status</h4>
+        </div>
+        <Radio.Group
+          onChange={changeState("socialStatus")}
+          value={(note && note.socialStatus) || "NONE"}
+        >
+          {["NONE", "READY", "POSTED"].map(state => (
             <Radio className="radio-box" key={state} value={state}>
               {state}
             </Radio>
