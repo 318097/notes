@@ -77,7 +77,8 @@ const reducer = (state = initialState, action) => {
     case LOAD_NOTES: {
       return {
         ...state,
-        notes: [...action.payload]
+        notes: [...action.payload.notes],
+        meta: action.payload.meta
       };
     }
     case GET_NOTE_BY_ID: {

@@ -33,18 +33,22 @@ const ProfileIcon = styled.div`
 
 const StyledSection = styled.section`
   margin: 0 auto;
-  max-width: 350px;
-  padding: 20px;
+  max-width: 275px;
+  padding: 50px 15px;
   background: white;
   border-radius: 5px;
   border: 1px solid lightgrey;
   box-shadow: 3px 3px 3px lightgrey;
   position: relative;
   top: 50px;
+  text-align: center;
   h3 {
+    font-size: 1.1rem;
     text-align: center;
-    font-weight: bold;
+    text-transform: uppercase;
     text-decoration: underline;
+    color: #808080;
+    margin-bottom: 20px;
   }
   button {
     margin: 5px 5px 0 0;

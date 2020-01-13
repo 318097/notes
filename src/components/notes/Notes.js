@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { Button } from "antd";
 
 import Card from "./Card";
+import Filters from "../Filters";
 
 import { MessageWrapper } from "../../styled";
 import { setFilter, fetchNotes } from "../../store/actions";
@@ -38,7 +39,15 @@ const Wrapper = styled.div`
   }
 `;
 
-const Notes = ({ notes, appLoading, history, dispatch, session, filters }) => {
+const Notes = ({
+  notes,
+  appLoading,
+  history,
+  dispatch,
+  session,
+  filters,
+  meta
+}) => {
   useEffect(() => {
     if (session) dispatch(fetchNotes());
   }, [session]);
@@ -50,6 +59,7 @@ const Notes = ({ notes, appLoading, history, dispatch, session, filters }) => {
 
   return (
     <section>
+      <Filters className="filters" />
       {notes.length ? (
         <Wrapper>
           {notes.map(note => (
@@ -65,7 +75,7 @@ const Notes = ({ notes, appLoading, history, dispatch, session, filters }) => {
       ) : (
         !appLoading && <MessageWrapper>Empty</MessageWrapper>
       )}
-      {notes.length > 0 && (
+      {notes.length && notes.length < meta.count && (
         <div className="flex center">
           <Button
             type="danger"
@@ -79,11 +89,12 @@ const Notes = ({ notes, appLoading, history, dispatch, session, filters }) => {
   );
 };
 
-const mapStateToProps = ({ notes, appLoading, session, filters }) => ({
+const mapStateToProps = ({ notes, meta, appLoading, session, filters }) => ({
   notes,
   appLoading,
   session,
-  filters
+  filters,
+  meta
 });
 
 export default withRouter(connect(mapStateToProps)(Notes));

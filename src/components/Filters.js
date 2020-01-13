@@ -14,7 +14,7 @@ const Filters = ({ dispatch, session, filters }) => {
   const setFilterValues = (key, value) => dispatch(setFilter({ [key]: value }));
 
   return (
-    <div className="flex align-center">
+    <div className="flex center align-center" style={{ margin: "5px" }}>
       <Search
         allowClear
         className="input-width"

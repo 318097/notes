@@ -3,12 +3,12 @@ import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import axios from "axios";
 
-import { auth, firestore } from "./firebase";
-
 import "./App.scss";
 
-import ProtectedRoute from "./ProtectedRoute";
+import { auth, firestore } from "./firebase";
+import { setSession, setSettings, fetchNotes } from "./store/actions";
 
+import ProtectedRoute from "./ProtectedRoute";
 import Header from "./components/Header";
 import Signup from "./components/Signup";
 import Signin from "./components/Signin";
@@ -18,12 +18,10 @@ import NoteView from "./components/notes/NoteView";
 import UploadContent from "./components/notes/UploadContent";
 import Settings from "./components/Settings";
 
-import { setSession, setSettings, fetchNotes } from "./store/actions";
-
 axios.defaults.headers.common["external-source"] = "NOTES_APP";
 
 const App = ({ location, history, dispatch, session, settings }) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   // const queryString = new URLSearchParams(location.search);
   // const mode = queryString.get('mode');
   // if (mode === 'add') {
@@ -61,6 +59,7 @@ const App = ({ location, history, dispatch, session, settings }) => {
         console.log(doc.data());
         dispatch(setSettings(doc.data().settings));
       });
+      setLoading(true);
     };
     if (!session) return;
     fetchSettings(session.email);

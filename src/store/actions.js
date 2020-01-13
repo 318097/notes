@@ -76,6 +76,7 @@ export const fetchNotes = filters => async (dispatch, getState) => {
     } = getState();
     dispatch(setAppLoading(true));
     const data = filters && filters.page > 1 ? [...notes] : [];
+    let metaInfo;
 
     if (storage === "FIREBASE") {
       const querySnapshot = await firestore
@@ -89,9 +90,10 @@ export const fetchNotes = filters => async (dispatch, getState) => {
         data: { posts, meta }
       } = await axios.get("/posts", { params: filters });
       data.push(...posts);
+      metaInfo = meta;
     }
 
-    dispatch({ type: LOAD_NOTES, payload: data });
+    dispatch({ type: LOAD_NOTES, payload: { notes: data, meta: metaInfo } });
   } catch (err) {
     console.log(err);
   } finally {

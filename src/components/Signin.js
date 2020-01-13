@@ -1,25 +1,29 @@
 import React, { useState } from "react";
 import { Input, Button, Icon } from "antd";
 
-import { auth, signInWithGoogle } from '../firebase';
-import { StyledSection } from '../styled';
+import { auth, signInWithGoogle } from "../firebase";
+import { StyledSection } from "../styled";
 
 const initialState = {
   password: "",
-  email: "",
+  email: ""
 };
 
 const Signin = () => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(initialState);
 
-  const handleInput = key => ({ target: { value } }) => setForm(data => ({ ...data, [key]: value }));
+  const handleInput = key => ({ target: { value } }) =>
+    setForm(data => ({ ...data, [key]: value }));
 
   const handleSignin = async () => {
-    setLoading(true);
-    const { email, password } = form;
-    await auth.signInWithEmailAndPassword(email, password);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const { email, password } = form;
+      await auth.signInWithEmailAndPassword(email, password);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,22 +42,17 @@ const Signin = () => {
           onPressEnter={handleSignin}
         />
         <br />
-        <Button
-          type="primary"
-          onClick={handleSignin}
-          loading={loading}
-        >
+        <Button type="primary" onClick={handleSignin} loading={loading}>
           Sign in
-          </Button>
+        </Button>
 
-        <Button
-          onClick={signInWithGoogle}>
+        <Button onClick={signInWithGoogle}>
           Sign in
           <Icon type="google" />
         </Button>
       </form>
     </StyledSection>
   );
-}
+};
 
 export default Signin;

@@ -30,7 +30,6 @@ h4,
 h5,
 h6 {
   margin: 0;
-  margin-bottom: 0 !important;
 }
 
 input,
@@ -52,7 +51,12 @@ body {
     width: 100vw;
     margin: 0;
     padding: 0;
-    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    section {
+      flex: 1 1 auto;
+      overflow: auto;
+    }
   }
   .ant-modal-body {
     padding: 0;
