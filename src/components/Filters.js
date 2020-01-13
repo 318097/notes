@@ -9,6 +9,7 @@ const { Search } = Input;
 const { Option } = Select;
 
 const status = ["ALL", "DRAFT", "READY", "POSTED"];
+const socialStatus = ["NONE", "DRAFT", "READY", "POSTED"];
 
 const Filters = ({ dispatch, session, filters, notes, meta }) => {
   const setFilterValues = (key, value) => dispatch(setFilter({ [key]: value }));
@@ -24,11 +25,21 @@ const Filters = ({ dispatch, session, filters, notes, meta }) => {
       />
       <Select
         className="input-width"
-        placeholder="Status"
+        placeholder="Post Status"
         value={filters.status}
         onChange={value => setFilterValues("status", value)}
       >
         {status.map(state => (
+          <Option key={state}>{state}</Option>
+        ))}
+      </Select>
+      <Select
+        className="input-width"
+        placeholder="Social Status"
+        value={filters.socialStatus}
+        onChange={value => setFilterValues("socialStatus", value)}
+      >
+        {socialStatus.map(state => (
           <Option key={state}>{state}</Option>
         ))}
       </Select>

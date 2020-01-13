@@ -24,7 +24,8 @@ const initialState = {
   },
   filters: {
     search: "",
-    status: "ALL",
+    status: undefined,
+    socialStatus: undefined,
     page: 1
   },
   notes: [],
