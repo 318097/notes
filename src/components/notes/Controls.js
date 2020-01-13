@@ -47,11 +47,8 @@ const Controls = ({ note, dispatch }) => {
     setHashtags([...defaultTags, note.tags.map(tag => `#${tag}`)]);
   }, [note]);
 
-  const changeState = key => async ({ target: { value } }) =>
+  const updateProperties = key => async ({ target: { value } }) =>
     await dispatch(updateNote({ _id: note._id, [key]: value }));
-
-  const changeVisibility = async value =>
-    await dispatch(updateNote({ _id: note._id, visible: value }));
 
   return (
     <ControlsWrapper>
@@ -77,7 +74,7 @@ const Controls = ({ note, dispatch }) => {
           <h4>Status</h4>
         </div>
         <Radio.Group
-          onChange={changeState("status")}
+          onChange={updateProperties("status")}
           value={note && note.status}
         >
           {["DRAFT", "READY", "POSTED"].map(state => (
@@ -93,7 +90,7 @@ const Controls = ({ note, dispatch }) => {
           <h4>Social status</h4>
         </div>
         <Radio.Group
-          onChange={changeState("socialStatus")}
+          onChange={updateProperties("socialStatus")}
           value={(note && note.socialStatus) || "NONE"}
         >
           {["NONE", "READY", "POSTED"].map(state => (
@@ -106,7 +103,10 @@ const Controls = ({ note, dispatch }) => {
       <Divider />
       <div>
         Visible{" "}
-        <Switch checked={note && note.visible} onChange={changeVisibility} />
+        <Switch
+          checked={note && note.visible}
+          onChange={updateProperties("visible")}
+        />
       </div>
     </ControlsWrapper>
   );

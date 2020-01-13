@@ -211,11 +211,6 @@ const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
             <Card view="UPLOAD" note={item} />
             <span className="index-number">#{i + 1}</span>
             <Icon
-              onClick={removeItem(item.tempId)}
-              className="delete-icon"
-              type="delete"
-            />
-            <Icon
               onClick={() =>
                 dispatch(
                   setModalMeta({
@@ -226,8 +221,15 @@ const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
                   })
                 )
               }
+              label="Edit"
               className="edit-icon"
               type="edit"
+            />
+            <Icon
+              label="Delete"
+              onClick={removeItem(item.tempId)}
+              className="delete-icon"
+              type="delete"
             />
           </div>
         ))}

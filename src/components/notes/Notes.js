@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
@@ -48,19 +48,26 @@ const Notes = ({
   filters,
   meta
 }) => {
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     if (session) dispatch(fetchNotes());
   }, [session]);
+
+  useEffect(() => {
+    if (!appLoading) setLoading(false);
+  }, [notes, appLoading]);
 
   const handleClick = _id => event => {
     event.stopPropagation();
     history.push(`/note/${_id}`);
   };
 
+  if (loading) return <Fragment />;
   return (
     <section>
       <Filters className="filters" />
-      {notes.length ? (
+      {notes.length && !loading ? (
         <Wrapper>
           {notes.map(note => (
             <div
@@ -73,8 +80,9 @@ const Notes = ({
           ))}
         </Wrapper>
       ) : (
-        !appLoading && <MessageWrapper>Empty</MessageWrapper>
+        <MessageWrapper>Empty</MessageWrapper>
       )}
+      <br />
       {notes.length && notes.length < meta.count && (
         <div className="flex center">
           <Button

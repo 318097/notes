@@ -22,7 +22,7 @@ import AddNote from "./components/notes/AddNote";
 axios.defaults.headers.common["external-source"] = "NOTES_APP";
 
 const App = ({ location, history, dispatch, session, settings }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   // const queryString = new URLSearchParams(location.search);
   // const mode = queryString.get('mode');
   // if (mode === 'add') {
@@ -43,6 +43,7 @@ const App = ({ location, history, dispatch, session, settings }) => {
         sessionStorage.setItem("notes-app", "logged-in");
         if (history.location.pathname === "/signin") history.push("/home");
       } else {
+        setLoading(false);
         sessionStorage.clear();
       }
     });
@@ -59,7 +60,6 @@ const App = ({ location, history, dispatch, session, settings }) => {
         console.log(doc.data());
         dispatch(setSettings(doc.data().settings));
       });
-      setLoading(true);
     };
     if (!session) return;
     fetchSettings(session.email);
@@ -79,17 +79,19 @@ const App = ({ location, history, dispatch, session, settings }) => {
     <div className="container">
       <Header />
       <AddNote />
-      {!loading && (
-        <Switch>
-          <Route path="/signup" exact component={Signup} />
-          <Route path="/signin" exact component={Signin} />
-          <ProtectedRoute path="/home" exact component={Notes} />
-          <ProtectedRoute path="/note/:id" exact component={NoteView} />
-          <ProtectedRoute path="/upload" exact component={UploadContent} />
-          <Route path="/" exact render={() => <Redirect to="/signin" />} />
-          <Route component={NotFound} />
-        </Switch>
-      )}
+      <div className="content">
+        {!loading && (
+          <Switch>
+            <Route path="/signup" exact component={Signup} />
+            <Route path="/signin" exact component={Signin} />
+            <ProtectedRoute path="/home" exact component={Notes} />
+            <ProtectedRoute path="/note/:id" exact component={NoteView} />
+            <ProtectedRoute path="/upload" exact component={UploadContent} />
+            <Route path="/" exact render={() => <Redirect to="/signin" />} />
+            <Route component={NotFound} />
+          </Switch>
+        )}
+      </div>
       <Settings />
     </div>
   );
