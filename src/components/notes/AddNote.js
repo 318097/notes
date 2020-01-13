@@ -2,20 +2,12 @@ import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import marked from "marked";
-import { Modal, Input, Radio, Divider, Checkbox, Popover } from "antd";
+import { Modal, Input, Radio, Divider, Checkbox } from "antd";
 import SimpleMDE from "react-simplemde-editor";
 
-import {
-  addNote,
-  updateNote,
-  setAddNoteModalVisibility,
-  setUploadNoteStatus,
-  setNoteToEdit
-} from "../../store/actions";
+import { addNote, updateNote, setModalMeta } from "../../store/actions";
 
 import { generateSlug, tagList } from "../../utils";
-
-import { StyledIcon } from "../../styled";
 
 import "easymde/dist/easymde.min.css";
 
@@ -48,15 +40,13 @@ const initialState = {
 };
 
 const AddNote = ({
+  session,
   addNote,
   updateNote,
+  setModalMeta,
   modalVisibility,
-  setAddNoteModalVisibility,
   mode,
-  selectedNote,
-  session,
-  setUploadNoteStatus,
-  setNoteToEdit
+  selectedNote
 }) => {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
@@ -70,8 +60,7 @@ const AddNote = ({
     }
   }, [mode, selectedNote, modalVisibility]);
 
-  const setModalVisibilityStatus = (status, mode) => async () =>
-    setAddNoteModalVisibility(status, mode);
+  const closeModal = async () => setModalMeta();
 
   const setData = (key, value) => setNote(data => ({ ...data, [key]: value }));
 
@@ -80,121 +69,108 @@ const AddNote = ({
     try {
       if (mode === "edit") await updateNote({ ...note });
       else if (mode === "add") await addNote({ ...note, userId: session.uid });
-      else {
-        await setNoteToEdit({ ...note });
-        await setUploadNoteStatus(true);
-      }
+      else await setModalMeta({ selectedNote: note, finishEditing: true });
     } finally {
       setLoading(false);
-      setModalVisibilityStatus(false)();
+      closeModal();
     }
   };
 
   return (
-    <Fragment>
-      <Popover placement="bottom" content="Add Note">
-        <StyledIcon
-          type="plus"
-          onClick={setModalVisibilityStatus(true, "add")}
-        />
-      </Popover>
-      <Modal
-        title={mode === "add" ? "ADD NOTE" : "EDIT NOTE"}
-        centered={true}
-        visible={modalVisibility}
-        okText={mode === "add" ? "Add" : "Update"}
-        onOk={handleOk}
-        onCancel={setModalVisibilityStatus(false)}
-        width="80vw"
-        confirmLoading={loading}
-      >
-        <CustomContainer>
-          <form>
-            <Radio.Group
-              buttonStyle="solid"
-              value={note.type}
-              onChange={({ target: { value } }) => setData("type", value)}
-            >
-              <Radio.Button value="POST">POST</Radio.Button>
-              <Radio.Button value="DROP">DROP</Radio.Button>
-            </Radio.Group>
+    <Modal
+      title={mode === "add" ? "ADD NOTE" : "EDIT NOTE"}
+      centered={true}
+      visible={modalVisibility}
+      okText={mode === "add" ? "Add" : "Update"}
+      onOk={handleOk}
+      onCancel={closeModal}
+      width="80vw"
+      confirmLoading={loading}
+    >
+      <CustomContainer>
+        <form>
+          <Radio.Group
+            buttonStyle="solid"
+            value={note.type}
+            onChange={({ target: { value } }) => setData("type", value)}
+          >
+            <Radio.Button value="POST">POST</Radio.Button>
+            <Radio.Button value="DROP">DROP</Radio.Button>
+          </Radio.Group>
 
-            <Input
-              autoFocus
-              placeholder="Title"
-              value={note.title}
-              onChange={({ target: { value } }) => setData("title", value)}
-              onBlur={() => setData("slug", generateSlug(note.title))}
-            />
-            <Input
-              placeholder="Slug"
-              value={note.slug}
-              onChange={({ target: { value } }) => setData("slug", value)}
-            />
-            <SimpleMDE
-              value={note.content}
-              onChange={value => setData("content", value)}
-              options={{
-                spellChecker: false,
-                placeholder: "Content...",
-                hideIcons: ["guide", "preview", "fullscreen", "side-by-side"]
-              }}
-            />
-            <Checkbox.Group
-              options={tagList}
-              value={note.tags}
-              onChange={value => setData("tags", value)}
-            />
-          </form>
-          {showPreview && (
-            <div className="preview">
-              <div className="flex space-between">
-                <h3>Preview</h3>
-                <Radio.Group
-                  defaultValue={previewMode}
-                  buttonStyle="solid"
-                  onChange={({ target: { value } }) => setPreviewMode(value)}
-                >
-                  <Radio.Button value="PREVIEW">PREVIEW</Radio.Button>
-                  <Radio.Button value="CODE">CODE</Radio.Button>
-                </Radio.Group>
-              </div>
-              <Divider />
-              {previewMode === "PREVIEW" ? (
-                <Fragment>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: marked(note.title || "")
-                    }}
-                  ></div>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: marked(note.content || "")
-                    }}
-                  ></div>
-                </Fragment>
-              ) : (
-                <div>
-                  {marked(note.title)}
-                  <br />
-                  {marked(note.content)}
-                </div>
-              )}
+          <Input
+            autoFocus
+            placeholder="Title"
+            value={note.title}
+            onChange={({ target: { value } }) => setData("title", value)}
+            onBlur={() => setData("slug", generateSlug(note.title))}
+          />
+          <Input
+            placeholder="Slug"
+            value={note.slug}
+            onChange={({ target: { value } }) => setData("slug", value)}
+          />
+          <SimpleMDE
+            value={note.content}
+            onChange={value => setData("content", value)}
+            options={{
+              spellChecker: false,
+              placeholder: "Content...",
+              hideIcons: ["guide", "preview", "fullscreen", "side-by-side"]
+            }}
+          />
+          <Checkbox.Group
+            options={tagList}
+            value={note.tags}
+            onChange={value => setData("tags", value)}
+          />
+        </form>
+        {showPreview && (
+          <div className="preview">
+            <div className="flex space-between">
+              <h3>Preview</h3>
+              <Radio.Group
+                defaultValue={previewMode}
+                buttonStyle="solid"
+                onChange={({ target: { value } }) => setPreviewMode(value)}
+              >
+                <Radio.Button value="PREVIEW">PREVIEW</Radio.Button>
+                <Radio.Button value="CODE">CODE</Radio.Button>
+              </Radio.Group>
             </div>
-          )}
-        </CustomContainer>
-      </Modal>
-    </Fragment>
+            <Divider />
+            {previewMode === "PREVIEW" ? (
+              <Fragment>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: marked(note.title || "")
+                  }}
+                ></div>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: marked(note.content || "")
+                  }}
+                ></div>
+              </Fragment>
+            ) : (
+              <div>
+                {marked(note.title)}
+                <br />
+                {marked(note.content)}
+              </div>
+            )}
+          </div>
+        )}
+      </CustomContainer>
+    </Modal>
   );
 };
 
 const mapStateToProps = ({
-  addNoteModalVisibility,
-  selectedNote,
-  mode,
+  modalMeta: { visibility, mode, selectedNote },
   session
 }) => ({
-  modalVisibility: addNoteModalVisibility,
+  modalVisibility: visibility,
   selectedNote,
   mode,
   session
@@ -202,9 +178,7 @@ const mapStateToProps = ({
 const mapDispatchToProps = {
   addNote,
   updateNote,
-  setAddNoteModalVisibility,
-  setUploadNoteStatus,
-  setNoteToEdit
+  setModalMeta
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNote);

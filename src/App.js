@@ -17,6 +17,7 @@ import Notes from "./components/notes/Notes";
 import NoteView from "./components/notes/NoteView";
 import UploadContent from "./components/notes/UploadContent";
 import Settings from "./components/Settings";
+import AddNote from "./components/notes/AddNote";
 
 axios.defaults.headers.common["external-source"] = "NOTES_APP";
 
@@ -25,7 +26,6 @@ const App = ({ location, history, dispatch, session, settings }) => {
   // const queryString = new URLSearchParams(location.search);
   // const mode = queryString.get('mode');
   // if (mode === 'add') {
-  //   dispatch(setAddNoteModalVisibility(true));
   // }
 
   useEffect(() => {
@@ -78,6 +78,7 @@ const App = ({ location, history, dispatch, session, settings }) => {
   return (
     <div className="container">
       <Header />
+      <AddNote />
       {!loading && (
         <Switch>
           <Route path="/signup" exact component={Signup} />

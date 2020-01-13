@@ -7,7 +7,7 @@ import axios from "axios";
 import styled from "styled-components";
 import uuid from "uuid";
 
-import { setNoteToEdit } from "../../store/actions";
+import { setModalMeta } from "../../store/actions";
 import { StyledIcon } from "../../styled";
 import { firestore } from "../../firebase";
 import { generateSlug } from "../../utils";
@@ -75,12 +75,7 @@ const parseItem = (item, type = "POST") => {
   };
 };
 
-const UploadContent = ({
-  session,
-  dispatch,
-  uploadNoteStatus,
-  selectedNote
-}) => {
+const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
   const [disable, setDisable] = useState(true);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -96,14 +91,14 @@ const UploadContent = ({
   }, [dataType]);
 
   useEffect(() => {
-    if (!uploadNoteStatus) return;
+    if (!finishEditing) return;
     setData(prev =>
       prev.map(item => {
         if (item.tempId === selectedNote.tempId) return selectedNote;
         return item;
       })
     );
-  }, [uploadNoteStatus]);
+  }, [finishEditing]);
 
   useEffect(() => {
     if (rawData) {
@@ -221,7 +216,16 @@ const UploadContent = ({
               type="delete"
             />
             <StyledIcon
-              onClick={() => dispatch(setNoteToEdit(item))}
+              onClick={() =>
+                dispatch(
+                  setModalMeta({
+                    selectedNote: item,
+                    mode: "edit-upload",
+                    finishEditing: false,
+                    visibility: true
+                  })
+                )
+              }
               className="edit-icon"
               type="edit"
             />
@@ -238,9 +242,12 @@ const UploadContent = ({
   );
 };
 
-const mapStateToProps = ({ session, uploadNoteStatus, selectedNote }) => ({
+const mapStateToProps = ({
   session,
-  uploadNoteStatus,
+  modalMeta: { finishEditing, selectedNote }
+}) => ({
+  session,
+  finishEditing,
   selectedNote
 });
 

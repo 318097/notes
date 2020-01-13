@@ -10,7 +10,7 @@ const { Option } = Select;
 
 const status = ["ALL", "DRAFT", "READY", "POSTED"];
 
-const Filters = ({ dispatch, session, filters }) => {
+const Filters = ({ dispatch, session, filters, notes, meta }) => {
   const setFilterValues = (key, value) => dispatch(setFilter({ [key]: value }));
 
   return (
@@ -45,10 +45,18 @@ const Filters = ({ dispatch, session, filters }) => {
           </Option>
         ))}
       </Select>
+      <span>
+        Showing {notes.length} of {meta && meta.count}
+      </span>
     </div>
   );
 };
 
-const mapStateToProps = ({ session, filters }) => ({ session, filters });
+const mapStateToProps = ({ session, filters, notes, meta }) => ({
+  session,
+  filters,
+  notes,
+  meta
+});
 
 export default connect(mapStateToProps)(Filters);

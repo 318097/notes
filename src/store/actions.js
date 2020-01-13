@@ -1,4 +1,3 @@
-// import data from './data';
 import axios from "axios";
 
 import { firestore } from "../firebase";
@@ -6,14 +5,12 @@ import {
   SET_SESSION,
   SET_SETTINGS,
   SET_APP_LOADING,
-  SET_ADD_NOTE_MODAL_VISIBILITY,
   UPDATE_FILTER,
   LOAD_NOTES,
   GET_NOTE_BY_ID,
   ADD_NOTE,
-  EDIT_NOTE,
-  SET_EDIT_NOTE,
-  SET_UPLOAD_NOTE_STATUS,
+  SET_NOTE_TO_EDIT,
+  SET_MODAL_META,
   UPDATE_NOTE,
   DELETE_NOTE,
   TOGGLE_SETTINGS_DRAWER,
@@ -47,11 +44,6 @@ export const setSettings = updatedSettings => async (dispatch, getState) => {
 export const setAppLoading = status => ({
   type: SET_APP_LOADING,
   payload: status
-});
-
-export const setAddNoteModalVisibility = (status, mode) => ({
-  type: SET_ADD_NOTE_MODAL_VISIBILITY,
-  payload: { status, mode }
 });
 
 export const toggleSettingsDrawer = status => ({
@@ -145,26 +137,15 @@ export const addNote = note => async (dispatch, getState) => {
     } else {
       await axios.post(`/posts`, { data: note });
     }
-
     dispatch({ type: ADD_NOTE, payload: note });
   } finally {
     dispatch(setAppLoading(false));
   }
 };
 
-export const editNote = noteId => ({
-  type: EDIT_NOTE,
+export const setNoteToEdit = noteId => ({
+  type: SET_NOTE_TO_EDIT,
   payload: noteId
-});
-
-export const setNoteToEdit = note => ({
-  type: SET_EDIT_NOTE,
-  payload: note
-});
-
-export const setUploadNoteStatus = () => ({
-  type: SET_UPLOAD_NOTE_STATUS,
-  payload: true
 });
 
 export const updateNote = note => async (dispatch, getState) => {
@@ -215,3 +196,13 @@ export const deleteNote = noteId => async (dispatch, getState) => {
 export const setTags = tags => ({ type: SET_TAGS, payload: tags });
 
 export const toggleFavoriteNote = noteId => async dispatch => {};
+
+export const setModalMeta = ({
+  visibility = false,
+  finishEditing = false,
+  mode = "add",
+  selectedNote = null
+} = {}) => ({
+  type: SET_MODAL_META,
+  payload: { visibility, finishEditing, mode, selectedNote }
+});

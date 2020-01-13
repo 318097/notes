@@ -89,7 +89,7 @@ const NoteView = ({ dispatch, match, selectedNote, session, history }) => {
   );
 };
 
-const mapStateToProps = ({ selectedNote, session }) => ({
+const mapStateToProps = ({ modalMeta: { selectedNote }, session }) => ({
   selectedNote,
   session
 });

@@ -2,15 +2,13 @@ import {
   SET_SESSION,
   SET_SETTINGS,
   SET_APP_LOADING,
-  SET_ADD_NOTE_MODAL_VISIBILITY,
   TOGGLE_SETTINGS_DRAWER,
   UPDATE_FILTER,
   LOAD_NOTES,
   GET_NOTE_BY_ID,
   ADD_NOTE,
-  EDIT_NOTE,
-  SET_EDIT_NOTE,
-  SET_UPLOAD_NOTE_STATUS,
+  SET_NOTE_TO_EDIT,
+  SET_MODAL_META,
   UPDATE_NOTE,
   DELETE_NOTE,
   SET_TAGS
@@ -18,7 +16,12 @@ import {
 
 const initialState = {
   appLoading: false,
-  addNoteModalVisibility: false,
+  modalMeta: {
+    visibility: false,
+    finishEditing: false,
+    mode: undefined,
+    selectedNote: null
+  },
   filters: {
     search: "",
     status: "ALL",
@@ -26,9 +29,6 @@ const initialState = {
   },
   notes: [],
   meta: null,
-  selectedNote: null,
-  uploadNoteStatus: false,
-  mode: undefined,
   session: null,
   settings: {},
   tags: []
@@ -55,13 +55,6 @@ const reducer = (state = initialState, action) => {
         appLoading: action.payload
       };
     }
-    case SET_ADD_NOTE_MODAL_VISIBILITY: {
-      return {
-        ...state,
-        addNoteModalVisibility: action.payload.status,
-        mode: action.payload.mode
-      };
-    }
     case TOGGLE_SETTINGS_DRAWER: {
       return {
         ...state,
@@ -84,7 +77,10 @@ const reducer = (state = initialState, action) => {
     case GET_NOTE_BY_ID: {
       return {
         ...state,
-        selectedNote: action.payload
+        modalMeta: {
+          ...state.modalMeta,
+          selectedNote: action.payload
+        }
       };
     }
     case ADD_NOTE: {
@@ -93,37 +89,37 @@ const reducer = (state = initialState, action) => {
         notes: [...state.notes, action.payload]
       };
     }
-    case EDIT_NOTE: {
+    case SET_NOTE_TO_EDIT: {
       const selectedNote = state.notes.find(
         note => note._id === action.payload
       );
       return {
         ...state,
-        mode: "edit",
-        addNoteModalVisibility: true,
-        selectedNote
+        modalMeta: {
+          ...state.modalMeta,
+          mode: "edit",
+          visibility: true,
+          selectedNote
+        }
       };
     }
-    case SET_EDIT_NOTE: {
+    case SET_MODAL_META: {
       return {
         ...state,
-        mode: "edit-upload",
-        addNoteModalVisibility: true,
-        selectedNote: action.payload,
-        uploadNoteStatus: false
-      };
-    }
-    case SET_UPLOAD_NOTE_STATUS: {
-      return {
-        ...state,
-        uploadNoteStatus: action.payload
+        modalMeta: {
+          ...state.modalMeta,
+          ...action.payload
+        }
       };
     }
     case UPDATE_NOTE: {
       return {
         ...state,
-        mode: undefined,
-        selectedNote: null,
+        modalMeta: {
+          ...state.modalMeta,
+          mode: undefined,
+          selectedNote: null
+        },
         notes: state.notes.map(note => {
           if (note._id === action.payload._id)
             return { ...note, ...action.payload };

@@ -5,7 +5,7 @@ import { Tag, Icon, Popover, Popconfirm } from "antd";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
-import { editNote, deleteNote } from "../../store/actions";
+import { setNoteToEdit, deleteNote } from "../../store/actions";
 
 const Wrapper = styled.div`
   background: white;
@@ -90,7 +90,13 @@ const DropdownWrapper = styled.div`
   }
 `;
 
-const Card = ({ note, editNote, deleteNote, view = "CARD", dropdownView }) => {
+const Card = ({
+  note,
+  setNoteToEdit,
+  deleteNote,
+  view = "CARD",
+  dropdownView
+}) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const { title = "", content = "", type = "DROP", tags = [], _id } =
@@ -104,7 +110,7 @@ const Card = ({ note, editNote, deleteNote, view = "CARD", dropdownView }) => {
   const handleFavorite = () => {};
 
   const handleEdit = () => {
-    editNote(_id);
+    setNoteToEdit(_id);
     setShowDropdown(false);
   };
 
@@ -181,6 +187,6 @@ const Card = ({ note, editNote, deleteNote, view = "CARD", dropdownView }) => {
 };
 
 const mapStateToProps = ({ notes }) => ({ notes });
-const mapDispatchToProps = { editNote, deleteNote };
+const mapDispatchToProps = { setNoteToEdit, deleteNote };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Card));

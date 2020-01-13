@@ -8,10 +8,9 @@ import { auth } from "../firebase";
 import {
   setSession,
   toggleSettingsDrawer,
-  setSettings
+  setSettings,
+  setModalMeta
 } from "../store/actions";
-
-import AddNote from "./notes/AddNote";
 
 import { StyledIcon, ProfileIcon } from "../styled";
 
@@ -91,7 +90,12 @@ const Header = ({ history, dispatch, appLoading, session, settings }) => {
           <Popover placement="bottom" content="Home">
             <StyledIcon type="home" onClick={() => history.push("/home")} />
           </Popover>
-          <AddNote />
+          <Popover placement="bottom" content="Add Note">
+            <StyledIcon
+              type="plus"
+              onClick={() => dispatch(setModalMeta({ visibility: true }))}
+            />
+          </Popover>
           <Popover placement="bottom" content="Upload">
             <StyledIcon type="upload" onClick={() => history.push("/upload")} />
           </Popover>
