@@ -60,7 +60,7 @@ export const setFilter = filterUpdate => async (dispatch, getState) => {
   dispatch(fetchNotes(updatedFiters));
 };
 
-export const fetchNotes = filters => async (dispatch, getState) => {
+export const fetchNotes = (filters = {}) => async (dispatch, getState) => {
   try {
     const {
       session: { uid, storage },

@@ -72,7 +72,7 @@ const App = ({ location, history, dispatch, session, settings }) => {
       axios.defaults.baseURL = "https://bubblegum-server.herokuapp.com/api";
     else axios.defaults.baseURL = "http://localhost:7000/api";
     setLoading(false);
-    dispatch(fetchNotes({}));
+    dispatch(fetchNotes());
   }, [settings]);
 
   return (

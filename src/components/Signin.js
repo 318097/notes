@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Input, Button, Icon } from "antd";
+import { Input, Button, Icon, Divider } from "antd";
+import { withRouter } from "react-router-dom";
 
 import { auth, signInWithGoogle } from "../firebase";
 import { StyledSection } from "../styled";
@@ -9,7 +10,7 @@ const initialState = {
   email: ""
 };
 
-const Signin = () => {
+const Signin = ({ history }) => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(initialState);
 
@@ -42,7 +43,7 @@ const Signin = () => {
           onPressEnter={handleSignin}
         />
         <br />
-        <Button type="primary" onClick={handleSignin} loading={loading}>
+        <Button ghost type="primary" onClick={handleSignin} loading={loading}>
           Sign in
         </Button>
 
@@ -50,9 +51,15 @@ const Signin = () => {
           Sign in
           <Icon type="google" />
         </Button>
+
+        <Divider />
+
+        <Button ghost type="danger" onClick={() => history.push("/signup")}>
+          Sign up
+        </Button>
       </form>
     </StyledSection>
   );
 };
 
-export default Signin;
+export default withRouter(Signin);
