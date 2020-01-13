@@ -1,15 +1,16 @@
 import React, { useState, Fragment } from "react";
 import marked from "marked";
 import styled from "styled-components";
-import { Tag, Icon, Popover, Popconfirm } from "antd";
+import { Tag, Popconfirm } from "antd";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
+import Icon from "../Icon";
 import { setNoteToEdit, deleteNote } from "../../store/actions";
 
 const Wrapper = styled.div`
   background: white;
-  padding: 5px 0 10px 5px;
+  padding: 5px 0 3px 5px;
   position: relative;
   height: 100%;
   width: 100%;
@@ -22,8 +23,8 @@ const Wrapper = styled.div`
   justify-content: flex-end;
   .drop-icon {
     position: absolute;
-    bottom: 4px;
-    left: 4px;
+    right: 2px;
+    bottom: 3px;
     z-index: 2;
   }
   .title {
@@ -161,23 +162,17 @@ const Card = ({
               className="dropdown"
               onClick={event => event.stopPropagation()}
             >
-              <Popover placement="right" content="Favorite">
-                <Icon onClick={handleFavorite} type="heart" />
-              </Popover>
-              <Popover placement="right" content="Edit">
-                <Icon onClick={handleEdit} type="edit" />
-              </Popover>
-              <Popover placement="right" content="Delete">
-                <Popconfirm
-                  title="Delete?"
-                  onConfirm={handleDelete}
-                  placement="right"
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <Icon type="delete" />
-                </Popconfirm>
-              </Popover>
+              <Icon onClick={handleFavorite} type="heart" />
+              <Icon onClick={handleEdit} type="edit" />
+              <Popconfirm
+                title="Delete?"
+                onConfirm={handleDelete}
+                placement="right"
+                okText="Yes"
+                cancelText="No"
+              >
+                <Icon type="delete" />
+              </Popconfirm>
             </div>
           )}
         </DropdownWrapper>

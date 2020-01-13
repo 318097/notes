@@ -3,14 +3,13 @@ import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Popover, Icon } from "antd";
 
 import Card from "./Card";
 import Controls from "./Controls";
 
 import { getNoteById } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
-import { StyledIcon } from "../../styled";
+import Icon from "../Icon";
 
 const Wrapper = styled.div`
   max-width: 350px;
@@ -31,13 +30,13 @@ const Wrapper = styled.div`
   }
   .copy-header-icon {
     position: absolute;
-    top: 3px;
+    top: 10px;
     right: 1px;
     z-index: 999;
   }
   .copy-content-icon {
     position: absolute;
-    bottom: 3px;
+    bottom: 20px;
     right: 1px;
     z-index: 999;
   }
@@ -65,25 +64,26 @@ const NoteView = ({ dispatch, match, selectedNote, session, history }) => {
   return (
     <Wrapper>
       <Icon
+        label="Back"
         className="back-icon"
         onClick={() => history.push("/home")}
         type="caret-left"
       />
       <Card view="EXPANDED" note={selectedNote} />
-      <Popover placement="bottom" content="Copy to clipboard">
-        <StyledIcon
+      {selectedNote && selectedNote.type === "POST" && (
+        <Icon
+          label="Copy to clipboard"
           className="copy-header-icon"
           type="copy"
           onClick={() => copyToClipboard(selectedNote.title)}
         />
-      </Popover>
-      <Popover placement="bottom" content="Copy to clipboard">
-        <StyledIcon
-          className="copy-content-icon"
-          type="copy"
-          onClick={() => copyToClipboard(selectedNote.content)}
-        />
-      </Popover>
+      )}
+      <Icon
+        label="Copy to clipboard"
+        type="copy"
+        className="copy-content-icon"
+        onClick={() => copyToClipboard(selectedNote.content)}
+      />
       <Controls note={selectedNote} />
     </Wrapper>
   );

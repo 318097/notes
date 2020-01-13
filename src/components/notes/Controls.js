@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Popover, Divider, Radio, Switch } from "antd";
+import { Divider, Radio, Switch } from "antd";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
 import { updateNote } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
-import { StyledIcon } from "../../styled";
+import Icon from "../Icon";
 
 const ControlsWrapper = styled.div`
   width: 200px;
@@ -57,12 +57,11 @@ const Controls = ({ note, dispatch }) => {
     <ControlsWrapper>
       <div className="flex space-between align-center">
         <h4>Hashtags</h4>
-        <Popover placement="bottom" content="Copy to clipboard">
-          <StyledIcon
-            type="copy"
-            onClick={() => copyToClipboard(hashtags.join(" "))}
-          />
-        </Popover>
+        <Icon
+          label="Copy to clipboard"
+          type="copy"
+          onClick={() => copyToClipboard(hashtags.join(" "))}
+        />
       </div>
       <div>
         {note &&

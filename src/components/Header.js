@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { Spin, Icon, Divider, Popover, Switch } from "antd";
+import { Spin, Divider, Switch } from "antd";
 import { withRouter, Link } from "react-router-dom";
 
 import { auth } from "../firebase";
@@ -12,7 +12,8 @@ import {
   setModalMeta
 } from "../store/actions";
 
-import { StyledIcon, ProfileIcon } from "../styled";
+import { ProfileIcon } from "../styled";
+import Icon from "./Icon";
 
 const antIcon = <Icon type="loading" spin />;
 
@@ -87,18 +88,21 @@ const Header = ({ history, dispatch, appLoading, session, settings }) => {
       </h3>
       {session && (
         <div className="controls">
-          <Popover placement="bottom" content="Home">
-            <StyledIcon type="home" onClick={() => history.push("/home")} />
-          </Popover>
-          <Popover placement="bottom" content="Add Note">
-            <StyledIcon
-              type="plus"
-              onClick={() => dispatch(setModalMeta({ visibility: true }))}
-            />
-          </Popover>
-          <Popover placement="bottom" content="Upload">
-            <StyledIcon type="upload" onClick={() => history.push("/upload")} />
-          </Popover>
+          <Icon
+            label="Home"
+            type="home"
+            onClick={() => history.push("/home")}
+          />
+          <Icon
+            label="Add Note"
+            type="plus"
+            onClick={() => dispatch(setModalMeta({ visibility: true }))}
+          />
+          <Icon
+            label="Upload"
+            type="upload"
+            onClick={() => history.push("/upload")}
+          />
           <Divider type="vertical" />
           <div>
             Server{" "}
@@ -121,19 +125,16 @@ const Header = ({ history, dispatch, appLoading, session, settings }) => {
               {session.photoURL ? (
                 <img src={session.photoURL} alt="Profile pic" />
               ) : (
-                <StyledIcon type="user" />
+                <Icon type="user" />
               )}
             </ProfileIcon>
           </UserInfo>
-          <Popover placement="bottom" content="Settings">
-            <StyledIcon
-              type="setting"
-              onClick={() => dispatch(toggleSettingsDrawer(true))}
-            />
-          </Popover>
-          <Popover placement="bottom" content="Logout">
-            <StyledIcon type="logout" onClick={signOut} />
-          </Popover>
+          <Icon
+            label="Settings"
+            type="setting"
+            onClick={() => dispatch(toggleSettingsDrawer(true))}
+          />
+          <Icon label="Logout" type="logout" onClick={signOut} />
         </div>
       )}
     </Container>

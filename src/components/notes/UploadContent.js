@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from "react";
-import { Button, message, Icon, PageHeader, Radio, Input } from "antd";
+import { Button, message, PageHeader, Radio, Input } from "antd";
 import Card from "./Card";
 import { connect } from "react-redux";
 import axios from "axios";
@@ -8,7 +8,7 @@ import styled from "styled-components";
 import uuid from "uuid";
 
 import { setModalMeta } from "../../store/actions";
-import { StyledIcon } from "../../styled";
+import Icon from "../Icon";
 import { firestore } from "../../firebase";
 import { generateSlug } from "../../utils";
 
@@ -210,12 +210,12 @@ const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
           <div className="card-wrapper" key={item.tempId}>
             <Card view="UPLOAD" note={item} />
             <span className="index-number">#{i + 1}</span>
-            <StyledIcon
+            <Icon
               onClick={removeItem(item.tempId)}
               className="delete-icon"
               type="delete"
             />
-            <StyledIcon
+            <Icon
               onClick={() =>
                 dispatch(
                   setModalMeta({
