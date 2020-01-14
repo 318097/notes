@@ -48,9 +48,9 @@ const Filters = ({ dispatch, filters, notes, meta, tags }) => {
         value={filters.tags}
         onChange={values => setFilterValues("tags", values)}
       >
-        {tags.map(({ name, _id }) => (
-          <Option key={_id} value={name}>
-            {name.toUpperCase()}
+        {tags.map(({ label, value, _id }) => (
+          <Option key={_id} value={value}>
+            {label}
           </Option>
         ))}
       </Select>

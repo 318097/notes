@@ -14,7 +14,16 @@ const Settings = ({ settings, settingsDrawerVisibility, dispatch, tags }) => {
       const {
         data: { tags }
       } = await axios.get("/posts/tags");
-      dispatch(setTags(tags));
+      dispatch(
+        setTags(
+          tags.map(({ _id, color, name }) => ({
+            _id,
+            color,
+            label: name.toUpperCase(),
+            value: name
+          }))
+        )
+      );
     };
     if (!Object.keys(settings).length) return;
     fetchTags();
@@ -37,8 +46,8 @@ const Settings = ({ settings, settingsDrawerVisibility, dispatch, tags }) => {
     >
       <section>
         <h3>Tags</h3>
-        {tags.map(tag => (
-          <Tag key={tag.name}>{tag.name}</Tag>
+        {tags.map(({ label }) => (
+          <Tag key={label}>{label}</Tag>
         ))}
         <div style={{ marginTop: "3px" }}>
           <Input

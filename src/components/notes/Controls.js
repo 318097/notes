@@ -44,7 +44,7 @@ const Controls = ({ note, dispatch }) => {
 
   useEffect(() => {
     if (!note) return;
-    setHashtags([...defaultTags, note.tags.map(tag => `#${tag}`)]);
+    setHashtags([...defaultTags, ...note.tags.map(tag => `#${tag}`)]);
   }, [note]);
 
   const updateProperties = key => async ({ target: { value } }) =>

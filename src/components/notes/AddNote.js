@@ -53,7 +53,6 @@ const AddNote = ({
   const [showPreview, setShowPreview] = useState(true);
   const [previewMode, setPreviewMode] = useState("PREVIEW");
   const [note, setNote] = useState(initialState);
-  const [tagList, setTagList] = useState([]);
 
   useEffect(() => {
     if (modalVisibility) {
@@ -61,13 +60,6 @@ const AddNote = ({
       else setNote({ ...selectedNote });
     }
   }, [mode, selectedNote, modalVisibility]);
-
-  useEffect(() => {
-    if (tags.length)
-      setTagList(
-        tags.map(({ name }) => ({ label: name.toUpperCase(), value: name }))
-      );
-  }, [tags]);
 
   const closeModal = async () => setModalMeta();
 
@@ -130,7 +122,7 @@ const AddNote = ({
             }}
           />
           <Checkbox.Group
-            options={tagList}
+            options={tags}
             value={note.tags}
             onChange={value => setData("tags", value)}
           />

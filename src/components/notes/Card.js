@@ -144,8 +144,8 @@ const Card = ({
         ></div>
       )}
       <div className="tags">
-        {tags.map((tag, index) => (
-          <Tag onClick={handleTagClick} key={index}>
+        {tags.map(tag => (
+          <Tag onClick={handleTagClick} key={tag}>
             {tag.toUpperCase()}
           </Tag>
         ))}
