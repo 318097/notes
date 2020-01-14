@@ -7,7 +7,7 @@ import SimpleMDE from "react-simplemde-editor";
 
 import { addNote, updateNote, setModalMeta } from "../../store/actions";
 
-import { generateSlug, tagList } from "../../utils";
+import { generateSlug } from "../../utils";
 
 import "easymde/dist/easymde.min.css";
 
@@ -46,12 +46,14 @@ const AddNote = ({
   setModalMeta,
   modalVisibility,
   mode,
-  selectedNote
+  selectedNote,
+  tags
 }) => {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [previewMode, setPreviewMode] = useState("PREVIEW");
   const [note, setNote] = useState(initialState);
+  const [tagList, setTagList] = useState([]);
 
   useEffect(() => {
     if (modalVisibility) {
@@ -59,6 +61,13 @@ const AddNote = ({
       else setNote({ ...selectedNote });
     }
   }, [mode, selectedNote, modalVisibility]);
+
+  useEffect(() => {
+    if (tags.length)
+      setTagList(
+        tags.map(({ name }) => ({ label: name.toUpperCase(), value: name }))
+      );
+  }, [tags]);
 
   const closeModal = async () => setModalMeta();
 
@@ -80,6 +89,7 @@ const AddNote = ({
     <Modal
       title={mode === "add" ? "ADD NOTE" : "EDIT NOTE"}
       centered={true}
+      style={{ padding: "0" }}
       visible={modalVisibility}
       okText={mode === "add" ? "Add" : "Update"}
       onOk={handleOk}
@@ -168,12 +178,14 @@ const AddNote = ({
 
 const mapStateToProps = ({
   modalMeta: { visibility, mode, selectedNote },
-  session
+  session,
+  tags
 }) => ({
   modalVisibility: visibility,
   selectedNote,
   mode,
-  session
+  session,
+  tags
 });
 const mapDispatchToProps = {
   addNote,

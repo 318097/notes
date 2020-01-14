@@ -107,6 +107,7 @@ const Header = ({ history, dispatch, appLoading, session, settings }) => {
           <div>
             Server{" "}
             <Switch
+              loading={!Object.keys(settings).length}
               checked={settings.server === "server"}
               onChange={() =>
                 dispatch(

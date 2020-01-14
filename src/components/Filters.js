@@ -3,15 +3,13 @@ import { Input, Select } from "antd";
 import { connect } from "react-redux";
 import { setFilter } from "../store/actions";
 
-import { tagList } from "../utils";
-
 const { Search } = Input;
 const { Option } = Select;
 
 const status = ["ALL", "DRAFT", "READY", "POSTED"];
 const socialStatus = ["NONE", "DRAFT", "READY", "POSTED"];
 
-const Filters = ({ dispatch, session, filters, notes, meta }) => {
+const Filters = ({ dispatch, filters, notes, meta, tags }) => {
   const setFilterValues = (key, value) => dispatch(setFilter({ [key]: value }));
 
   return (
@@ -50,9 +48,9 @@ const Filters = ({ dispatch, session, filters, notes, meta }) => {
         value={filters.tags}
         onChange={values => setFilterValues("tags", values)}
       >
-        {tagList.map(({ label, value }) => (
-          <Option key={value} value={value}>
-            {label}
+        {tags.map(({ name, _id }) => (
+          <Option key={_id} value={name}>
+            {name.toUpperCase()}
           </Option>
         ))}
       </Select>
@@ -63,11 +61,11 @@ const Filters = ({ dispatch, session, filters, notes, meta }) => {
   );
 };
 
-const mapStateToProps = ({ session, filters, notes, meta }) => ({
-  session,
+const mapStateToProps = ({ filters, notes, meta, tags }) => ({
   filters,
   notes,
-  meta
+  meta,
+  tags
 });
 
 export default connect(mapStateToProps)(Filters);

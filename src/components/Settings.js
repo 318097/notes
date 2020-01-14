@@ -6,25 +6,19 @@ import { Input, Button } from "antd";
 
 import { toggleSettingsDrawer, setTags } from "../store/actions";
 
-const Settings = ({
-  settings,
-  settingsDrawerVisibility,
-  dispatch,
-  tags,
-  session
-}) => {
+const Settings = ({ settings, settingsDrawerVisibility, dispatch, tags }) => {
   const [data, setData] = useState("");
 
   useEffect(() => {
-    if (!session) return;
     const fetchTags = async () => {
       const {
         data: { tags }
       } = await axios.get("/posts/tags");
       dispatch(setTags(tags));
     };
-    setTimeout(fetchTags, 5000);
-  }, [session]);
+    if (!Object.keys(settings).length) return;
+    fetchTags();
+  }, [settings]);
 
   const handleClose = () => dispatch(toggleSettingsDrawer(false));
 
@@ -60,16 +54,10 @@ const Settings = ({
   );
 };
 
-const mapStateToProps = ({
+const mapStateToProps = ({ settings, settingsDrawerVisibility, tags }) => ({
   settings,
   settingsDrawerVisibility,
-  tags,
-  session
-}) => ({
-  settings,
-  settingsDrawerVisibility,
-  tags,
-  session
+  tags
 });
 
 export default connect(mapStateToProps)(Settings);
