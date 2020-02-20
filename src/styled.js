@@ -35,7 +35,6 @@ const StyledSection = styled.section`
   margin: 0 auto;
   max-width: 275px;
   padding: 50px 15px;
-  background: white;
   border-radius: 5px;
   border: 1px solid lightgrey;
   box-shadow: 3px 3px 3px lightgrey;
@@ -61,7 +60,6 @@ const MessageWrapper = styled.div`
   color: lightgrey;
   font-weight: bold;
   text-transform: uppercase;
-  font-family: LuckiestGuy;
 `;
 
 export { StyledIcon, ProfileIcon, StyledSection, MessageWrapper };

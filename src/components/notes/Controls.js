@@ -15,7 +15,6 @@ const ControlsWrapper = styled.div`
   position: absolute;
   top: 0;
   right: -210px;
-  background: white;
   border-radius: 5px;
   border: 1px solid lightgrey;
   box-shadow: 3px 3px 3px lightgrey;
@@ -23,7 +22,6 @@ const ControlsWrapper = styled.div`
     margin: 1px 2px;
     padding: 1px 3px;
     font-size: 0.7rem;
-    background: #f5f5f5;
     display: inline-block;
   }
   .ant-divider {

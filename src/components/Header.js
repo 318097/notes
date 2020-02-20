@@ -24,7 +24,6 @@ const Container = styled.header`
   padding: 10px;
   position: sticky;
   top: 0;
-  background: inherit;
   z-index: 10;
   h3 {
     flex: 1 1 auto;
@@ -34,10 +33,8 @@ const Container = styled.header`
     transition: 2s;
     font-weight: bold;
     a {
-      font-family: LuckiestGuy;
       color: #424242;
       & > span {
-        font-family: LuckiestGuy;
         text-decoration: underline;
         font-size: 150%;
         color: #2b2b2b;
@@ -54,7 +51,6 @@ const Container = styled.header`
 const UserInfo = styled.div`
   display: flex;
   height: 24px;
-  background: #dcdcdc;
   padding: 0px 10px;
   margin: 0;
   margin-right: 6px;
@@ -66,9 +62,8 @@ const UserInfo = styled.div`
     padding: 0 2px;
     position: relative;
     top: 2px;
-    font-size: 13px;
+    font-size: 0.81rem;
     font-weight: bold;
-    font-family: Saira;
   }
 `;
 

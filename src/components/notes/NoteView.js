@@ -42,7 +42,6 @@ const Wrapper = styled.div`
   }
   .back-icon {
     position: absolute;
-    background: lightgrey;
     top: -7px;
     left: -9px;
     z-index: 10;

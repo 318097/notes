@@ -44,13 +44,11 @@ const Wrapper = styled.div`
       border: 1px solid lightgrey;
       padding: 5px;
       & > code {
-        background: initial;
         padding: initial;
         border-radius: initial;
       }
     }
     code {
-      background: tomato;
       padding: 2px 4px;
       border-radius: 10px;
     }
@@ -80,7 +78,6 @@ const DropdownWrapper = styled.div`
     display: flex;
     flex-direction: column;
     position: absolute;
-    background: lightgrey;
     padding: 5px;
     right: -3px;
     top: 19px;

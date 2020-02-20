@@ -24,7 +24,6 @@ const CustomContainer = styled.div`
     flex: 1 1 59%;
   }
   div.preview {
-    background: #f3f3f3;
     margin: 10px;
     border-radius: 5px;
     flex: 1 1 39%;

@@ -29,9 +29,6 @@ const Wrapper = styled.div`
         transform: translate(-50%, -50%);
         font-size: 13px;
       }
-      &:hover {
-        background: #efefef;
-      }
       .content {
         overflow: hidden;
       }
