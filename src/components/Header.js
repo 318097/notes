@@ -62,7 +62,7 @@ const UserInfo = styled.div`
     padding: 0 2px;
     position: relative;
     top: 2px;
-    font-size: 0.81rem;
+    font-size: 0.8rem;
     font-weight: bold;
   }
 `;
@@ -83,21 +83,12 @@ const Header = ({ history, dispatch, appLoading, session, settings }) => {
       </h3>
       {session && (
         <div className="controls">
+          <Icon type="home" onClick={() => history.push("/home")} />
           <Icon
-            label="Home"
-            type="home"
-            onClick={() => history.push("/home")}
-          />
-          <Icon
-            label="Add Note"
             type="plus"
             onClick={() => dispatch(setModalMeta({ visibility: true }))}
           />
-          <Icon
-            label="Upload"
-            type="upload"
-            onClick={() => history.push("/upload")}
-          />
+          <Icon type="upload" onClick={() => history.push("/upload")} />
           <Divider type="vertical" />
           <div>
             Server{" "}
@@ -126,7 +117,6 @@ const Header = ({ history, dispatch, appLoading, session, settings }) => {
             </ProfileIcon>
           </UserInfo>
           <Icon
-            label="Settings"
             type="setting"
             onClick={() => dispatch(toggleSettingsDrawer(true))}
           />

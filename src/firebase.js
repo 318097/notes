@@ -29,11 +29,7 @@ const createNewFirebaseUser = async ({ email, uid, name }) =>
     .set({
       email,
       name,
-      userId: uid,
-      settings: {
-        server: "production",
-        tags: []
-      }
+      userId: uid
     });
 
 export { firestore, auth, signInWithGoogle, createNewFirebaseUser };

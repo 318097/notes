@@ -40,8 +40,7 @@ const reducer = (state = initialState, action) => {
     case SET_SESSION: {
       return {
         ...state,
-        session: action.payload,
-        notes: action.payload ? state.notes : []
+        session: action.payload
       };
     }
     case SET_SETTINGS: {
