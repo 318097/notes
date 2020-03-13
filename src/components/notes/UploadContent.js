@@ -221,12 +221,10 @@ const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
                   })
                 )
               }
-              label="Edit"
               className="edit-icon"
               type="edit"
             />
             <Icon
-              label="Delete"
               onClick={removeItem(item.tempId)}
               className="delete-icon"
               type="delete"

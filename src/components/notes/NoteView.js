@@ -63,7 +63,6 @@ const NoteView = ({ dispatch, match, selectedNote, session, history }) => {
   return (
     <Wrapper>
       <Icon
-        label="Back"
         className="back-icon"
         onClick={() => history.push("/home")}
         type="caret-left"
@@ -71,14 +70,12 @@ const NoteView = ({ dispatch, match, selectedNote, session, history }) => {
       <Card view="EXPANDED" note={selectedNote} />
       {selectedNote && selectedNote.type === "POST" && (
         <Icon
-          label="Copy to clipboard"
           className="copy-header-icon"
           type="copy"
           onClick={() => copyToClipboard(selectedNote.title)}
         />
       )}
       <Icon
-        label="Copy to clipboard"
         type="copy"
         className="copy-content-icon"
         onClick={() => copyToClipboard(selectedNote.content)}

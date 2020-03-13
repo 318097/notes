@@ -120,7 +120,7 @@ const Header = ({ history, dispatch, appLoading, session, settings }) => {
             type="setting"
             onClick={() => dispatch(toggleSettingsDrawer(true))}
           />
-          <Icon label="Logout" type="logout" onClick={signOut} />
+          <Icon type="logout" onClick={signOut} />
         </div>
       )}
     </Container>

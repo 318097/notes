@@ -52,11 +52,7 @@ const Controls = ({ note, dispatch }) => {
     <ControlsWrapper>
       <div className="flex space-between align-center">
         <h4>Hashtags</h4>
-        <Icon
-          label="Copy to clipboard"
-          type="copy"
-          onClick={() => copyToClipboard(hashtags.join(" "))}
-        />
+        <Icon type="copy" onClick={() => copyToClipboard(hashtags.join(" "))} />
       </div>
       <div>
         {note &&

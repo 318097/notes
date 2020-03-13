@@ -1,7 +1,7 @@
 import React from "react";
 import { StyledIcon } from "../styled";
 
-const Icon = ({ label, type, onClick, ...props }) => (
+const Icon = ({ type, onClick, ...props }) => (
   <StyledIcon type={type} onClick={onClick} {...props} />
 );
 
