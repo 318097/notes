@@ -1,5 +1,10 @@
+@font-face {
+  src: url("./assets/fonts/PatrickHand-Regular.ttf");
+  font-family: PatrickHand;
+}
+
 .ant-page-header-heading-title {
-  font-size: 14px !important;
+  font-size: 1.4rem !important;
 }
 
 /* Checkboxes font size */
@@ -15,7 +20,16 @@ textarea,
   margin: 2px !important;
 }
 
+* {
+  font-family: PatrickHand;
+}
+
+html {
+  font-size: 10px;
+}
 body {
+  font-family: PatrickHand;
+
   h1,
   h2,
   h3,

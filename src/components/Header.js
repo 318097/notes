@@ -105,17 +105,17 @@ const Header = ({ history, dispatch, appLoading, session, settings }) => {
               }
             />
           </div>
-          <Divider type="vertical" />
+          {/* <Divider type="vertical" />
           <UserInfo>
             <div className="username">{session.name}</div>
-            {/* <ProfileIcon>
+             <ProfileIcon>
               {session.photoURL ? (
                 <img src={session.photoURL} alt="Profile pic" />
               ) : (
                 <Icon type="user" />
               )}
-            </ProfileIcon> */}
-          </UserInfo>
+            </ProfileIcon>
+          </UserInfo> */}
           <Icon
             type="setting"
             onClick={() => dispatch(toggleSettingsDrawer(true))}

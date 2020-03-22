@@ -55,7 +55,7 @@ const StyledSection = styled.section`
 `;
 
 const MessageWrapper = styled.div`
-  font-size: 40px;
+  font-size: 4rem;
   text-align: center;
   color: lightgrey;
   font-weight: bold;
