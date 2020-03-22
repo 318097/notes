@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Divider, Radio, Switch } from "antd";
+import { Radio, Switch } from "antd";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
@@ -8,14 +8,11 @@ import { copyToClipboard } from "../../utils";
 import Icon from "../Icon";
 
 const ControlsWrapper = styled.div`
+  background: white;
+  margin: 10px;
   width: 200px;
-  height: 100%;
-  overflow: auto;
-  padding: 10px 5px;
-  position: absolute;
-  top: 0;
-  right: -210px;
-  border-radius: 5px;
+  padding: 20px;
+  border-radius: 10px;
   border: 1px solid lightgrey;
   box-shadow: 3px 3px 3px lightgrey;
   .hashtag {
@@ -23,9 +20,6 @@ const ControlsWrapper = styled.div`
     padding: 1px 3px;
     font-size: 0.7rem;
     display: inline-block;
-  }
-  .ant-divider {
-    margin: 15px 0;
   }
 `;
 
@@ -49,60 +43,68 @@ const Controls = ({ note, dispatch }) => {
     await dispatch(updateNote({ _id: note._id, [key]: value }));
 
   return (
-    <ControlsWrapper>
-      <div className="flex space-between align-center">
-        <h4>Hashtags</h4>
-        <Icon type="copy" onClick={() => copyToClipboard(hashtags.join(" "))} />
-      </div>
-      <div>
-        {note &&
-          hashtags.map(tag => (
-            <span className="hashtag" key={tag}>
-              {tag}
-            </span>
-          ))}
-      </div>
-      <Divider />
-      <div>
+    <div className="controls">
+      <ControlsWrapper>
         <div className="flex space-between align-center">
-          <h4>Status</h4>
+          <h4>Hashtags</h4>
+          <Icon
+            type="copy"
+            onClick={() => copyToClipboard(hashtags.join(" "))}
+          />
         </div>
-        <Radio.Group
-          onChange={updateProperties("status")}
-          value={note && note.status}
-        >
-          {["DRAFT", "READY", "POSTED"].map(state => (
-            <Radio className="radio-box" key={state} value={state}>
-              {state}
-            </Radio>
-          ))}
-        </Radio.Group>
-      </div>
-      <Divider />
-      <div>
-        <div className="flex space-between align-center">
-          <h4>Social status</h4>
+        <div>
+          {note &&
+            hashtags.map(tag => (
+              <span className="hashtag" key={tag}>
+                {tag}
+              </span>
+            ))}
         </div>
-        <Radio.Group
-          onChange={updateProperties("socialStatus")}
-          value={(note && note.socialStatus) || "NONE"}
-        >
-          {["NONE", "READY", "POSTED"].map(state => (
-            <Radio className="radio-box" key={state} value={state}>
-              {state}
-            </Radio>
-          ))}
-        </Radio.Group>
-      </div>
-      <Divider />
-      <div>
-        Visible{" "}
-        <Switch
-          checked={note && note.visible}
-          onChange={updateProperties("visible")}
-        />
-      </div>
-    </ControlsWrapper>
+      </ControlsWrapper>
+      <ControlsWrapper>
+        <div>
+          <div className="flex space-between align-center">
+            <h4>Status</h4>
+          </div>
+          <Radio.Group
+            onChange={updateProperties("status")}
+            value={note && note.status}
+          >
+            {["DRAFT", "READY", "POSTED"].map(state => (
+              <Radio className="radio-box" key={state} value={state}>
+                {state}
+              </Radio>
+            ))}
+          </Radio.Group>
+        </div>
+      </ControlsWrapper>
+      <ControlsWrapper>
+        <div>
+          <div className="flex space-between align-center">
+            <h4>Social status</h4>
+          </div>
+          <Radio.Group
+            onChange={updateProperties("socialStatus")}
+            value={(note && note.socialStatus) || "NONE"}
+          >
+            {["NONE", "READY", "POSTED"].map(state => (
+              <Radio className="radio-box" key={state} value={state}>
+                {state}
+              </Radio>
+            ))}
+          </Radio.Group>
+        </div>
+      </ControlsWrapper>
+      <ControlsWrapper>
+        <div>
+          Visible{" "}
+          <Switch
+            checked={note && note.visible}
+            onChange={updateProperties("visible")}
+          />
+        </div>
+      </ControlsWrapper>
+    </div>
   );
 };
 

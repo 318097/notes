@@ -108,13 +108,13 @@ const Header = ({ history, dispatch, appLoading, session, settings }) => {
           <Divider type="vertical" />
           <UserInfo>
             <div className="username">{session.name}</div>
-            <ProfileIcon>
+            {/* <ProfileIcon>
               {session.photoURL ? (
                 <img src={session.photoURL} alt="Profile pic" />
               ) : (
                 <Icon type="user" />
               )}
-            </ProfileIcon>
+            </ProfileIcon> */}
           </UserInfo>
           <Icon
             type="setting"

@@ -17,16 +17,13 @@ import { copyToClipboard } from "../../utils";
 
 const Wrapper = styled.div`
   margin-top: 20px;
-  max-width: 450px;
-  width: 95%;
-  height: 80%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-column-gap: 14px;
   .card {
     height: 100%;
     padding: 10px 0 10px 5px;
+    grid-column: 4/10;
     display: flex;
     flex-direction: column;
     .title {
@@ -44,22 +41,25 @@ const Wrapper = styled.div`
         }
       }
     }
-  }
-  .back-icon {
-    position: absolute;
-    background: #484848;
-    color: white;
-    top: 5px;
-    left: 5px;
-    z-index: 10;
-    padding: 5px;
-    border-radius: 30px;
-    transition: 1s;
-    &:hover {
+    .back-icon {
+      position: absolute;
       background: #484848;
       color: white;
-      transform: scale(1.2);
+      top: 5px;
+      left: 5px;
+      z-index: 10;
+      padding: 5px;
+      border-radius: 30px;
+      transition: 1s;
+      &:hover {
+        background: #484848;
+        color: white;
+        transform: scale(1.2);
+      }
     }
+  }
+  .controls {
+    grid-column: 10/11;
   }
 `;
 
@@ -84,12 +84,12 @@ const NoteView = ({ dispatch, match, selectedNote, session, history }) => {
             <Tag key={index}>{tag.toUpperCase()}</Tag>
           ))}
         </div>
+        <Icon
+          className="back-icon"
+          onClick={() => history.push("/home")}
+          type="caret-left"
+        />
       </Card>
-      <Icon
-        className="back-icon"
-        onClick={() => history.push("/home")}
-        type="caret-left"
-      />
       {/* {selectedNote && selectedNote.type === "POST" && (
         <Icon
           className="copy-header-icon"
