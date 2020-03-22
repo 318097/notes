@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from "react";
-import { Button, message, PageHeader, Radio, Input } from "antd";
-import Card from "./Card";
+import { Button, message, PageHeader, Radio, Input, Tag } from "antd";
+import Card from "@bit/ml318097.mui.card";
+import Icon from "@bit/ml318097.mui.icon";
 import { connect } from "react-redux";
 import axios from "axios";
 import styled from "styled-components";
 import uuid from "uuid";
+import marked from "marked";
 
 import { setModalMeta } from "../../store/actions";
-import Icon from "../Icon";
-import { firestore } from "../../firebase";
 import { generateSlug } from "../../utils";
 
 const Wrapper = styled.div`
@@ -141,24 +141,7 @@ const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
     const { storage } = session;
     setLoading(true);
 
-    if (storage === "FIREBASE") {
-      const createdAt = new Date().toISOString();
-      const userId = session.uid;
-      const batch = firestore.batch();
-      data.forEach(item => {
-        const ref = firestore.collection("notes").doc();
-        batch.set(ref, {
-          ...item,
-          tags: [],
-          type: "DROP",
-          createdAt,
-          userId
-        });
-      });
-      await batch.commit();
-    } else {
-      await axios.post("/posts", { data });
-    }
+    await axios.post("/posts", { data });
 
     setRawData(null);
     setData([]);
@@ -206,31 +189,52 @@ const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
         ]}
       />
       <Wrapper>
-        {data.map((item, i) => (
-          <div className="card-wrapper" key={item.tempId}>
-            <Card view="UPLOAD" note={item} />
-            <span className="index-number">#{i + 1}</span>
-            <Icon
-              onClick={() =>
-                dispatch(
-                  setModalMeta({
-                    selectedNote: item,
-                    mode: "edit-upload",
-                    finishEditing: false,
-                    visibility: true
-                  })
-                )
-              }
-              className="edit-icon"
-              type="edit"
-            />
-            <Icon
-              onClick={removeItem(item.tempId)}
-              className="delete-icon"
-              type="delete"
-            />
-          </div>
-        ))}
+        {data.map((item, i) => {
+          const {
+            title = "",
+            content = "",
+            type = "DROP",
+            tags = [],
+            _id
+          } = item;
+          return (
+            <div className="card-wrapper" key={item.tempId}>
+              <Card>
+                <h3 className="title">{title}</h3>
+                <div
+                  className="content"
+                  dangerouslySetInnerHTML={{ __html: marked(content) }}
+                ></div>
+                <div className="tags">
+                  {tags.map((tag, index) => (
+                    <Tag key={index}>{tag.toUpperCase()}</Tag>
+                  ))}
+                </div>
+              </Card>
+
+              <span className="index-number">#{i + 1}</span>
+              <Icon
+                onClick={() =>
+                  dispatch(
+                    setModalMeta({
+                      selectedNote: item,
+                      mode: "edit-upload",
+                      finishEditing: false,
+                      visibility: true
+                    })
+                  )
+                }
+                className="edit-icon"
+                type="edit"
+              />
+              <Icon
+                onClick={removeItem(item.tempId)}
+                className="delete-icon"
+                type="delete"
+              />
+            </div>
+          );
+        })}
       </Wrapper>
       <input
         ref={inputEl}

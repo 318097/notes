@@ -4,52 +4,60 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import styled from "styled-components";
 
-import Card from "./Card";
+import { Tag } from "antd";
+import marked from "marked";
+
+import Card from "@bit/ml318097.mui.card";
+import Icon from "@bit/ml318097.mui.icon";
+
 import Controls from "./Controls";
 
 import { getNoteById } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
-import Icon from "../Icon";
 
 const Wrapper = styled.div`
-  max-width: 350px;
-  width: 100%;
-  height: 70%;
-  padding: 0px;
+  margin-top: 20px;
+  max-width: 450px;
+  width: 95%;
+  height: 80%;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   .card {
+    height: 100%;
+    padding: 10px 0 10px 5px;
+    display: flex;
+    flex-direction: column;
     .title {
+      text-align: center;
       margin: 10px;
     }
     .content {
+      flex: 1 1 auto;
       overflow: auto;
+      padding: 20px 10px;
+      pre {
+        border: 1px solid lightgrey;
+        code {
+          font-size: 0.7rem;
+        }
+      }
     }
-  }
-  .copy-header-icon {
-    position: absolute;
-    top: 10px;
-    right: 1px;
-    z-index: 999;
-  }
-  .copy-content-icon {
-    position: absolute;
-    bottom: 20px;
-    right: 1px;
-    z-index: 999;
   }
   .back-icon {
     position: absolute;
-    top: -7px;
-    left: -9px;
+    background: #484848;
+    color: white;
+    top: 5px;
+    left: 5px;
     z-index: 10;
     padding: 5px;
     border-radius: 30px;
     transition: 1s;
     &:hover {
-      color: grey;
+      background: #484848;
+      color: white;
       transform: scale(1.2);
     }
   }
@@ -60,15 +68,29 @@ const NoteView = ({ dispatch, match, selectedNote, session, history }) => {
     if (session) dispatch(getNoteById(match.params.id));
   }, [match.params]);
 
+  if (!selectedNote) return null;
+
+  const { title, content, tags, _id } = selectedNote || {};
   return (
     <Wrapper>
+      <Card>
+        <h3 className="title">{title}</h3>
+        <div
+          className="content"
+          dangerouslySetInnerHTML={{ __html: marked(content) }}
+        ></div>
+        <div className="tags">
+          {tags.map((tag, index) => (
+            <Tag key={index}>{tag.toUpperCase()}</Tag>
+          ))}
+        </div>
+      </Card>
       <Icon
         className="back-icon"
         onClick={() => history.push("/home")}
         type="caret-left"
       />
-      <Card view="EXPANDED" note={selectedNote} />
-      {selectedNote && selectedNote.type === "POST" && (
+      {/* {selectedNote && selectedNote.type === "POST" && (
         <Icon
           className="copy-header-icon"
           type="copy"
@@ -79,7 +101,7 @@ const NoteView = ({ dispatch, match, selectedNote, session, history }) => {
         type="copy"
         className="copy-content-icon"
         onClick={() => copyToClipboard(selectedNote.content)}
-      />
+      /> */}
       <Controls note={selectedNote} />
     </Wrapper>
   );

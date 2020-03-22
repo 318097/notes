@@ -2,36 +2,72 @@ import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
-import { Button } from "antd";
+import { Tag } from "antd";
+import marked from "marked";
 
-import Card from "./Card";
+import Card from "@bit/ml318097.mui.card";
+import Icon from "@bit/ml318097.mui.icon";
+
 import Filters from "../Filters";
 
 import { MessageWrapper } from "../../styled";
-import { setFilter, fetchNotes } from "../../store/actions";
+import { fetchNotes } from "../../store/actions";
 
 const Wrapper = styled.div`
-  display: flex;
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 215px);
   justify-content: center;
-  flex-wrap: wrap;
+  grid-gap: 8px;
   .card-wrapper {
-    width: 215px;
     height: 115px;
-    margin: 4px;
     cursor: pointer;
     position: relative;
+    padding: 0px;
     .card {
-      .title,
-      .content {
+      font-size: 13px;
+      &:hover {
+        background: #f3f3f3;
+      }
+      .title {
+        font-size: inherit;
+        text-align: center;
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 13px;
       }
       .content {
-        overflow: hidden;
+        font-size: inherit;
+        width: 100%;
+        overflow: auto;
+        padding: 5px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        pre code {
+          font-size: 0.7rem;
+        }
       }
+      .tags {
+        position: absolute;
+        bottom: 9px;
+        left: 3px;
+        text-align: left;
+        .ant-tag {
+          cursor: pointer;
+          margin-right: 3px;
+          padding: 0px 4px;
+          font-size: 12px;
+        }
+      }
+    }
+    .bulb-icon {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      z-index: 10;
+      color: green;
     }
   }
 `;
@@ -61,26 +97,45 @@ const Notes = ({
   };
 
   if (loading) return <Fragment />;
+
   return (
     <section>
       <Filters className="filters" />
       {notes.length && !loading ? (
         <Wrapper>
-          {notes.map(note => (
-            <div
-              className="card-wrapper"
-              key={note._id}
-              onClick={handleClick(note._id)}
-            >
-              <Card note={note} dropdownView={true} />
-            </div>
-          ))}
+          {notes.map(
+            ({ title = "", content = "", type = "DROP", tags = [], _id }) => (
+              <div
+                className="card-wrapper"
+                key={_id}
+                onClick={handleClick(_id)}
+              >
+                <Card>
+                  {type === "POST" && <h3 className="title">{title}</h3>}
+                  {type === "DROP" && (
+                    <div
+                      className="content"
+                      dangerouslySetInnerHTML={{ __html: marked(content) }}
+                    ></div>
+                  )}
+                  <div className="tags">
+                    {tags.map(tag => (
+                      <Tag key={tag}>{tag.toUpperCase()}</Tag>
+                    ))}
+                  </div>
+                  {type === "DROP" && (
+                    <Icon className="bulb-icon" type="bulb" />
+                  )}
+                </Card>
+              </div>
+            )
+          )}
         </Wrapper>
       ) : (
         <MessageWrapper>Empty</MessageWrapper>
       )}
       <br />
-      {notes.length && notes.length < meta.count && (
+      {/* {notes.length && notes.length < meta.count && (
         <div className="flex center">
           <Button
             type="danger"
@@ -89,7 +144,7 @@ const Notes = ({
             Load
           </Button>
         </div>
-      )}
+      )} */}
     </section>
   );
 };
