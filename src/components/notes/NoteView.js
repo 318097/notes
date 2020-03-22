@@ -21,7 +21,7 @@ const Wrapper = styled.div`
   grid-template-columns: repeat(12, 1fr);
   grid-column-gap: 14px;
   .card {
-    height: 100%;
+    height: 78vh;
     padding: 10px 0 10px 5px;
     grid-column: 4/10;
     display: flex;
@@ -36,9 +36,10 @@ const Wrapper = styled.div`
       padding: 20px 10px;
       pre {
         border: 1px solid lightgrey;
-        code {
-          font-size: 0.7rem;
-        }
+        border-radius: 4px;
+      }
+      code {
+        font-size: 1.1rem;
       }
     }
     .back-icon {

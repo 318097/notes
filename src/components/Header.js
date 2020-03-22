@@ -36,7 +36,7 @@ const Container = styled.header`
       color: #424242;
       & > span {
         text-decoration: underline;
-        font-size: 150%;
+        font-size: 2.4rem;
         color: #2b2b2b;
       }
     }
@@ -62,7 +62,7 @@ const UserInfo = styled.div`
     padding: 0 2px;
     position: relative;
     top: 2px;
-    font-size: 0.8rem;
+    font-size: 1.2rem;
     font-weight: bold;
   }
 `;

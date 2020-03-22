@@ -25,7 +25,7 @@ const Wrapper = styled.div`
     position: relative;
     padding: 0px;
     .card {
-      font-size: 13px;
+      font-size: 1.4rem;
       &:hover {
         background: #f3f3f3;
       }
@@ -46,7 +46,7 @@ const Wrapper = styled.div`
         top: 50%;
         transform: translateY(-50%);
         pre code {
-          font-size: 0.7rem;
+          font-size: 1.1rem;
         }
       }
       .tags {
@@ -58,7 +58,7 @@ const Wrapper = styled.div`
           cursor: pointer;
           margin-right: 3px;
           padding: 0px 4px;
-          font-size: 12px;
+          font-size: 1.1rem;
         }
       }
     }

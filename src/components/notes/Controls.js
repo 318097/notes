@@ -18,7 +18,7 @@ const ControlsWrapper = styled.div`
   .hashtag {
     margin: 1px 2px;
     padding: 1px 3px;
-    font-size: 0.7rem;
+    font-size: 1.3rem;
     display: inline-block;
   }
 `;

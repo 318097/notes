@@ -121,7 +121,8 @@ const AddNote = ({
             }}
           />
           <Checkbox.Group
-            options={tags}
+            // options={tags}
+            options={[{ label: "test", value: "1" }]}
             value={note.tags}
             onChange={value => setData("tags", value)}
           />

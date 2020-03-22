@@ -35,7 +35,7 @@ const Wrapper = styled.div`
       left: 7px;
       text-decoration: underline;
       font-style: italics;
-      font-size: 9px;
+      font-size: 0.9rem;
     }
     .edit-icon {
       position: absolute;
