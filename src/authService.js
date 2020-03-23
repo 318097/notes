@@ -1,7 +1,7 @@
 const isLoggedIn = () => !!getLocalSession().token;
 
-const setLocalSession = user =>
-  sessionStorage.setItem("notes-app", JSON.stringify(user));
+const setLocalSession = session =>
+  sessionStorage.setItem("notes-app", JSON.stringify(session));
 
 const getLocalSession = () =>
   JSON.parse(sessionStorage.getItem("notes-app") || "{}");

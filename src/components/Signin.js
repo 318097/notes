@@ -2,22 +2,25 @@ import React, { useState, useEffect } from "react";
 import { Input, Button, message } from "antd";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
-import { setLocalSession, isLoggedIn } from "../authService";
+import { setLocalSession } from "../authService";
 import { StyledSection } from "../styled";
 import { setSession } from "../store/actions";
+import { connect } from "react-redux";
 
 const initialState = {
   password: "",
   username: ""
 };
 
-const Signin = ({ history, dispatch }) => {
+const Signin = ({ history, dispatch, session }) => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(initialState);
 
   useEffect(() => {
-    if (isLoggedIn()) history.push("/");
-  }, []);
+    if (!session) return;
+
+    if (session.loggedIn) history.push("/");
+  }, [session]);
 
   const handleInput = key => ({ target: { value } }) =>
     setForm(data => ({ ...data, [key]: value }));
@@ -34,6 +37,7 @@ const Signin = ({ history, dispatch }) => {
       dispatch(setSession({ loggedIn: true, info: "LOGIN" }));
       history.push("/");
     } catch (err) {
+      console.log(err);
       const { response: { data: errorMessage = "Error." } = {} } = err;
       message.error(errorMessage);
     } finally {
@@ -69,4 +73,4 @@ const Signin = ({ history, dispatch }) => {
   );
 };
 
-export default withRouter(Signin);
+export default connect(null)(withRouter(Signin));

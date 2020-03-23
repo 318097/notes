@@ -23,28 +23,29 @@ import { isLoggedIn, getLocalSession } from "./authService";
 axios.defaults.baseURL = "http://localhost:7000/api";
 axios.defaults.headers.common["external-source"] = "NOTES_APP";
 
-const App = ({ history, dispatch, session, settings }) => {
+const App = ({ history, dispatch, session }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const { token, serverUrl } = getLocalSession();
-    setBaseUrl(serverUrl);
-    isAccountActive(token);
+    if (isLoggedIn()) {
+      dispatch(
+        setSession({
+          loggedIn: true,
+          serverUrl: sessionStorage.getItem("serverUrl") || "local",
+          ...(getLocalSession() || {})
+        })
+      );
+    }
   }, []);
 
   useEffect(() => {
     if (!session) return;
 
-    setLoading(false);
-    getSettings();
-  }, [session]);
-
-  useEffect(() => {
-    if (!settings) return;
-
-    setBaseUrl(settings.serverUrl);
+    setBaseUrl(session.serverUrl);
     dispatch(fetchNotes());
-  }, [settings]);
+    setLoading(false);
+    // getSettings();
+  }, [session]);
 
   const setBaseUrl = serverUrl => {
     if (serverUrl === "server")
@@ -52,23 +53,23 @@ const App = ({ history, dispatch, session, settings }) => {
     else axios.defaults.baseURL = "http://localhost:7000/api";
   };
 
-  const isAccountActive = async token => {
-    if (token) {
-      try {
-        await axios.post(`/auth/account-status`, { token });
-        axios.defaults.headers.common["authorization"] = token;
-        dispatch(
-          setSession({
-            loggedIn: true,
-            info: "ON_LOAD",
-            ...(getLocalSession() || {})
-          })
-        );
-      } catch (err) {
-        // sendAppNotification();
-      }
-    } else setLoading(false);
-  };
+  // const isAccountActive = async token => {
+  //   if (token) {
+  //     try {
+  //       await axios.post(`/auth/account-status`, { token });
+  //       axios.defaults.headers.common["authorization"] = token;
+  //       dispatch(
+  //         setSession({
+  //           loggedIn: true,
+  //           info: "ON_LOAD",
+  //           ...(getLocalSession() || {})
+  //         })
+  //       );
+  //     } catch (err) {
+  //       // sendAppNotification();
+  //     }
+  //   } else setLoading(false);
+  // };
 
   const getSettings = async () => {
     const {

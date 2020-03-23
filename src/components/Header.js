@@ -67,7 +67,7 @@ const UserInfo = styled.div`
   }
 `;
 
-const Header = ({ history, dispatch, appLoading, session, settings }) => {
+const Header = ({ history, dispatch, appLoading, session }) => {
   const signOut = async () => {
     await auth.signOut();
     dispatch(setSession(null));
@@ -94,18 +94,13 @@ const Header = ({ history, dispatch, appLoading, session, settings }) => {
             Server{" "}
             <Switch
               // loading={!Object.keys(settings).length}
-              checked={settings.serverUrl === "server"}
-              onChange={() =>
-                dispatch(
-                  setSettings(
-                    {
-                      serverUrl:
-                        settings.serverUrl === "server" ? "localhost" : "server"
-                    },
-                    true
-                  )
-                )
-              }
+              checked={session.serverUrl === "server"}
+              onChange={() => {
+                const newValue =
+                  session.serverUrl === "server" ? "localhost" : "server";
+                dispatch(setSession({ serverUrl: newValue }));
+                sessionStorage.setItem("serverUrl", newValue);
+              }}
             />
           </div>
           {/* <Divider type="vertical" />
