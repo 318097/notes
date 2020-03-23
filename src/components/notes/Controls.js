@@ -9,12 +9,18 @@ import Icon from "../Icon";
 
 const ControlsWrapper = styled.div`
   background: white;
-  margin: 10px;
+  margin-bottom: 8px;
   width: 200px;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 14px;
+  border-radius: 12px;
   border: 1px solid lightgrey;
   box-shadow: 3px 3px 3px lightgrey;
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
   .hashtag {
     margin: 1px 2px;
     padding: 1px 3px;
@@ -45,7 +51,7 @@ const Controls = ({ note, dispatch }) => {
   return (
     <div className="controls">
       <ControlsWrapper>
-        <div className="flex space-between align-center">
+        <div className="header">
           <h4>Hashtags</h4>
           <Icon
             type="copy"
@@ -63,7 +69,7 @@ const Controls = ({ note, dispatch }) => {
       </ControlsWrapper>
       <ControlsWrapper>
         <div>
-          <div className="flex space-between align-center">
+          <div className="header">
             <h4>Status</h4>
           </div>
           <Radio.Group
@@ -80,7 +86,7 @@ const Controls = ({ note, dispatch }) => {
       </ControlsWrapper>
       <ControlsWrapper>
         <div>
-          <div className="flex space-between align-center">
+          <div className="header">
             <h4>Social status</h4>
           </div>
           <Radio.Group
