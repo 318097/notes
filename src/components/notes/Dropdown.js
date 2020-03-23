@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import Icon from "@bit/ml318097.mui.icon";
+import { Popconfirm } from "antd";
 
 const DropdownWrapper = styled.div`
   position: absolute;
@@ -23,14 +25,14 @@ const DropdownWrapper = styled.div`
   }
 `;
 
-const Dropdown = ({ showDropdown }) => {
+const Dropdown = ({ showDropdown, setShowDropdown, onEdit, onDelete }) => {
   const handleEdit = () => {
-    setNoteToEdit(_id);
+    onEdit();
     setShowDropdown(false);
   };
 
   const handleDelete = () => {
-    deleteNote(_id);
+    onDelete();
     setShowDropdown(false);
   };
 
@@ -48,7 +50,7 @@ const Dropdown = ({ showDropdown }) => {
       />
       {showDropdown && (
         <div className="dropdown" onClick={event => event.stopPropagation()}>
-          <Icon onClick={handleFavorite} type="heart" />
+          {/* <Icon onClick={handleFavorite} type="heart" /> */}
           <Icon onClick={handleEdit} type="edit" />
           <Popconfirm
             title="Delete?"

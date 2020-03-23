@@ -7,11 +7,11 @@ import marked from "marked";
 
 import Card from "@bit/ml318097.mui.card";
 import Icon from "@bit/ml318097.mui.icon";
-
+import Dropdown from "./Dropdown";
 import Filters from "../Filters";
 
 import { MessageWrapper } from "../../styled";
-import { fetchNotes } from "../../store/actions";
+import { fetchNotes, setNoteToEdit, deleteNote } from "../../store/actions";
 
 const Wrapper = styled.div`
   margin-top: 12px;
@@ -64,8 +64,8 @@ const Wrapper = styled.div`
     }
     .bulb-icon {
       position: absolute;
-      top: 5px;
-      right: 5px;
+      bottom: 6px;
+      right: 4px;
       z-index: 10;
       color: green;
     }
@@ -78,8 +78,8 @@ const Notes = ({
   history,
   dispatch,
   session,
-  filters,
-  meta
+  setNoteToEdit,
+  deleteNote
 }) => {
   const [loading, setLoading] = useState(true);
 
@@ -91,11 +91,6 @@ const Notes = ({
     if (!appLoading) setLoading(false);
   }, [notes, appLoading]);
 
-  const handleClick = _id => event => {
-    event.stopPropagation();
-    history.push(`/note/${_id}`);
-  };
-
   if (loading) return <Fragment />;
 
   return (
@@ -103,33 +98,9 @@ const Notes = ({
       <Filters className="filters" />
       {notes.length && !loading ? (
         <Wrapper>
-          {notes.map(
-            ({ title = "", content = "", type = "DROP", tags = [], _id }) => (
-              <div
-                className="card-wrapper"
-                key={_id}
-                onClick={handleClick(_id)}
-              >
-                <Card>
-                  {type === "POST" && <h3 className="title">{title}</h3>}
-                  {type === "DROP" && (
-                    <div
-                      className="content"
-                      dangerouslySetInnerHTML={{ __html: marked(content) }}
-                    ></div>
-                  )}
-                  <div className="tags">
-                    {tags.map(tag => (
-                      <Tag key={tag}>{tag.toUpperCase()}</Tag>
-                    ))}
-                  </div>
-                  {type === "DROP" && (
-                    <Icon className="bulb-icon" type="bulb" />
-                  )}
-                </Card>
-              </div>
-            )
-          )}
+          {notes.map(note => (
+            <NoteCard note={note} history={history} dispatch={dispatch} />
+          ))}
         </Wrapper>
       ) : (
         <MessageWrapper>Empty</MessageWrapper>
@@ -146,6 +117,53 @@ const Notes = ({
         </div>
       )} */}
     </section>
+  );
+};
+
+const NoteCard = ({
+  note: { title = "", content = "", type = "DROP", tags = [], _id },
+  history,
+  dispatch
+}) => {
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const handleClick = _id => event => {
+    event.stopPropagation();
+    history.push(`/note/${_id}`);
+  };
+
+  const onEdit = () => {
+    dispatch(setNoteToEdit(_id));
+  };
+
+  const onDelete = () => {
+    dispatch(deleteNote(_id));
+  };
+
+  return (
+    <div className="card-wrapper" key={_id} onClick={handleClick(_id)}>
+      <Card>
+        {type === "POST" && <h3 className="title">{title}</h3>}
+        {type === "DROP" && (
+          <div
+            className="content"
+            dangerouslySetInnerHTML={{ __html: marked(content) }}
+          ></div>
+        )}
+        <div className="tags">
+          {tags.map(tag => (
+            <Tag key={tag}>{tag.toUpperCase()}</Tag>
+          ))}
+        </div>
+        {type === "DROP" && <Icon className="bulb-icon" type="bulb" />}
+      </Card>
+      <Dropdown
+        showDropdown={showDropdown}
+        setShowDropdown={setShowDropdown}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
+    </div>
   );
 };
 
