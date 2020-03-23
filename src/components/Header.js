@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { Spin, Divider, Switch } from "antd";
+import { Spin, Divider, Switch, Icon as AntIcon } from "antd";
 import { withRouter, Link } from "react-router-dom";
 
 import { auth } from "../firebase";
@@ -11,11 +11,9 @@ import {
   setSettings,
   setModalMeta
 } from "../store/actions";
-
-import { ProfileIcon } from "../styled";
 import Icon from "./Icon";
 
-const antIcon = <Icon type="loading" spin />;
+const antIcon = <AntIcon type="loading" spin />;
 
 const Container = styled.header`
   display: flex;
