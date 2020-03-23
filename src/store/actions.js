@@ -1,6 +1,5 @@
 import axios from "axios";
 
-import { firestore } from "../firebase";
 import {
   SET_SESSION,
   SET_SETTINGS,
@@ -22,11 +21,14 @@ export const setSession = session => ({
   payload: session
 });
 
-export const setSettings = updatedSettings => async (dispatch, getState) => {
-  const {
-    settings = {},
-    session: { uid }
-  } = getState();
+export const setSettings = (updatedSettings, updateOnServer = false) => async (
+  dispatch,
+  getState
+) => {
+  const { settings = {}, session } = getState();
+
+  if (updateOnServer)
+    await axios.put(`/users/${session.userId}/settings`, updatedSettings);
 
   const newSettings = { ...settings, ...updatedSettings };
 
@@ -65,14 +67,6 @@ export const fetchNotes = (filters = {}) => async (dispatch, getState) => {
     const data = filters && filters.page > 1 ? [...notes] : [];
     let metaInfo;
 
-    // if (storage === "FIREBASE") {
-    //   const querySnapshot = await firestore
-    //     .collection("notes")
-    //     // .where("userId", "==", uid)
-    //     .get();
-
-    //   querySnapshot.forEach(doc => data.push({ ...doc.data(), _id: doc.id }));
-    // }
     const {
       data: { posts, meta }
     } = await axios.get("/posts", { params: filters });
@@ -94,17 +88,7 @@ export const getNoteById = noteId => async (dispatch, getState) => {
 
   dispatch(setAppLoading(true));
   let data = {};
-  // if (storage === "FIREBASE") {
-  //   const querySnapshot = await firestore
-  //     .collection("notes")
-  //     .doc(noteId)
-  //     .get();
 
-  //   data = {
-  //     ...querySnapshot.data(),
-  //     _id: querySnapshot.id
-  //   };
-  // }
   const {
     data: { post }
   } = await axios.get(`/posts/${noteId}`);
@@ -122,12 +106,6 @@ export const addNote = note => async (dispatch, getState) => {
 
     dispatch(setAppLoading(true));
 
-    // if (storage === "FIREBASE") {
-    //   const result = await firestore
-    //     .collection("notes")
-    //     .add({ ...note, createdAt: new Date().toISOString() });
-    //   console.log("Result", result);
-    // }
     await axios.post(`/posts`, { data: note });
 
     dispatch({ type: ADD_NOTE, payload: note });

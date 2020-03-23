@@ -93,14 +93,17 @@ const Header = ({ history, dispatch, appLoading, session, settings }) => {
           <div>
             Server{" "}
             <Switch
-              loading={!Object.keys(settings).length}
-              checked={settings.server === "server"}
+              // loading={!Object.keys(settings).length}
+              checked={settings.serverUrl === "server"}
               onChange={() =>
                 dispatch(
-                  setSettings({
-                    server:
-                      settings.server === "server" ? "localhost" : "server"
-                  })
+                  setSettings(
+                    {
+                      serverUrl:
+                        settings.serverUrl === "server" ? "localhost" : "server"
+                    },
+                    true
+                  )
                 )
               }
             />

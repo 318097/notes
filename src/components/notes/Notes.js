@@ -99,7 +99,12 @@ const Notes = ({
       {notes.length && !loading ? (
         <Wrapper>
           {notes.map(note => (
-            <NoteCard note={note} history={history} dispatch={dispatch} />
+            <NoteCard
+              key={note._id}
+              note={note}
+              history={history}
+              dispatch={dispatch}
+            />
           ))}
         </Wrapper>
       ) : (
@@ -141,7 +146,7 @@ const NoteCard = ({
   };
 
   return (
-    <div className="card-wrapper" key={_id} onClick={handleClick(_id)}>
+    <div className="card-wrapper" onClick={handleClick(_id)}>
       <Card>
         {type === "POST" && <h3 className="title">{title}</h3>}
         {type === "DROP" && (

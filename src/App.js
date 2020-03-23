@@ -5,8 +5,7 @@ import axios from "axios";
 
 import "./App.scss";
 
-import { auth } from "./firebase";
-import { setSession, fetchNotes } from "./store/actions";
+import { setSession, fetchNotes, setSettings } from "./store/actions";
 
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -19,41 +18,65 @@ import NoteView from "./components/notes/NoteView";
 import UploadContent from "./components/notes/UploadContent";
 import Settings from "./components/Settings";
 import AddNote from "./components/notes/AddNote";
+import { isLoggedIn, getLocalSession } from "./authService";
 
+axios.defaults.baseURL = "http://localhost:7000/api";
 axios.defaults.headers.common["external-source"] = "NOTES_APP";
 
 const App = ({ history, dispatch, session, settings }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        const { displayName: name, email, photoURL, uid } = user;
-        dispatch(
-          setSession({
-            name,
-            email,
-            photoURL,
-            uid
-          })
-        );
-        if (history.location.pathname === "/signin") history.push("/home");
-      } else {
-        setLoading(false);
-        sessionStorage.clear();
-      }
-    });
+    const { token, serverUrl } = getLocalSession();
+    setBaseUrl(serverUrl);
+    isAccountActive(token);
   }, []);
 
   useEffect(() => {
     if (!session) return;
 
-    // if (settings.server === "server")
-    // axios.defaults.baseURL = "https://bubblegum-server.herokuapp.com/api";
-    axios.defaults.baseURL = "http://localhost:7000/api";
     setLoading(false);
-    dispatch(fetchNotes());
+    getSettings();
   }, [session]);
+
+  useEffect(() => {
+    if (!settings) return;
+
+    setBaseUrl(settings.serverUrl);
+    dispatch(fetchNotes());
+  }, [settings]);
+
+  const setBaseUrl = serverUrl => {
+    if (serverUrl === "server")
+      axios.defaults.baseURL = "https://bubblegum-server.herokuapp.com/api";
+    else axios.defaults.baseURL = "http://localhost:7000/api";
+  };
+
+  const isAccountActive = async token => {
+    if (token) {
+      try {
+        await axios.post(`/auth/account-status`, { token });
+        axios.defaults.headers.common["authorization"] = token;
+        dispatch(
+          setSession({
+            loggedIn: true,
+            info: "ON_LOAD",
+            ...(getLocalSession() || {})
+          })
+        );
+      } catch (err) {
+        // sendAppNotification();
+      }
+    } else setLoading(false);
+  };
+
+  const getSettings = async () => {
+    const {
+      data: { settings }
+    } = await axios.get(`/users/${session.userId}/settings`);
+    console.log("settings", settings);
+    dispatch(setSettings(settings));
+  };
 
   return (
     <div className="container">
@@ -61,7 +84,12 @@ const App = ({ history, dispatch, session, settings }) => {
       <div className="content">
         {!loading && (
           <Switch>
-            <Route path="/signup" exact component={Signup} />
+            <Route
+              path="/signup"
+              exact
+              component={Signup}
+              dispatch={dispatch}
+            />
             <Route path="/signin" exact component={Signin} />
             <ProtectedRoute
               session={session}
@@ -81,7 +109,7 @@ const App = ({ history, dispatch, session, settings }) => {
               exact
               component={UploadContent}
             />
-            <Route path="/" exact render={() => <Redirect to="/signin" />} />
+            <Route path="/" exact render={() => <Redirect to="/home" />} />
             <Route component={NotFound} />
           </Switch>
         )}
