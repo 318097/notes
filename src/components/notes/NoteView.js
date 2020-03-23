@@ -37,6 +37,8 @@ const Wrapper = styled.div`
       pre {
         border: 1px solid lightgrey;
         border-radius: 4px;
+        padding: 4px 8px;
+        line-height: 1.2rem;
       }
       code {
         font-size: 1.1rem;

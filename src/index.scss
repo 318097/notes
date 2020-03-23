@@ -51,6 +51,8 @@ body {
   }
   .ant-modal-body {
     padding: 0;
+    height: 80vh;
+    overflow: hidden;
   }
   .CodeMirror {
     height: 250px !important;

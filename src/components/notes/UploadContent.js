@@ -22,8 +22,9 @@ const Wrapper = styled.div`
     margin: 5px;
     position: relative;
     .card {
+      padding: 20px 0 0 12px;
       .title {
-        margin: 10px;
+        margin-bottom: 10px;
       }
       .content {
         overflow: auto;
@@ -35,7 +36,7 @@ const Wrapper = styled.div`
       left: 7px;
       text-decoration: underline;
       font-style: italics;
-      font-size: 0.9rem;
+      font-size: 1.1rem;
     }
     .edit-icon {
       position: absolute;
@@ -76,7 +77,6 @@ const parseItem = (item, type = "POST") => {
 };
 
 const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
-  const [disable, setDisable] = useState(true);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [dataType, setDataType] = useState("POST");
@@ -101,15 +101,8 @@ const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
   }, [finishEditing]);
 
   useEffect(() => {
-    if (rawData) {
-      processData();
-      setDisable(false);
-    }
-  }, [rawData]);
-
-  useEffect(() => {
     processData();
-  }, [fileParsing]);
+  }, [rawData, fileParsing]);
 
   const handleUpload = event => {
     const [document] = event.target.files;
@@ -138,7 +131,6 @@ const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
   };
 
   const addData = async () => {
-    const { storage } = session;
     setLoading(true);
 
     await axios.post("/posts", { data });
@@ -175,17 +167,17 @@ const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
             <Radio.Button value="POST">POST</Radio.Button>
             <Radio.Button value="DROP">DROP</Radio.Button>
           </Radio.Group>,
-          <Button key="select-file" onClick={() => inputEl.current.click()}>
-            Select File
-          </Button>,
-          <Button
-            key="upload-button"
-            onClick={addData}
-            disabled={disable}
-            loading={loading}
-          >
-            Upload <Icon type="upload" />
-          </Button>
+          <span>
+            {rawData ? (
+              <Button key="upload-button" onClick={addData} loading={loading}>
+                Upload <Icon type="upload" />
+              </Button>
+            ) : (
+              <Button key="select-file" onClick={() => inputEl.current.click()}>
+                Select File
+              </Button>
+            )}
+          </span>
         ]}
       />
       <Wrapper>

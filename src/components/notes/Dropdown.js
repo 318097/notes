@@ -7,17 +7,13 @@ const DropdownWrapper = styled.div`
   position: absolute;
   top: 4px;
   right: 4px;
-  .dropdown-icon {
-    padding: 2px;
-    border-radius: 50%;
-  }
   .dropdown {
     display: flex;
     flex-direction: column;
     position: absolute;
-    padding: 5px;
-    right: -3px;
-    top: 19px;
+    padding: 2px;
+    right: 0px;
+    top: 24px;
     border-radius: 15px;
     & > * {
       margin: 2px 0;

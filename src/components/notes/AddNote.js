@@ -11,22 +11,23 @@ import { generateSlug } from "../../utils";
 
 import "easymde/dist/easymde.min.css";
 
-const CustomContainer = styled.div`
+const StyledContainer = styled.div`
   display: flex;
-  align-items: stretch;
   justify-content: space-between;
-
+  height: 100%;
   form,
   div.preview {
-    padding: 20px 10px;
+    padding: 10px;
   }
   form {
     flex: 1 1 59%;
   }
   div.preview {
+    height: 100%;
     margin: 10px;
     border-radius: 5px;
     flex: 1 1 39%;
+    overflow: auto;
   }
 `;
 
@@ -88,7 +89,7 @@ const AddNote = ({
       width="80vw"
       confirmLoading={loading}
     >
-      <CustomContainer>
+      <StyledContainer>
         <form>
           <Radio.Group
             buttonStyle="solid"
@@ -162,7 +163,7 @@ const AddNote = ({
             )}
           </div>
         )}
-      </CustomContainer>
+      </StyledContainer>
     </Modal>
   );
 };

@@ -51,20 +51,12 @@ const Controls = ({ note, dispatch }) => {
   return (
     <div className="controls">
       <ControlsWrapper>
-        <div className="header">
-          <h4>Hashtags</h4>
-          <Icon
-            type="copy"
-            onClick={() => copyToClipboard(hashtags.join(" "))}
-          />
-        </div>
         <div>
-          {note &&
-            hashtags.map(tag => (
-              <span className="hashtag" key={tag}>
-                {tag}
-              </span>
-            ))}
+          Visible{" "}
+          <Switch
+            checked={note && note.visible}
+            onChange={updateProperties("visible")}
+          />
         </div>
       </ControlsWrapper>
       <ControlsWrapper>
@@ -102,12 +94,20 @@ const Controls = ({ note, dispatch }) => {
         </div>
       </ControlsWrapper>
       <ControlsWrapper>
-        <div>
-          Visible{" "}
-          <Switch
-            checked={note && note.visible}
-            onChange={updateProperties("visible")}
+        <div className="header">
+          <h4>Hashtags</h4>
+          <Icon
+            type="copy"
+            onClick={() => copyToClipboard(hashtags.join(" "))}
           />
+        </div>
+        <div>
+          {note &&
+            hashtags.map(tag => (
+              <span className="hashtag" key={tag}>
+                {tag}
+              </span>
+            ))}
         </div>
       </ControlsWrapper>
     </div>
