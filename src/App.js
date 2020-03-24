@@ -35,7 +35,7 @@ const App = ({ history, dispatch, session }) => {
           ...(getLocalSession() || {})
         })
       );
-    }
+    } else setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -85,12 +85,7 @@ const App = ({ history, dispatch, session }) => {
       <div className="content">
         {!loading && (
           <Switch>
-            <Route
-              path="/signup"
-              exact
-              component={Signup}
-              dispatch={dispatch}
-            />
+            <Route path="/signup" exact component={Signup} />
             <Route path="/signin" exact component={Signin} />
             <ProtectedRoute
               session={session}

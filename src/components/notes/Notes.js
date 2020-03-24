@@ -18,7 +18,7 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, 215px);
   justify-content: center;
-  grid-gap: 8px;
+  grid-gap: 6px;
   .card-wrapper {
     height: 115px;
     cursor: pointer;
@@ -45,9 +45,6 @@ const Wrapper = styled.div`
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        pre code {
-          font-size: 1.1rem;
-        }
       }
       .tags {
         position: absolute;
@@ -96,31 +93,33 @@ const Notes = ({
   return (
     <section>
       <Filters className="filters" />
-      {notes.length && !loading ? (
-        <Wrapper>
-          {notes.map(note => (
-            <NoteCard
-              key={note._id}
-              note={note}
-              history={history}
-              dispatch={dispatch}
-            />
-          ))}
-        </Wrapper>
-      ) : (
-        <MessageWrapper>Empty</MessageWrapper>
-      )}
-      <br />
-      {/* {notes.length && notes.length < meta.count && (
-        <div className="flex center">
-          <Button
-            type="danger"
-            onClick={() => dispatch(setFilter({ page: filters.page + 1 }))}
-          >
-            Load
-          </Button>
-        </div>
-      )} */}
+      <div className="notes">
+        {notes.length && !loading ? (
+          <Wrapper>
+            {notes.map(note => (
+              <NoteCard
+                key={note._id}
+                note={note}
+                history={history}
+                dispatch={dispatch}
+              />
+            ))}
+          </Wrapper>
+        ) : (
+          <MessageWrapper>Empty</MessageWrapper>
+        )}
+        <br />
+        {/* {notes.length && notes.length < meta.count && (
+          <div className="flex center">
+            <Button
+              type="danger"
+              onClick={() => dispatch(setFilter({ page: filters.page + 1 }))}
+            >
+              Load
+            </Button>
+          </div>
+        )} */}
+      </div>
     </section>
   );
 };

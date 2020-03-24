@@ -24,7 +24,6 @@ const StyledContainer = styled.div`
   }
   div.preview {
     height: 100%;
-    margin: 10px;
     border-radius: 5px;
     flex: 1 1 39%;
     overflow: auto;
@@ -129,7 +128,7 @@ const AddNote = ({
         </form>
         {showPreview && (
           <div className="preview">
-            <div className="flex space-between">
+            <div className="flex space-between align-center">
               <h3>Preview</h3>
               <Radio.Group
                 defaultValue={previewMode}
@@ -155,10 +154,10 @@ const AddNote = ({
                 ></div>
               </Fragment>
             ) : (
-              <div>
+              <div className="preview">
                 {marked(note.title)}
                 <br />
-                {marked(note.content)}
+                <div className="preview-body">{marked(note.content)}</div>
               </div>
             )}
           </div>

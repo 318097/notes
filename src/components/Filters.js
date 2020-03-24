@@ -54,7 +54,7 @@ const Filters = ({ dispatch, filters, notes, meta, tags }) => {
           </Option>
         ))}
       </Select>
-      <span className="ml">
+      <span className="showingCount">
         Showing {notes.length} of {meta && meta.count}
       </span>
     </div>

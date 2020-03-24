@@ -28,7 +28,8 @@ const ControlsWrapper = styled.div`
     display: inline-block;
   }
   .slug {
-    background: lightgreen;
+    background: #26b0d0;
+    color: white;
     padding: 2px 4px;
     overflow: hidden;
     text-align: center;

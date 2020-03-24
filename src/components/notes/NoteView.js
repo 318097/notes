@@ -34,15 +34,6 @@ const Wrapper = styled.div`
       flex: 1 1 auto;
       overflow: auto;
       padding: 20px 10px;
-      pre {
-        border: 1px solid lightgrey;
-        border-radius: 4px;
-        padding: 4px 8px;
-        line-height: 1.2rem;
-      }
-      code {
-        font-size: 1.1rem;
-      }
     }
     .back-icon {
       position: absolute;

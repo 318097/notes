@@ -73,4 +73,8 @@ const Signin = ({ history, dispatch, session }) => {
   );
 };
 
-export default connect(null)(withRouter(Signin));
+const mapStateToProps = ({ session }) => ({
+  session
+});
+
+export default connect(mapStateToProps)(withRouter(Signin));

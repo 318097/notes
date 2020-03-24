@@ -1,5 +1,13 @@
 @import "./Common.scss";
 
+.preview,
+.preview-body,
+pre,
+pre code,
+code {
+  font-size: 1.1rem !important;
+}
+
 body {
   font-family: PatrickHand;
   h1,
@@ -24,6 +32,20 @@ body {
     .content {
       flex: 1 1 auto;
       overflow: auto;
+    }
+    .showingCount {
+      padding: 4px 6px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.4);
+      margin-left: 8px;
+      color: #fff;
+    }
+
+    pre {
+      border: 1px solid lightgrey;
+      border-radius: 4px;
+      padding: 4px 8px;
+      line-height: 1.4rem;
     }
   }
   .ant-modal-body {
