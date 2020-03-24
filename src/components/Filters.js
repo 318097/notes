@@ -42,7 +42,7 @@ const Filters = ({ dispatch, filters, notes, meta, tags }) => {
         ))}
       </Select>
       <Select
-        style={{ minWidth: "150px", margin: "0 2px" }}
+        style={{ minWidth: "150px", margin: "2px" }}
         mode="multiple"
         placeholder="Tags"
         value={filters.tags}

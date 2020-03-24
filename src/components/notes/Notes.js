@@ -18,8 +18,9 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, 215px);
   justify-content: center;
-  grid-gap: 6px;
+  column-gap: 6px;
   .card-wrapper {
+    margin: 3px 0;
     height: 115px;
     cursor: pointer;
     position: relative;

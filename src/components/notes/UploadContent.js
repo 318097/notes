@@ -13,16 +13,16 @@ import { setModalMeta } from "../../store/actions";
 import { generateSlug } from "../../utils";
 
 const Wrapper = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 300px);
+  column-gap: 6px;
   justify-content: center;
-  flex-wrap: wrap;
   .card-wrapper {
     height: 300px;
-    width: 300px;
-    margin: 5px;
+    margin: 3px 0;
     position: relative;
     .card {
-      padding: 20px 0 0 12px;
+      padding: 20px 12px;
       .title {
         margin-bottom: 10px;
       }
@@ -173,7 +173,11 @@ const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
                 Upload <Icon type="upload" />
               </Button>
             ) : (
-              <Button key="select-file" onClick={() => inputEl.current.click()}>
+              <Button
+                type="dashed"
+                key="select-file"
+                onClick={() => inputEl.current.click()}
+              >
                 Select File
               </Button>
             )}

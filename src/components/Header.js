@@ -69,12 +69,12 @@ const Header = ({ history, dispatch, appLoading, session }) => {
     sessionStorage.clear();
     return history.push("/signin");
   };
- 
+
   return (
     <Container>
       <h3>
         <Link to="/home">
-          <span>N</span>otes {appLoading && <Spin indicator={antIcon} />}
+          <span>N</span>otes App {appLoading && <Spin indicator={antIcon} />}
         </Link>
       </h3>
       {session && (

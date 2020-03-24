@@ -11,7 +11,7 @@ const ControlsWrapper = styled.div`
   background: white;
   margin-bottom: 8px;
   width: 218px;
-  padding: 14px;
+  padding: 12px;
   border-radius: 12px;
   border: 1px solid lightgrey;
   box-shadow: 3px 3px 3px lightgrey;
@@ -28,7 +28,9 @@ const ControlsWrapper = styled.div`
     display: inline-block;
   }
   .slug {
-    background: #26b0d0;
+    background: #21009a;
+    text-overflow: ellipsis;
+    width: 100%;
     color: white;
     padding: 2px 4px;
     overflow: hidden;

@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-column-gap: 14px;
+  column-gap: 8px;
   .card {
     height: 78vh;
     padding: 10px 0 10px 5px;
