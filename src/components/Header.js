@@ -4,11 +4,9 @@ import { connect } from "react-redux";
 import { Spin, Divider, Switch, Icon as AntIcon } from "antd";
 import { withRouter, Link } from "react-router-dom";
 
-import { auth } from "../firebase";
 import {
   setSession,
   toggleSettingsDrawer,
-  setSettings,
   setModalMeta
 } from "../store/actions";
 import Icon from "./Icon";
@@ -67,11 +65,11 @@ const UserInfo = styled.div`
 
 const Header = ({ history, dispatch, appLoading, session }) => {
   const signOut = async () => {
-    await auth.signOut();
     dispatch(setSession(null));
+    sessionStorage.clear();
     return history.push("/signin");
   };
-
+ 
   return (
     <Container>
       <h3>

@@ -4,13 +4,13 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 
 import { updateNote } from "../../store/actions";
-import { copyToClipboard } from "../../utils";
+import { copyToClipboard, generateSlug } from "../../utils";
 import Icon from "../Icon";
 
 const ControlsWrapper = styled.div`
   background: white;
   margin-bottom: 8px;
-  width: 200px;
+  width: 218px;
   padding: 14px;
   border-radius: 12px;
   border: 1px solid lightgrey;
@@ -26,6 +26,18 @@ const ControlsWrapper = styled.div`
     padding: 1px 3px;
     font-size: 1.3rem;
     display: inline-block;
+  }
+  .slug {
+    background: lightgreen;
+    padding: 2px 4px;
+    overflow: hidden;
+    text-align: center;
+    border-radius: 4px;
+  }
+  .divider {
+    height: 1px;
+    background: #e8e8e8;
+    margin: 8px auto;
   }
 `;
 
@@ -48,11 +60,37 @@ const Controls = ({ note, dispatch }) => {
   const updateProperties = async (key, value) =>
     await dispatch(updateNote({ _id: note._id, [key]: value }));
 
+  const slug = generateSlug(note.title, "_");
   return (
     <div className="controls">
       <ControlsWrapper>
+        <div className="header">
+          <h4>Name</h4>
+          <Icon type="copy" onClick={() => copyToClipboard(slug)} />
+        </div>
+        <div className="slug">{slug}</div>
+
+        <div className="divider"></div>
+
+        <div className="header">
+          <h4>Hashtags</h4>
+          <Icon
+            type="copy"
+            onClick={() => copyToClipboard(hashtags.join(" "))}
+          />
+        </div>
         <div>
-          Visible{" "}
+          {note &&
+            hashtags.map(tag => (
+              <span className="hashtag" key={tag}>
+                {tag}
+              </span>
+            ))}
+        </div>
+      </ControlsWrapper>
+      <ControlsWrapper>
+        <div className="flex align-center">
+          <span style={{ marginRight: "4px" }}>Visible</span>
           <Switch
             checked={note && note.visible}
             onChange={value => updateProperties("visible", value)}
@@ -95,23 +133,6 @@ const Controls = ({ note, dispatch }) => {
               </Radio>
             ))}
           </Radio.Group>
-        </div>
-      </ControlsWrapper>
-      <ControlsWrapper>
-        <div className="header">
-          <h4>Hashtags</h4>
-          <Icon
-            type="copy"
-            onClick={() => copyToClipboard(hashtags.join(" "))}
-          />
-        </div>
-        <div>
-          {note &&
-            hashtags.map(tag => (
-              <span className="hashtag" key={tag}>
-                {tag}
-              </span>
-            ))}
         </div>
       </ControlsWrapper>
     </div>

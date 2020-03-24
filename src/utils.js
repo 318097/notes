@@ -1,8 +1,8 @@
-export const generateSlug = (title = "") =>
+export const generateSlug = (title = "", seperator = "-") =>
   title
     .trim()
     .replace(/[^a-zA-Z0-9\-\s]/gi, "")
-    .replace(/\s/gi, "-")
+    .replace(/\s+/gi, seperator)
     .toLowerCase();
 
 export const copyToClipboard = text => {
