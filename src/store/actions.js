@@ -59,21 +59,16 @@ export const setFilter = filterUpdate => async (dispatch, getState) => {
 
 export const fetchNotes = (filters = {}) => async (dispatch, getState) => {
   try {
-    const {
-      session: { uid, storage },
-      notes = []
-    } = getState();
     dispatch(setAppLoading(true));
+    const { notes = [] } = getState();
     const data = filters && filters.page > 1 ? [...notes] : [];
-    let metaInfo;
 
     const {
       data: { posts, meta }
     } = await axios.get("/posts", { params: filters });
     data.push(...posts);
-    metaInfo = meta;
 
-    dispatch({ type: LOAD_NOTES, payload: { notes: data, meta: metaInfo } });
+    dispatch({ type: LOAD_NOTES, payload: { notes: data, meta } });
   } catch (err) {
     console.log(err);
   } finally {
@@ -82,10 +77,6 @@ export const fetchNotes = (filters = {}) => async (dispatch, getState) => {
 };
 
 export const getNoteById = noteId => async (dispatch, getState) => {
-  const {
-    session: { uid, storage }
-  } = getState();
-
   dispatch(setAppLoading(true));
   let data = {};
 
@@ -100,10 +91,6 @@ export const getNoteById = noteId => async (dispatch, getState) => {
 
 export const addNote = note => async (dispatch, getState) => {
   try {
-    const {
-      session: { storage }
-    } = getState();
-
     dispatch(setAppLoading(true));
 
     await axios.post(`/posts`, { data: note });
@@ -121,9 +108,6 @@ export const setNoteToEdit = noteId => ({
 
 export const updateNote = note => async (dispatch, getState) => {
   try {
-    const {
-      session: { storage }
-    } = getState();
     dispatch(setAppLoading(true));
 
     await axios.put(`/posts/${note._id}`, { ...note });
@@ -136,9 +120,6 @@ export const updateNote = note => async (dispatch, getState) => {
 
 export const deleteNote = noteId => async (dispatch, getState) => {
   try {
-    const {
-      session: { storage }
-    } = getState();
     dispatch(setAppLoading(true));
 
     await axios.delete(`/posts/${noteId}`);
