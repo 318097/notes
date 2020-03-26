@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import styled from "styled-components";
-
 import { Tag } from "antd";
 import marked from "marked";
 
@@ -11,7 +10,6 @@ import Card from "@bit/ml318097.mui.card";
 import Icon from "@bit/ml318097.mui.icon";
 
 import Controls from "./Controls";
-
 import { getNoteById } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
 
@@ -51,6 +49,16 @@ const Wrapper = styled.div`
         transform: scale(1.2);
       }
     }
+    .copy-icon {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: -14px;
+      transition: 0.3s;
+      &:hover {
+        right: -4px;
+      }
+    }
   }
   .controls {
     grid-column: 10/11;
@@ -64,15 +72,31 @@ const NoteView = ({ dispatch, match, selectedNote, session, history }) => {
 
   if (!selectedNote) return null;
 
-  const { title, content, tags, _id } = selectedNote || {};
+  const { title, content, tags, type } = selectedNote || {};
   return (
     <Wrapper>
       <Card>
-        <h3 className="title">{title}</h3>
-        <div
-          className="content"
-          dangerouslySetInnerHTML={{ __html: marked(content) }}
-        ></div>
+        <div className="relative">
+          <h3 className="title">{title}</h3>
+          {type === "POST" && (
+            <Icon
+              className="copy-icon"
+              type="copy"
+              onClick={() => copyToClipboard(title)}
+            />
+          )}
+        </div>
+        <div className="relative">
+          <div
+            className="content"
+            dangerouslySetInnerHTML={{ __html: marked(content) }}
+          ></div>
+          <Icon
+            type="copy"
+            className="copy-icon"
+            onClick={() => copyToClipboard(content)}
+          />
+        </div>
         <div className="tags">
           {tags.map((tag, index) => (
             <Tag key={index}>{tag.toUpperCase()}</Tag>
@@ -84,18 +108,6 @@ const NoteView = ({ dispatch, match, selectedNote, session, history }) => {
           type="caret-left"
         />
       </Card>
-      {/* {selectedNote && selectedNote.type === "POST" && (
-        <Icon
-          className="copy-header-icon"
-          type="copy"
-          onClick={() => copyToClipboard(selectedNote.title)}
-        />
-      )}
-      <Icon
-        type="copy"
-        className="copy-content-icon"
-        onClick={() => copyToClipboard(selectedNote.content)}
-      /> */}
       <Controls note={selectedNote} />
     </Wrapper>
   );
