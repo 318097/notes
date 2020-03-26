@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import marked from "marked";
-import { Modal, Input, Radio, Divider, Checkbox } from "antd";
+import { Modal, Input, Radio, Checkbox } from "antd";
 import SimpleMDE from "react-simplemde-editor";
 
 import { addNote, updateNote, setModalMeta } from "../../store/actions";
@@ -139,7 +139,7 @@ const AddNote = ({
                 <Radio.Button value="CODE">CODE</Radio.Button>
               </Radio.Group>
             </div>
-            <Divider />
+            <div className="divider"></div>
             {previewMode === "PREVIEW" ? (
               <Fragment>
                 <div

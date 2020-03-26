@@ -13,8 +13,8 @@ const ControlsWrapper = styled.div`
   width: 218px;
   padding: 12px;
   border-radius: 12px;
-  border: 1px solid lightgrey;
-  box-shadow: 3px 3px 3px lightgrey;
+  border: 1px solid #f2f2f2;
+  box-shadow: 3px 3px 3px #f2f2f2;
   .header {
     display: flex;
     align-items: center;
@@ -36,11 +36,6 @@ const ControlsWrapper = styled.div`
     overflow: hidden;
     text-align: center;
     border-radius: 4px;
-  }
-  .divider {
-    height: 1px;
-    background: #e8e8e8;
-    margin: 8px auto;
   }
 `;
 
