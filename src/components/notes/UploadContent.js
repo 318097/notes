@@ -76,7 +76,7 @@ const parseItem = (item, type = "POST") => {
   };
 };
 
-const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
+const UploadContent = ({ dispatch, finishEditing, selectedNote }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [dataType, setDataType] = useState("POST");
@@ -147,6 +147,16 @@ const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
     }
   };
 
+  const editItem = item => () =>
+    dispatch(
+      setModalMeta({
+        selectedNote: item,
+        mode: "edit-upload",
+        finishEditing: false,
+        visibility: true
+      })
+    );
+
   const removeItem = tempId => () =>
     setData(prev => prev.filter(item => item.tempId !== tempId));
 
@@ -199,24 +209,15 @@ const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
                   dangerouslySetInnerHTML={{ __html: marked(content) }}
                 ></div>
                 <div className="tags">
-                  {tags.map((tag, index) => (
-                    <Tag key={index}>{tag.toUpperCase()}</Tag>
+                  {tags.map(tag => (
+                    <Tag key={tag}>{tag.toUpperCase()}</Tag>
                   ))}
                 </div>
               </Card>
 
               <span className="index-number">#{i + 1}</span>
               <Icon
-                onClick={() =>
-                  dispatch(
-                    setModalMeta({
-                      selectedNote: item,
-                      mode: "edit-upload",
-                      finishEditing: false,
-                      visibility: true
-                    })
-                  )
-                }
+                onClick={editItem(item)}
                 className="edit-icon"
                 type="edit"
               />
@@ -239,11 +240,7 @@ const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
   );
 };
 
-const mapStateToProps = ({
-  session,
-  modalMeta: { finishEditing, selectedNote }
-}) => ({
-  session,
+const mapStateToProps = ({ modalMeta: { finishEditing, selectedNote } }) => ({
   finishEditing,
   selectedNote
 });

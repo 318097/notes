@@ -30,6 +30,11 @@ body {
     .content {
       flex: 1 1 auto;
       overflow: auto;
+      section {
+        height: calc(100vh - 50px);
+        display: flex;
+        flex-direction: column;
+      }
     }
     .showingCount {
       padding: 4px 6px;

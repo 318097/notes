@@ -13,8 +13,10 @@ import Filters from "../Filters";
 import { MessageWrapper } from "../../styled";
 import { fetchNotes, setNoteToEdit, deleteNote } from "../../store/actions";
 
-const Wrapper = styled.div`
+const NotesWrapper = styled.div`
   margin-top: 12px;
+  overflow: auto;
+  flex-grow: 1;
   display: grid;
   grid-template-columns: repeat(auto-fill, 215px);
   justify-content: center;
@@ -70,15 +72,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const Notes = ({
-  notes,
-  appLoading,
-  history,
-  dispatch,
-  session,
-  setNoteToEdit,
-  deleteNote
-}) => {
+const Notes = ({ notes, appLoading, history, dispatch, session }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -94,23 +88,17 @@ const Notes = ({
   return (
     <section>
       <Filters className="filters" />
-      <div className="notes">
-        {notes.length && !loading ? (
-          <Wrapper>
-            {notes.map(note => (
-              <NoteCard
-                key={note._id}
-                note={note}
-                history={history}
-                dispatch={dispatch}
-              />
-            ))}
-          </Wrapper>
-        ) : (
-          <MessageWrapper>Empty</MessageWrapper>
-        )}
-        <br />
-        {/* {notes.length && notes.length < meta.count && (
+      {notes.length && !loading ? (
+        <NotesWrapper>
+          {notes.map(note => (
+            <NoteCard
+              key={note._id}
+              note={note}
+              history={history}
+              dispatch={dispatch}
+            />
+          ))}
+          {/* {notes.length && notes.length < meta.count && (
           <div className="flex center">
             <Button
               type="danger"
@@ -120,7 +108,10 @@ const Notes = ({
             </Button>
           </div>
         )} */}
-      </div>
+        </NotesWrapper>
+      ) : (
+        <MessageWrapper>Empty</MessageWrapper>
+      )}
     </section>
   );
 };

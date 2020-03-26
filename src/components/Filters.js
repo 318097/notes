@@ -13,7 +13,7 @@ const Filters = ({ dispatch, filters, notes, meta, tags }) => {
   const setFilterValues = (key, value) => dispatch(setFilter({ [key]: value }));
 
   return (
-    <div className="flex center align-center" style={{ margin: "5px" }}>
+    <div className="flex center align-center" style={{ flexShrink: 0 }}>
       <Search
         allowClear
         className="input-width"
