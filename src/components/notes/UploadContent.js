@@ -116,29 +116,35 @@ const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
 
   const processData = () => {
     if (!rawData) return;
-    const fileContent = rawData.split(new RegExp(fileParsing)).map(item => {
-      let { title, content } = parseItem(item.trim(), dataType);
-      return {
-        tags: [],
-        type: dataType,
-        title,
-        content,
-        tempId: uuid(),
-        slug: generateSlug(title)
-      };
-    });
+    const fileContent = rawData
+      .split(new RegExp(fileParsing))
+      .map(item => {
+        let { title = "", content = "" } = parseItem(item.trim(), dataType);
+        return {
+          tags: [],
+          type: dataType,
+          title,
+          content,
+          tempId: uuid(),
+          slug: generateSlug(title)
+        };
+      })
+      .filter(item => item.title || item.content);
     setData(fileContent);
   };
 
   const addData = async () => {
-    setLoading(true);
-
-    await axios.post("/posts", { data });
-
-    setRawData(null);
-    setData([]);
-    setLoading(false);
-    message.success(`${data.length} notes added successfully.`);
+    try {
+      setLoading(true);
+      await axios.post("/posts", { data });
+      message.success(`${data.length} notes added successfully.`);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+      setRawData(null);
+      setData([]);
+    }
   };
 
   const removeItem = tempId => () =>
@@ -167,17 +173,14 @@ const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
             <Radio.Button value="POST">POST</Radio.Button>
             <Radio.Button value="DROP">DROP</Radio.Button>
           </Radio.Group>,
-          <span>
+          <span key="upload-buttons">
             {rawData ? (
-              <Button key="upload-button" onClick={addData} loading={loading}>
-                Upload <Icon type="upload" />
+              <Button onClick={addData} loading={loading}>
+                {`Upload ${data.length} ${dataType.toLowerCase()}`}{" "}
+                <Icon type="upload" />
               </Button>
             ) : (
-              <Button
-                type="dashed"
-                key="select-file"
-                onClick={() => inputEl.current.click()}
-              >
+              <Button type="dashed" onClick={() => inputEl.current.click()}>
                 Select File
               </Button>
             )}
@@ -186,13 +189,7 @@ const UploadContent = ({ session, dispatch, finishEditing, selectedNote }) => {
       />
       <Wrapper>
         {data.map((item, i) => {
-          const {
-            title = "",
-            content = "",
-            type = "DROP",
-            tags = [],
-            _id
-          } = item;
+          const { title = "", content = "", tags = [] } = item;
           return (
             <div className="card-wrapper" key={item.tempId}>
               <Card>
