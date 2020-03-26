@@ -16,30 +16,32 @@ const Settings = ({ session, settingsDrawerVisibility, dispatch, tags }) => {
   const [data, setData] = useState("");
 
   useEffect(() => {
-    const fetchTags = async () => {
-      const {
-        data: { tags }
-      } = await axios.get("/posts/tags");
-      dispatch(
-        setTags(
-          tags.map(({ _id, color, name }) => ({
-            _id,
-            color,
-            label: name.toUpperCase(),
-            value: name
-          }))
-        )
-      );
-    };
     if (!session) return;
     fetchTags();
   }, [session]);
+
+  const fetchTags = async () => {
+    const {
+      data: { tags }
+    } = await axios.get("/posts/tags");
+    dispatch(
+      setTags(
+        tags.map(({ _id, color, name }) => ({
+          _id,
+          color,
+          label: name.toUpperCase(),
+          value: name
+        }))
+      )
+    );
+  };
 
   const handleClose = () => dispatch(toggleSettingsDrawer(false));
 
   const addTag = async () => {
     await axios.post("/posts/tags", { name: data });
     setData("");
+    fetchTags();
   };
 
   return (
