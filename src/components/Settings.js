@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Drawer, Tag } from "antd";
+import { Drawer, Tag, Input, Button } from "antd";
 import { connect } from "react-redux";
 import axios from "axios";
-import { Input, Button } from "antd";
+import styled from "styled-components";
 
 import { toggleSettingsDrawer, setTags } from "../store/actions";
 
-const Settings = ({ settings, settingsDrawerVisibility, dispatch, tags }) => {
+const Wrapper = styled.div`
+  .ant-tag {
+    margin: 2px 4px 2px 0;
+  }
+`;
+
+const Settings = ({ session, settingsDrawerVisibility, dispatch, tags }) => {
   const [data, setData] = useState("");
 
   useEffect(() => {
@@ -25,9 +31,9 @@ const Settings = ({ settings, settingsDrawerVisibility, dispatch, tags }) => {
         )
       );
     };
-    if (!Object.keys(settings).length) return;
+    if (!session) return;
     fetchTags();
-  }, [settings]);
+  }, [session]);
 
   const handleClose = () => dispatch(toggleSettingsDrawer(false));
 
@@ -39,17 +45,17 @@ const Settings = ({ settings, settingsDrawerVisibility, dispatch, tags }) => {
   return (
     <Drawer
       title="Settings"
-      placement="bottom"
+      placement="right"
       closable={true}
       onClose={handleClose}
       visible={settingsDrawerVisibility}
     >
-      <section>
+      <Wrapper>
         <h3>Tags</h3>
         {tags.map(({ label }) => (
           <Tag key={label}>{label}</Tag>
         ))}
-        <div style={{ marginTop: "3px" }}>
+        <div style={{ marginTop: "8px" }}>
           <Input
             placehoder="Tag name"
             style={{ width: "150px" }}
@@ -58,13 +64,13 @@ const Settings = ({ settings, settingsDrawerVisibility, dispatch, tags }) => {
           />
           <Button onClick={addTag}>Add</Button>
         </div>
-      </section>
+      </Wrapper>
     </Drawer>
   );
 };
 
-const mapStateToProps = ({ settings, settingsDrawerVisibility, tags }) => ({
-  settings,
+const mapStateToProps = ({ session, settingsDrawerVisibility, tags }) => ({
+  session,
   settingsDrawerVisibility,
   tags
 });
