@@ -16,7 +16,6 @@ import { fetchNotes, setNoteToEdit, deleteNote } from "../../store/actions";
 const NotesWrapper = styled.div`
   margin-top: 12px;
   overflow: auto;
-  flex-grow: 1;
   display: grid;
   grid-template-columns: repeat(auto-fill, 215px);
   justify-content: center;
