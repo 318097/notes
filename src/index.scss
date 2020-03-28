@@ -12,6 +12,13 @@ textarea,
   width: 100%;
 }
 
+#simplemde-editor-1-wrapper {
+  .editor-toolbar:before,
+  .editor-toolbar:after {
+    display: none;
+  }
+}
+
 * {
   font-family: PatrickHand;
 }

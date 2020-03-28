@@ -15,15 +15,17 @@ const StyledContainer = styled.div`
   display: flex;
   justify-content: space-between;
   height: 100%;
-  form,
-  div.preview {
+  form {
     padding: 10px;
   }
   form {
     flex: 1 1 59%;
   }
   div.preview {
-    height: 100%;
+    padding: 10px;
+    margin: 8px;
+    background: #f8f8f8;
+    height: 96%;
     border-radius: 5px;
     flex: 1 1 39%;
     overflow: auto;
