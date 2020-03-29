@@ -56,14 +56,14 @@ export const setFilter = (filterUpdate, resetPage = true) => async (
   const updatedFiters = { ...filters, ...filterUpdate };
   if (resetPage) updatedFiters["page"] = 1;
   dispatch({ type: UPDATE_FILTER, payload: updatedFiters });
-  dispatch(fetchNotes(updatedFiters));
+  dispatch(fetchNotes());
 };
 
 export const fetchNotes = () => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
-    const { filters } = getState();
-    const { notes = [] } = getState();
+    const { filters, notes = [] } = getState();
+
     const data = filters && filters.page > 1 ? [...notes] : [];
 
     const {
@@ -81,14 +81,11 @@ export const fetchNotes = () => async (dispatch, getState) => {
 
 export const getNoteById = noteId => async (dispatch, getState) => {
   dispatch(setAppLoading(true));
-  let data = {};
-
   const {
     data: { post }
   } = await axios.get(`/posts/${noteId}`);
-  data = { ...post };
 
-  dispatch({ type: GET_NOTE_BY_ID, payload: data });
+  dispatch({ type: GET_NOTE_BY_ID, payload: post });
   dispatch(setAppLoading(false));
 };
 
