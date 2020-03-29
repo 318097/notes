@@ -20,7 +20,9 @@ import Settings from "./components/Settings";
 import AddNote from "./components/notes/AddNote";
 import { isLoggedIn, getLocalSession } from "./authService";
 
-axios.defaults.baseURL = "http://localhost:7000/api";
+axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL
+  ? process.env.REACT_APP_SERVER_URL
+  : "http://localhost:7000/api";
 axios.defaults.headers.common["external-source"] = "NOTES_APP";
 
 const App = ({ history, dispatch, session }) => {
@@ -31,7 +33,7 @@ const App = ({ history, dispatch, session }) => {
       dispatch(
         setSession({
           loggedIn: true,
-          serverUrl: sessionStorage.getItem("serverUrl") || "local",
+          // serverUrl: sessionStorage.getItem("serverUrl") || "local",
           ...(getLocalSession() || {})
         })
       );
@@ -41,17 +43,17 @@ const App = ({ history, dispatch, session }) => {
   useEffect(() => {
     if (!session) return;
 
-    setBaseUrl(session.serverUrl);
+    // setBaseUrl(session.serverUrl);
+    // getSettings();
     dispatch(fetchNotes());
     setLoading(false);
-    // getSettings();
   }, [session]);
 
-  const setBaseUrl = serverUrl => {
-    if (serverUrl === "server")
-      axios.defaults.baseURL = "https://bubblegum-server.herokuapp.com/api";
-    else axios.defaults.baseURL = "http://localhost:7000/api";
-  };
+  // const setBaseUrl = serverUrl => {
+  //   if (serverUrl === "server")
+  //     axios.defaults.baseURL = "https://bubblegum-server.herokuapp.com/api";
+  //   else axios.defaults.baseURL = "http://localhost:7000/api";
+  // };
 
   // const isAccountActive = async token => {
   //   if (token) {
@@ -71,13 +73,13 @@ const App = ({ history, dispatch, session }) => {
   //   } else setLoading(false);
   // };
 
-  const getSettings = async () => {
-    const {
-      data: { settings }
-    } = await axios.get(`/users/${session.userId}/settings`);
-    console.log("settings", settings);
-    dispatch(setSettings(settings));
-  };
+  // const getSettings = async () => {
+  //   const {
+  //     data: { settings }
+  //   } = await axios.get(`/users/${session.userId}/settings`);
+  //   console.log("settings", settings);
+  //   dispatch(setSettings(settings));
+  // };
 
   return (
     <div className="container">

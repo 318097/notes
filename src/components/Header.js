@@ -86,10 +86,9 @@ const Header = ({ history, dispatch, appLoading, session }) => {
           />
           <Icon type="upload" onClick={() => history.push("/upload")} />
           <Divider type="vertical" />
-          <div>
+          {/* <div>
             Server{" "}
             <Switch
-              // loading={!Object.keys(settings).length}
               checked={session.serverUrl === "server"}
               onChange={() => {
                 const newValue =
@@ -98,8 +97,8 @@ const Header = ({ history, dispatch, appLoading, session }) => {
                 sessionStorage.setItem("serverUrl", newValue);
               }}
             />
-          </div>
-          {/* <Divider type="vertical" />
+          </div> */}
+          {/* 
           <UserInfo>
             <div className="username">{session.name}</div>
              <ProfileIcon>

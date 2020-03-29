@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Input, Button, message } from "antd";
 import { withRouter } from "react-router-dom";
 
-import { auth, createNewFirebaseUser } from "../firebase";
 import { StyledSection } from "../styled";
 const initialState = {
   name: "",
@@ -17,36 +16,7 @@ const Signup = ({ history }) => {
   const handleInput = key => ({ target: { value } }) =>
     setForm(data => ({ ...data, [key]: value }));
 
-  const handleSignup = async () => {
-    try {
-      setLoading(true);
-      const { email, password, name } = form;
-
-      const { user } = await auth.createUserWithEmailAndPassword(
-        email,
-        password
-      );
-      user.updateProfile({
-        displayName: name
-      });
-
-      const { uid } = user;
-      await createNewFirebaseUser({
-        email,
-        uid,
-        name
-      });
-
-      history.push("/home");
-    } catch (err) {
-      const { code } = err;
-      if (code === "auth/email-already-in-use")
-        message.error("This email id already exists.");
-      else message.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const handleSignup = async () => {};
 
   return (
     <StyledSection>
