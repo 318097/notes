@@ -45,7 +45,6 @@ const App = ({ history, dispatch, session }) => {
 
     // setBaseUrl(session.serverUrl);
     // getSettings();
-    dispatch(fetchNotes());
     setLoading(false);
   }, [session]);
 

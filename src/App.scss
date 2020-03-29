@@ -35,6 +35,9 @@ body {
         display: flex;
         flex-direction: column;
       }
+      section#signin {
+        height: auto;
+      }
     }
     .showingCount {
       padding: 4px 6px;

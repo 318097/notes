@@ -46,7 +46,7 @@ const Signin = ({ history, dispatch, session }) => {
   };
 
   return (
-    <StyledSection>
+    <StyledSection id="signin">
       <h3>Signin</h3>
       <form>
         <Input

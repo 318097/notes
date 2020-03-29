@@ -44,24 +44,24 @@ const Container = styled.header`
   }
 `;
 
-const UserInfo = styled.div`
-  display: flex;
-  height: 24px;
-  padding: 0px 10px;
-  margin: 0;
-  margin-right: 6px;
-  border-radius: 20px;
-  position: relative;
-  .username {
-    margin: 0;
-    margin-right: 9px;
-    padding: 0 2px;
-    position: relative;
-    top: 2px;
-    font-size: 1.2rem;
-    font-weight: bold;
-  }
-`;
+// const UserInfo = styled.div`
+//   display: flex;
+//   height: 24px;
+//   padding: 0px 10px;
+//   margin: 0;
+//   margin-right: 6px;
+//   border-radius: 20px;
+//   position: relative;
+//   .username {
+//     margin: 0;
+//     margin-right: 9px;
+//     padding: 0 2px;
+//     position: relative;
+//     top: 2px;
+//     font-size: 1.2rem;
+//     font-weight: bold;
+//   }
+// `;
 
 const Header = ({ history, dispatch, appLoading, session }) => {
   const signOut = async () => {
