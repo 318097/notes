@@ -48,18 +48,21 @@ export const toggleSettingsDrawer = status => ({
   payload: status
 });
 
-export const setFilter = filterUpdate => async (dispatch, getState) => {
+export const setFilter = (filterUpdate, resetPage = true) => async (
+  dispatch,
+  getState
+) => {
   const { filters } = getState();
-
   const updatedFiters = { ...filters, ...filterUpdate };
-
+  if (resetPage) updatedFiters["page"] = 1;
   dispatch({ type: UPDATE_FILTER, payload: updatedFiters });
   dispatch(fetchNotes(updatedFiters));
 };
 
-export const fetchNotes = (filters = {}) => async (dispatch, getState) => {
+export const fetchNotes = () => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
+    const { filters } = getState();
     const { notes = [] } = getState();
     const data = filters && filters.page > 1 ? [...notes] : [];
 

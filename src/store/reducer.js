@@ -26,7 +26,8 @@ const initialState = {
     search: "",
     status: undefined,
     socialStatus: undefined,
-    page: 1
+    page: 1,
+    limit: 25
   },
   notes: [],
   meta: null,

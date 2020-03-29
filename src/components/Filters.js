@@ -13,7 +13,10 @@ const Filters = ({ dispatch, filters, notes, meta, tags }) => {
   const setFilterValues = (key, value) => dispatch(setFilter({ [key]: value }));
 
   return (
-    <div className="flex center align-center" style={{ flexShrink: 0 }}>
+    <div
+      className="flex center align-center"
+      style={{ flexShrink: 0, paddingBottom: "12px" }}
+    >
       <Search
         allowClear
         className="input-width"
@@ -54,9 +57,11 @@ const Filters = ({ dispatch, filters, notes, meta, tags }) => {
           </Option>
         ))}
       </Select>
-      <span className="showingCount">
-        Showing {notes.length} of {meta && meta.count}
-      </span>
+      {meta && (
+        <span className="showingCount">
+          Showing {notes.length} of {meta.count}
+        </span>
+      )}
     </div>
   );
 };

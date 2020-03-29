@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
-import { Tag } from "antd";
+import { Tag, Button } from "antd";
 import marked from "marked";
 
 import Card from "@bit/ml318097.mui.card";
@@ -11,11 +11,14 @@ import Dropdown from "./Dropdown";
 import Filters from "../Filters";
 
 import { MessageWrapper } from "../../styled";
-import { fetchNotes, setNoteToEdit, deleteNote } from "../../store/actions";
+import {
+  fetchNotes,
+  setNoteToEdit,
+  deleteNote,
+  setFilter
+} from "../../store/actions";
 
 const NotesWrapper = styled.div`
-  margin-top: 12px;
-  overflow: auto;
   display: grid;
   grid-template-columns: repeat(auto-fill, 215px);
   justify-content: center;
@@ -71,12 +74,20 @@ const NotesWrapper = styled.div`
   }
 `;
 
-const Notes = ({ notes, appLoading, history, dispatch, session }) => {
+const Notes = ({
+  notes,
+  appLoading,
+  history,
+  dispatch,
+  session,
+  meta,
+  filters
+}) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (session) dispatch(fetchNotes());
-  }, [session]);
+    if (session || !notes.length) dispatch(fetchNotes());
+  }, [session, dispatch]);
 
   useEffect(() => {
     if (!appLoading) setLoading(false);
@@ -88,26 +99,32 @@ const Notes = ({ notes, appLoading, history, dispatch, session }) => {
     <section>
       <Filters className="filters" />
       {notes.length && !loading ? (
-        <NotesWrapper>
-          {notes.map(note => (
-            <NoteCard
-              key={note._id}
-              note={note}
-              history={history}
-              dispatch={dispatch}
-            />
-          ))}
-          {/* {notes.length && notes.length < meta.count && (
-          <div className="flex center">
-            <Button
-              type="danger"
-              onClick={() => dispatch(setFilter({ page: filters.page + 1 }))}
-            >
-              Load
-            </Button>
-          </div>
-        )} */}
-        </NotesWrapper>
+        <div
+          style={{ overflow: "auto", height: "100%", paddingBottom: "30px" }}
+        >
+          <NotesWrapper>
+            {notes.map(note => (
+              <NoteCard
+                key={note._id}
+                note={note}
+                history={history}
+                dispatch={dispatch}
+              />
+            ))}
+          </NotesWrapper>
+          {notes.length && notes.length < meta.count && (
+            <div className="flex center">
+              <Button
+                type="danger"
+                onClick={() =>
+                  dispatch(setFilter({ page: filters.page + 1 }, false))
+                }
+              >
+                Load
+              </Button>
+            </div>
+          )}
+        </div>
       ) : (
         <MessageWrapper>Empty</MessageWrapper>
       )}
