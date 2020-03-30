@@ -114,12 +114,15 @@ const reducer = (state = initialState, action) => {
       };
     }
     case UPDATE_NOTE: {
+      const { selectedNote } = state.modalMeta;
       return {
         ...state,
         modalMeta: {
           ...state.modalMeta,
           mode: undefined,
-          selectedNote: null
+          selectedNote: selectedNote
+            ? { ...selectedNote, ...action.payload }
+            : null
         },
         notes: state.notes.map(note => {
           if (note._id === action.payload._id)

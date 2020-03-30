@@ -23,6 +23,7 @@ import { isLoggedIn, getLocalSession } from "./authService";
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL
   ? process.env.REACT_APP_SERVER_URL
   : "http://localhost:7000/api";
+
 axios.defaults.headers.common["external-source"] = "NOTES_APP";
 
 const App = ({ history, dispatch, session }) => {
@@ -79,7 +80,6 @@ const App = ({ history, dispatch, session }) => {
   //   console.log("settings", settings);
   //   dispatch(setSettings(settings));
   // };
-
   return (
     <div className="container">
       <Header />
@@ -117,8 +117,7 @@ const App = ({ history, dispatch, session }) => {
   );
 };
 
-const mapStateToProps = ({ notes, session, settings }) => ({
-  notes,
+const mapStateToProps = ({ session, settings }) => ({
   session,
   settings
 });
