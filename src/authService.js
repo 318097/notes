@@ -1,10 +1,10 @@
 const isLoggedIn = () => !!getLocalSession().token;
 
 const setLocalSession = session =>
-  sessionStorage.setItem("notes-app", JSON.stringify(session));
+  localStorage.setItem("notes-app", JSON.stringify(session));
 
 const getLocalSession = () =>
-  JSON.parse(sessionStorage.getItem("notes-app") || "{}");
+  JSON.parse(localStorage.getItem("notes-app") || "{}");
 
 module.exports = {
   isLoggedIn,
