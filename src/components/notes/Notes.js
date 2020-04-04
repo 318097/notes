@@ -9,7 +9,7 @@ import Card from "@bit/ml318097.mui.card";
 import Icon from "@bit/ml318097.mui.icon";
 import Dropdown from "./Dropdown";
 import Filters from "../Filters";
-
+import colors from "../../colors";
 import { MessageWrapper } from "../../styled";
 import {
   fetchNotes,
@@ -32,7 +32,7 @@ const NotesWrapper = styled.div`
     .card {
       font-size: 1.4rem;
       &:hover {
-        background: #f3f3f3;
+        background: ${colors.shade3};
       }
       .title {
         font-size: inherit;

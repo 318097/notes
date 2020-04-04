@@ -12,6 +12,7 @@ import Controls from "./Controls";
 import { getNoteById } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
 import { fadeInDownAnimation } from "../../animations";
+import colors from "../../colors";
 
 const Wrapper = styled.div`
   margin-top: 20px;
@@ -36,7 +37,7 @@ const Wrapper = styled.div`
     }
     .back-icon {
       position: absolute;
-      background: #484848;
+      background: ${colors.bar};
       color: white;
       top: 5px;
       left: 5px;
@@ -45,7 +46,7 @@ const Wrapper = styled.div`
       border-radius: 30px;
       transition: 1s;
       &:hover {
-        background: #484848;
+        background: ${colors.bar};
         color: white;
         transform: scale(1.2);
       }

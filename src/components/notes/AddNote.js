@@ -4,12 +4,11 @@ import styled from "styled-components";
 import marked from "marked";
 import { Modal, Input, Radio, Checkbox } from "antd";
 import SimpleMDE from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
 
 import { addNote, updateNote, setModalMeta } from "../../store/actions";
-
 import { generateSlug } from "../../utils";
-
-import "easymde/dist/easymde.min.css";
+import colors from "../../colors";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -24,7 +23,7 @@ const StyledContainer = styled.div`
   div.preview {
     padding: 10px;
     margin: 8px;
-    background: #f8f8f8;
+    background: ${colors.shade1};
     height: 96%;
     border-radius: 5px;
     flex: 1 1 39%;
@@ -37,7 +36,7 @@ const initialState = {
   title: "",
   content: "",
   slug: "",
-  tags: []
+  tags: [],
 };
 
 const AddNote = ({
@@ -48,7 +47,7 @@ const AddNote = ({
   modalVisibility,
   mode,
   selectedNote,
-  tags
+  tags,
 }) => {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
@@ -64,7 +63,8 @@ const AddNote = ({
 
   const closeModal = async () => setModalMeta();
 
-  const setData = (key, value) => setNote(data => ({ ...data, [key]: value }));
+  const setData = (key, value) =>
+    setNote((data) => ({ ...data, [key]: value }));
 
   const handleOk = async () => {
     setLoading(true);
@@ -115,17 +115,17 @@ const AddNote = ({
           />
           <SimpleMDE
             value={note.content}
-            onChange={value => setData("content", value)}
+            onChange={(value) => setData("content", value)}
             options={{
               spellChecker: false,
               placeholder: "Content...",
-              hideIcons: ["guide", "preview", "fullscreen", "side-by-side"]
+              hideIcons: ["guide", "preview", "fullscreen", "side-by-side"],
             }}
           />
           <Checkbox.Group
             options={tags}
             value={note.tags}
-            onChange={value => setData("tags", value)}
+            onChange={(value) => setData("tags", value)}
           />
         </form>
         {showPreview && (
@@ -146,12 +146,12 @@ const AddNote = ({
               <Fragment>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: marked(note.title || "")
+                    __html: marked(note.title || ""),
                   }}
                 ></div>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: marked(note.content || "")
+                    __html: marked(note.content || ""),
                   }}
                 ></div>
               </Fragment>
@@ -172,18 +172,18 @@ const AddNote = ({
 const mapStateToProps = ({
   modalMeta: { visibility, mode, selectedNote },
   session,
-  tags
+  tags,
 }) => ({
   modalVisibility: visibility,
   selectedNote,
   mode,
   session,
-  tags
+  tags,
 });
 const mapDispatchToProps = {
   addNote,
   updateNote,
-  setModalMeta
+  setModalMeta,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNote);

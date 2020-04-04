@@ -1,4 +1,5 @@
 @import "./Common.scss";
+@import "./theme.scss";
 
 pre,
 pre code,
@@ -42,13 +43,13 @@ body {
     .showingCount {
       padding: 4px 6px;
       border-radius: 4px;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba($black, 0.4);
       margin: 2px;
-      color: #fff;
+      color: $white;
     }
 
     pre {
-      border: 1px solid lightgrey;
+      border: 1px solid $grey;
       border-radius: 4px;
       padding: 4px 8px;
       line-height: 1.4rem;

@@ -1,3 +1,5 @@
+@import "./theme.scss";
+
 @font-face {
   src: url("./assets/fonts/PatrickHand-Regular.ttf");
   font-family: PatrickHand;
@@ -44,7 +46,7 @@ html {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgb(71, 71, 71);
+  background: $bar;
   border-radius: 15px;
 }
 

@@ -34,8 +34,7 @@ const App = ({ history, dispatch, session }) => {
       dispatch(
         setSession({
           loggedIn: true,
-          // serverUrl: sessionStorage.getItem("serverUrl") || "local",
-          ...(getLocalSession() || {})
+          ...(getLocalSession() || {}),
         })
       );
     } else setLoading(false);
@@ -44,16 +43,9 @@ const App = ({ history, dispatch, session }) => {
   useEffect(() => {
     if (!session) return;
 
-    // setBaseUrl(session.serverUrl);
     // getSettings();
     setLoading(false);
   }, [session]);
-
-  // const setBaseUrl = serverUrl => {
-  //   if (serverUrl === "server")
-  //     axios.defaults.baseURL = "https://bubblegum-server.herokuapp.com/api";
-  //   else axios.defaults.baseURL = "http://localhost:7000/api";
-  // };
 
   // const isAccountActive = async token => {
   //   if (token) {
@@ -73,13 +65,6 @@ const App = ({ history, dispatch, session }) => {
   //   } else setLoading(false);
   // };
 
-  // const getSettings = async () => {
-  //   const {
-  //     data: { settings }
-  //   } = await axios.get(`/users/${session.userId}/settings`);
-  //   console.log("settings", settings);
-  //   dispatch(setSettings(settings));
-  // };
   return (
     <div className="container">
       <Header />
@@ -119,7 +104,7 @@ const App = ({ history, dispatch, session }) => {
 
 const mapStateToProps = ({ session, settings }) => ({
   session,
-  settings
+  settings,
 });
 
 export default withRouter(connect(mapStateToProps)(App));

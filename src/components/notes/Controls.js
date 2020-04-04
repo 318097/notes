@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { updateNote } from "../../store/actions";
 import { copyToClipboard, generateSlug } from "../../utils";
 import Icon from "../Icon";
+import colors from "../../colors";
 
 const ControlsWrapper = styled.div`
   background: white;
@@ -13,8 +14,8 @@ const ControlsWrapper = styled.div`
   width: 218px;
   padding: 12px;
   border-radius: 12px;
-  border: 1px solid #f2f2f2;
-  box-shadow: 3px 3px 3px #f2f2f2;
+  border: 1px solid ${colors.shade2};
+  box-shadow: 3px 3px 3px ${colors.shade2};
   .header {
     display: flex;
     align-items: center;
@@ -28,7 +29,7 @@ const ControlsWrapper = styled.div`
     display: inline-block;
   }
   .slug {
-    background: #21009a;
+    background: ${colors.primary};
     text-overflow: ellipsis;
     width: 100%;
     color: white;

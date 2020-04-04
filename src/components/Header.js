@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { Spin, Divider, Icon as AntIcon } from "antd";
 import { withRouter, Link } from "react-router-dom";
-
+import colors from "../colors";
 import {
   setSession,
   toggleSettingsDrawer,
@@ -29,11 +29,11 @@ const Container = styled.header`
     transition: 2s;
     font-weight: bold;
     a {
-      color: #424242;
+      color: ${colors.black};
       & > span {
         text-decoration: underline;
         font-size: 2.4rem;
-        color: #2b2b2b;
+        color: ${colors.black2};
       }
     }
   }
