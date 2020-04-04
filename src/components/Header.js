@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { Spin, Divider, Switch, Icon as AntIcon } from "antd";
+import { Spin, Divider, Icon as AntIcon } from "antd";
 import { withRouter, Link } from "react-router-dom";
 
 import {
   setSession,
   toggleSettingsDrawer,
-  setModalMeta
+  setModalMeta,
 } from "../store/actions";
 import Icon from "./Icon";
 
@@ -44,24 +44,26 @@ const Container = styled.header`
   }
 `;
 
-// const UserInfo = styled.div`
-//   display: flex;
-//   height: 24px;
-//   padding: 0px 10px;
-//   margin: 0;
-//   margin-right: 6px;
-//   border-radius: 20px;
-//   position: relative;
-//   .username {
-//     margin: 0;
-//     margin-right: 9px;
-//     padding: 0 2px;
-//     position: relative;
-//     top: 2px;
-//     font-size: 1.2rem;
-//     font-weight: bold;
-//   }
-// `;
+const UserInfo = styled.div`
+  display: flex;
+  height: 24px;
+  padding: 0;
+  margin: 0;
+  margin-right: 6px;
+  border-radius: 20px;
+  background: lightgrey;
+  align-items: center;
+  .profile-icon {
+    right: -4px;
+    position: relative;
+    top: 1;
+  }
+  .username {
+    padding-left: 8px;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+  }
+`;
 
 const Header = ({ history, dispatch, appLoading, session }) => {
   const signOut = async () => {
@@ -86,29 +88,11 @@ const Header = ({ history, dispatch, appLoading, session }) => {
           />
           <Icon type="upload" onClick={() => history.push("/upload")} />
           <Divider type="vertical" />
-          {/* <div>
-            Server{" "}
-            <Switch
-              checked={session.serverUrl === "server"}
-              onChange={() => {
-                const newValue =
-                  session.serverUrl === "server" ? "localhost" : "server";
-                dispatch(setSession({ serverUrl: newValue }));
-                sessionStorage.setItem("serverUrl", newValue);
-              }}
-            />
-          </div> */}
-          {/* 
+
           <UserInfo>
             <div className="username">{session.name}</div>
-             <ProfileIcon>
-              {session.photoURL ? (
-                <img src={session.photoURL} alt="Profile pic" />
-              ) : (
-                <Icon type="user" />
-              )}
-            </ProfileIcon>
-          </UserInfo> */}
+            <Icon className="profile-icon" type="user" />
+          </UserInfo>
           <Icon
             type="setting"
             onClick={() => dispatch(toggleSettingsDrawer(true))}
@@ -123,7 +107,7 @@ const Header = ({ history, dispatch, appLoading, session }) => {
 const mapStateToProps = ({ appLoading, session, settings }) => ({
   appLoading,
   session,
-  settings
+  settings,
 });
 
 export default withRouter(connect(mapStateToProps)(Header));

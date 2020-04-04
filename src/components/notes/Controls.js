@@ -44,7 +44,7 @@ const defaultTags = [
   "#WebDevelopment",
   "#Tech",
   "#Coding",
-  "#Developer"
+  "#Developer",
 ];
 
 const Controls = ({ note, dispatch }) => {
@@ -52,7 +52,7 @@ const Controls = ({ note, dispatch }) => {
 
   useEffect(() => {
     if (!note) return;
-    setHashtags([...defaultTags, ...note.tags.map(tag => `#${tag}`)]);
+    setHashtags([...defaultTags, ...note.tags.map((tag) => `#${tag}`)]);
   }, [note]);
 
   const updateProperties = async (key, value) =>
@@ -79,7 +79,7 @@ const Controls = ({ note, dispatch }) => {
         </div>
         <div>
           {note &&
-            hashtags.map(tag => (
+            hashtags.map((tag) => (
               <span className="hashtag" key={tag}>
                 {tag}
               </span>
@@ -91,7 +91,7 @@ const Controls = ({ note, dispatch }) => {
           <span style={{ marginRight: "4px" }}>Visible</span>
           <Switch
             checked={note && note.visible}
-            onChange={value => updateProperties("visible", value)}
+            onChange={(value) => updateProperties("visible", value)}
           />
         </div>
       </ControlsWrapper>
@@ -106,7 +106,7 @@ const Controls = ({ note, dispatch }) => {
             }
             value={note && note.status}
           >
-            {["DRAFT", "READY", "POSTED"].map(state => (
+            {["DRAFT", "READY", "POSTED"].map((state) => (
               <Radio className="radio-box" key={state} value={state}>
                 {state}
               </Radio>
@@ -125,7 +125,7 @@ const Controls = ({ note, dispatch }) => {
             }
             value={(note && note.socialStatus) || "NONE"}
           >
-            {["NONE", "READY", "POSTED"].map(state => (
+            {["NONE", "READY", "POSTED"].map((state) => (
               <Radio className="radio-box" key={state} value={state}>
                 {state}
               </Radio>

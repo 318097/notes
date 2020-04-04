@@ -5,13 +5,13 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { Tag } from "antd";
 import marked from "marked";
-
 import Card from "@bit/ml318097.mui.card";
 import Icon from "@bit/ml318097.mui.icon";
 
 import Controls from "./Controls";
 import { getNoteById } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
+import { fadeInDownAnimation } from "../../animations";
 
 const Wrapper = styled.div`
   margin-top: 20px;
@@ -19,6 +19,7 @@ const Wrapper = styled.div`
   grid-template-columns: repeat(12, 1fr);
   column-gap: 8px;
   .card {
+    animation: 0.4s ${fadeInDownAnimation};
     height: 78vh;
     padding: 10px 0 10px 5px;
     grid-column: 4/10;
@@ -75,7 +76,7 @@ const NoteView = ({ dispatch, match, selectedNote, session, history }) => {
   const { title, content, tags, type } = selectedNote || {};
   return (
     <Wrapper>
-      <Card>
+      <Card style={{ animation: `` }}>
         <div className="relative">
           <h3 className="title">{title}</h3>
           {type === "POST" && (
@@ -115,7 +116,7 @@ const NoteView = ({ dispatch, match, selectedNote, session, history }) => {
 
 const mapStateToProps = ({ modalMeta: { selectedNote }, session }) => ({
   selectedNote,
-  session
+  session,
 });
 
 export default withRouter(connect(mapStateToProps)(NoteView));

@@ -15,7 +15,7 @@ import {
   fetchNotes,
   setNoteToEdit,
   deleteNote,
-  setFilter
+  setFilter,
 } from "../../store/actions";
 
 const NotesWrapper = styled.div`
@@ -81,12 +81,12 @@ const Notes = ({
   dispatch,
   session,
   meta,
-  filters
+  filters,
 }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (session || !notes.length) dispatch(fetchNotes());
+    if (session && !notes.length) dispatch(fetchNotes());
   }, [session, dispatch]);
 
   useEffect(() => {
@@ -103,7 +103,7 @@ const Notes = ({
           style={{ overflow: "auto", height: "100%", paddingBottom: "30px" }}
         >
           <NotesWrapper>
-            {notes.map(note => (
+            {notes.map((note) => (
               <NoteCard
                 key={note._id}
                 note={note}
@@ -135,11 +135,11 @@ const Notes = ({
 const NoteCard = ({
   note: { title = "", content = "", type = "DROP", tags = [], _id },
   history,
-  dispatch
+  dispatch,
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const handleClick = _id => event => {
+  const handleClick = (_id) => (event) => {
     event.stopPropagation();
     history.push(`/note/${_id}`);
   };
@@ -163,7 +163,7 @@ const NoteCard = ({
           ></div>
         )}
         <div className="tags">
-          {tags.map(tag => (
+          {tags.map((tag) => (
             <Tag key={tag}>{tag.toUpperCase()}</Tag>
           ))}
         </div>
@@ -184,7 +184,7 @@ const mapStateToProps = ({ notes, meta, appLoading, session, filters }) => ({
   appLoading,
   session,
   filters,
-  meta
+  meta,
 });
 
 export default withRouter(connect(mapStateToProps)(Notes));
