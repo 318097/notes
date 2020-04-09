@@ -13,12 +13,12 @@ import {
   UPDATE_NOTE,
   DELETE_NOTE,
   TOGGLE_SETTINGS_DRAWER,
-  SET_TAGS
+  SET_TAGS,
 } from "./constants";
 
-export const setSession = session => ({
+export const setSession = (session) => ({
   type: SET_SESSION,
-  payload: session
+  payload: session,
 });
 
 export const setSettings = (updatedSettings, updateOnServer = false) => async (
@@ -34,18 +34,18 @@ export const setSettings = (updatedSettings, updateOnServer = false) => async (
 
   dispatch({
     type: SET_SETTINGS,
-    payload: newSettings
+    payload: newSettings,
   });
 };
 
-export const setAppLoading = status => ({
+export const setAppLoading = (status) => ({
   type: SET_APP_LOADING,
-  payload: status
+  payload: status,
 });
 
-export const toggleSettingsDrawer = status => ({
+export const toggleSettingsDrawer = (status) => ({
   type: TOGGLE_SETTINGS_DRAWER,
-  payload: status
+  payload: status,
 });
 
 export const setFilter = (filterUpdate, resetPage = true) => async (
@@ -67,7 +67,7 @@ export const fetchNotes = () => async (dispatch, getState) => {
     const data = filters && filters.page > 1 ? [...notes] : [];
 
     const {
-      data: { posts, meta }
+      data: { posts, meta },
     } = await axios.get("/posts", { params: filters });
     data.push(...posts);
 
@@ -79,17 +79,24 @@ export const fetchNotes = () => async (dispatch, getState) => {
   }
 };
 
-export const getNoteById = noteId => async (dispatch, getState) => {
+export const getNoteById = (noteId) => async (dispatch, getState) => {
+  const { notes } = getState();
   dispatch(setAppLoading(true));
-  const {
-    data: { post }
-  } = await axios.get(`/posts/${noteId}`);
 
-  dispatch({ type: GET_NOTE_BY_ID, payload: post });
+  let viewPost = notes.find((note) => note._id === noteId);
+
+  if (!viewPost) {
+    const {
+      data: { post },
+    } = await axios.get(`/posts/${noteId}`);
+    viewPost = post;
+  }
+
+  dispatch({ type: GET_NOTE_BY_ID, payload: viewPost });
   dispatch(setAppLoading(false));
 };
 
-export const addNote = note => async (dispatch, getState) => {
+export const addNote = (note) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
 
@@ -101,12 +108,12 @@ export const addNote = note => async (dispatch, getState) => {
   }
 };
 
-export const setNoteToEdit = noteId => ({
+export const setNoteToEdit = (noteId) => ({
   type: SET_NOTE_TO_EDIT,
-  payload: noteId
+  payload: noteId,
 });
 
-export const updateNote = note => async (dispatch, getState) => {
+export const updateNote = (note) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
 
@@ -118,7 +125,7 @@ export const updateNote = note => async (dispatch, getState) => {
   }
 };
 
-export const deleteNote = noteId => async (dispatch, getState) => {
+export const deleteNote = (noteId) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
 
@@ -130,16 +137,16 @@ export const deleteNote = noteId => async (dispatch, getState) => {
   }
 };
 
-export const setTags = tags => ({ type: SET_TAGS, payload: tags });
+export const setTags = (tags) => ({ type: SET_TAGS, payload: tags });
 
-export const toggleFavoriteNote = noteId => async dispatch => {};
+export const toggleFavoriteNote = (noteId) => async (dispatch) => {};
 
 export const setModalMeta = ({
   visibility = false,
   finishEditing = false,
   mode = "add",
-  selectedNote = null
+  selectedNote = null,
 } = {}) => ({
   type: SET_MODAL_META,
-  payload: { visibility, finishEditing, mode, selectedNote }
+  payload: { visibility, finishEditing, mode, selectedNote },
 });

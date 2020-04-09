@@ -11,7 +11,7 @@ import {
   SET_MODAL_META,
   UPDATE_NOTE,
   DELETE_NOTE,
-  SET_TAGS
+  SET_TAGS,
 } from "./constants";
 
 const initialState = {
@@ -20,20 +20,21 @@ const initialState = {
     visibility: false,
     finishEditing: false,
     mode: undefined,
-    selectedNote: null
+    selectedNote: null,
   },
   filters: {
     search: "",
     status: undefined,
     socialStatus: undefined,
     page: 1,
-    limit: 25
+    limit: 25,
   },
   notes: [],
   meta: null,
   session: null,
   settings: {},
-  tags: []
+  tags: [],
+  viewNote: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -41,58 +42,55 @@ const reducer = (state = initialState, action) => {
     case SET_SESSION: {
       return {
         ...state,
-        session: { ...state.session, ...action.payload }
+        session: { ...state.session, ...action.payload },
       };
     }
     case SET_SETTINGS: {
       return {
         ...state,
-        settings: action.payload
+        settings: action.payload,
       };
     }
     case SET_APP_LOADING: {
       return {
         ...state,
-        appLoading: action.payload
+        appLoading: action.payload,
       };
     }
     case TOGGLE_SETTINGS_DRAWER: {
       return {
         ...state,
-        settingsDrawerVisibility: action.payload
+        settingsDrawerVisibility: action.payload,
       };
     }
     case UPDATE_FILTER: {
       return {
         ...state,
-        filters: action.payload
+        filters: action.payload,
       };
     }
     case LOAD_NOTES: {
       return {
         ...state,
         notes: [...action.payload.notes],
-        meta: action.payload.meta
+        meta: action.payload.meta,
       };
     }
     case GET_NOTE_BY_ID: {
       return {
         ...state,
-        modalMeta: {
-          ...state.modalMeta,
-          selectedNote: action.payload
-        }
+        viewNote: action.payload,
       };
     }
     case ADD_NOTE: {
       return {
         ...state,
-        notes: [...state.notes, action.payload]
+        notes: [...state.notes, action.payload],
       };
     }
     case SET_NOTE_TO_EDIT: {
       const selectedNote = state.notes.find(
-        note => note._id === action.payload
+        (note) => note._id === action.payload
       );
       return {
         ...state,
@@ -100,8 +98,8 @@ const reducer = (state = initialState, action) => {
           ...state.modalMeta,
           mode: "edit",
           visibility: true,
-          selectedNote
-        }
+          selectedNote,
+        },
       };
     }
     case SET_MODAL_META: {
@@ -109,8 +107,8 @@ const reducer = (state = initialState, action) => {
         ...state,
         modalMeta: {
           ...state.modalMeta,
-          ...action.payload
-        }
+          ...action.payload,
+        },
       };
     }
     case UPDATE_NOTE: {
@@ -122,25 +120,25 @@ const reducer = (state = initialState, action) => {
           mode: undefined,
           selectedNote: selectedNote
             ? { ...selectedNote, ...action.payload }
-            : null
+            : null,
         },
-        notes: state.notes.map(note => {
+        notes: state.notes.map((note) => {
           if (note._id === action.payload._id)
             return { ...note, ...action.payload };
           return note;
-        })
+        }),
       };
     }
     case DELETE_NOTE: {
       return {
         ...state,
-        notes: state.notes.filter(note => note._id !== action.payload)
+        notes: state.notes.filter((note) => note._id !== action.payload),
       };
     }
     case SET_TAGS: {
       return {
         ...state,
-        tags: action.payload
+        tags: action.payload,
       };
     }
     default:

@@ -67,14 +67,14 @@ const Wrapper = styled.div`
   }
 `;
 
-const NoteView = ({ dispatch, match, selectedNote, session, history }) => {
+const NoteView = ({ dispatch, match, viewNote, session, history }) => {
   useEffect(() => {
     if (session) dispatch(getNoteById(match.params.id));
   }, [match.params]);
 
-  if (!selectedNote) return null;
+  if (!viewNote) return null;
 
-  const { title, content, tags, type } = selectedNote || {};
+  const { title, content, tags, type } = viewNote || {};
   return (
     <Wrapper>
       <Card style={{ animation: `` }}>
@@ -110,13 +110,13 @@ const NoteView = ({ dispatch, match, selectedNote, session, history }) => {
           type="caret-left"
         />
       </Card>
-      <Controls note={selectedNote} />
+      <Controls note={viewNote} />
     </Wrapper>
   );
 };
 
-const mapStateToProps = ({ modalMeta: { selectedNote }, session }) => ({
-  selectedNote,
+const mapStateToProps = ({ viewNote, session }) => ({
+  viewNote,
   session,
 });
 
