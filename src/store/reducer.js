@@ -12,6 +12,7 @@ import {
   UPDATE_NOTE,
   DELETE_NOTE,
   SET_TAGS,
+  SET_UPLOADING_DATA,
 } from "./constants";
 
 const initialState = {
@@ -35,59 +36,58 @@ const initialState = {
   settings: {},
   tags: [],
   viewNote: null,
+  uploadingData: {
+    rawData: null,
+    data: [],
+    dataType: "POST",
+    shouldProcessData: true,
+  },
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_SESSION: {
+    case SET_SESSION:
       return {
         ...state,
         session: { ...state.session, ...action.payload },
       };
-    }
-    case SET_SETTINGS: {
+    case SET_SETTINGS:
       return {
         ...state,
         settings: action.payload,
       };
-    }
-    case SET_APP_LOADING: {
+    case SET_APP_LOADING:
       return {
         ...state,
         appLoading: action.payload,
       };
-    }
-    case TOGGLE_SETTINGS_DRAWER: {
+    case TOGGLE_SETTINGS_DRAWER:
       return {
         ...state,
         settingsDrawerVisibility: action.payload,
       };
-    }
-    case UPDATE_FILTER: {
+    case UPDATE_FILTER:
       return {
         ...state,
         filters: action.payload,
       };
-    }
-    case LOAD_NOTES: {
+    case LOAD_NOTES:
       return {
         ...state,
         notes: [...action.payload.notes],
         meta: action.payload.meta,
       };
-    }
-    case GET_NOTE_BY_ID: {
+    case GET_NOTE_BY_ID:
       return {
         ...state,
         viewNote: action.payload,
       };
-    }
-    case ADD_NOTE: {
+    case ADD_NOTE:
       return {
         ...state,
         notes: [...state.notes, action.payload],
       };
-    }
+
     case SET_NOTE_TO_EDIT: {
       const selectedNote = state.notes.find(
         (note) => note._id === action.payload
@@ -102,7 +102,7 @@ const reducer = (state = initialState, action) => {
         },
       };
     }
-    case SET_MODAL_META: {
+    case SET_MODAL_META:
       return {
         ...state,
         modalMeta: {
@@ -110,7 +110,6 @@ const reducer = (state = initialState, action) => {
           ...action.payload,
         },
       };
-    }
     case UPDATE_NOTE: {
       const { selectedNote } = state.modalMeta;
       return {
@@ -129,18 +128,21 @@ const reducer = (state = initialState, action) => {
         }),
       };
     }
-    case DELETE_NOTE: {
+    case DELETE_NOTE:
       return {
         ...state,
         notes: state.notes.filter((note) => note._id !== action.payload),
       };
-    }
-    case SET_TAGS: {
+    case SET_TAGS:
       return {
         ...state,
         tags: action.payload,
       };
-    }
+    case SET_UPLOADING_DATA:
+      return {
+        ...state,
+        uploadingData: { ...state.uploadingData, ...action.payload },
+      };
     default:
       return state;
   }

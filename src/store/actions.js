@@ -14,6 +14,7 @@ import {
   DELETE_NOTE,
   TOGGLE_SETTINGS_DRAWER,
   SET_TAGS,
+  SET_UPLOADING_DATA,
 } from "./constants";
 
 export const setSession = (session) => ({
@@ -149,4 +150,9 @@ export const setModalMeta = ({
 } = {}) => ({
   type: SET_MODAL_META,
   payload: { visibility, finishEditing, mode, selectedNote },
+});
+
+export const setUploadingData = (uploadingContent) => ({
+  type: "SET_UPLOADING_DATA",
+  payload: uploadingContent,
 });

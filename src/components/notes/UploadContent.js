@@ -9,7 +9,7 @@ import styled from "styled-components";
 import uuid from "uuid";
 import marked from "marked";
 
-import { setModalMeta } from "../../store/actions";
+import { setModalMeta, setUploadingData } from "../../store/actions";
 import { generateSlug } from "../../utils";
 
 const Wrapper = styled.div`
@@ -72,15 +72,18 @@ const parseItem = (item, type = "POST") => {
   }
   return {
     title,
-    content
+    content,
   };
 };
 
-const UploadContent = ({ dispatch, finishEditing, selectedNote }) => {
+const UploadContent = ({
+  modalMeta: { finishEditing, selectedNote },
+  setModalMeta,
+  uploadingData: { rawData, data, dataType },
+  setUploadingData,
+  shouldProcessData,
+}) => {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const [dataType, setDataType] = useState("POST");
-  const [rawData, setRawData] = useState(null);
   const [fileParsing, setFileParsing] = useState("===[\r\n]");
 
   const inputEl = useRef(null);
@@ -92,33 +95,38 @@ const UploadContent = ({ dispatch, finishEditing, selectedNote }) => {
 
   useEffect(() => {
     if (!finishEditing) return;
-    setData(prev =>
-      prev.map(item => {
-        if (item.tempId === selectedNote.tempId) return selectedNote;
-        return item;
-      })
-    );
+
+    const updatedData = data.map((item) => {
+      if (item.tempId === selectedNote.tempId) return selectedNote;
+      return item;
+    });
+    setUploadingData({ data: updatedData });
   }, [finishEditing]);
 
   useEffect(() => {
-    processData();
-  }, [rawData, fileParsing]);
+    if (shouldProcessData) processData();
+  }, [fileParsing, rawData]);
 
-  const handleUpload = event => {
+  useEffect(() => {
+    setUploadingData({ shouldProcessData: true });
+  }, [fileParsing]);
+
+  const handleUpload = (event) => {
     const [document] = event.target.files;
 
     if (!document) return;
 
     const reader = new FileReader();
     reader.readAsText(document);
-    reader.onload = () => setRawData(reader.result);
+    reader.onload = () =>
+      setUploadingData({ rawData: reader.result, shouldProcessData: false });
   };
 
   const processData = () => {
     if (!rawData) return;
     const fileContent = rawData
       .split(new RegExp(fileParsing))
-      .map(item => {
+      .map((item) => {
         let { title = "", content = "" } = parseItem(item.trim(), dataType);
         return {
           tags: [],
@@ -126,11 +134,11 @@ const UploadContent = ({ dispatch, finishEditing, selectedNote }) => {
           title,
           content,
           tempId: uuid(),
-          slug: generateSlug(title)
+          slug: generateSlug(title),
         };
       })
-      .filter(item => item.title || item.content);
-    setData(fileContent);
+      .filter((item) => item.title || item.content);
+    setUploadingData({ data: fileContent });
   };
 
   const addData = async () => {
@@ -142,23 +150,22 @@ const UploadContent = ({ dispatch, finishEditing, selectedNote }) => {
       console.log(err);
     } finally {
       setLoading(false);
-      setRawData(null);
-      setData([]);
+      setUploadingData({ rawData: null, data: [] });
     }
   };
 
-  const editItem = item => () =>
-    dispatch(
-      setModalMeta({
-        selectedNote: item,
-        mode: "edit-upload",
-        finishEditing: false,
-        visibility: true
-      })
-    );
+  const editItem = (item) => () =>
+    setModalMeta({
+      selectedNote: item,
+      mode: "edit-upload",
+      finishEditing: false,
+      visibility: true,
+    });
 
-  const removeItem = tempId => () =>
-    setData(prev => prev.filter(item => item.tempId !== tempId));
+  const removeItem = (tempId) => () =>
+    setUploadingData({ data: data.filter((item) => item.tempId !== tempId) });
+
+  const clearData = () => setUploadingData({ data: [], rawData: null });
 
   return (
     <section>
@@ -178,7 +185,9 @@ const UploadContent = ({ dispatch, finishEditing, selectedNote }) => {
             key="data-type"
             buttonStyle="solid"
             value={dataType}
-            onChange={({ target: { value } }) => setDataType(value)}
+            onChange={({ target: { value } }) =>
+              setUploadingData({ dataType: value })
+            }
           >
             <Radio.Button value="POST">POST</Radio.Button>
             <Radio.Button value="DROP">DROP</Radio.Button>
@@ -186,7 +195,7 @@ const UploadContent = ({ dispatch, finishEditing, selectedNote }) => {
           <span key="upload-buttons">
             {rawData ? (
               <Button onClick={addData} loading={loading}>
-                {`Upload ${data.length} ${dataType.toLowerCase()}`}{" "}
+                {`Upload ${data.length} ${(dataType || "").toLowerCase()}`}{" "}
                 <Icon type="upload" />
               </Button>
             ) : (
@@ -194,7 +203,10 @@ const UploadContent = ({ dispatch, finishEditing, selectedNote }) => {
                 Select File
               </Button>
             )}
-          </span>
+          </span>,
+          <Button key="clear-button" onClick={clearData}>
+            Clear
+          </Button>,
         ]}
       />
       <Wrapper>
@@ -209,7 +221,7 @@ const UploadContent = ({ dispatch, finishEditing, selectedNote }) => {
                   dangerouslySetInnerHTML={{ __html: marked(content) }}
                 ></div>
                 <div className="tags">
-                  {tags.map(tag => (
+                  {tags.map((tag) => (
                     <Tag key={tag}>{tag.toUpperCase()}</Tag>
                   ))}
                 </div>
@@ -240,9 +252,11 @@ const UploadContent = ({ dispatch, finishEditing, selectedNote }) => {
   );
 };
 
-const mapStateToProps = ({ modalMeta: { finishEditing, selectedNote } }) => ({
-  finishEditing,
-  selectedNote
+const mapStateToProps = ({ modalMeta, uploadingData }) => ({
+  modalMeta,
+  uploadingData,
 });
 
-export default connect(mapStateToProps)(UploadContent);
+const mapDispatchToProps = { setModalMeta, setUploadingData };
+
+export default connect(mapStateToProps, mapDispatchToProps)(UploadContent);
