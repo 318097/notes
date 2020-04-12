@@ -6,7 +6,12 @@ import { Modal, Input, Radio, Checkbox } from "antd";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 
-import { addNote, updateNote, setModalMeta } from "../../store/actions";
+import {
+  addNote,
+  updateNote,
+  setModalMeta,
+  updateUploadNote,
+} from "../../store/actions";
 import { generateSlug } from "../../utils";
 import colors from "../../colors";
 
@@ -48,6 +53,7 @@ const AddNote = ({
   mode,
   selectedNote,
   tags,
+  updateUploadNote,
 }) => {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
@@ -71,7 +77,7 @@ const AddNote = ({
     try {
       if (mode === "edit") await updateNote({ ...note });
       else if (mode === "add") await addNote({ ...note, userId: session.uid });
-      else await setModalMeta({ selectedNote: note, finishEditing: true });
+      else await updateUploadNote({ ...note });
     } finally {
       setLoading(false);
       closeModal();
@@ -184,6 +190,7 @@ const mapDispatchToProps = {
   addNote,
   updateNote,
   setModalMeta,
+  updateUploadNote,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNote);

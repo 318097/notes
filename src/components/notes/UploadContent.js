@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import { Button, message, PageHeader, Radio, Input, Tag } from "antd";
 import Card from "@bit/ml318097.mui.card";
 import Icon from "@bit/ml318097.mui.icon";
@@ -77,11 +77,9 @@ const parseItem = (item, type = "POST") => {
 };
 
 const UploadContent = ({
-  modalMeta: { finishEditing, selectedNote },
   setModalMeta,
-  uploadingData: { rawData, data, dataType },
+  uploadingData: { rawData, data, dataType, shouldProcessData },
   setUploadingData,
-  shouldProcessData,
 }) => {
   const [loading, setLoading] = useState(false);
   const [fileParsing, setFileParsing] = useState("===[\r\n]");
@@ -92,16 +90,6 @@ const UploadContent = ({
     if (dataType === "POST") setFileParsing("===[\r\n]");
     else if (dataType === "DROP") setFileParsing("[\r\n]");
   }, [dataType]);
-
-  useEffect(() => {
-    if (!finishEditing) return;
-
-    const updatedData = data.map((item) => {
-      if (item.tempId === selectedNote.tempId) return selectedNote;
-      return item;
-    });
-    setUploadingData({ data: updatedData });
-  }, [finishEditing]);
 
   useEffect(() => {
     if (shouldProcessData) processData();
@@ -119,7 +107,7 @@ const UploadContent = ({
     const reader = new FileReader();
     reader.readAsText(document);
     reader.onload = () =>
-      setUploadingData({ rawData: reader.result, shouldProcessData: false });
+      setUploadingData({ rawData: reader.result, shouldProcessData: true });
   };
 
   const processData = () => {
@@ -138,7 +126,7 @@ const UploadContent = ({
         };
       })
       .filter((item) => item.title || item.content);
-    setUploadingData({ data: fileContent });
+    setUploadingData({ data: fileContent, shouldProcessData: false });
   };
 
   const addData = async () => {
@@ -194,19 +182,24 @@ const UploadContent = ({
           </Radio.Group>,
           <span key="upload-buttons">
             {rawData ? (
-              <Button onClick={addData} loading={loading}>
-                {`Upload ${data.length} ${(dataType || "").toLowerCase()}`}{" "}
-                <Icon type="upload" />
-              </Button>
+              <Fragment>
+                <Button onClick={addData} loading={loading}>
+                  {`Upload ${data.length} ${(dataType || "").toLowerCase()}`}
+                </Button>
+                <Button
+                  style={{ marginLeft: 2 }}
+                  key="clear-button"
+                  onClick={clearData}
+                >
+                  Clear
+                </Button>
+              </Fragment>
             ) : (
               <Button type="dashed" onClick={() => inputEl.current.click()}>
                 Select File
               </Button>
             )}
           </span>,
-          <Button key="clear-button" onClick={clearData}>
-            Clear
-          </Button>,
         ]}
       />
       <Wrapper>
@@ -252,8 +245,7 @@ const UploadContent = ({
   );
 };
 
-const mapStateToProps = ({ modalMeta, uploadingData }) => ({
-  modalMeta,
+const mapStateToProps = ({ uploadingData }) => ({
   uploadingData,
 });
 

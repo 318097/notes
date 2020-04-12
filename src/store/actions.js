@@ -15,6 +15,7 @@ import {
   TOGGLE_SETTINGS_DRAWER,
   SET_TAGS,
   SET_UPLOADING_DATA,
+  UPDATE_UPLOAD_NOTE,
 } from "./constants";
 
 export const setSession = (session) => ({
@@ -153,6 +154,16 @@ export const setModalMeta = ({
 });
 
 export const setUploadingData = (uploadingContent) => ({
-  type: "SET_UPLOADING_DATA",
+  type: SET_UPLOADING_DATA,
   payload: uploadingContent,
 });
+
+export const updateUploadNote = (note) => async (dispatch, getState) => {
+  try {
+    dispatch(setAppLoading(true));
+
+    dispatch({ type: UPDATE_UPLOAD_NOTE, payload: note });
+  } finally {
+    dispatch(setAppLoading(false));
+  }
+};

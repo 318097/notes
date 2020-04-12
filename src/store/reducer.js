@@ -13,6 +13,7 @@ import {
   DELETE_NOTE,
   SET_TAGS,
   SET_UPLOADING_DATA,
+  UPDATE_UPLOAD_NOTE,
 } from "./constants";
 
 const initialState = {
@@ -143,6 +144,22 @@ const reducer = (state = initialState, action) => {
         ...state,
         uploadingData: { ...state.uploadingData, ...action.payload },
       };
+    case UPDATE_UPLOAD_NOTE: {
+      const {
+        uploadingData: { data },
+      } = state;
+      const { payload: selectedNote } = action;
+      const updatedData = data.map((item) =>
+        item.tempId === selectedNote.tempId ? selectedNote : item
+      );
+      return {
+        ...state,
+        uploadingData: {
+          ...state.uploadingData,
+          data: updatedData,
+        },
+      };
+    }
     default:
       return state;
   }
