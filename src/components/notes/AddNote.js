@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import marked from "marked";
-import { Modal, Input, Radio, Checkbox } from "antd";
+import { Modal, Input, Radio, Checkbox, Button } from "antd";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 
@@ -11,6 +11,7 @@ import {
   updateNote,
   setModalMeta,
   updateUploadNote,
+  setNextNoteForEditing,
 } from "../../store/actions";
 import { generateSlug } from "../../utils";
 import colors from "../../colors";
@@ -54,6 +55,7 @@ const AddNote = ({
   selectedNote,
   tags,
   updateUploadNote,
+  setNextNoteForEditing,
 }) => {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
@@ -67,7 +69,7 @@ const AddNote = ({
     }
   }, [mode, selectedNote, modalVisibility]);
 
-  const closeModal = async () => setModalMeta();
+  const handleClose = async () => setModalMeta();
 
   const setData = (key, value) =>
     setNote((data) => ({ ...data, [key]: value }));
@@ -80,9 +82,11 @@ const AddNote = ({
       else await updateUploadNote({ ...note });
     } finally {
       setLoading(false);
-      closeModal();
+      handleClose();
     }
   };
+
+  const handleUpdateAndNext = () => setNextNoteForEditing({ ...note });
 
   return (
     <Modal
@@ -90,11 +94,26 @@ const AddNote = ({
       centered={true}
       style={{ padding: "0" }}
       visible={modalVisibility}
-      okText={mode === "add" ? "Add" : "Update"}
-      onOk={handleOk}
-      onCancel={closeModal}
       width="80vw"
       confirmLoading={loading}
+      okText={mode === "add" ? "Add" : "Update"}
+      onOk={handleOk}
+      onCancel={handleClose}
+      footer={[
+        <Button key="cancel-button" onClick={handleClose}>
+          Cancel
+        </Button>,
+        <Button type="primary" key="add-button" onClick={handleOk}>
+          {mode === "add" ? "Add" : "Update"}
+        </Button>,
+        <Fragment key="update-and-next-button">
+          {mode !== "add" && (
+            <Button type="danger" onClick={handleUpdateAndNext}>
+              Update and next
+            </Button>
+          )}
+        </Fragment>,
+      ]}
     >
       <StyledContainer>
         <form>
@@ -191,6 +210,7 @@ const mapDispatchToProps = {
   updateNote,
   setModalMeta,
   updateUploadNote,
+  setNextNoteForEditing,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNote);

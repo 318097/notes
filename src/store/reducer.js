@@ -20,7 +20,6 @@ const initialState = {
   appLoading: false,
   modalMeta: {
     visibility: false,
-    finishEditing: false,
     mode: undefined,
     selectedNote: null,
   },
@@ -90,14 +89,12 @@ const reducer = (state = initialState, action) => {
       };
 
     case SET_NOTE_TO_EDIT: {
-      const selectedNote = state.notes.find(
-        (note) => note._id === action.payload
-      );
+      const { selectedNote, mode } = action.payload;
       return {
         ...state,
         modalMeta: {
           ...state.modalMeta,
-          mode: "edit",
+          mode,
           visibility: true,
           selectedNote,
         },
@@ -157,6 +154,7 @@ const reducer = (state = initialState, action) => {
         uploadingData: {
           ...state.uploadingData,
           data: updatedData,
+          shouldProcessData: false,
         },
       };
     }

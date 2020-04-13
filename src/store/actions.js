@@ -18,6 +18,11 @@ import {
   UPDATE_UPLOAD_NOTE,
 } from "./constants";
 
+const getNextNote = (data, id, matchKey = "id") => {
+  const currentNoteIndex = data.findIndex((note) => note[matchKey] === id);
+  return data[currentNoteIndex + 1];
+};
+
 export const setSession = (session) => ({
   type: SET_SESSION,
   payload: session,
@@ -110,10 +115,21 @@ export const addNote = (note) => async (dispatch, getState) => {
   }
 };
 
-export const setNoteToEdit = (noteId) => ({
-  type: SET_NOTE_TO_EDIT,
-  payload: noteId,
-});
+export const setNoteToEdit = (noteId, mode = "edit") => async (
+  dispatch,
+  getState
+) => {
+  const {
+    notes = [],
+    uploadingData: { data: uploadingNotes = [] } = {},
+  } = getState();
+  const data = mode === "edit" ? notes : uploadingNotes;
+  const selectedNote = data.find((note) => note._id === noteId);
+  dispatch({
+    type: SET_NOTE_TO_EDIT,
+    payload: { selectedNote, mode },
+  });
+};
 
 export const updateNote = (note) => async (dispatch, getState) => {
   try {
@@ -145,12 +161,11 @@ export const toggleFavoriteNote = (noteId) => async (dispatch) => {};
 
 export const setModalMeta = ({
   visibility = false,
-  finishEditing = false,
   mode = "add",
   selectedNote = null,
 } = {}) => ({
   type: SET_MODAL_META,
-  payload: { visibility, finishEditing, mode, selectedNote },
+  payload: { visibility, mode, selectedNote },
 });
 
 export const setUploadingData = (uploadingContent) => ({
@@ -159,11 +174,32 @@ export const setUploadingData = (uploadingContent) => ({
 });
 
 export const updateUploadNote = (note) => async (dispatch, getState) => {
-  try {
-    dispatch(setAppLoading(true));
+  dispatch({ type: UPDATE_UPLOAD_NOTE, payload: note });
+};
 
-    dispatch({ type: UPDATE_UPLOAD_NOTE, payload: note });
-  } finally {
-    dispatch(setAppLoading(false));
+export const setNextNoteForEditing = (currentNote) => async (
+  dispatch,
+  getState
+) => {
+  const {
+    notes = [],
+    modalMeta: { mode },
+    uploadingData: { data: uploadingNotes = [] } = {},
+  } = getState();
+
+  let nextNote;
+  if (mode === "edit") {
+    nextNote = getNextNote(notes, currentNote.id);
+    await dispatch(updateNote({ ...currentNote }));
+  } else {
+    nextNote = getNextNote(uploadingNotes, currentNote.tempId, "tempId");
+    await dispatch(updateUploadNote({ ...currentNote }));
   }
+  dispatch(
+    setModalMeta({
+      selectedNote: nextNote,
+      mode,
+      visibility: true,
+    })
+  );
 };

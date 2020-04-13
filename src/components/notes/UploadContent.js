@@ -96,7 +96,7 @@ const UploadContent = ({
   }, [fileParsing, rawData]);
 
   useEffect(() => {
-    setUploadingData({ shouldProcessData: true });
+    if (fileParsing) setUploadingData({ shouldProcessData: true });
   }, [fileParsing]);
 
   const handleUpload = (event) => {
@@ -146,7 +146,6 @@ const UploadContent = ({
     setModalMeta({
       selectedNote: item,
       mode: "edit-upload",
-      finishEditing: false,
       visibility: true,
     });
 
