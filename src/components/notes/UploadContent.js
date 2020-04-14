@@ -123,6 +123,7 @@ const UploadContent = ({
           content,
           tempId: uuid(),
           slug: generateSlug(title),
+          viewed: false,
         };
       })
       .filter((item) => item.title || item.content);
@@ -203,9 +204,12 @@ const UploadContent = ({
       />
       <Wrapper>
         {data.map((item, i) => {
-          const { title = "", content = "", tags = [] } = item;
+          const { title = "", content = "", tags = [], viewed } = item;
           return (
-            <div className="card-wrapper" key={item.tempId}>
+            <div
+              className={`card-wrapper ${viewed ? "viewed" : ""}`}
+              key={item.tempId}
+            >
               <Card>
                 <h3 className="title">{title}</h3>
                 <div

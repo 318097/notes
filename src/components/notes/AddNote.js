@@ -86,7 +86,8 @@ const AddNote = ({
     }
   };
 
-  const handleUpdateAndNext = () => setNextNoteForEditing({ ...note });
+  const handleUpdateAndNext = () =>
+    setNextNoteForEditing({ ...note, viewed: true });
 
   return (
     <Modal
