@@ -13,7 +13,7 @@ code {
 }
 
 pre {
-  border: 1px solid $bar;
+  border: 1px solid rgba($black, 0.4);
   border-radius: 2px;
   padding: 4px 8px;
   line-height: 1.4rem;
@@ -75,6 +75,6 @@ body {
 
 .viewed {
   .card {
-    background: #fffbde;
+    background: #e7ffde;
   }
 }

@@ -93,11 +93,11 @@ const UploadContent = ({
 
   useEffect(() => {
     if (shouldProcessData) processData();
-  }, [fileParsing, rawData]);
+  }, [shouldProcessData]);
 
-  useEffect(() => {
-    if (fileParsing) setUploadingData({ shouldProcessData: true });
-  }, [fileParsing]);
+  // useEffect(() => {
+  //   if (fileParsing) setUploadingData({ shouldProcessData: true });
+  // }, [fileParsing]);
 
   const handleUpload = (event) => {
     const [document] = event.target.files;
