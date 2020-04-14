@@ -18,7 +18,7 @@ import {
   UPDATE_UPLOAD_NOTE,
 } from "./constants";
 
-const getNextNote = (data, id, matchKey = "id") => {
+const getNextNote = (data, id, matchKey = "_id") => {
   const currentNoteIndex = data.findIndex((note) => note[matchKey] === id);
   return data[currentNoteIndex + 1];
 };
@@ -189,12 +189,13 @@ export const setNextNoteForEditing = (currentNote) => async (
 
   let nextNote;
   if (mode === "edit") {
-    nextNote = getNextNote(notes, currentNote.id);
+    nextNote = getNextNote(notes, currentNote._id);
     await dispatch(updateNote({ ...currentNote }));
   } else {
     nextNote = getNextNote(uploadingNotes, currentNote.tempId, "tempId");
     await dispatch(updateUploadNote({ ...currentNote }));
   }
+  console.log(currentNote, nextNote);
   dispatch(
     setModalMeta({
       selectedNote: nextNote,
