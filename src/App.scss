@@ -12,6 +12,16 @@ code {
   background: $green;
 }
 
+pre {
+  border: 1px solid $bar;
+  border-radius: 2px;
+  padding: 4px 8px;
+  line-height: 1.4rem;
+  & > code {
+    background: none;
+  }
+}
+
 body {
   font-family: PatrickHand;
   h1,
@@ -51,16 +61,6 @@ body {
       background: rgba($black, 0.4);
       margin: 2px;
       color: $white;
-    }
-
-    pre {
-      border: 1px solid $bar;
-      border-radius: 2px;
-      padding: 4px 8px;
-      line-height: 1.4rem;
-      & > code {
-        background: none;
-      }
     }
   }
   .ant-modal-body {
