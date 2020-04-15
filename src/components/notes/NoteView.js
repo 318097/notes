@@ -77,7 +77,7 @@ const NoteView = ({ dispatch, match, viewNote, session, history }) => {
   const { title, content, tags, type } = viewNote || {};
   return (
     <Wrapper>
-      <Card style={{ animation: `` }}>
+      <Card>
         <div className="relative">
           <h3 className="title">{title}</h3>
           {type === "POST" && (
