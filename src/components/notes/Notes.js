@@ -64,6 +64,15 @@ const NotesWrapper = styled.div`
         }
       }
     }
+    .draft-status {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 8px;
+      height: 8px;
+      background: lightgrey;
+      border-radius: 50%;
+    }
     .bulb-icon {
       position: absolute;
       bottom: 6px;
@@ -133,7 +142,7 @@ const Notes = ({
 };
 
 const NoteCard = ({
-  note: { title = "", content = "", type = "DROP", tags = [], _id },
+  note: { title = "", content = "", type = "DROP", tags = [], _id, status },
   history,
   dispatch,
 }) => {
@@ -169,6 +178,7 @@ const NoteCard = ({
         </div>
         {type === "DROP" && <Icon className="bulb-icon" type="bulb" />}
       </Card>
+      {status === "DRAFT" && <div className="draft-status"></div>}
       <Dropdown
         showDropdown={showDropdown}
         setShowDropdown={setShowDropdown}
