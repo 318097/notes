@@ -4,8 +4,7 @@ import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { Tag, Button } from "antd";
 import marked from "marked";
-
-import Card from "@bit/ml318097.mui.card";
+import { Card } from "@codedrops/react-ui";
 import Icon from "@bit/ml318097.mui.icon";
 import Dropdown from "./Dropdown";
 import Filters from "../Filters";
@@ -30,6 +29,8 @@ const NotesWrapper = styled.div`
     position: relative;
     padding: 0px;
     .card {
+      width: 100%;
+      height: 100%;
       font-size: 1.4rem;
       &:hover {
         background: ${colors.shade3};
@@ -176,7 +177,7 @@ const NoteCard = ({
             <Tag key={tag}>{tag.toUpperCase()}</Tag>
           ))}
         </div>
-        {type === "DROP" && <Icon className="bulb-icon" type="bulb" />}
+        {/* {type === "DROP" && <Icon className="bulb-icon" type="bulb" />} */}
       </Card>
       {status === "DRAFT" && <div className="draft-status"></div>}
       <Dropdown

@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { Tag } from "antd";
 import marked from "marked";
-import Card from "@bit/ml318097.mui.card";
+import { Card } from "@codedrops/react-ui";
 import Icon from "@bit/ml318097.mui.icon";
 
 import Controls from "./Controls";
@@ -22,6 +22,7 @@ const Wrapper = styled.div`
   .card {
     animation: 0.4s ${fadeInDownAnimation};
     height: 78vh;
+    width: 100%;
     padding: 10px 0 10px 5px;
     grid-column: 4/10;
     display: flex;

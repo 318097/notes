@@ -1053,20 +1053,26 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@bit/ml318097.mui.card@^0.0.1":
-  version "0.0.1"
-  resolved "https://node.bit.dev/ml318097.mui.card/-/ml318097.mui.card-0.0.1.tgz#4256f54a09a315524dd33e1a3d4a5985f6b0869c"
-  integrity sha1-Qlb1SgmjFVJN0z4aPUpZhfawhpw=
+"@bit/ml318097.mui.card@^1.0.0":
+  version "1.0.0"
+  resolved "https://node.bit.dev/ml318097.mui.card/-/ml318097.mui.card-1.0.0.tgz#b2f86cff94def80ba5effdc6dc2841a6ae03aa61"
+  integrity sha1-svhs/5Te+Aul7/3G3ChBpq4DqmE=
   dependencies:
+    "@bit/ml318097.mui.colors" "1.0.0"
     react "^16.8.6"
     styled-components "^4.4.1"
 
-"@bit/ml318097.mui.icon@^0.0.1":
-  version "0.0.1"
-  resolved "https://node.bit.dev/ml318097.mui.icon/-/ml318097.mui.icon-0.0.1.tgz#6f3c5406c84725d1171a299afad8c101ab6de4ef"
-  integrity sha1-bzxUBshHJdEXGima+tjBAatt5O8=
+"@bit/ml318097.mui.colors@1.0.0":
+  version "1.0.0"
+  resolved "https://node.bit.dev/ml318097.mui.colors/-/ml318097.mui.colors-1.0.0.tgz#15562ad50f2121c66534dd9986a957e27571f8b5"
+  integrity sha1-FVYq1Q8hIcZlNN2ZhqlX4nVx+LU=
+
+"@bit/ml318097.mui.icon@^1.0.0":
+  version "1.0.0"
+  resolved "https://node.bit.dev/ml318097.mui.icon/-/ml318097.mui.icon-1.0.0.tgz#630d2996455ceb3c954e81e2a388dd32260f9e1b"
+  integrity sha1-Yw0plkVc6zyVToHio4jdMiYPnhs=
   dependencies:
-    antd "^3.20.7"
+    "@bit/ml318097.mui.colors" "1.0.0"
     react "^16.8.6"
     styled-components "^4.4.1"
 
@@ -1077,6 +1083,11 @@
   dependencies:
     exec-sh "^0.3.2"
     minimist "^1.2.0"
+
+"@codedrops/react-ui@^0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@codedrops/react-ui/-/react-ui-0.24.0.tgz#84c236662d031d362bbf6a3db81ea258dc122d5e"
+  integrity sha512-/TLO0oSHqvG44HpMcLxJJswA4mMK/gZMQSNdnHXbQu4wC6bD5MFxHnEuRR9YsMWZ0hnieIi5JGCofZq/xQG12g==
 
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"
@@ -1895,7 +1906,7 @@ ansi-styles@^4.1.0:
     "@types/color-name" "^1.1.1"
     color-convert "^2.0.1"
 
-antd@^3.20.7, antd@^3.25.0:
+antd@^3.25.0:
   version "3.26.15"
   resolved "https://registry.yarnpkg.com/antd/-/antd-3.26.15.tgz#c5f4e5628502f9cdfb0c351c71320d5c0e2421be"
   integrity sha512-OAcfz9D1Qt+4Fme4E0DfCKuWm/1RIVrJZzaTYVCGOnVAHJjoxEtKCoCrcj/8wwCS9LbXHVci/s2u/gY+QmtCSw==

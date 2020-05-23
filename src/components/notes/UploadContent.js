@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { Button, message, PageHeader, Radio, Input, Tag } from "antd";
-import Card from "@bit/ml318097.mui.card";
+import { Card } from "@codedrops/react-ui";
 import Icon from "@bit/ml318097.mui.icon";
 import { connect } from "react-redux";
 import axios from "axios";
@@ -22,6 +22,8 @@ const Wrapper = styled.div`
     margin: 3px 0;
     position: relative;
     .card {
+      height: 100%;
+      width: 100%;
       padding: 20px 12px;
       .title {
         margin-bottom: 10px;

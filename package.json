@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@bit/ml318097.mui.card": "^0.0.1",
-    "@bit/ml318097.mui.icon": "^0.0.1",
+    "@bit/ml318097.mui.card": "^1.0.0",
+    "@bit/ml318097.mui.icon": "^1.0.0",
+    "@codedrops/react-ui": "^0.24.0",
     "antd": "^3.25.0",
     "axios": "^0.19.0",
     "marked": "^0.7.0",
