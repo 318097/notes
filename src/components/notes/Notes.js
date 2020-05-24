@@ -4,10 +4,9 @@ import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { Tag, Button } from "antd";
 import marked from "marked";
-import { Card, Icon } from "@codedrops/react-ui";
+import colors, { Card, Icon } from "@codedrops/react-ui";
 import Dropdown from "./Dropdown";
 import Filters from "../Filters";
-import colors from "../../colors";
 import { MessageWrapper } from "../../styled";
 import {
   fetchNotes,
@@ -31,6 +30,7 @@ const NotesWrapper = styled.div`
       width: 100%;
       height: 100%;
       font-size: 1.4rem;
+      overflow-x: hidden;
       &:hover {
         background: ${colors.shade3};
       }
@@ -53,14 +53,14 @@ const NotesWrapper = styled.div`
       }
       .tags {
         position: absolute;
-        bottom: 9px;
-        left: 3px;
+        bottom: 4px;
+        left: 4px;
         text-align: left;
         .ant-tag {
           cursor: pointer;
           margin-right: 3px;
           padding: 0px 4px;
-          font-size: 1.1rem;
+          font-size: 0.8rem;
         }
       }
     }
@@ -77,8 +77,7 @@ const NotesWrapper = styled.div`
       position: absolute;
       bottom: 6px;
       right: 4px;
-      z-index: 10;
-      color: green;
+      z-index: 1;
     }
   }
 `;

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { Button, message, PageHeader, Radio, Input, Tag } from "antd";
-import { Card, Icon } from "@codedrops/react-ui";
+import colors, { Card, Icon } from "@codedrops/react-ui";
 import { connect } from "react-redux";
 import axios from "axios";
 import styled from "styled-components";
@@ -39,17 +39,15 @@ const Wrapper = styled.div`
       font-style: italics;
       font-size: 1.1rem;
     }
-    .edit-icon {
+    .actions {
+      display: flex;
+      flex-direction: column;
       position: absolute;
       top: 6px;
-      right: 2px;
-      color: green;
-    }
-    .delete-icon {
-      position: absolute;
-      top: 33px;
-      right: 2px;
-      color: red;
+      right: 6px;
+      background: ${colors.bg};
+      padding: 8px 4px;
+      border-radius: 20px;
     }
   }
 `;
@@ -225,16 +223,20 @@ const UploadContent = ({
               </Card>
 
               <span className="index-number">#{i + 1}</span>
-              <Icon
-                onClick={editItem(item)}
-                className="edit-icon"
-                type="edit"
-              />
-              <Icon
-                onClick={removeItem(item.tempId)}
-                className="delete-icon"
-                type="delete"
-              />
+              <div className="actions">
+                <Icon
+                  size={12}
+                  onClick={editItem(item)}
+                  className="edit-icon"
+                  type="edit"
+                />
+                <Icon
+                  size={12}
+                  onClick={removeItem(item.tempId)}
+                  className="delete-icon"
+                  type="delete"
+                />
+              </div>
             </div>
           );
         })}

@@ -5,12 +5,11 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { Tag } from "antd";
 import marked from "marked";
-import { Card, Icon } from "@codedrops/react-ui";
+import colors, { Card, Icon } from "@codedrops/react-ui";
 import Controls from "./Controls";
 import { getNoteById } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
 import { fadeInDownAnimation } from "../../animations";
-import colors from "../../colors";
 
 const Wrapper = styled.div`
   margin-top: 20px;
@@ -18,6 +17,7 @@ const Wrapper = styled.div`
   grid-template-columns: repeat(12, 1fr);
   column-gap: 8px;
   .card {
+    overflow-x: hidden;
     animation: 0.4s ${fadeInDownAnimation};
     height: 78vh;
     width: 100%;
@@ -54,7 +54,7 @@ const Wrapper = styled.div`
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      right: -14px;
+      right: -10px;
       transition: 0.3s;
       &:hover {
         right: -4px;

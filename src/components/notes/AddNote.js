@@ -14,7 +14,7 @@ import {
   setNextNoteForEditing,
 } from "../../store/actions";
 import { generateSlug } from "../../utils";
-import colors from "../../colors";
+import colors from "@codedrops/react-ui";
 
 const StyledContainer = styled.div`
   display: flex;

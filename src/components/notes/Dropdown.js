@@ -1,18 +1,22 @@
 import React from "react";
 import styled from "styled-components";
-import { Icon } from "@codedrops/react-ui";
+import colors, { Icon } from "@codedrops/react-ui";
 import { Popconfirm } from "antd";
 
 const DropdownWrapper = styled.div`
   position: absolute;
   top: 4px;
   right: 4px;
+  .dropdown-icon {
+    padding: 4px;
+  }
   .dropdown {
+    background: ${colors.strokeOne};
     display: flex;
     flex-direction: column;
     position: absolute;
-    padding: 2px;
-    right: 0px;
+    padding: 4px 2px;
+    right: 4px;
     top: 24px;
     border-radius: 15px;
     & > * {
@@ -40,6 +44,7 @@ const Dropdown = ({ showDropdown, setShowDropdown, onEdit, onDelete }) => {
   return (
     <DropdownWrapper className="dropdown-wrapper">
       <Icon
+        size={12}
         className="dropdown-icon"
         type="menu-2"
         onClick={handleDropdownClick}
@@ -47,7 +52,7 @@ const Dropdown = ({ showDropdown, setShowDropdown, onEdit, onDelete }) => {
       {showDropdown && (
         <div className="dropdown" onClick={(event) => event.stopPropagation()}>
           {/* <Icon onClick={handleFavorite} type="heart" /> */}
-          <Icon onClick={handleEdit} type="edit" />
+          <Icon size={12} onClick={handleEdit} type="edit" />
           <Popconfirm
             title="Delete?"
             onConfirm={handleDelete}
@@ -55,7 +60,7 @@ const Dropdown = ({ showDropdown, setShowDropdown, onEdit, onDelete }) => {
             okText="Yes"
             cancelText="No"
           >
-            <Icon type="delete" />
+            <Icon size={12} type="delete" />
           </Popconfirm>
         </div>
       )}

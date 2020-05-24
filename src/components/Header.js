@@ -3,13 +3,13 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { Spin, Divider, Icon as AntIcon } from "antd";
 import { withRouter, Link } from "react-router-dom";
-import colors from "../colors";
+
 import {
   setSession,
   toggleSettingsDrawer,
   setModalMeta,
 } from "../store/actions";
-import { Icon } from "@codedrops/react-ui";
+import colors, { Icon } from "@codedrops/react-ui";
 
 const antIcon = <AntIcon type="loading" spin />;
 
@@ -29,11 +29,11 @@ const Container = styled.header`
     transition: 2s;
     font-weight: bold;
     a {
-      color: ${colors.black};
+      color: ${colors.bar};
       & > span {
         text-decoration: underline;
         font-size: 2.4rem;
-        color: ${colors.black2};
+        color: ${colors.bar};
       }
     }
   }
@@ -59,7 +59,7 @@ const UserInfo = styled.div`
     top: 1;
   }
   .username {
-    padding-left: 8px;
+    padding: 0 8px;
     text-transform: uppercase;
     font-size: 1.2rem;
   }
@@ -81,12 +81,17 @@ const Header = ({ history, dispatch, appLoading, session }) => {
       </h3>
       {session && (
         <div className="controls">
-          <Icon type="home" onClick={() => history.push("/home")} />
+          <Icon background type="home" onClick={() => history.push("/home")} />
           <Icon
+            background
             type="plus"
             onClick={() => dispatch(setModalMeta({ visibility: true }))}
           />
-          <Icon type="upload" onClick={() => history.push("/upload")} />
+          <Icon
+            background
+            type="upload"
+            onClick={() => history.push("/upload")}
+          />
           <Divider type="vertical" />
 
           <UserInfo>
@@ -94,10 +99,11 @@ const Header = ({ history, dispatch, appLoading, session }) => {
             {/* <Icon className="profile-icon" type="user" /> */}
           </UserInfo>
           <Icon
+            background
             type="settings"
             onClick={() => dispatch(toggleSettingsDrawer(true))}
           />
-          <Icon type="logout" onClick={signOut} />
+          <Icon background type="logout" onClick={signOut} />
         </div>
       )}
     </Container>

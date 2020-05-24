@@ -1,5 +1,5 @@
 @import "./Common.scss";
-@import "./theme.scss";
+@import "@codedrops/react-ui/dist/styles/colors.scss";
 
 pre,
 pre code,
@@ -10,6 +10,10 @@ code {
 
 code {
   background: $green;
+  padding: 2px;
+  border-radius: 2px;
+  color: $white;
+  padding: 3px 2px 1px;
 }
 
 pre {
@@ -75,6 +79,6 @@ body {
 
 .viewed {
   .card {
-    background: #e7ffde;
+    background: #f8f8f8;
   }
 }
