@@ -9,7 +9,7 @@ import {
   toggleSettingsDrawer,
   setModalMeta,
 } from "../store/actions";
-import Icon from "./Icon";
+import { Icon } from "@codedrops/react-ui";
 
 const antIcon = <AntIcon type="loading" spin />;
 
@@ -91,10 +91,10 @@ const Header = ({ history, dispatch, appLoading, session }) => {
 
           <UserInfo>
             <div className="username">{session.name}</div>
-            <Icon className="profile-icon" type="user" />
+            {/* <Icon className="profile-icon" type="user" /> */}
           </UserInfo>
           <Icon
-            type="setting"
+            type="settings"
             onClick={() => dispatch(toggleSettingsDrawer(true))}
           />
           <Icon type="logout" onClick={signOut} />

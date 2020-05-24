@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Icon from "@bit/ml318097.mui.icon";
+import { Icon } from "@codedrops/react-ui";
 import { Popconfirm } from "antd";
 
 const DropdownWrapper = styled.div`
@@ -32,20 +32,20 @@ const Dropdown = ({ showDropdown, setShowDropdown, onEdit, onDelete }) => {
     setShowDropdown(false);
   };
 
-  const handleDropdownClick = event => {
+  const handleDropdownClick = (event) => {
     event.stopPropagation();
-    setShowDropdown(prevState => !prevState);
+    setShowDropdown((prevState) => !prevState);
   };
 
   return (
     <DropdownWrapper className="dropdown-wrapper">
       <Icon
         className="dropdown-icon"
-        type="more"
+        type="menu-2"
         onClick={handleDropdownClick}
       />
       {showDropdown && (
-        <div className="dropdown" onClick={event => event.stopPropagation()}>
+        <div className="dropdown" onClick={(event) => event.stopPropagation()}>
           {/* <Icon onClick={handleFavorite} type="heart" /> */}
           <Icon onClick={handleEdit} type="edit" />
           <Popconfirm

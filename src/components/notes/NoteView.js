@@ -5,9 +5,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { Tag } from "antd";
 import marked from "marked";
-import { Card } from "@codedrops/react-ui";
-import Icon from "@bit/ml318097.mui.icon";
-
+import { Card, Icon } from "@codedrops/react-ui";
 import Controls from "./Controls";
 import { getNoteById } from "../../store/actions";
 import { copyToClipboard } from "../../utils";

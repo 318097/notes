@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { Button, message, PageHeader, Radio, Input, Tag } from "antd";
-import { Card } from "@codedrops/react-ui";
-import Icon from "@bit/ml318097.mui.icon";
+import { Card, Icon } from "@codedrops/react-ui";
 import { connect } from "react-redux";
 import axios from "axios";
 import styled from "styled-components";

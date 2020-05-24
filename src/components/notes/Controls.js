@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 import { updateNote } from "../../store/actions";
 import { copyToClipboard, generateSlug } from "../../utils";
-import Icon from "../Icon";
+import { Icon } from "@codedrops/react-ui";
 import colors from "../../colors";
 
 const ControlsWrapper = styled.div`

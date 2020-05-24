@@ -1053,29 +1053,6 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@bit/ml318097.mui.card@^1.0.0":
-  version "1.0.0"
-  resolved "https://node.bit.dev/ml318097.mui.card/-/ml318097.mui.card-1.0.0.tgz#b2f86cff94def80ba5effdc6dc2841a6ae03aa61"
-  integrity sha1-svhs/5Te+Aul7/3G3ChBpq4DqmE=
-  dependencies:
-    "@bit/ml318097.mui.colors" "1.0.0"
-    react "^16.8.6"
-    styled-components "^4.4.1"
-
-"@bit/ml318097.mui.colors@1.0.0":
-  version "1.0.0"
-  resolved "https://node.bit.dev/ml318097.mui.colors/-/ml318097.mui.colors-1.0.0.tgz#15562ad50f2121c66534dd9986a957e27571f8b5"
-  integrity sha1-FVYq1Q8hIcZlNN2ZhqlX4nVx+LU=
-
-"@bit/ml318097.mui.icon@^1.0.0":
-  version "1.0.0"
-  resolved "https://node.bit.dev/ml318097.mui.icon/-/ml318097.mui.icon-1.0.0.tgz#630d2996455ceb3c954e81e2a388dd32260f9e1b"
-  integrity sha1-Yw0plkVc6zyVToHio4jdMiYPnhs=
-  dependencies:
-    "@bit/ml318097.mui.colors" "1.0.0"
-    react "^16.8.6"
-    styled-components "^4.4.1"
-
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"
@@ -1084,10 +1061,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@codedrops/react-ui@^0.24.0":
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/@codedrops/react-ui/-/react-ui-0.24.0.tgz#84c236662d031d362bbf6a3db81ea258dc122d5e"
-  integrity sha512-/TLO0oSHqvG44HpMcLxJJswA4mMK/gZMQSNdnHXbQu4wC6bD5MFxHnEuRR9YsMWZ0hnieIi5JGCofZq/xQG12g==
+"@codedrops/react-ui@^0.25.0":
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/@codedrops/react-ui/-/react-ui-0.25.0.tgz#e7beed639f3461be5df683c9d6f3fbc398988866"
+  integrity sha512-7Xrl7quH0560kgeqTRD12VjXjAAesQUcDWcg+4Hh4+wyzN3Avm4BSlbt3nfA1AKkrIs3aPppkYa8mKdHXoIgDw==
 
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"
@@ -9552,7 +9529,7 @@ react-slick@~0.25.2:
     lodash.debounce "^4.0.8"
     resize-observer-polyfill "^1.5.0"
 
-react@^16.8.6, react@^16.9.0:
+react@^16.9.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
   integrity sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==
