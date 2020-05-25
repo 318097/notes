@@ -79,7 +79,7 @@ const AddNote = ({
     try {
       if (mode === "edit") await updateNote({ ...note });
       else if (mode === "add") await addNote({ ...note, userId: session.uid });
-      else await updateUploadNote({ ...note });
+      else await updateUploadNote({ ...note, viewed: true });
     } finally {
       setLoading(false);
       handleClose();
