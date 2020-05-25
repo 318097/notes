@@ -2,9 +2,9 @@ import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
-import { Tag, Button } from "antd";
+import { Button, Icon as AntIcon } from "antd";
 import marked from "marked";
-import colors, { Card, Icon } from "@codedrops/react-ui";
+import colors, { Card, Icon, Tag } from "@codedrops/react-ui";
 import Dropdown from "./Dropdown";
 import Filters from "../Filters";
 import { MessageWrapper } from "../../styled";
@@ -19,7 +19,7 @@ const NotesWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, 215px);
   justify-content: center;
-  column-gap: 6px;
+  gap: 20px;
   .card-wrapper {
     margin: 3px 0;
     height: 115px;
@@ -49,6 +49,7 @@ const NotesWrapper = styled.div`
         padding: 5px;
         position: absolute;
         top: 50%;
+        left: 0;
         transform: translateY(-50%);
       }
       .tags {
@@ -56,28 +57,32 @@ const NotesWrapper = styled.div`
         bottom: 4px;
         left: 4px;
         text-align: left;
-        .ant-tag {
+        .tag {
           cursor: pointer;
-          margin-right: 3px;
           padding: 0px 4px;
           font-size: 0.8rem;
         }
       }
     }
-    .draft-status {
+    .status-row {
       position: absolute;
-      top: 6px;
-      left: 6px;
-      width: 8px;
-      height: 8px;
-      background: lightgrey;
-      border-radius: 50%;
-    }
-    .bulb-icon {
-      position: absolute;
-      bottom: 6px;
-      right: 4px;
-      z-index: 1;
+      top: calc(100% + 4px);
+      width: 100%;
+      display: flex;
+      align-items: center;
+      padding-left: 2px;
+      .anticon {
+        margin: 0 1px;
+      }
+      .dot {
+        margin: 0 1px;
+        background: lightgrey;
+        border-radius: 20px;
+        display: inline-block;
+        width: max-content;
+        font-size: 0.8rem;
+        padding: 0 8px;
+      }
     }
   }
 `;
@@ -141,7 +146,16 @@ const Notes = ({
 };
 
 const NoteCard = ({
-  note: { title = "", content = "", type = "DROP", tags = [], _id, status },
+  note: {
+    title = "",
+    content = "",
+    type = "DROP",
+    tags = [],
+    _id,
+    status,
+    visible,
+    socialStatus,
+  },
   history,
   dispatch,
 }) => {
@@ -175,9 +189,29 @@ const NoteCard = ({
             <Tag key={tag}>{tag.toUpperCase()}</Tag>
           ))}
         </div>
-        {type === "DROP" && <Icon className="bulb-icon" type="bulb" />}
       </Card>
-      {status === "DRAFT" && <div className="draft-status"></div>}
+      <div className="status-row">
+        {type === "DROP" && (
+          <Icon className="bulb-icon" type="bulb" size={12} />
+        )}
+        <AntIcon type={`${visible ? "eye" : "eye-invisible"}`} />
+        <div
+          className="dot"
+          style={{
+            background: status === "POSTED" ? "lightgreen" : "lightgrey",
+          }}
+        >
+          STATUS
+        </div>
+        <div
+          className="dot"
+          style={{
+            background: status === "POSTED" ? "lightgreen" : "lightgrey",
+          }}
+        >
+          SOCIAL
+        </div>
+      </div>
       <Dropdown
         showDropdown={showDropdown}
         setShowDropdown={setShowDropdown}
