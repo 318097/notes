@@ -195,12 +195,11 @@ export const setNextNoteForEditing = (currentNote) => async (
     nextNote = getNextNote(uploadingNotes, currentNote.tempId, "tempId");
     await dispatch(updateUploadNote({ ...currentNote }));
   }
-  console.log(currentNote, nextNote);
   dispatch(
     setModalMeta({
       selectedNote: nextNote,
       mode,
-      visibility: true,
+      visibility: !!nextNote,
     })
   );
 };
