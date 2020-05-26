@@ -13,37 +13,7 @@ const Wrapper = styled.div`
 `;
 
 const Settings = ({ session, settingsDrawerVisibility, dispatch, tags }) => {
-  const [data, setData] = useState("");
-
-  useEffect(() => {
-    if (!session) return;
-    fetchTags();
-  }, [session]);
-
-  const fetchTags = async () => {
-    const {
-      data: { tags }
-    } = await axios.get("/posts/tags");
-    dispatch(
-      setTags(
-        tags.map(({ _id, color, name }) => ({
-          _id,
-          color,
-          label: name.toUpperCase(),
-          value: name
-        }))
-      )
-    );
-  };
-
   const handleClose = () => dispatch(toggleSettingsDrawer(false));
-
-  const addTag = async () => {
-    await axios.post("/posts/tags", { name: data });
-    setData("");
-    fetchTags();
-  };
-
   return (
     <Drawer
       title="Settings"
@@ -52,29 +22,75 @@ const Settings = ({ session, settingsDrawerVisibility, dispatch, tags }) => {
       onClose={handleClose}
       visible={settingsDrawerVisibility}
     >
-      <Wrapper>
-        <h3>Tags</h3>
-        {tags.map(({ label }) => (
-          <Tag key={label}>{label}</Tag>
-        ))}
-        <div style={{ marginTop: "8px" }}>
-          <Input
-            placehoder="Tag name"
-            style={{ width: "150px" }}
-            value={data}
-            onChange={({ target: { value } }) => setData(value)}
-          />
-          <Button onClick={addTag}>Add</Button>
-        </div>
-      </Wrapper>
+      <TagsList session={session} dispatch={dispatch} tags={tags} />
     </Drawer>
+  );
+};
+
+const TagsList = ({ session, dispatch, tags }) => {
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    if (!session) return;
+    fetchTags();
+  }, [session]);
+
+  const fetchTags = async () => {
+    const {
+      data: { tags },
+    } = await axios.get("/posts/tags");
+    dispatch(
+      setTags(
+        tags.map(({ _id, color, name }) => ({
+          _id,
+          color,
+          label: name.toUpperCase(),
+          value: name,
+        }))
+      )
+    );
+  };
+
+  const addTag = async () => {
+    await axios.post("/posts/tags", { ...data });
+    setData({});
+    fetchTags();
+  };
+  return (
+    <Wrapper>
+      <h3>Tags</h3>
+      {tags.map(({ label, color }) => (
+        <Tag key={label} color={color}>
+          {label}
+        </Tag>
+      ))}
+      <div style={{ marginTop: "8px" }}>
+        <Input
+          placeholder="Tag name"
+          value={data.name}
+          onChange={({ target: { value } }) =>
+            setData((prev) => ({ ...prev, name: value }))
+          }
+        />
+        <br />
+        <Input
+          placeholder="Color code"
+          value={data.color}
+          onChange={({ target: { value } }) =>
+            setData((prev) => ({ ...prev, color: value }))
+          }
+        />
+        <br />
+        <Button onClick={addTag}>Add</Button>
+      </div>
+    </Wrapper>
   );
 };
 
 const mapStateToProps = ({ session, settingsDrawerVisibility, tags }) => ({
   session,
   settingsDrawerVisibility,
-  tags
+  tags,
 });
 
 export default connect(mapStateToProps)(Settings);
