@@ -23,14 +23,13 @@ const NotesWrapper = styled.div`
   .card-wrapper {
     margin: 3px 0;
     height: 115px;
-    cursor: pointer;
     position: relative;
     padding: 0px;
     .card {
+      cursor: pointer;
       width: 100%;
       height: 100%;
       font-size: 1.4rem;
-      overflow-x: hidden;
       &:hover {
         background: ${colors.shade3};
       }
@@ -74,7 +73,7 @@ const NotesWrapper = styled.div`
       .anticon {
         margin: 0 1px;
       }
-      .dot {
+      .state {
         margin: 0 1px;
         background: lightgrey;
         border-radius: 20px;
@@ -176,7 +175,7 @@ const NoteCard = ({
 
   return (
     <div className="card-wrapper" onClick={handleClick(_id)}>
-      <Card>
+      <Card curved>
         {type === "POST" && <h3 className="title">{title}</h3>}
         {type === "DROP" && (
           <div
@@ -196,7 +195,7 @@ const NoteCard = ({
         )}
         <AntIcon type={`${visible ? "eye" : "eye-invisible"}`} />
         <div
-          className="dot"
+          className="state"
           style={{
             background: status === "POSTED" ? "lightgreen" : "lightgrey",
           }}
@@ -204,7 +203,7 @@ const NoteCard = ({
           STATUS
         </div>
         <div
-          className="dot"
+          className="state"
           style={{
             background: status === "POSTED" ? "lightgreen" : "lightgrey",
           }}

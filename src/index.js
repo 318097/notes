@@ -5,6 +5,7 @@ import { PersistGate } from "redux-persist/integration/react";
 
 import "./index.scss";
 import "antd/dist/antd.css";
+import "@codedrops/react-ui/dist/styles/custom-styles.scss";
 
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
