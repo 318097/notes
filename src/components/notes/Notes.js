@@ -71,16 +71,16 @@ const NotesWrapper = styled.div`
       align-items: center;
       padding-left: 2px;
       .anticon {
-        margin: 0 1px;
+        margin: 0 2px;
       }
       .state {
-        margin: 0 1px;
-        background: lightgrey;
-        border-radius: 20px;
+        color: white;
+        margin: 0 2px;
+        border-radius: 28px;
         display: inline-block;
         width: max-content;
         font-size: 0.8rem;
-        padding: 0 8px;
+        padding: 1px 8px;
       }
     }
   }
@@ -197,7 +197,7 @@ const NoteCard = ({
         <div
           className="state"
           style={{
-            background: status === "POSTED" ? "lightgreen" : "lightgrey",
+            background: status === "POSTED" ? colors.green : colors.bar,
           }}
         >
           STATUS
@@ -205,7 +205,7 @@ const NoteCard = ({
         <div
           className="state"
           style={{
-            background: status === "POSTED" ? "lightgreen" : "lightgrey",
+            background: status === "POSTED" ? colors.green : colors.bar,
           }}
         >
           SOCIAL
