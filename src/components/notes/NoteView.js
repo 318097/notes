@@ -18,7 +18,7 @@ const Wrapper = styled.div`
   column-gap: 8px;
   .card {
     overflow-x: hidden;
-    animation: 0.4s ${fadeInDownAnimation};
+    animation: 0.2s ${fadeInDownAnimation};
     height: 78vh;
     width: 100%;
     padding: 10px 0 10px 5px;
