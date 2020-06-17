@@ -65,10 +65,11 @@ const NotesWrapper = styled.div`
     }
     .status-row {
       position: absolute;
-      top: calc(100% + 4px);
+      top: 100%;
       width: 100%;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       padding-left: 2px;
       .anticon {
         margin: 0 2px;
@@ -190,25 +191,30 @@ const NoteCard = ({
         </div>
       </Card>
       <div className="status-row">
-        {type === "DROP" && (
-          <Icon className="bulb-icon" type="bulb" size={12} />
-        )}
-        <AntIcon type={`${visible ? "eye" : "eye-invisible"}`} />
-        <div
-          className="state"
-          style={{
-            background: status === "POSTED" ? colors.green : colors.bar,
-          }}
-        >
-          STATUS
+        <div>
+          <div
+            className="state"
+            style={{
+              background: status === "POSTED" ? colors.green : colors.bar,
+            }}
+          >
+            STATUS
+          </div>
+          <div
+            className="state"
+            style={{
+              background: status === "POSTED" ? colors.green : colors.bar,
+            }}
+          >
+            SOCIAL
+          </div>
         </div>
-        <div
-          className="state"
-          style={{
-            background: status === "POSTED" ? colors.green : colors.bar,
-          }}
-        >
-          SOCIAL
+
+        <div>
+          {type === "DROP" && (
+            <Icon className="bulb-icon" type="bulb" size={12} />
+          )}
+          <AntIcon type={`${visible ? "eye" : "eye-invisible"}`} />
         </div>
       </div>
       <Dropdown
