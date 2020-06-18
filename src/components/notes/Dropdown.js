@@ -51,7 +51,6 @@ const Dropdown = ({ showDropdown, setShowDropdown, onEdit, onDelete }) => {
       />
       {showDropdown && (
         <div className="dropdown" onClick={(event) => event.stopPropagation()}>
-          {/* <Icon onClick={handleFavorite} type="heart" /> */}
           <Icon size={12} onClick={handleEdit} type="edit" />
           <Popconfirm
             title="Delete?"
