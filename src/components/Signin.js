@@ -2,42 +2,41 @@ import React, { useState, useEffect } from "react";
 import { Input, Button, message } from "antd";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
-import { setLocalSession } from "../authService";
+import { setSessionInStorage } from "../authService";
 import { StyledSection } from "../styled";
 import { setSession } from "../store/actions";
 import { connect } from "react-redux";
 
 const initialState = {
   password: "",
-  username: ""
+  username: "",
 };
 
-const Signin = ({ history, dispatch, session }) => {
+const Signin = ({ history, setSession, session }) => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(initialState);
 
   useEffect(() => {
-    if (!session) return;
+    if (session && session.loggedIn) history.push("/");
+  }, []);
 
-    if (session.loggedIn) history.push("/");
-  }, [session]);
-
-  const handleInput = key => ({ target: { value } }) =>
-    setForm(data => ({ ...data, [key]: value }));
+  const handleInput = (key) => ({ target: { value } }) =>
+    setForm((data) => ({ ...data, [key]: value }));
 
   const handleSignin = async () => {
     setLoading(true);
     try {
-      const {
-        data: { token, user }
-      } = await axios.post("/auth/login", form);
+      const { data } = await axios.post("/auth/login", form);
 
-      setLocalSession({ ...user, token });
-
-      dispatch(setSession({ loggedIn: true, info: "LOGIN" }));
-      history.push("/");
+      setSessionInStorage(data);
+      await setSession({
+        loggedIn: true,
+        info: "LOGIN",
+        ...data,
+      });
+      axios.defaults.headers.common["authorization"] = data.token;
+      setTimeout(() => history.push("/"), 400);
     } catch (err) {
-      console.log(err);
       const { response: { data: errorMessage = "Error." } = {} } = err;
       message.error(errorMessage);
     } finally {
@@ -74,7 +73,7 @@ const Signin = ({ history, dispatch, session }) => {
 };
 
 const mapStateToProps = ({ session }) => ({
-  session
+  session,
 });
 
-export default connect(mapStateToProps)(withRouter(Signin));
+export default connect(mapStateToProps, { setSession })(withRouter(Signin));

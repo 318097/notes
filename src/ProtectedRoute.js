@@ -1,16 +1,27 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
 import { connect } from "react-redux";
-const ProtectedRoute = ({ component: Component, path, session, ...rest }) => {
-  const isLoggedIn = !!session;
+import _ from "lodash";
+
+const ProtectedRoute = ({
+  component: Component,
+  path,
+  loggedIn,
+  session,
+  ...rest
+}) => {
   return (
     <Route
       path={path}
       render={() =>
-        isLoggedIn ? <Component {...rest} /> : <Redirect to="/signin" />
+        loggedIn ? <Component {...rest} /> : <Redirect to="/signin" />
       }
     />
   );
 };
 
-export default ProtectedRoute;
+const mapStateToProps = (state) => ({
+  loggedIn: _.get(state, "session.loggedIn"),
+});
+
+export default connect(mapStateToProps)(ProtectedRoute);

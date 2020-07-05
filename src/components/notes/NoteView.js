@@ -24,6 +24,7 @@ const Wrapper = styled.div`
     padding: 10px 0 10px 5px;
     grid-column: 4/10;
     display: flex;
+    background: ${colors.bg};
     flex-direction: column;
     .title {
       text-align: center;
