@@ -19,13 +19,11 @@ const NotesWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, 215px);
   justify-content: center;
-  gap: 20px;
+  gap: 16px;
   .card-wrapper {
-    margin: 3px 0;
-    height: 115px;
-    position: relative;
-    padding: 0px;
     .card {
+      position: relative;
+      height: 115px !important;
       cursor: pointer;
       width: 100%;
       height: 100%;
@@ -51,10 +49,16 @@ const NotesWrapper = styled.div`
         left: 0;
         transform: translateY(-50%);
       }
+    }
+    .action-row {
+      background: #fcfcfc;
+      border: 1px solid ${colors.bg};
+      border-radius: 2px;
+      position: relative;
+      padding: 4px;
+      height: 53px;
+      top: -5px;
       .tags {
-        position: absolute;
-        bottom: 4px;
-        left: 4px;
         text-align: left;
         .tag {
           cursor: pointer;
@@ -62,26 +66,22 @@ const NotesWrapper = styled.div`
           font-size: 0.8rem;
         }
       }
-    }
-    .status-row {
-      position: absolute;
-      top: 100%;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-left: 2px;
-      .anticon {
-        margin: 0 2px;
-      }
-      .state {
-        color: white;
-        margin: 0 2px;
-        border-radius: 28px;
-        display: inline-block;
-        width: max-content;
-        font-size: 0.8rem;
-        padding: 1px 8px;
+      .status-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .anticon {
+          margin: 0 2px;
+        }
+        .state {
+          color: white;
+          margin: 0 2px;
+          border-radius: 28px;
+          display: inline-block;
+          width: max-content;
+          font-size: 0.8rem;
+          padding: 1px 8px;
+        }
       }
     }
   }
@@ -175,8 +175,8 @@ const NoteCard = ({
   };
 
   return (
-    <div className="card-wrapper" onClick={handleClick(_id)}>
-      <Card curved>
+    <div className="card-wrapper">
+      <Card onClick={handleClick(_id)}>
         {type === "POST" && <h3 className="title">{title}</h3>}
         {type === "DROP" && (
           <div
@@ -184,45 +184,47 @@ const NoteCard = ({
             dangerouslySetInnerHTML={{ __html: marked(content) }}
           ></div>
         )}
+        <Dropdown
+          showDropdown={showDropdown}
+          setShowDropdown={setShowDropdown}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
+      </Card>
+      <div className="action-row">
         <div className="tags">
           {tags.map((tag) => (
             <Tag key={tag}>{tag.toUpperCase()}</Tag>
           ))}
         </div>
-      </Card>
-      <div className="status-row">
-        <div>
-          <div
-            className="state"
-            style={{
-              background: status === "POSTED" ? colors.green : colors.bar,
-            }}
-          >
-            STATUS
+        <div className="status-row">
+          <div>
+            <div
+              className="state"
+              style={{
+                background: status === "POSTED" ? colors.green : colors.bar,
+              }}
+            >
+              STATUS
+            </div>
+            <div
+              className="state"
+              style={{
+                background: status === "POSTED" ? colors.green : colors.bar,
+              }}
+            >
+              SOCIAL
+            </div>
           </div>
-          <div
-            className="state"
-            style={{
-              background: status === "POSTED" ? colors.green : colors.bar,
-            }}
-          >
-            SOCIAL
-          </div>
-        </div>
 
-        <div>
-          {type === "DROP" && (
-            <Icon className="bulb-icon" type="bulb" size={12} />
-          )}
-          <AntIcon type={`${visible ? "eye" : "eye-invisible"}`} />
+          <div>
+            {type === "DROP" && (
+              <Icon className="bulb-icon" type="bulb" size={12} />
+            )}
+            <AntIcon type={`${visible ? "eye" : "eye-invisible"}`} />
+          </div>
         </div>
       </div>
-      <Dropdown
-        showDropdown={showDropdown}
-        setShowDropdown={setShowDropdown}
-        onEdit={onEdit}
-        onDelete={onDelete}
-      />
     </div>
   );
 };
