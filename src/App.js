@@ -47,7 +47,7 @@ const App = ({ setSession, session }) => {
 
   return (
     <div className="container">
-      <Header />
+      <Header loading={loading} />
       <div className="content">
         {!loading && (
           <Switch>

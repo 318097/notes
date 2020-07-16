@@ -65,7 +65,7 @@ const UserInfo = styled.div`
   }
 `;
 
-const Header = ({ history, dispatch, appLoading, session }) => {
+const Header = ({ history, dispatch, appLoading, session, loading }) => {
   const signOut = async () => {
     dispatch(setSession(null));
     sessionStorage.clear();
@@ -76,7 +76,8 @@ const Header = ({ history, dispatch, appLoading, session }) => {
     <Container>
       <h3>
         <Link to="/home">
-          <span>N</span>otes App {appLoading && <Spin indicator={antIcon} />}
+          <span>N</span>otes App{" "}
+          {(appLoading || loading) && <Spin indicator={antIcon} />}
         </Link>
       </h3>
       {session && (
