@@ -7,7 +7,7 @@ import { Tag } from "antd";
 import marked from "marked";
 import colors, { Card, Icon } from "@codedrops/react-ui";
 import Controls from "./Controls";
-import { getNoteById } from "../../store/actions";
+import { getNoteById, setModalMeta } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
 import { fadeInDownAnimation } from "../../animations";
 
@@ -38,19 +38,20 @@ const Wrapper = styled.div`
     }
     .back-icon {
       position: absolute;
-      background: ${colors.bar};
-      color: white;
       top: 5px;
       left: 5px;
       z-index: 10;
       padding: 5px;
       border-radius: 30px;
-      transition: 1s;
+      transition: 0.4s;
       &:hover {
-        background: ${colors.bar};
-        color: white;
-        transform: scale(1.2);
+        background: ${colors.strokeOne};
       }
+    }
+    .edit-icon {
+      position: absolute;
+      right: 5px;
+      bottom: 5px;
     }
     .copy-icon {
       position: absolute;
@@ -72,6 +73,15 @@ const NoteView = ({ dispatch, match, viewNote, session, history }) => {
   useEffect(() => {
     if (session) dispatch(getNoteById(match.params.id));
   }, [match.params]);
+
+  const handleEdit = () =>
+    dispatch(
+      setModalMeta({
+        selectedNote: viewNote,
+        mode: "edit",
+        visibility: true,
+      })
+    );
 
   if (!viewNote) return null;
 
@@ -109,6 +119,12 @@ const NoteView = ({ dispatch, match, viewNote, session, history }) => {
           className="back-icon"
           onClick={() => history.push("/home")}
           type="caret-left"
+        />
+        <Icon
+          size={12}
+          onClick={handleEdit}
+          className="edit-icon"
+          type="edit"
         />
       </Card>
       <Controls note={viewNote} />
