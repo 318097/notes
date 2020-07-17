@@ -19,14 +19,14 @@ const NotesWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, 215px);
   justify-content: center;
-  gap: 16px;
+  column-gap: 16px;
+  row-gap: 12px;
   .card-wrapper {
     .card {
       position: relative;
-      height: 115px !important;
+      height: 115px;
       cursor: pointer;
       width: 100%;
-      height: 100%;
       font-size: 1.4rem;
       &:hover {
         background: ${colors.shade3};
@@ -51,12 +51,12 @@ const NotesWrapper = styled.div`
       }
     }
     .action-row {
-      background: #fcfcfc;
-      border: 1px solid ${colors.bg};
-      border-radius: 2px;
       position: relative;
-      padding: 4px;
+      padding: 6px;
       height: 53px;
+      min-height: unset;
+      overflow: visible;
+      width: 100%;
       top: -5px;
       .tags {
         text-align: left;
@@ -191,7 +191,7 @@ const NoteCard = ({
           onDelete={onDelete}
         />
       </Card>
-      <div className="action-row">
+      <Card className="action-row">
         <div className="tags">
           {tags.map((tag) => (
             <Tag key={tag}>{tag.toUpperCase()}</Tag>
@@ -224,7 +224,7 @@ const NoteCard = ({
             <AntIcon type={`${visible ? "eye" : "eye-invisible"}`} />
           </div>
         </div>
-      </div>
+      </Card>
     </div>
   );
 };
