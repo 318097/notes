@@ -7,6 +7,7 @@ import axios from "axios";
 import styled from "styled-components";
 import uuid from "uuid";
 import marked from "marked";
+import { MessageWrapper } from "../../styled";
 
 import { setModalMeta, setUploadingData } from "../../store/actions";
 import { generateSlug } from "../../utils";
@@ -197,46 +198,50 @@ const UploadContent = ({
           </span>,
         ]}
       />
-      <Wrapper>
-        {data.map((item, i) => {
-          const { title = "", content = "", tags = [], viewed } = item;
-          return (
-            <div
-              className={`card-wrapper ${viewed ? "viewed" : ""}`}
-              key={item.tempId}
-            >
-              <Card>
-                <h3 className="title">{title}</h3>
-                <div
-                  className="content"
-                  dangerouslySetInnerHTML={{ __html: marked(content) }}
-                ></div>
-                <div className="tags">
-                  {tags.map((tag) => (
-                    <Tag key={tag}>{tag.toUpperCase()}</Tag>
-                  ))}
-                </div>
-              </Card>
+      {data.length ? (
+        <Wrapper>
+          {data.map((item, i) => {
+            const { title = "", content = "", tags = [], viewed } = item;
+            return (
+              <div
+                className={`card-wrapper ${viewed ? "viewed" : ""}`}
+                key={item.tempId}
+              >
+                <Card>
+                  <h3 className="title">{title}</h3>
+                  <div
+                    className="content"
+                    dangerouslySetInnerHTML={{ __html: marked(content) }}
+                  ></div>
+                  <div className="tags">
+                    {tags.map((tag) => (
+                      <Tag key={tag}>{tag.toUpperCase()}</Tag>
+                    ))}
+                  </div>
+                </Card>
 
-              <span className="index-number">#{i + 1}</span>
-              <div className="actions">
-                <Icon
-                  size={12}
-                  onClick={editItem(item)}
-                  className="edit-icon"
-                  type="edit"
-                />
-                <Icon
-                  size={12}
-                  onClick={removeItem(item.tempId)}
-                  className="delete-icon"
-                  type="delete"
-                />
+                <span className="index-number">#{i + 1}</span>
+                <div className="actions">
+                  <Icon
+                    size={12}
+                    onClick={editItem(item)}
+                    className="edit-icon"
+                    type="edit"
+                  />
+                  <Icon
+                    size={12}
+                    onClick={removeItem(item.tempId)}
+                    className="delete-icon"
+                    type="delete"
+                  />
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </Wrapper>
+            );
+          })}
+        </Wrapper>
+      ) : (
+        <MessageWrapper>EMPTY</MessageWrapper>
+      )}
       <input
         ref={inputEl}
         type="file"

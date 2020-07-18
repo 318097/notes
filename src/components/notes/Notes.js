@@ -100,22 +100,16 @@ const Notes = ({
   meta,
   filters,
 }) => {
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
-    if (session && !notes.length) dispatch(fetchNotes());
-  }, [session, dispatch]);
+    if (!notes.length) dispatch(fetchNotes());
+  }, [dispatch]);
 
-  useEffect(() => {
-    if (!appLoading) setLoading(false);
-  }, [notes, appLoading]);
-
-  if (loading) return <Fragment />;
+  if (appLoading) return <Fragment />;
 
   return (
     <section>
       <Filters className="filters" />
-      {notes.length && !loading ? (
+      {notes.length ? (
         <div
           style={{ overflow: "auto", height: "100%", paddingBottom: "30px" }}
         >
