@@ -104,6 +104,7 @@ const UploadContent = ({
     reader.readAsText(document);
     reader.onload = () =>
       setUploadingData({ rawData: reader.result, shouldProcessData: true });
+    event.target.value = null;
   };
 
   const processData = () => {
