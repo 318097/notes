@@ -83,6 +83,10 @@ const NotesWrapper = styled.div`
           padding: 1px 8px;
         }
       }
+      .index {
+        font-style: italic;
+        color: ${colors.bar};
+      }
     }
   }
 `;
@@ -155,6 +159,7 @@ const NoteCard = ({
     status,
     visible,
     socialStatus,
+    index,
   },
   history,
   dispatch,
@@ -218,6 +223,7 @@ const NoteCard = ({
           </div>
 
           <div>
+            {!!index && <span className="index">{`#${index}`}</span>}
             {type === "DROP" && (
               <Icon className="bulb-icon" type="bulb" size={12} />
             )}

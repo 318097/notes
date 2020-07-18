@@ -109,9 +109,9 @@ export const addNote = (note) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
 
-    await axios.post(`/posts`, { data: note });
-
-    dispatch({ type: ADD_NOTE, payload: note });
+    const { data } = await axios.post(`/posts`, { data: note });
+    console.log(data);
+    dispatch({ type: ADD_NOTE, payload: _.get(data, "result.0") });
   } finally {
     dispatch(setAppLoading(false));
   }

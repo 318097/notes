@@ -63,6 +63,13 @@ const Wrapper = styled.div`
         right: -4px;
       }
     }
+    .index {
+      position: absolute;
+      top: 4px;
+      right: 10px;
+      font-style: italic;
+      color: ${colors.bar};
+    }
   }
   .controls {
     grid-column: 10/11;
@@ -85,7 +92,7 @@ const NoteView = ({ dispatch, match, viewNote, session, history }) => {
 
   if (!viewNote) return null;
 
-  const { title, content, tags, type } = viewNote || {};
+  const { title, content, tags, type, index } = viewNote || {};
   return (
     <Wrapper>
       <Card>
@@ -126,6 +133,7 @@ const NoteView = ({ dispatch, match, viewNote, session, history }) => {
           className="edit-icon"
           type="edit"
         />
+        {!!index && <span className="index">{`#${index}`}</span>}
       </Card>
       <Controls note={viewNote} />
     </Wrapper>
