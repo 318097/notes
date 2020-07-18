@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Radio, Switch } from "antd";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import _ from "lodash";
 
 import { updateNote } from "../../store/actions";
 import { copyToClipboard, generateSlug } from "../../utils";
@@ -11,7 +12,7 @@ const ControlsWrapper = styled.div`
   background: white;
   margin-bottom: 8px;
   width: 218px;
-  padding: 12px;
+  padding: 8px;
   border-radius: 12px;
   border: 1px solid ${colors.shade2};
   box-shadow: 3px 3px 3px ${colors.shade2};
@@ -19,12 +20,12 @@ const ControlsWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
   .hashtag {
     margin: 1px 2px;
     padding: 1px 3px;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     display: inline-block;
   }
   .slug {
@@ -36,6 +37,18 @@ const ControlsWrapper = styled.div`
     overflow: hidden;
     text-align: center;
     border-radius: 4px;
+    font-size: 1rem;
+  }
+  .resource-id {
+    background: ${colors.strokeOne};
+    text-overflow: ellipsis;
+    padding: 0px 2px;
+    overflow: hidden;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  .ant-radio-wrapper {
+    font-size: 12px;
   }
 `;
 
@@ -59,6 +72,7 @@ const Controls = ({ note, dispatch }) => {
     await dispatch(updateNote({ _id: note._id, [key]: value }));
 
   const slug = generateSlug(note.title, "_");
+
   return (
     <div className="controls">
       <ControlsWrapper>
@@ -67,6 +81,28 @@ const Controls = ({ note, dispatch }) => {
           <Icon type="copy" onClick={() => copyToClipboard(slug)} />
         </div>
         <div className="slug">{slug}</div>
+        <div className="header">
+          <h4>Resources</h4>
+          <Icon
+            type="plus"
+            size={10}
+            onClick={() => dispatch(updateNote(note, "CREATE_RESOURCE"))}
+          />
+        </div>
+
+        {_.get(note, "resources", []).map((resource) => (
+          <div
+            className="flex center"
+            style={{ marginBottom: "2px", justifyContent: "space-between" }}
+          >
+            <div className="resource-id">{resource}</div>
+            <Icon
+              size={12}
+              type="copy"
+              onClick={() => copyToClipboard(resource)}
+            />
+          </div>
+        ))}
 
         <div className="divider"></div>
 
@@ -85,8 +121,7 @@ const Controls = ({ note, dispatch }) => {
               </span>
             ))}
         </div>
-      </ControlsWrapper>
-      <ControlsWrapper>
+        <div className="divider"></div>
         <div className="flex align-center">
           <span style={{ marginRight: "4px" }}>Visible</span>
           <Switch

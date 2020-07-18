@@ -3,13 +3,13 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { Spin, Divider, Icon as AntIcon } from "antd";
 import { withRouter, Link } from "react-router-dom";
+import colors, { Icon } from "@codedrops/react-ui";
 
 import {
   setSession,
   toggleSettingsDrawer,
   setModalMeta,
 } from "../store/actions";
-import colors, { Icon } from "@codedrops/react-ui";
 
 const antIcon = <AntIcon type="loading" spin />;
 

@@ -1,4 +1,6 @@
 import axios from "axios";
+import moment from "moment";
+import _ from "lodash";
 
 import {
   SET_SESSION,
@@ -131,11 +133,23 @@ export const setNoteToEdit = (noteId, mode = "edit") => async (
   });
 };
 
-export const updateNote = (note) => async (dispatch, getState) => {
+export const updateNote = (note, action) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
 
-    await axios.put(`/posts/${note._id}`, { ...note });
+    if (action === "CREATE_RESOURCE") {
+      const resourceId = `${note.slug}-${moment().format("DD_MM_YYYY")}-${
+        _.get(note, "resources.length", 0) + 1
+      }`;
+      await axios.put(
+        `/posts/${note._id}?action=${action}&value=${resourceId}`,
+        {}
+      );
+
+      if (!note["resources"]) note["resources"] = [];
+
+      note["resources"].push(resourceId);
+    } else await axios.put(`/posts/${note._id}`, { ...note });
 
     dispatch({ type: UPDATE_NOTE, payload: note });
   } finally {
