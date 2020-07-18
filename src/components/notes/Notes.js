@@ -86,6 +86,7 @@ const NotesWrapper = styled.div`
       .index {
         font-style: italic;
         color: ${colors.bar};
+        margin-right: 3px;
       }
     }
   }

@@ -5,8 +5,8 @@ import { Popconfirm } from "antd";
 
 const DropdownWrapper = styled.div`
   position: absolute;
-  top: 4px;
-  right: 4px;
+  top: 0px;
+  right: 0px;
   .dropdown-icon {
     padding: 4px;
   }
