@@ -16,18 +16,22 @@ import {
 } from "../../store/actions";
 
 const NotesWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 215px);
-  justify-content: center;
-  column-gap: 16px;
-  row-gap: 12px;
+  columns: 220px;
+  padding: 0 28px;
+  column-gap: 12px;
   .card-wrapper {
+    margin-bottom: 8px;
     .card {
+      break-inside: avoid-column;
       position: relative;
       height: 115px;
+      margin: 0;
+      min-height: unset;
       cursor: pointer;
       width: 100%;
       font-size: 1.4rem;
+      overflow: visible;
+      padding: 20px 8px;
       &:hover {
         background: ${colors.shade3};
       }
@@ -42,12 +46,8 @@ const NotesWrapper = styled.div`
       .content {
         font-size: inherit;
         width: 100%;
-        overflow: auto;
-        padding: 5px;
-        position: absolute;
-        top: 50%;
-        left: 0;
-        transform: translateY(-50%);
+        overflow-x: auto;
+        padding: 0;
       }
     }
     .action-row {
@@ -175,7 +175,10 @@ const NoteCard = ({
 
   return (
     <div className="card-wrapper">
-      <Card onClick={handleClick(_id)}>
+      <Card
+        onClick={handleClick(_id)}
+        style={{ height: type === "DROP" ? "auto" : "115px" }}
+      >
         {type === "POST" && <h3 className="title">{title}</h3>}
         {type === "DROP" && (
           <div
