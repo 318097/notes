@@ -78,7 +78,7 @@ const parseItem = (item, type = "POST") => {
 
 const UploadContent = ({
   setModalMeta,
-  uploadingData: { rawData, data, dataType, shouldProcessData },
+  uploadingData: { rawData, data, dataType, shouldProcessData, fileName },
   setUploadingData,
 }) => {
   const [loading, setLoading] = useState(false);
@@ -99,11 +99,14 @@ const UploadContent = ({
     const [document] = event.target.files;
 
     if (!document) return;
-
     const reader = new FileReader();
     reader.readAsText(document);
     reader.onload = () =>
-      setUploadingData({ rawData: reader.result, shouldProcessData: true });
+      setUploadingData({
+        rawData: reader.result,
+        shouldProcessData: true,
+        fileName: document.name,
+      });
     event.target.value = null;
   };
 
@@ -121,6 +124,7 @@ const UploadContent = ({
           tempId: uuid(),
           slug: generateSlug(title),
           viewed: false,
+          fileName,
         };
       })
       .filter((item) => item.title || item.content);

@@ -41,6 +41,7 @@ const initialState = {
     data: [],
     dataType: "POST",
     shouldProcessData: true,
+    fileName: null,
   },
 };
 
