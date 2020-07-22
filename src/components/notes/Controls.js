@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Radio, Switch } from "antd";
+import { Radio, Switch, message } from "antd";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import _ from "lodash";
+import colors, { Icon } from "@codedrops/react-ui";
 
 import { updateNote } from "../../store/actions";
 import { copyToClipboard, generateSlug } from "../../utils";
-import colors, { Icon } from "@codedrops/react-ui";
 
 const ControlsWrapper = styled.div`
   background: white;
@@ -38,6 +38,11 @@ const ControlsWrapper = styled.div`
     text-align: center;
     border-radius: 4px;
     font-size: 1rem;
+    transition: 0.4s;
+    cursor: pointer;
+    &:hover {
+      background: ${colors.green};
+    }
   }
   .resource-id {
     background: ${colors.strokeOne};
@@ -46,6 +51,12 @@ const ControlsWrapper = styled.div`
     overflow: hidden;
     border-radius: 4px;
     font-size: 1rem;
+    margin-bottom: 2px;
+    cursor: pointer;
+    transition: 0.4s;
+    &:hover {
+      background: ${colors.strokeTwo};
+    }
   }
   .ant-radio-wrapper {
     font-size: 12px;
@@ -73,14 +84,17 @@ const Controls = ({ note, dispatch }) => {
 
   const slug = generateSlug(note.title, "_");
 
+  const copy = (text) => () => {
+    copyToClipboard(text);
+    message.info(`Copied - ${text}`);
+  };
+
   return (
     <div className="controls">
       <ControlsWrapper>
-        <div className="header">
-          <h4>Name</h4>
-          <Icon type="copy" onClick={() => copyToClipboard(slug)} />
+        <div className="slug" onClick={copy(slug)}>
+          {slug}
         </div>
-        <div className="slug">{slug}</div>
         <div className="header">
           <h4>Resources</h4>
           <Icon
@@ -91,16 +105,8 @@ const Controls = ({ note, dispatch }) => {
         </div>
 
         {_.get(note, "resources", []).map((resource) => (
-          <div
-            className="flex center"
-            style={{ marginBottom: "2px", justifyContent: "space-between" }}
-          >
-            <div className="resource-id">{resource}</div>
-            <Icon
-              size={12}
-              type="copy"
-              onClick={() => copyToClipboard(resource)}
-            />
+          <div className="resource-id" onClick={copy(resource)}>
+            {resource}
           </div>
         ))}
 

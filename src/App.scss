@@ -18,7 +18,8 @@ code {
 
 pre {
   border: 1px solid rgba($black, 0.4);
-  border-radius: 2px;
+  background: $feather;
+  border-radius: 4px;
   padding: 4px 8px;
   line-height: 1.4rem;
   & > code {
