@@ -88,7 +88,7 @@ const UploadContent = ({
 
   useEffect(() => {
     if (dataType === "POST") setFileParsing("===[\r\n]");
-    else if (dataType === "DROP") setFileParsing("[\r\n]");
+    else if (dataType === "DROP") setFileParsing("\n");
   }, [dataType]);
 
   useEffect(() => {
