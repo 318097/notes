@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
@@ -8,17 +8,39 @@ import colors, { Card, Icon, Tag } from "@codedrops/react-ui";
 import Dropdown from "./Dropdown";
 import Filters from "../Filters";
 import { MessageWrapper } from "../../styled";
-import {
-  fetchNotes,
-  setNoteToEdit,
-  deleteNote,
-  setFilter,
-} from "../../store/actions";
+import { setNoteToEdit, deleteNote, setFilter } from "../../store/actions";
 
-const NotesWrapper = styled.div`
-  columns: 220px;
-  padding: 0 28px;
-  column-gap: 12px;
+const PageWrapper = styled.div`
+  margin-bottom: 25px;
+  .page-splitter {
+    display: block;
+    width: 80%;
+    margin: 20px 30px 25px;
+    position: relative;
+    span {
+      padding: 0 12px;
+      display: inline-block;
+      position: relative;
+      left: 20px;
+      background: ${colors.strokeOne};
+      font-size: 1rem;
+    }
+    &:after {
+      content: "";
+      z-index: -1;
+      display: block;
+      width: 100%;
+      height: 1px;
+      position: absolute;
+      top: 50%;
+      background: ${colors.strokeOne};
+    }
+  }
+  .notes-wrapper {
+    columns: 220px;
+    padding: 0 28px;
+    column-gap: 12px;
+  }
   .card-wrapper {
     margin-bottom: 8px;
     .card {
@@ -76,11 +98,11 @@ const NotesWrapper = styled.div`
         .state {
           color: white;
           margin: 0 2px;
-          border-radius: 28px;
+          border-radius: 4px;
           display: inline-block;
           width: max-content;
           font-size: 0.8rem;
-          padding: 1px 8px;
+          padding: 1px 4px;
         }
       }
       .index {
@@ -92,20 +114,14 @@ const NotesWrapper = styled.div`
   }
 `;
 
-const Notes = ({
-  notes,
-  appLoading,
-  history,
-  dispatch,
-  session,
-  meta,
-  filters,
-}) => {
+const Notes = ({ notes, history, dispatch, meta, filters }) => {
   useEffect(() => {
-    if (!notes.length) dispatch(fetchNotes());
+    dispatch(setFilter({}));
   }, [dispatch]);
 
-  if (appLoading) return <Fragment />;
+  const noteChunks = Array(Math.floor(notes.length / 25))
+    .fill(null)
+    .map((_, index) => notes.slice(index * 25, index * 25 + 25));
 
   return (
     <section>
@@ -114,16 +130,25 @@ const Notes = ({
         <div
           style={{ overflow: "auto", height: "100%", paddingBottom: "30px" }}
         >
-          <NotesWrapper>
-            {notes.map((note) => (
-              <NoteCard
-                key={note._id}
-                note={note}
-                history={history}
-                dispatch={dispatch}
-              />
-            ))}
-          </NotesWrapper>
+          {noteChunks.map((chunk, index) => (
+            <PageWrapper key={index}>
+              <div className="notes-wrapper">
+                {chunk.map((note) => (
+                  <NoteCard
+                    key={note._id}
+                    note={note}
+                    history={history}
+                    dispatch={dispatch}
+                  />
+                ))}
+              </div>
+              {index < noteChunks.length - 1 && (
+                <div className="page-splitter">
+                  <span>{`Page: ${index + 2}`}</span>
+                </div>
+              )}
+            </PageWrapper>
+          ))}
           {notes.length && notes.length < meta.count && (
             <div className="flex center">
               <Button
@@ -213,7 +238,8 @@ const NoteCard = ({
             <div
               className="state"
               style={{
-                background: status === "POSTED" ? colors.green : colors.bar,
+                background:
+                  socialStatus === "POSTED" ? colors.green : colors.bar,
               }}
             >
               SOCIAL

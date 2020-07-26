@@ -44,7 +44,7 @@ const Dropdown = ({ showDropdown, setShowDropdown, onEdit, onDelete }) => {
   return (
     <DropdownWrapper className="dropdown-wrapper">
       <Icon
-        size={12}
+        size={10}
         className="dropdown-icon"
         type="menu-2"
         onClick={handleDropdownClick}
