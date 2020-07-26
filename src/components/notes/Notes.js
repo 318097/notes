@@ -119,7 +119,7 @@ const Notes = ({ notes, history, dispatch, meta, filters }) => {
     dispatch(setFilter({}));
   }, [dispatch]);
 
-  const noteChunks = Array(Math.floor(notes.length / 25))
+  const noteChunks = Array(Math.ceil(notes.length / 25))
     .fill(null)
     .map((_, index) => notes.slice(index * 25, index * 25 + 25));
 
