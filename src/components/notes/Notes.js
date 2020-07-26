@@ -227,23 +227,26 @@ const NoteCard = ({
         </div>
         <div className="status-row">
           <div>
-            <div
-              className="state"
-              style={{
-                background: status === "POSTED" ? colors.green : colors.bar,
-              }}
-            >
-              STATUS
-            </div>
-            <div
-              className="state"
-              style={{
-                background:
-                  socialStatus === "POSTED" ? colors.green : colors.bar,
-              }}
-            >
-              SOCIAL
-            </div>
+            {status !== "DRAFT" && (
+              <div
+                className="state"
+                style={{
+                  background: status === "POSTED" ? "seagreen" : "orange",
+                }}
+              >
+                STATUS
+              </div>
+            )}
+            {socialStatus !== "NONE" && (
+              <div
+                className="state"
+                style={{
+                  background: socialStatus === "POSTED" ? "seagreen" : "orange",
+                }}
+              >
+                SOCIAL STATUS
+              </div>
+            )}
           </div>
 
           <div>
