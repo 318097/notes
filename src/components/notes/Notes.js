@@ -55,11 +55,13 @@ const PageWrapper = styled.div`
       overflow: visible;
       padding: 20px 8px;
       &:hover {
-        background: ${colors.shade3};
+        background: ${colors.feather};
       }
       .title {
         font-size: inherit;
         text-align: center;
+      }
+      .post-title {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -205,7 +207,12 @@ const NoteCard = ({
         onClick={handleClick(_id)}
         style={{ height: type === "DROP" ? "auto" : "115px" }}
       >
-        {type === "POST" && <h3 className="title">{title}</h3>}
+        {!!title && (
+          <h3 className={type === "POST" ? "title post-title" : "title"}>
+            {title}
+          </h3>
+        )}
+
         {type === "DROP" && (
           <div
             className="content"
