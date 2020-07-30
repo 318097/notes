@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
@@ -37,7 +37,7 @@ const PageWrapper = styled.div`
     }
   }
   .notes-wrapper {
-    columns: 220px;
+    columns: 240px;
     padding: 0 28px;
     column-gap: 12px;
   }
@@ -116,10 +116,35 @@ const PageWrapper = styled.div`
   }
 `;
 
-const Notes = ({ notes, history, dispatch, meta, filters }) => {
+const scrollToPosition = (ref, offset) => {
+  let position = 0;
+  const increment = offset / 10;
+  const interval = setInterval(() => {
+    ref.scrollTop = position;
+    position += increment;
+    if (position >= offset) clearInterval(interval);
+  }, 50);
+};
+
+const Notes = ({ notes, history, dispatch, meta, filters, session }) => {
+  const scrollRef = useRef();
+
   useEffect(() => {
     dispatch(setFilter({}));
-  }, [dispatch]);
+  }, []);
+
+  useEffect(() => {
+    if (!scrollRef.current) return;
+    const offset = sessionStorage.getItem("scroll");
+    console.log(offset);
+    scrollToPosition(scrollRef.current, offset);
+  }, [scrollRef]);
+
+  const handleClick = (_id) => (event) => {
+    event.stopPropagation();
+    history.push(`/note/${_id}`);
+    sessionStorage.setItem("scroll", scrollRef.current.scrollTop);
+  };
 
   const noteChunks = Array(Math.ceil(notes.length / 25))
     .fill(null)
@@ -131,6 +156,7 @@ const Notes = ({ notes, history, dispatch, meta, filters }) => {
       {notes.length ? (
         <div
           style={{ overflow: "auto", height: "100%", paddingBottom: "30px" }}
+          ref={scrollRef}
         >
           {noteChunks.map((chunk, index) => (
             <PageWrapper key={index}>
@@ -140,7 +166,7 @@ const Notes = ({ notes, history, dispatch, meta, filters }) => {
                     key={note._id}
                     note={note}
                     history={history}
-                    dispatch={dispatch}
+                    handleClick={handleClick}
                   />
                 ))}
               </div>
@@ -183,15 +209,10 @@ const NoteCard = ({
     socialStatus,
     index,
   },
-  history,
+  handleClick,
   dispatch,
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-
-  const handleClick = (_id) => (event) => {
-    event.stopPropagation();
-    history.push(`/note/${_id}`);
-  };
 
   const onEdit = () => {
     dispatch(setNoteToEdit(_id));

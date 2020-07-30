@@ -7,7 +7,7 @@ import { Tag } from "antd";
 import marked from "marked";
 import colors, { Card, Icon } from "@codedrops/react-ui";
 import Controls from "./Controls";
-import { getNoteById, setModalMeta } from "../../store/actions";
+import { getNoteById, setModalMeta, setSession } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
 import { fadeInDownAnimation } from "../../animations";
 
@@ -90,6 +90,11 @@ const NoteView = ({ dispatch, match, viewNote, session, history }) => {
       })
     );
 
+  const goBack = () => {
+    history.push("/home");
+    dispatch(setSession({ retainPage: true }));
+  };
+
   if (!viewNote) return null;
 
   const { title, content, tags, type, index } = viewNote || {};
@@ -122,11 +127,7 @@ const NoteView = ({ dispatch, match, viewNote, session, history }) => {
             <Tag key={index}>{tag.toUpperCase()}</Tag>
           ))}
         </div>
-        <Icon
-          className="back-icon"
-          onClick={() => history.push("/home")}
-          type="caret-left"
-        />
+        <Icon className="back-icon" onClick={goBack} type="caret-left" />
         <Icon
           size={12}
           onClick={handleEdit}

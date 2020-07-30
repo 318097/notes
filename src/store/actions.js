@@ -61,7 +61,13 @@ export const setFilter = (filterUpdate, resetPage = true) => async (
   dispatch,
   getState
 ) => {
-  const { filters } = getState();
+  const {
+    filters,
+    session: { retainPage },
+  } = getState();
+  if (retainPage)
+    return dispatch({ type: SET_SESSION, payload: { retainPage: false } });
+
   const updatedFiters = { ...filters, ...filterUpdate };
   if (resetPage) updatedFiters["page"] = 1;
   dispatch({ type: UPDATE_FILTER, payload: updatedFiters });
