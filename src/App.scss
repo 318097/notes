@@ -23,6 +23,7 @@ pre {
   padding: 4px 8px;
   line-height: 1.4rem;
   & > code {
+    cursor: pointer;
     background: none;
   }
 }

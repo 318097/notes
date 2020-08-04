@@ -136,8 +136,8 @@ const Notes = ({ notes, history, dispatch, meta, filters, session }) => {
   useEffect(() => {
     if (!scrollRef.current) return;
     const offset = sessionStorage.getItem("scroll");
-    console.log(offset);
     scrollToPosition(scrollRef.current, offset);
+    sessionStorage.clear();
   }, [scrollRef]);
 
   const handleClick = (_id) => (event) => {

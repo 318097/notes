@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Radio, Switch, message } from "antd";
+import { Radio, Switch } from "antd";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import _ from "lodash";
@@ -86,7 +86,6 @@ const Controls = ({ note, dispatch }) => {
 
   const copy = (text) => () => {
     copyToClipboard(text);
-    message.info(`Copied - ${text}`);
   };
 
   return (
