@@ -64,6 +64,7 @@ body {
     .showingCount {
       padding: 4px 6px;
       margin: 2px;
+      text-transform: uppercase;
     }
   }
   .ant-modal-body {
@@ -71,8 +72,8 @@ body {
     height: 80vh;
     overflow: hidden;
   }
-  .CodeMirror {
-    height: 220px !important;
+  .CodeMirror.CodeMirror-wrap {
+    height: 220px;
   }
 }
 

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { Spin, Divider, Icon as AntIcon, Select } from "antd";
+import { Spin, Divider, Icon as AntIcon } from "antd";
 import { withRouter, Link } from "react-router-dom";
 import colors, { Icon } from "@codedrops/react-ui";
+import _ from "lodash";
 import Filters from "./Filters";
 
 import {
@@ -37,6 +38,12 @@ const Container = styled.header`
       }
     }
   }
+  .icon {
+    transition: 0.4s;
+    &:hover {
+      background: ${colors.strokeOne};
+    }
+  }
   .controls {
     flex: 0 0 auto;
     display: flex;
@@ -51,7 +58,7 @@ const UserInfo = styled.div`
   margin: 0;
   margin-right: 6px;
   border-radius: 20px;
-  background: lightgrey;
+  background: #f3f3f3;
   align-items: center;
   .profile-icon {
     right: -4px;
@@ -66,6 +73,12 @@ const UserInfo = styled.div`
 `;
 
 const Header = ({ history, dispatch, appLoading, session, loading }) => {
+  const [showFilters, setShowFilters] = useState(false);
+
+  useEffect(() => {
+    setShowFilters(_.get(history, "location.pathname") === "/home");
+  }, [history.location]);
+
   const signOut = async () => {
     dispatch(setSession(null));
     sessionStorage.clear();
@@ -80,7 +93,7 @@ const Header = ({ history, dispatch, appLoading, session, loading }) => {
           {(appLoading || loading) && <Spin indicator={antIcon} />}
         </Link>
       </h3>
-      <Filters />
+      {showFilters && <Filters />}
       {session && (
         <div className="controls">
           <Icon background type="home" onClick={() => history.push("/home")} />
