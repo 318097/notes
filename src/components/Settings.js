@@ -1,19 +1,56 @@
 import React, { useState, useEffect } from "react";
-import { Drawer, Tag, Input, Button } from "antd";
+import { Drawer, Tag, Input, Button, Select, Divider, message } from "antd";
 import { connect } from "react-redux";
+import _ from "lodash";
+import short from "short-uuid";
+import { toggleSettingsDrawer, setTags, setSession } from "../store/actions";
+import colors from "@codedrops/react-ui";
 import axios from "axios";
-import styled from "styled-components";
 
-import { toggleSettingsDrawer, setTags } from "../store/actions";
+const { TextArea } = Input;
+const { Option } = Select;
 
-const Wrapper = styled.div`
-  .ant-tag {
-    margin: 2px 4px 2px 0;
-  }
-`;
+const Settings = ({
+  settingsDrawerVisibility,
+  settings,
+  session,
+  activeCollection,
+  toggleSettingsDrawer,
+  setSession,
+}) => {
+  const [collections, setCollections] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [active, setActive] = useState(activeCollection);
 
-const Settings = ({ session, settingsDrawerVisibility, dispatch, tags }) => {
-  const handleClose = () => dispatch(toggleSettingsDrawer(false));
+  useEffect(() => {
+    if (!session.notesApp) return;
+    setCollections(Object.entries(session.notesApp));
+  }, [session.notesApp]);
+
+  const [settingId = "", settingData = {}] =
+    collections.find(([id]) => id === active) || [];
+
+  const handleClose = () => toggleSettingsDrawer(false);
+
+  const saveSettings = async (newSettings) => {
+    setLoading(true);
+    try {
+      const updatedSettings = {
+        ..._.get(session, "notesApp", {}),
+        [settingId]: newSettings,
+      };
+      await setSession({
+        settings: updatedSettings,
+      });
+      await axios.put(`/users/${session._id}`, { notesApp: updatedSettings });
+      message.success(`Settings updated.`);
+      toggleSettingsDrawer();
+    } catch (err) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Drawer
       title="Settings"
@@ -22,75 +59,154 @@ const Settings = ({ session, settingsDrawerVisibility, dispatch, tags }) => {
       onClose={handleClose}
       visible={settingsDrawerVisibility}
     >
-      <TagsList session={session} dispatch={dispatch} tags={tags} />
+      <Header
+        collections={collections}
+        setCollections={setCollections}
+        activeCollection={active}
+        setActive={setActive}
+      />
+      <CollectionInfo
+        settingData={settingData}
+        saveSettings={saveSettings}
+        loading={loading}
+      />
     </Drawer>
   );
 };
 
-const TagsList = ({ session, dispatch, tags }) => {
-  const [data, setData] = useState({});
-
-  useEffect(() => {
-    if (!session) return;
-    fetchTags();
-  }, [session]);
-
-  const fetchTags = async () => {
-    const {
-      data: { tags },
-    } = await axios.get("/posts/tags");
-    dispatch(
-      setTags(
-        tags.map(({ _id, color, name }) => ({
-          _id,
-          color,
-          label: name.toUpperCase(),
-          value: name,
-        }))
-      )
-    );
+const Header = ({
+  collections,
+  setCollections,
+  activeCollection,
+  setActive,
+}) => {
+  const addNewCollection = () => {
+    const id = short.generate();
+    const details = {
+      tags: [],
+      name: "Untitled",
+      caption: "",
+      index: 1,
+    };
+    setCollections((prev) => [...prev, [id, details]]);
+    setActive(id);
   };
 
-  const addTag = async () => {
-    await axios.post("/posts/tags", { ...data });
-    setData({});
-    fetchTags();
-  };
   return (
-    <Wrapper>
-      <h3>Tags</h3>
-      {tags.map(({ label, color }) => (
-        <Tag key={label} color={color}>
-          {label}
-        </Tag>
-      ))}
-      <div style={{ marginTop: "8px" }}>
-        <Input
-          placeholder="Tag name"
-          value={data.name}
-          onChange={({ target: { value } }) =>
-            setData((prev) => ({ ...prev, name: value }))
-          }
-        />
-        <br />
-        <Input
-          placeholder="Color code"
-          value={data.color}
-          onChange={({ target: { value } }) =>
-            setData((prev) => ({ ...prev, color: value }))
-          }
-        />
-        <br />
-        <Button onClick={addTag}>Add</Button>
-      </div>
-    </Wrapper>
+    <div className="flex space-between">
+      <Select
+        onChange={setActive}
+        style={{ width: 120 }}
+        placeholder="Collections"
+        value={activeCollection}
+      >
+        {collections.map(([id, config]) => (
+          <Option key={id} value={id}>
+            {_.get(config, "name", "")}
+          </Option>
+        ))}
+      </Select>
+      <Button onClick={addNewCollection} icon="plus"></Button>
+    </div>
   );
 };
 
-const mapStateToProps = ({ session, settingsDrawerVisibility, tags }) => ({
+const CollectionInfo = ({ settingData, saveSettings, loading }) => {
+  const [data, setData] = useState({});
+  const [newTag, setNewTag] = useState({ label: "", color: "" });
+
+  useEffect(() => {
+    if (!settingData) return;
+    setData({ ...settingData });
+  }, [settingData]);
+
+  const handleChange = (update) => setData((prev) => ({ ...prev, ...update }));
+
+  const addNewTag = () => {
+    const tags = _.get(data, "tags");
+    handleChange({ tags: [...tags, newTag] });
+  };
+
+  const { name = "", tags = [] } = data;
+  return (
+    <div>
+      <Divider />
+      <div>
+        <h6>Name</h6>
+        <Input
+          placeholder="title"
+          value={name}
+          onChange={(e) => handleChange({ name: e.target.value })}
+        />
+      </div>
+      <div>
+        <h6>Tags</h6>
+        {tags.map(({ label, color }) => (
+          <Tag key={label} color={color}>
+            {label}
+          </Tag>
+        ))}
+        <div
+          style={{
+            margin: "12px 0",
+            padding: "8px",
+            background: colors.feather,
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            <Input
+              placeholder="Tag name"
+              value={newTag.label}
+              onChange={({ target: { value } }) =>
+                setNewTag((prev) => ({ ...prev, label: value }))
+              }
+            />
+            <Input
+              placeholder="Color code"
+              value={newTag.color}
+              onChange={({ target: { value } }) =>
+                setNewTag((prev) => ({ ...prev, color: value }))
+              }
+            />
+          </div>
+          <Button size="small" onClick={addNewTag}>
+            Add
+          </Button>
+        </div>
+      </div>
+      <div>
+        <h6>Caption</h6>
+        <TextArea
+          placeholder="Caption"
+          value={data.caption}
+          onChange={(e) => handleChange({ caption: e.target.value })}
+        />
+      </div>
+      <Button
+        loading={loading}
+        type="primary"
+        style={{ marginTop: "20px" }}
+        onClick={() => saveSettings(data)}
+      >
+        Save
+      </Button>
+    </div>
+  );
+};
+
+const mapStateToProps = ({
   session,
   settingsDrawerVisibility,
-  tags,
+  settings,
+  activeCollection,
+}) => ({
+  session: session || {},
+  settingsDrawerVisibility,
+  settings,
+  activeCollection,
 });
 
-export default connect(mapStateToProps)(Settings);
+export default connect(mapStateToProps, {
+  toggleSettingsDrawer,
+  setSession,
+})(Settings);

@@ -23,10 +23,7 @@ const ControlsWrapper = styled.div`
     margin-bottom: 4px;
   }
   .hashtag {
-    margin: 1px 2px;
-    padding: 1px 3px;
     font-size: 1.1rem;
-    display: inline-block;
   }
   .slug {
     background: ${colors.primary};
@@ -63,20 +60,16 @@ const ControlsWrapper = styled.div`
   }
 `;
 
-const defaultTags = [
-  "#Web",
-  "#WebDevelopment",
-  "#Tech",
-  "#Coding",
-  "#Developer",
-];
+const defaultTags =
+  "#Web #WebDevelopment #Tech #Coding #Developer #DevelopersLife #DeveloperLife #WebDeveloper #SoftwareDeveloper #SoftwareEngineer #Javascript #JS #JavascriptDeveloper #JavascriptTutorial #JavascriptEngineer #JavascriptLearning #JavascriptLover #LearnJavascript #JavascriptTips #JavascriptIsLife #JavascriptNinja";
 
 const Controls = ({ note, dispatch }) => {
-  const [hashtags, setHashtags] = useState([]);
+  const [hashtags, setHashtags] = useState("");
 
   useEffect(() => {
     if (!note) return;
-    setHashtags([...defaultTags, ...note.tags.map((tag) => `#${tag}`)]);
+    const tags = note.tags.map((tag) => `#${tag}`).join(" ");
+    setHashtags(`${defaultTags}, ${tags}`);
   }, [note]);
 
   const updateProperties = async (key, value) =>
@@ -118,14 +111,7 @@ const Controls = ({ note, dispatch }) => {
             onClick={() => copyToClipboard(hashtags.join(" "))}
           />
         </div>
-        <div>
-          {note &&
-            hashtags.map((tag) => (
-              <span className="hashtag" key={tag}>
-                {tag}
-              </span>
-            ))}
-        </div>
+        <div>{note && <div className="hashtag">{hashtags}</div>}</div>
         <div className="divider"></div>
         <div className="flex align-center">
           <span style={{ marginRight: "4px" }}>Visible</span>

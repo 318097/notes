@@ -108,13 +108,13 @@ const NoteView = ({ dispatch, match, viewNote, session, history }) => {
 
   if (!viewNote) return null;
 
-  const { title, content, tags, type, index } = viewNote || {};
+  const { title, content, tags, index } = viewNote || {};
   return (
     <Wrapper>
       <Card>
         <div className="relative">
           <h3 className="title">{title}</h3>
-          {type === "POST" && (
+          {title && (
             <Icon
               className="copy-icon"
               type="copy"
@@ -138,6 +138,7 @@ const NoteView = ({ dispatch, match, viewNote, session, history }) => {
             <Tag key={index}>{tag.toUpperCase()}</Tag>
           ))}
         </div>
+
         <Icon className="back-icon" onClick={goBack} type="caret-left" />
         <Icon
           size={12}

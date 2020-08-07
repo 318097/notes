@@ -10,25 +10,22 @@ const status = [
   { label: "ALL", value: "" },
   { label: "DRAFT", value: "DRAFT" },
   { label: "READY", value: "READY" },
-  { label: "POSTED", value: "POSTED" }
+  { label: "POSTED", value: "POSTED" },
 ];
 const socialStatus = [
   { label: "NONE", value: "" },
   { label: "READY", value: "READY" },
-  { label: "POSTED", value: "POSTED" }
+  { label: "POSTED", value: "POSTED" },
 ];
 
 const validateFilters = ({ socialStatus, status, search, tags = [] } = {}) =>
   socialStatus || status || search || tags.length;
 
 const Filters = ({ dispatch, filters, notes, meta, tags }) => {
-  const setFilterValues = filter => dispatch(setFilter({ ...filter }));
+  const setFilterValues = (filter) => dispatch(setFilter({ ...filter }));
 
   return (
-    <div
-      className="flex center align-center"
-      style={{ flexShrink: 0, paddingBottom: "12px" }}
-    >
+    <div className="flex center align-center" style={{ flexShrink: 0 }}>
       {validateFilters(filters) ? (
         <Button
           type="dashed"
@@ -37,7 +34,7 @@ const Filters = ({ dispatch, filters, notes, meta, tags }) => {
               tags: [],
               socialStatus: "",
               status: "",
-              search: ""
+              search: "",
             })
           }
         >
@@ -49,13 +46,13 @@ const Filters = ({ dispatch, filters, notes, meta, tags }) => {
         className="input-width"
         placeholder="Search..."
         defaultValue={filters.search}
-        onSearch={value => setFilterValues({ search: value })}
+        onSearch={(value) => setFilterValues({ search: value })}
       />
       <Select
         className="input-width"
         placeholder="Post Status"
         value={filters.status}
-        onChange={value => setFilterValues({ status: value })}
+        onChange={(value) => setFilterValues({ status: value })}
       >
         {status.map(({ label, value }) => (
           <Option key={value} value={value}>
@@ -67,7 +64,7 @@ const Filters = ({ dispatch, filters, notes, meta, tags }) => {
         className="input-width"
         placeholder="Social Status"
         value={filters.socialStatus}
-        onChange={value => setFilterValues({ socialStatus: value })}
+        onChange={(value) => setFilterValues({ socialStatus: value })}
       >
         {socialStatus.map(({ label, value }) => (
           <Option key={value} value={value}>
@@ -80,7 +77,7 @@ const Filters = ({ dispatch, filters, notes, meta, tags }) => {
         mode="multiple"
         placeholder="Tags"
         value={filters.tags}
-        onChange={values => setFilterValues({ tags: values })}
+        onChange={(values) => setFilterValues({ tags: values })}
       >
         {tags.map(({ label, value, _id }) => (
           <Option key={_id} value={value}>
@@ -101,7 +98,7 @@ const mapStateToProps = ({ filters, notes, meta, tags }) => ({
   filters,
   notes,
   meta,
-  tags
+  tags,
 });
 
 export default connect(mapStateToProps)(Filters);

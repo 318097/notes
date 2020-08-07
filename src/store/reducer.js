@@ -1,3 +1,4 @@
+import _ from "lodash";
 import {
   SET_SESSION,
   SET_SETTINGS,
@@ -14,6 +15,7 @@ import {
   SET_TAGS,
   SET_UPLOADING_DATA,
   UPDATE_UPLOAD_NOTE,
+  SET_ACTIVE_COLLECTION,
 } from "./constants";
 
 const initialState = {
@@ -30,6 +32,7 @@ const initialState = {
     page: 1,
     limit: 25,
   },
+  activeCollection: null,
   notes: [],
   meta: null,
   session: null,
@@ -48,9 +51,18 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_SESSION:
+      const { activeCollection, session } = state;
+      const updatedSession = { ...session, ...action.payload };
+
+      const currentSettingKey =
+        activeCollection || Object.keys(_.get("updatedSession", "notesApp"))[0];
+      const settings = currentSettingKey
+        ? _.get(action, ["payload.notesApp", currentSettingKey], {})
+        : {};
       return {
         ...state,
-        session: { ...state.session, ...action.payload },
+        session: updatedSession,
+        settings,
       };
     case SET_SETTINGS:
       return {
@@ -61,6 +73,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         appLoading: action.payload,
+      };
+    case SET_ACTIVE_COLLECTION:
+      return {
+        ...state,
+        activeCollection: action.payload,
       };
     case TOGGLE_SETTINGS_DRAWER:
       return {

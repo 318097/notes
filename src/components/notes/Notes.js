@@ -6,7 +6,6 @@ import { Button, Icon as AntIcon } from "antd";
 import marked from "marked";
 import colors, { Card, Icon, Tag } from "@codedrops/react-ui";
 import Dropdown from "./Dropdown";
-import Filters from "../Filters";
 import { MessageWrapper } from "../../styled";
 import { setNoteToEdit, deleteNote, setFilter } from "../../store/actions";
 
@@ -152,7 +151,6 @@ const Notes = ({ notes, history, dispatch, meta, filters, session }) => {
 
   return (
     <section>
-      <Filters className="filters" />
       {notes.length ? (
         <div
           style={{ overflow: "auto", height: "100%", paddingBottom: "30px" }}

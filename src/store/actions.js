@@ -18,6 +18,7 @@ import {
   SET_TAGS,
   SET_UPLOADING_DATA,
   UPDATE_UPLOAD_NOTE,
+  SET_ACTIVE_COLLECTION,
 } from "./constants";
 
 const getNextNote = (data, id, matchKey = "_id") => {
@@ -29,6 +30,14 @@ export const setSession = (session) => ({
   type: SET_SESSION,
   payload: session,
 });
+
+export const setActiveCollection = (id) => async (dispatch, getState) => {
+  await dispatch({
+    type: SET_ACTIVE_COLLECTION,
+    payload: id,
+  });
+  await dispatch(setFilter());
+};
 
 export const setSettings = (updatedSettings, updateOnServer = false) => async (
   dispatch,
@@ -77,13 +86,15 @@ export const setFilter = (filterUpdate, resetPage = true) => async (
 export const fetchNotes = () => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
-    const { filters, notes = [] } = getState();
+    const { filters, notes = [], activeCollection } = getState();
 
     const data = filters && filters.page > 1 ? [...notes] : [];
 
     const {
       data: { posts, meta },
-    } = await axios.get("/posts", { params: filters });
+    } = await axios.get(`/posts?collectionId=${activeCollection}`, {
+      params: filters,
+    });
     data.push(...posts);
 
     dispatch({ type: LOAD_NOTES, payload: { notes: data, meta } });
@@ -95,7 +106,7 @@ export const fetchNotes = () => async (dispatch, getState) => {
 };
 
 export const getNoteById = (noteId) => async (dispatch, getState) => {
-  const { notes } = getState();
+  const { notes, activeCollection } = getState();
   dispatch(setAppLoading(true));
 
   let viewPost = notes.find((note) => note._id === noteId);
@@ -103,7 +114,7 @@ export const getNoteById = (noteId) => async (dispatch, getState) => {
   if (!viewPost) {
     const {
       data: { post },
-    } = await axios.get(`/posts/${noteId}`);
+    } = await axios.get(`/posts/${noteId}?collectionId=${activeCollection}`);
     viewPost = post;
   }
 
@@ -114,8 +125,11 @@ export const getNoteById = (noteId) => async (dispatch, getState) => {
 export const addNote = (note) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
-
-    const { data } = await axios.post(`/posts`, { data: note });
+    const { activeCollection } = getState();
+    const { data } = await axios.post(
+      `/posts?collectionId=${activeCollection}`,
+      { data: note }
+    );
     dispatch({ type: ADD_NOTE, payload: _.get(data, "result.0") });
   } finally {
     dispatch(setAppLoading(false));
@@ -143,9 +157,9 @@ export const updateNote = (note, action) => async (dispatch, getState) => {
     dispatch(setAppLoading(true));
 
     if (action === "CREATE_RESOURCE") {
-      const resourceId = `${note.slug}-${moment().format("DD_MM_YYYY")}-${
+      const resourceId = `${note.slug}-${
         _.get(note, "resources.length", 0) + 1
-      }`;
+      }-${moment().format("DD_MM_YYYY")}`;
       await axios.put(
         `/posts/${note._id}?action=${action}&value=${resourceId}`,
         {}
