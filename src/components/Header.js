@@ -4,29 +4,25 @@ import { connect } from "react-redux";
 import { Spin, Divider, Icon as AntIcon, Select } from "antd";
 import { withRouter, Link } from "react-router-dom";
 import colors, { Icon } from "@codedrops/react-ui";
-import _ from "lodash";
 import Filters from "./Filters";
 
 import {
   setSession,
   toggleSettingsDrawer,
   setModalMeta,
-  setActiveCollection,
 } from "../store/actions";
 
-const { Option } = Select;
 const antIcon = <AntIcon type="loading" spin />;
 
 const Container = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 16px;
+  padding: 8px 16px 12px;
   position: sticky;
   top: 0;
   z-index: 10;
   h3 {
-    /* flex: 1 1 auto; */
     margin: 0;
     margin-left: 10px;
     text-transform: uppercase;
@@ -69,22 +65,11 @@ const UserInfo = styled.div`
   }
 `;
 
-const Header = ({
-  history,
-  dispatch,
-  appLoading,
-  session,
-  loading,
-  activeCollection,
-}) => {
+const Header = ({ history, dispatch, appLoading, session, loading }) => {
   const signOut = async () => {
     dispatch(setSession(null));
     sessionStorage.clear();
     return history.push("/signin");
-  };
-
-  const setActive = (id) => {
-    dispatch(setActiveCollection(id));
   };
 
   return (
@@ -98,21 +83,6 @@ const Header = ({
       <Filters />
       {session && (
         <div className="controls">
-          <Select
-            size="small"
-            onChange={setActive}
-            style={{ width: 120 }}
-            placeholder="Collections"
-            value={activeCollection}
-          >
-            {Object.entries(_.get(session, "notesApp", [])).map(
-              ([id, config]) => (
-                <Option key={id} value={id}>
-                  {_.get(config, "name", "")}
-                </Option>
-              )
-            )}
-          </Select>
           <Icon background type="home" onClick={() => history.push("/home")} />
           <Icon
             background
@@ -142,16 +112,10 @@ const Header = ({
   );
 };
 
-const mapStateToProps = ({
+const mapStateToProps = ({ appLoading, session, settings }) => ({
   appLoading,
   session,
   settings,
-  activeCollection,
-}) => ({
-  appLoading,
-  session,
-  settings,
-  activeCollection,
 });
 
 export default withRouter(connect(mapStateToProps)(Header));

@@ -1,7 +1,8 @@
 import React from "react";
 import { Input, Select, Button } from "antd";
 import { connect } from "react-redux";
-import { setFilter } from "../store/actions";
+import { setFilter, setActiveCollection } from "../store/actions";
+import _ from "lodash";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -12,6 +13,7 @@ const status = [
   { label: "READY", value: "READY" },
   { label: "POSTED", value: "POSTED" },
 ];
+
 const socialStatus = [
   { label: "NONE", value: "" },
   { label: "READY", value: "READY" },
@@ -21,26 +23,35 @@ const socialStatus = [
 const validateFilters = ({ socialStatus, status, search, tags = [] } = {}) =>
   socialStatus || status || search || tags.length;
 
-const Filters = ({ dispatch, filters, notes, meta, tags }) => {
+const Filters = ({
+  dispatch,
+  filters,
+  notes,
+  meta,
+  tags,
+  activeCollection,
+  session,
+}) => {
   const setFilterValues = (filter) => dispatch(setFilter({ ...filter }));
+
+  const setActive = (id) => {
+    dispatch(setActiveCollection(id));
+  };
 
   return (
     <div className="flex center align-center" style={{ flexShrink: 0 }}>
-      {validateFilters(filters) ? (
-        <Button
-          type="dashed"
-          onClick={() =>
-            setFilterValues({
-              tags: [],
-              socialStatus: "",
-              status: "",
-              search: "",
-            })
-          }
-        >
-          Clear
-        </Button>
-      ) : null}
+      <Select
+        onChange={setActive}
+        style={{ width: 120 }}
+        placeholder="Collections"
+        value={activeCollection}
+      >
+        {Object.entries(_.get(session, "notesApp", [])).map(([id, config]) => (
+          <Option key={id} value={id}>
+            {_.get(config, "name", "")}
+          </Option>
+        ))}
+      </Select>
       <Search
         allowClear
         className="input-width"
@@ -85,6 +96,21 @@ const Filters = ({ dispatch, filters, notes, meta, tags }) => {
           </Option>
         ))}
       </Select>
+      {!!validateFilters(filters) && (
+        <Button
+          type="dashed"
+          onClick={() =>
+            setFilterValues({
+              tags: [],
+              socialStatus: "",
+              status: "",
+              search: "",
+            })
+          }
+        >
+          Clear
+        </Button>
+      )}
       {meta && meta.count > 0 && (
         <span className="showingCount">
           Showing {notes.length} of {meta.count}
@@ -94,11 +120,20 @@ const Filters = ({ dispatch, filters, notes, meta, tags }) => {
   );
 };
 
-const mapStateToProps = ({ filters, notes, meta, tags }) => ({
+const mapStateToProps = ({
   filters,
   notes,
   meta,
   tags,
+  activeCollection,
+  session,
+}) => ({
+  filters,
+  notes,
+  meta,
+  tags,
+  activeCollection,
+  session,
 });
 
 export default connect(mapStateToProps)(Filters);
