@@ -2,10 +2,10 @@ import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import marked from "marked";
-import { Modal, Input, Radio, Checkbox, Button } from "antd";
+import { Modal, Input, Radio, Checkbox, Button, Select } from "antd";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
-
+import _ from "lodash";
 import {
   addNote,
   updateNote,
@@ -15,6 +15,8 @@ import {
 } from "../../store/actions";
 import { generateSlug } from "../../utils";
 import colors from "@codedrops/react-ui";
+
+const { Option } = Select;
 
 const StyledContainer = styled.div`
   display: flex;
@@ -56,10 +58,12 @@ const AddNote = ({
   tags,
   updateUploadNote,
   setNextNoteForEditing,
+  activeCollection,
 }) => {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [previewMode, setPreviewMode] = useState("PREVIEW");
+  const [collection, setCollection] = useState(activeCollection);
   const [note, setNote] = useState(initialState);
 
   useEffect(() => {
@@ -78,7 +82,8 @@ const AddNote = ({
     setLoading(true);
     try {
       if (mode === "edit") await updateNote({ ...note });
-      else if (mode === "add") await addNote({ ...note, userId: session.uid });
+      else if (mode === "add")
+        await addNote({ ...note, userId: session.uid, collection });
       else await updateUploadNote({ ...note, viewed: true });
     } finally {
       setLoading(false);
@@ -118,14 +123,30 @@ const AddNote = ({
     >
       <StyledContainer>
         <form>
-          <Radio.Group
-            buttonStyle="solid"
-            value={note.type}
-            onChange={({ target: { value } }) => setData("type", value)}
-          >
-            <Radio.Button value="POST">POST</Radio.Button>
-            <Radio.Button value="DROP">DROP</Radio.Button>
-          </Radio.Group>
+          <div className="flex space-between">
+            <Radio.Group
+              buttonStyle="solid"
+              value={note.type}
+              onChange={({ target: { value } }) => setData("type", value)}
+            >
+              <Radio.Button value="POST">POST</Radio.Button>
+              <Radio.Button value="DROP">DROP</Radio.Button>
+            </Radio.Group>
+            <Select
+              onChange={setCollection}
+              style={{ width: 120 }}
+              placeholder="Collections"
+              value={collection}
+            >
+              {Object.entries(_.get(session, "notesApp", [])).map(
+                ([id, config]) => (
+                  <Option key={id} value={id}>
+                    {_.get(config, "name", "")}
+                  </Option>
+                )
+              )}
+            </Select>
+          </div>
 
           <Input
             autoFocus
@@ -199,12 +220,14 @@ const mapStateToProps = ({
   modalMeta: { visibility, mode, selectedNote },
   session,
   tags,
+  activeCollection,
 }) => ({
   modalVisibility: visibility,
   selectedNote,
   mode,
   session,
   tags,
+  activeCollection,
 });
 const mapDispatchToProps = {
   addNote,

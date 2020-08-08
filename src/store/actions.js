@@ -127,7 +127,7 @@ export const addNote = (note) => async (dispatch, getState) => {
     dispatch(setAppLoading(true));
     const { activeCollection } = getState();
     const { data } = await axios.post(
-      `/posts?collectionId=${activeCollection}`,
+      `/posts?collectionId=${note.collection || activeCollection}`,
       { data: note }
     );
     dispatch({ type: ADD_NOTE, payload: _.get(data, "result.0") });
