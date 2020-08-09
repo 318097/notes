@@ -82,6 +82,7 @@ const Header = ({ history, dispatch, appLoading, session, loading }) => {
   const signOut = async () => {
     dispatch(setSession(null));
     sessionStorage.clear();
+    localStorage.clear();
     return history.push("/signin");
   };
 
