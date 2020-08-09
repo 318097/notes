@@ -155,7 +155,7 @@ export const setNoteToEdit = (noteId, mode = "edit") => async (
 export const updateNote = (note, action) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
-
+    const { activeCollection } = getState();
     if (action === "CREATE_RESOURCE") {
       const resourceId = `${note.slug}-${
         _.get(note, "resources.length", 0) + 1
@@ -168,7 +168,17 @@ export const updateNote = (note, action) => async (dispatch, getState) => {
       if (!note["resources"]) note["resources"] = [];
 
       note["resources"].push(resourceId);
-    } else await axios.put(`/posts/${note._id}`, { ...note });
+    } else {
+      const {
+        data: { result },
+      } = await axios.put(
+        `/posts/${note._id}?collectionId=${activeCollection}`,
+        {
+          ...note,
+        }
+      );
+      note = { ...result };
+    }
 
     dispatch({ type: UPDATE_NOTE, payload: note });
   } finally {

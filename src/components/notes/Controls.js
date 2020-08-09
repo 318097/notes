@@ -12,7 +12,7 @@ const ControlsWrapper = styled.div`
   background: white;
   margin-bottom: 8px;
   width: 218px;
-  padding: 8px;
+  padding: 16px 12px;
   border-radius: 12px;
   border: 1px solid ${colors.shade2};
   box-shadow: 3px 3px 3px ${colors.shade2};
@@ -30,21 +30,35 @@ const ControlsWrapper = styled.div`
     text-overflow: ellipsis;
     width: 100%;
     color: white;
-    padding: 2px 4px;
+    padding: 4px 4px;
     overflow: hidden;
     text-align: center;
     border-radius: 4px;
     font-size: 1rem;
     transition: 0.4s;
     cursor: pointer;
+    margin-bottom: 4px;
     &:hover {
-      background: ${colors.green};
+      background: ${colors.orchid};
     }
+  }
+  .empty {
+    opacity: 0.8;
+    text-align: center;
+    font-size: 1rem;
+  }
+  .live-id {
+    color: ${colors.white};
+    text-transform: uppercase;
+    font-size: 1rem;
+    background: ${colors.orchid};
+    padding: 0px 4px;
+    border-radius: 4px;
   }
   .resource-id {
     background: ${colors.strokeOne};
     text-overflow: ellipsis;
-    padding: 0px 2px;
+    padding: 2px 4px;
     overflow: hidden;
     border-radius: 4px;
     font-size: 1rem;
@@ -60,8 +74,8 @@ const ControlsWrapper = styled.div`
   }
 `;
 
-const defaultTags =
-  "#Web #WebDevelopment #Tech #Coding #Developer #DevelopersLife #DeveloperLife #WebDeveloper #SoftwareDeveloper #SoftwareEngineer #Javascript #JS #JavascriptDeveloper #JavascriptTutorial #JavascriptEngineer #JavascriptLearning #JavascriptLover #LearnJavascript #JavascriptTips #JavascriptIsLife #JavascriptNinja";
+// const defaultTags =
+//   "#Web #WebDevelopment #Tech #Coding #Developer #DevelopersLife #DeveloperLife #WebDeveloper #SoftwareDeveloper #SoftwareEngineer #Javascript #JS #JavascriptDeveloper #JavascriptTutorial #JavascriptEngineer #JavascriptLearning #JavascriptLover #LearnJavascript #JavascriptTips #JavascriptIsLife #JavascriptNinja";
 
 const Controls = ({ note, dispatch }) => {
   const [hashtags, setHashtags] = useState("");
@@ -69,13 +83,14 @@ const Controls = ({ note, dispatch }) => {
   useEffect(() => {
     if (!note) return;
     const tags = note.tags.map((tag) => `#${tag}`).join(" ");
-    setHashtags(`${defaultTags}, ${tags}`);
+    setHashtags(`${tags}`);
   }, [note]);
 
   const updateProperties = async (key, value) =>
     await dispatch(updateNote({ _id: note._id, [key]: value }));
 
   const slug = generateSlug(note.title, "_");
+  const slugWithLiveId = `${note.liveId}-${slug}`;
 
   const copy = (text) => () => {
     copyToClipboard(text);
@@ -87,6 +102,11 @@ const Controls = ({ note, dispatch }) => {
         <div className="slug" onClick={copy(slug)}>
           {slug}
         </div>
+        {!!note.liveId && (
+          <div className="slug" onClick={copy(slugWithLiveId)}>
+            {slugWithLiveId}
+          </div>
+        )}
         <div className="header">
           <h4>Resources</h4>
           <Icon
@@ -111,7 +131,13 @@ const Controls = ({ note, dispatch }) => {
             onClick={() => copyToClipboard(hashtags.join(" "))}
           />
         </div>
-        <div>{note && <div className="hashtag">{hashtags}</div>}</div>
+        <div>
+          {hashtags ? (
+            <div className="hashtag">{hashtags}</div>
+          ) : (
+            <div className="empty">No Tags</div>
+          )}
+        </div>
         <div className="divider"></div>
         <div className="flex align-center">
           <span style={{ marginRight: "4px" }}>Visible</span>
@@ -125,6 +151,9 @@ const Controls = ({ note, dispatch }) => {
         <div>
           <div className="header">
             <h4>Status</h4>
+            {note.liveId && (
+              <span className="live-id">{`Live Id: ${note.liveId}`}</span>
+            )}
           </div>
           <Radio.Group
             onChange={({ target: { value } }) =>

@@ -21,8 +21,9 @@ const PageWrapper = styled.div`
       display: inline-block;
       position: relative;
       left: 20px;
-      background: ${colors.strokeOne};
+      background: ${colors.steel};
       font-size: 1rem;
+      color: white;
     }
     &:after {
       content: "";
@@ -32,7 +33,7 @@ const PageWrapper = styled.div`
       height: 1px;
       position: absolute;
       top: 50%;
-      background: ${colors.strokeOne};
+      background: ${colors.steel};
     }
   }
   .notes-wrapper {
