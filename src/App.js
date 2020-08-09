@@ -20,11 +20,11 @@ import Settings from "./components/Settings";
 import AddNote from "./components/notes/AddNote";
 import { getToken, hasToken } from "./authService";
 
-axios.defaults.baseURL = "https://bubblegum-server.herokuapp.com/api/";
+// axios.defaults.baseURL = "https://bubblegum-server.herokuapp.com/api/";
 
-// axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL
-//   ? process.env.REACT_APP_SERVER_URL
-//   : "http://localhost:7000/api";
+axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL
+  ? process.env.REACT_APP_SERVER_URL
+  : "http://localhost:7000/api";
 axios.defaults.headers.common["authorization"] = getToken();
 axios.defaults.headers.common["external-source"] = "NOTES_APP";
 
