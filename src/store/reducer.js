@@ -52,13 +52,17 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_SESSION:
       const { activeCollection, session } = state;
-      const updatedSession = { ...session, ...action.payload };
+      const updatedSession = { ...(session || {}), ...action.payload };
 
       const currentSettingKey =
-        activeCollection || Object.keys(_.get("updatedSession", "notesApp"))[0];
+        activeCollection ||
+        Object.keys(_.get("updatedSession", "notesApp", {}))[0] ||
+        "";
+
       const settings = currentSettingKey
         ? _.get(action, ["payload.notesApp", currentSettingKey], {})
         : {};
+
       return {
         ...state,
         session: updatedSession,
