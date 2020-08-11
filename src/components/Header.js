@@ -29,6 +29,7 @@ const Container = styled.header`
     text-transform: uppercase;
     transition: 2s;
     font-weight: bold;
+    min-width: 100px;
     a {
       color: ${colors.bar};
       & > span {
@@ -77,7 +78,7 @@ const Header = ({ history, dispatch, appLoading, session, loading }) => {
 
   useEffect(() => {
     setShowFilters(_.get(history, "location.pathname") === "/home");
-  }, [history.location]);
+  }, [history.location.pathname]);
 
   const signOut = async () => {
     dispatch(setSession(null));

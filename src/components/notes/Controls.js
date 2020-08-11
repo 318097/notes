@@ -47,14 +47,6 @@ const ControlsWrapper = styled.div`
     text-align: center;
     font-size: 1rem;
   }
-  .live-id {
-    color: ${colors.white};
-    text-transform: uppercase;
-    font-size: 1rem;
-    background: ${colors.orchid};
-    padding: 0px 4px;
-    border-radius: 4px;
-  }
   .resource-id {
     background: ${colors.strokeOne};
     text-overflow: ellipsis;
@@ -152,7 +144,7 @@ const Controls = ({ note, dispatch }) => {
           <div className="header">
             <h4>Status</h4>
             {note.liveId && (
-              <span className="live-id">{`Live Id: ${note.liveId}`}</span>
+              <span className="state">{`Live Id: ${note.liveId}`}</span>
             )}
           </div>
           <Radio.Group

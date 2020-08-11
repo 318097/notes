@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Select, Button } from "antd";
+import { Input, Select, Button, Icon } from "antd";
 import { connect } from "react-redux";
 import { setFilter, setActiveCollection } from "../store/actions";
 import _ from "lodash";
@@ -20,6 +20,12 @@ const socialStatus = [
   { label: "POSTED", value: "POSTED" },
 ];
 
+const sortFilter = [
+  { label: "NONE", value: "" },
+  { label: "LIVE ID", value: "liveId" },
+  { label: "CREATED", value: "createdAt" },
+];
+
 const validateFilters = ({ socialStatus, status, search, tags = [] } = {}) =>
   socialStatus || status || search || tags.length;
 
@@ -34,15 +40,13 @@ const Filters = ({
 }) => {
   const setFilterValues = (filter) => dispatch(setFilter({ ...filter }));
 
-  const setActive = (id) => {
-    dispatch(setActiveCollection(id));
-  };
+  const setActive = (id) => dispatch(setActiveCollection(id));
 
   return (
     <div className="flex center align-center" style={{ flexShrink: 0 }}>
       <Select
         onChange={setActive}
-        style={{ width: 120 }}
+        className="input-width"
         placeholder="Collections"
         value={activeCollection}
       >
@@ -59,6 +63,19 @@ const Filters = ({
         defaultValue={filters.search}
         onSearch={(value) => setFilterValues({ search: value })}
       />
+      <Select
+        style={{ minWidth: "100px", margin: "2px" }}
+        mode="multiple"
+        placeholder="Tags"
+        value={filters.tags}
+        onChange={(values) => setFilterValues({ tags: values })}
+      >
+        {tags.map(({ label, value, _id }) => (
+          <Option key={_id} value={value}>
+            {label}
+          </Option>
+        ))}
+      </Select>
       <Select
         className="input-width"
         placeholder="Post Status"
@@ -84,14 +101,13 @@ const Filters = ({
         ))}
       </Select>
       <Select
-        style={{ minWidth: "150px", margin: "2px" }}
-        mode="multiple"
-        placeholder="Tags"
-        value={filters.tags}
-        onChange={(values) => setFilterValues({ tags: values })}
+        className="input-width"
+        placeholder="Sort"
+        value={filters.sortFilter}
+        onChange={(value) => setFilterValues({ sortFilter: value })}
       >
-        {tags.map(({ label, value, _id }) => (
-          <Option key={_id} value={value}>
+        {sortFilter.map(({ label, value }) => (
+          <Option key={value} value={value}>
             {label}
           </Option>
         ))}
@@ -111,6 +127,20 @@ const Filters = ({
           Clear
         </Button>
       )}
+
+      <Icon
+        style={{ margin: "0 8px" }}
+        className="icon"
+        onClick={() =>
+          setFilterValues({
+            sortOrder: filters.sortOrder === "ASC" ? "DESC" : "ASC",
+          })
+        }
+        type={
+          filters.sortOrder === "ASC" ? "sort-ascending" : "sort-descending"
+        }
+      />
+
       {meta && meta.count > 0 && (
         <span className="showingCount">
           Showing {notes.length} of {meta.count}

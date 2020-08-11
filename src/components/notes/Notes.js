@@ -97,15 +97,6 @@ const PageWrapper = styled.div`
         .anticon {
           margin: 0 2px;
         }
-        .state {
-          color: white;
-          margin: 0 2px;
-          border-radius: 4px;
-          display: inline-block;
-          width: max-content;
-          font-size: 0.8rem;
-          padding: 1px 4px;
-        }
       }
       .index {
         font-style: italic;
@@ -207,19 +198,16 @@ const NoteCard = ({
     visible,
     socialStatus,
     index,
+    liveId,
   },
   handleClick,
   dispatch,
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const onEdit = () => {
-    dispatch(setNoteToEdit(_id));
-  };
+  const onEdit = () => dispatch(setNoteToEdit(_id));
 
-  const onDelete = () => {
-    dispatch(deleteNote(_id));
-  };
+  const onDelete = () => dispatch(deleteNote(_id));
 
   return (
     <div className="card-wrapper">
@@ -274,6 +262,7 @@ const NoteCard = ({
                 SOCIAL STATUS
               </div>
             )}
+            {liveId && <span className="state">{`Live Id: ${liveId}`}</span>}
           </div>
 
           <div>

@@ -31,6 +31,7 @@ const initialState = {
     socialStatus: undefined,
     page: 1,
     limit: 25,
+    sortOrder: "ASC",
   },
   activeCollection: null,
   notes: [],

@@ -41,12 +41,6 @@ const Wrapper = styled.div`
       top: 5px;
       left: 5px;
       z-index: 10;
-      padding: 5px;
-      border-radius: 30px;
-      transition: 0.4s;
-      &:hover {
-        background: ${colors.strokeOne};
-      }
     }
     .edit-icon {
       position: absolute;
@@ -116,7 +110,7 @@ const NoteView = ({ dispatch, match, viewNote, session, history }) => {
           <h3 className="title">{title}</h3>
           {title && (
             <Icon
-              className="copy-icon"
+              className="copy-icon  icon"
               type="copy"
               onClick={() => copyToClipboard(title)}
             />
@@ -129,7 +123,7 @@ const NoteView = ({ dispatch, match, viewNote, session, history }) => {
           ></div>
           <Icon
             type="copy"
-            className="copy-icon"
+            className="copy-icon  icon"
             onClick={() => copyToClipboard(content)}
           />
         </div>
@@ -139,11 +133,11 @@ const NoteView = ({ dispatch, match, viewNote, session, history }) => {
           ))}
         </div>
 
-        <Icon className="back-icon" onClick={goBack} type="caret-left" />
+        <Icon className="back-icon icon" onClick={goBack} type="caret-left" />
         <Icon
           size={12}
           onClick={handleEdit}
-          className="edit-icon"
+          className="edit-icon icon"
           type="edit"
         />
         {!!index && <span className="index">{`#${index}`}</span>}
