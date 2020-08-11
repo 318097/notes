@@ -113,8 +113,10 @@ const Filters = ({
         ))}
       </Select>
       {!!validateFilters(filters) && (
-        <Button
-          type="dashed"
+        <Icon
+          style={{ margin: "0 4px" }}
+          className="icon"
+          type="close"
           onClick={() =>
             setFilterValues({
               tags: [],
@@ -123,13 +125,11 @@ const Filters = ({
               search: "",
             })
           }
-        >
-          Clear
-        </Button>
+        />
       )}
 
       <Icon
-        style={{ margin: "0 8px" }}
+        style={{ margin: "0 4px" }}
         className="icon"
         onClick={() =>
           setFilterValues({

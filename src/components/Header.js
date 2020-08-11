@@ -39,12 +39,6 @@ const Container = styled.header`
       }
     }
   }
-  .icon {
-    transition: 0.4s;
-    &:hover {
-      background: ${colors.strokeOne};
-    }
-  }
   .controls {
     flex: 0 0 auto;
     display: flex;
