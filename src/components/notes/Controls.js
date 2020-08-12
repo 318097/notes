@@ -79,7 +79,9 @@ const Controls = ({ note, dispatch }) => {
   }, [note]);
 
   const updateProperties = async (key, value) =>
-    await dispatch(updateNote({ _id: note._id, [key]: value }));
+    await dispatch(
+      updateNote({ _id: note._id, liveId: note.liveId, [key]: value })
+    );
 
   const slug = generateSlug(note.title, "_");
   const slugWithLiveId = `${note.liveId}-${slug}`;
