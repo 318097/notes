@@ -7,7 +7,12 @@ import marked from "marked";
 import colors, { Card, Icon, Tag } from "@codedrops/react-ui";
 import Dropdown from "./Dropdown";
 import { MessageWrapper } from "../../styled";
-import { setNoteToEdit, deleteNote, setFilter } from "../../store/actions";
+import {
+  setNoteToEdit,
+  deleteNote,
+  setFilter,
+  setSession,
+} from "../../store/actions";
 
 const PageWrapper = styled.div`
   margin-bottom: 25px;
@@ -135,6 +140,7 @@ const Notes = ({ notes, history, dispatch, meta, filters, session }) => {
     event.stopPropagation();
     history.push(`/note/${_id}`);
     sessionStorage.setItem("scroll", scrollRef.current.scrollTop);
+    dispatch(setSession({ retainPage: true }));
   };
 
   const noteChunks = Array(Math.ceil(notes.length / 25))

@@ -95,10 +95,7 @@ const NoteView = ({ dispatch, match, viewNote, session, history }) => {
       })
     );
 
-  const goBack = () => {
-    history.push("/home");
-    dispatch(setSession({ retainPage: true }));
-  };
+  const goBack = () => history.push("/home");
 
   if (!viewNote) return null;
 
