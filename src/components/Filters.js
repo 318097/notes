@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Select, Button, Icon } from "antd";
+import { Input, Select, Icon } from "antd";
 import { connect } from "react-redux";
 import { setFilter, setActiveCollection } from "../store/actions";
 import _ from "lodash";
@@ -22,6 +22,7 @@ const socialStatus = [
 
 const sortFilter = [
   { label: "NONE", value: "" },
+  { label: "INDEX", value: "index" },
   { label: "LIVE ID", value: "liveId" },
   { label: "CREATED", value: "createdAt" },
 ];

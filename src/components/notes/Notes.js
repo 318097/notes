@@ -143,6 +143,10 @@ const Notes = ({ notes, history, dispatch, meta, filters, session }) => {
     dispatch(setSession({ retainPage: true }));
   };
 
+  const onEdit = (_id) => dispatch(setNoteToEdit(_id));
+
+  const onDelete = (_id) => dispatch(deleteNote(_id));
+
   const noteChunks = Array(Math.ceil(notes.length / 25))
     .fill(null)
     .map((_, index) => notes.slice(index * 25, index * 25 + 25));
@@ -163,6 +167,8 @@ const Notes = ({ notes, history, dispatch, meta, filters, session }) => {
                     note={note}
                     history={history}
                     handleClick={handleClick}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
                   />
                 ))}
               </div>
@@ -207,13 +213,10 @@ const NoteCard = ({
     liveId,
   },
   handleClick,
-  dispatch,
+  onEdit,
+  onDelete,
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-
-  const onEdit = () => dispatch(setNoteToEdit(_id));
-
-  const onDelete = () => dispatch(deleteNote(_id));
 
   return (
     <div className="card-wrapper">
@@ -236,8 +239,8 @@ const NoteCard = ({
         <Dropdown
           showDropdown={showDropdown}
           setShowDropdown={setShowDropdown}
-          onEdit={onEdit}
-          onDelete={onDelete}
+          onEdit={() => onEdit(_id)}
+          onDelete={() => onDelete(_id)}
         />
       </Card>
       <Card className="action-row">
