@@ -35,14 +35,15 @@ const Filters = ({
   filters,
   notes,
   meta,
-  tags,
   activeCollection,
   session,
+  settings,
 }) => {
   const setFilterValues = (filter) => dispatch(setFilter({ ...filter }));
 
   const setActive = (id) => dispatch(setActiveCollection(id));
 
+  const { tags = [] } = settings;
   return (
     <div className="flex center align-center" style={{ flexShrink: 0 }}>
       <Select
@@ -71,8 +72,8 @@ const Filters = ({
         value={filters.tags}
         onChange={(values) => setFilterValues({ tags: values })}
       >
-        {tags.map(({ label, value, _id }) => (
-          <Option key={_id} value={value}>
+        {tags.map(({ label }) => (
+          <Option key={label} value={label}>
             {label}
           </Option>
         ))}
@@ -155,16 +156,16 @@ const mapStateToProps = ({
   filters,
   notes,
   meta,
-  tags,
   activeCollection,
   session,
+  settings,
 }) => ({
   filters,
   notes,
   meta,
-  tags,
   activeCollection,
   session,
+  settings,
 });
 
 export default connect(mapStateToProps)(Filters);

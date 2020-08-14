@@ -15,7 +15,6 @@ import {
   UPDATE_NOTE,
   DELETE_NOTE,
   TOGGLE_SETTINGS_DRAWER,
-  SET_TAGS,
   SET_UPLOADING_DATA,
   UPDATE_UPLOAD_NOTE,
   SET_ACTIVE_COLLECTION,
@@ -197,8 +196,6 @@ export const deleteNote = (noteId) => async (dispatch, getState) => {
     dispatch(setAppLoading(false));
   }
 };
-
-export const setTags = (tags) => ({ type: SET_TAGS, payload: tags });
 
 export const toggleFavoriteNote = (noteId) => async (dispatch) => {};
 

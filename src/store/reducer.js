@@ -12,7 +12,6 @@ import {
   SET_MODAL_META,
   UPDATE_NOTE,
   DELETE_NOTE,
-  SET_TAGS,
   SET_UPLOADING_DATA,
   UPDATE_UPLOAD_NOTE,
   SET_ACTIVE_COLLECTION,
@@ -38,7 +37,6 @@ const initialState = {
   meta: null,
   session: null,
   settings: {},
-  tags: [],
   viewNote: null,
   uploadingData: {
     rawData: null,
@@ -54,14 +52,13 @@ const reducer = (state = initialState, action) => {
     case SET_SESSION:
       const { activeCollection, session } = state;
       const updatedSession = { ...(session || {}), ...action.payload };
-
       const currentSettingKey =
         activeCollection ||
-        Object.keys(_.get("updatedSession", "notesApp", {}))[0] ||
+        Object.keys(_.get(updatedSession, "notesApp", {}))[0] ||
         "";
 
       const settings = currentSettingKey
-        ? _.get(action, ["payload.notesApp", currentSettingKey], {})
+        ? _.get(updatedSession, ["notesApp", currentSettingKey], {})
         : {};
 
       return {
@@ -148,11 +145,6 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         notes: state.notes.filter((note) => note._id !== action.payload),
-      };
-    case SET_TAGS:
-      return {
-        ...state,
-        tags: action.payload,
       };
     case SET_UPLOADING_DATA:
       return {

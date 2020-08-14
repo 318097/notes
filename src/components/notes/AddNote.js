@@ -219,14 +219,17 @@ const AddNote = ({
 const mapStateToProps = ({
   modalMeta: { visibility, mode, selectedNote },
   session,
-  tags,
   activeCollection,
+  settings,
 }) => ({
   modalVisibility: visibility,
   selectedNote,
   mode,
   session,
-  tags,
+  tags: _.map(_.get(settings, "tags", []), ({ label }) => ({
+    label,
+    value: label,
+  })),
   activeCollection,
 });
 const mapDispatchToProps = {

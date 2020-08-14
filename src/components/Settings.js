@@ -3,7 +3,7 @@ import { Drawer, Tag, Input, Button, Select, Divider, message } from "antd";
 import { connect } from "react-redux";
 import _ from "lodash";
 import short from "short-uuid";
-import { toggleSettingsDrawer, setTags, setSession } from "../store/actions";
+import { toggleSettingsDrawer, setSession } from "../store/actions";
 import colors from "@codedrops/react-ui";
 import axios from "axios";
 
@@ -32,17 +32,18 @@ const Settings = ({
 
   const handleClose = () => toggleSettingsDrawer(false);
 
-  const saveSettings = async (newSettings) => {
+  const saveSettings = async (data) => {
     setLoading(true);
     try {
       const updatedSettings = {
         ..._.get(session, "notesApp", {}),
-        [settingId]: newSettings,
+        [settingId]: data,
       };
-      await setSession({
-        settings: updatedSettings,
-      });
-      await axios.put(`/users/${session._id}`, { notesApp: updatedSettings });
+      const newSettings = {
+        notesApp: updatedSettings,
+      };
+      await axios.put(`/users/${session._id}`, newSettings);
+      await setSession(newSettings);
       message.success(`Settings updated.`);
       toggleSettingsDrawer();
     } catch (err) {
@@ -125,6 +126,7 @@ const CollectionInfo = ({ settingData, saveSettings, loading }) => {
   const addNewTag = () => {
     const tags = _.get(data, "tags");
     handleChange({ tags: [...tags, newTag] });
+    setNewTag({ label: "", color: "" });
   };
 
   const { name = "", tags = [] } = data;

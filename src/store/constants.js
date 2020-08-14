@@ -9,7 +9,6 @@ export const ADD_NOTE = "ADD_NOTE";
 export const SET_NOTE_TO_EDIT = "SET_NOTE_TO_EDIT";
 export const UPDATE_NOTE = "UPDATE_NOTE";
 export const DELETE_NOTE = "DELETE_NOTE";
-export const SET_TAGS = "SET_TAGS";
 export const SET_MODAL_META = "SET_MODAL_META";
 export const SET_UPLOADING_DATA = "SET_UPLOADING_DATA";
 export const UPDATE_UPLOAD_NOTE = "UPDATE_UPLOAD_NOTE";
