@@ -16,7 +16,7 @@ const DropdownWrapper = styled.div`
     flex-direction: column;
     position: absolute;
     padding: 4px 2px;
-    right: 4px;
+    right: 0px;
     top: 24px;
     border-radius: 15px;
     & > * {
