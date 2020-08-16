@@ -65,7 +65,6 @@ const parseItem = (item, type = "POST") => {
       [title, content] = item.split("=>");
       title = title.replace(/-/, "");
       content = `${title} - ${content}`;
-      title = "";
       break;
     default:
       return;
