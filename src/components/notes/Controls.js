@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Radio, Switch } from "antd";
+import React, { useState, useEffect, Fragment } from "react";
+import { Radio, Switch, Input } from "antd";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import _ from "lodash";
@@ -71,6 +71,7 @@ const ControlsWrapper = styled.div`
 
 const Controls = ({ note, dispatch }) => {
   const [hashtags, setHashtags] = useState("");
+  const [liveIdEditor, setLiveIdEditor] = useState(false);
 
   useEffect(() => {
     if (!note) return;
@@ -88,6 +89,13 @@ const Controls = ({ note, dispatch }) => {
 
   const copy = (text) => () => {
     copyToClipboard(text);
+  };
+
+  const updateLiveId = (e) => {
+    const { value: id } = e.target;
+    if (!/^\d+$/.test(id)) return;
+    updateProperties("liveId", id);
+    setLiveIdEditor(false);
   };
 
   return (
@@ -146,7 +154,22 @@ const Controls = ({ note, dispatch }) => {
           <div className="header">
             <h4>Status</h4>
             {note.liveId && (
-              <span className="state">{`Live Id: ${note.liveId}`}</span>
+              <Fragment>
+                {liveIdEditor ? (
+                  <Input
+                    style={{ width: "30px", height: "18px", fontSize: "1rem" }}
+                    size="small"
+                    defaultValue={note.liveId}
+                    onBlur={updateLiveId}
+                  />
+                ) : (
+                  <span
+                    style={{ cursor: "pointer" }}
+                    onDoubleClick={() => setLiveIdEditor(true)}
+                    className="state"
+                  >{`Live Id: ${note.liveId}`}</span>
+                )}
+              </Fragment>
             )}
           </div>
           <Radio.Group
