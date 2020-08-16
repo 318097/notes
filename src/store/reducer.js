@@ -31,6 +31,7 @@ const initialState = {
     page: 1,
     limit: 25,
     sortOrder: "ASC",
+    visibility: "visible",
   },
   activeCollection: null,
   notes: [],

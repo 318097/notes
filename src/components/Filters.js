@@ -27,6 +27,12 @@ const sortFilter = [
   { label: "CREATED", value: "createdAt" },
 ];
 
+const visibilityFilter = [
+  { label: "ALL", value: "" },
+  { label: "VISIBLE", value: "visible" },
+  { label: "INVISIBLE", value: "invisible" },
+];
+
 const validateFilters = ({ socialStatus, status, search, tags = [] } = {}) =>
   socialStatus || status || search || tags.length;
 
@@ -114,6 +120,18 @@ const Filters = ({
           </Option>
         ))}
       </Select>
+      <Select
+        className="input-width"
+        placeholder="Visibility"
+        value={filters.visibility}
+        onChange={(value) => setFilterValues({ visibility: value })}
+      >
+        {visibilityFilter.map(({ label, value }) => (
+          <Option key={value} value={value}>
+            {label}
+          </Option>
+        ))}
+      </Select>
       {!!validateFilters(filters) && (
         <Icon
           style={{ margin: "0 4px" }}
@@ -125,6 +143,8 @@ const Filters = ({
               socialStatus: "",
               status: "",
               search: "",
+              visibility: "visible",
+              sortOrder: "ASC",
             })
           }
         />
