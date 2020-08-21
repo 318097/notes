@@ -16,3 +16,14 @@ export const copyToClipboard = (text) => {
   textField.remove();
   message.info(`Copied - ${text}`);
 };
+
+export const getNextNote = ({
+  data,
+  id,
+  increment = 1,
+  matchKey = "_id",
+} = {}) => {
+  const currentNoteIndex = data.findIndex((note) => note[matchKey] === id);
+  const newIndex = currentNoteIndex + increment;
+  return newIndex >= 0 && newIndex < data.length ? data[newIndex] : {};
+};

@@ -20,10 +20,7 @@ import {
   SET_ACTIVE_COLLECTION,
 } from "./constants";
 
-const getNextNote = (data, id, matchKey = "_id") => {
-  const currentNoteIndex = data.findIndex((note) => note[matchKey] === id);
-  return data[currentNoteIndex + 1];
-};
+import { getNextNote } from "../utils";
 
 export const setSession = (session) => ({
   type: SET_SESSION,
@@ -229,10 +226,14 @@ export const setNextNoteForEditing = (currentNote) => async (
 
   let nextNote;
   if (mode === "edit") {
-    nextNote = getNextNote(notes, currentNote._id);
+    nextNote = getNextNote({ data: notes, id: currentNote._id });
     await dispatch(updateNote({ ...currentNote }));
   } else {
-    nextNote = getNextNote(uploadingNotes, currentNote.tempId, "tempId");
+    nextNote = getNextNote({
+      data: uploadingNotes,
+      id: currentNote.tempId,
+      matchKey: "tempId",
+    });
     await dispatch(updateUploadNote({ ...currentNote }));
   }
   dispatch(

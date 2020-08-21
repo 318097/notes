@@ -5,11 +5,13 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { Tag } from "antd";
 import marked from "marked";
+import _ from "lodash";
 import colors, { Card, Icon } from "@codedrops/react-ui";
 import Controls from "./Controls";
 import { getNoteById, setModalMeta, setSession } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
 import { fadeInDownAnimation } from "../../animations";
+import { getNextNote } from "../../utils";
 
 const Wrapper = styled.div`
   margin-top: 20px;
@@ -68,9 +70,22 @@ const Wrapper = styled.div`
   .controls {
     grid-column: 10/11;
   }
+  .previous-icon,
+  .next-icon {
+    grid-column: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .next-icon {
+    grid-column: 11;
+    .icon {
+      transform: rotate(180deg);
+    }
+  }
 `;
 
-const NoteView = ({ dispatch, match, viewNote, session, history }) => {
+const NoteView = ({ dispatch, match, viewNote, session, history, notes }) => {
   useEffect(() => {
     if (session) dispatch(getNoteById(match.params.id));
   }, [match.params]);
@@ -97,11 +112,24 @@ const NoteView = ({ dispatch, match, viewNote, session, history }) => {
 
   const goBack = () => history.push("/home");
 
+  const navigateNote = (newIndex) => {
+    const newNote = getNextNote({
+      data: notes,
+      id: viewNote._id,
+      increment: newIndex,
+    });
+    console.log("newNote", newNote);
+    if (!_.isEmpty(newNote)) history.push(`/note/${newNote._id}`);
+  };
+
   if (!viewNote) return null;
 
   const { title, content, tags, index } = viewNote || {};
   return (
     <Wrapper>
+      <div className="previous-icon">
+        <Icon onClick={() => navigateNote(-1)} type="caret-left" />
+      </div>
       <Card>
         <div className="relative">
           <h3 className="title">{title}</h3>
@@ -140,11 +168,15 @@ const NoteView = ({ dispatch, match, viewNote, session, history }) => {
         {!!index && <span className="index">{`#${index}`}</span>}
       </Card>
       <Controls note={viewNote} />
+      <div className="next-icon">
+        <Icon onClick={() => navigateNote(1)} type="caret-left" />
+      </div>
     </Wrapper>
   );
 };
 
-const mapStateToProps = ({ viewNote, session }) => ({
+const mapStateToProps = ({ viewNote, session, notes }) => ({
+  notes,
   viewNote,
   session,
 });
