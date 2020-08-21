@@ -77,9 +77,13 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
   }
+  .prev,
+  .next {
+    color: ${colors.strokeTwo};
+  }
   .next-icon {
     grid-column: 11;
-    .icon {
+    .next {
       transform: rotate(180deg);
     }
   }
@@ -128,7 +132,12 @@ const NoteView = ({ dispatch, match, viewNote, session, history, notes }) => {
   return (
     <Wrapper>
       <div className="previous-icon">
-        <Icon onClick={() => navigateNote(-1)} type="caret-left" />
+        <Icon
+          size={40}
+          className="prev"
+          onClick={() => navigateNote(-1)}
+          type="caret-left"
+        />
       </div>
       <Card>
         <div className="relative">
@@ -169,7 +178,12 @@ const NoteView = ({ dispatch, match, viewNote, session, history, notes }) => {
       </Card>
       <Controls note={viewNote} />
       <div className="next-icon">
-        <Icon onClick={() => navigateNote(1)} type="caret-left" />
+        <Icon
+          size={40}
+          className="next"
+          onClick={() => navigateNote(1)}
+          type="caret-left"
+        />
       </div>
     </Wrapper>
   );

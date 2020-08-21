@@ -34,7 +34,7 @@ const Container = styled.header`
       color: ${colors.bar};
       & > span {
         text-decoration: underline;
-        font-size: 2.4rem;
+        font-size: 2rem;
         color: ${colors.bar};
       }
     }
@@ -63,7 +63,7 @@ const UserInfo = styled.div`
   .username {
     padding: 0 8px;
     text-transform: uppercase;
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 `;
 

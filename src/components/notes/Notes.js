@@ -56,7 +56,7 @@ const PageWrapper = styled.div`
       min-height: unset;
       cursor: pointer;
       width: 100%;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       overflow: visible;
       padding: 20px 8px;
       &:hover {

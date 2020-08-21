@@ -2,6 +2,10 @@
   src: url("./assets/fonts/PatrickHand-Regular.ttf");
   font-family: PatrickHand;
 }
+@font-face {
+  src: url("./assets/fonts/Roboto_Mono/RobotoMono-VariableFont_wght.ttf");
+  font-family: RobotoMono;
+}
 
 input,
 textarea,
@@ -23,11 +27,23 @@ textarea,
 }
 
 * {
-  font-family: PatrickHand;
+  font-family: RobotoMono;
 }
 
-html {
+html,
+body,
+[class*="ant"] {
   font-size: 10px;
+}
+
+.ant-input,
+.ant-btn,
+.ant-select-dropdown-menu-item {
+  font-size: 10px !important;
+}
+
+.anticon {
+  font-size: 14px;
 }
 
 /* Custom scrollbar */
