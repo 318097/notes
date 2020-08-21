@@ -6,7 +6,7 @@ import _ from "lodash";
 import colors, { Icon } from "@codedrops/react-ui";
 
 import { updateNote } from "../../store/actions";
-import { copyToClipboard, generateSlug } from "../../utils";
+import { copyToClipboard } from "../../utils";
 
 const ControlsWrapper = styled.div`
   background: white;
@@ -84,7 +84,7 @@ const Controls = ({ note, dispatch }) => {
       updateNote({ _id: note._id, liveId: note.liveId, [key]: value })
     );
 
-  const slug = generateSlug(note.title, "_");
+  const slug = note.slug.replace(/-/g, "_");
   const slugWithLiveId = `${note.liveId}-${slug}`;
 
   const copy = (text) => () => {
