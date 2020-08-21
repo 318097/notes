@@ -17,16 +17,16 @@ import { generateSlug } from "../../utils";
 import colors from "@codedrops/react-ui";
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 const StyledContainer = styled.div`
   display: flex;
   justify-content: space-between;
   height: 100%;
-  form {
+  .post-form {
     padding: 10px;
-  }
-  form {
     flex: 1 1 59%;
+    overflow-y: auto;
   }
   div.preview {
     padding: 10px;
@@ -109,9 +109,6 @@ const AddNote = ({
         <Button key="cancel-button" onClick={handleClose}>
           Cancel
         </Button>,
-        <Button type="primary" key="add-button" onClick={handleOk}>
-          {mode === "add" ? "Add" : "Update"}
-        </Button>,
         <Fragment key="update-and-next-button">
           {mode !== "add" && (
             <Button type="danger" onClick={handleUpdateAndNext}>
@@ -119,18 +116,22 @@ const AddNote = ({
             </Button>
           )}
         </Fragment>,
+        <Button type="primary" key="add-button" onClick={handleOk}>
+          {mode === "add" ? "Add" : "Update"}
+        </Button>,
       ]}
     >
       <StyledContainer>
-        <form>
+        <div className="post-form">
           <div className="flex space-between">
             <Radio.Group
               buttonStyle="solid"
               value={note.type}
               onChange={({ target: { value } }) => setData("type", value)}
             >
-              <Radio.Button value="POST">POST</Radio.Button>
               <Radio.Button value="DROP">DROP</Radio.Button>
+              <Radio.Button value="POST">POST</Radio.Button>
+              <Radio.Button value="QUIZ">QUIZ</Radio.Button>
             </Radio.Group>
             <Select
               onChange={setCollection}
@@ -169,12 +170,22 @@ const AddNote = ({
               hideIcons: ["guide", "preview", "fullscreen", "side-by-side"],
             }}
           />
-          <Checkbox.Group
-            options={tags}
-            value={note.tags}
-            onChange={(value) => setData("tags", value)}
-          />
-        </form>
+          {note.type === "QUIZ" && (
+            <TextArea
+              rows={4}
+              placeholder="Solution"
+              value={note.solution}
+              onChange={({ target: { value } }) => setData("solution", value)}
+            />
+          )}
+          <div className="mt">
+            <Checkbox.Group
+              options={tags}
+              value={note.tags}
+              onChange={(value) => setData("tags", value)}
+            />
+          </div>
+        </div>
         {showPreview && (
           <div className="preview">
             <div className="flex space-between align-center">

@@ -38,6 +38,14 @@ const Wrapper = styled.div`
       overflow: auto;
       padding: 20px 10px;
     }
+    .quiz-solution {
+      background: ${colors.strokeOne};
+      padding: 8px 12px;
+      width: 96%;
+      text-align: center;
+      margin: 2px auto 8px;
+      border-radius: 2px;
+    }
     .back-icon {
       position: absolute;
       top: 5px;
@@ -122,13 +130,12 @@ const NoteView = ({ dispatch, match, viewNote, session, history, notes }) => {
       id: viewNote._id,
       increment: newIndex,
     });
-    console.log("newNote", newNote);
     if (!_.isEmpty(newNote)) history.push(`/note/${newNote._id}`);
   };
 
   if (!viewNote) return null;
 
-  const { title, content, tags, index } = viewNote || {};
+  const { title, content, tags, index, type, solution } = viewNote || {};
   return (
     <Wrapper>
       <div className="previous-icon">
@@ -161,6 +168,9 @@ const NoteView = ({ dispatch, match, viewNote, session, history, notes }) => {
             onClick={() => copyToClipboard(content)}
           />
         </div>
+        {type === "QUIZ" && solution && (
+          <div className="quiz-solution">{solution}</div>
+        )}
         <div className="tags">
           {tags.map((tag, index) => (
             <Tag key={index}>{tag.toUpperCase()}</Tag>

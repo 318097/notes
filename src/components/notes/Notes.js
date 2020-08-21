@@ -79,6 +79,12 @@ const PageWrapper = styled.div`
         overflow-x: auto;
         padding: 0;
       }
+      .quiz-solution {
+        background: ${colors.strokeOne};
+        padding: 8px 12px;
+        margin: 2px 0;
+        border-radius: 2px;
+      }
     }
     .action-row {
       position: relative;
@@ -212,6 +218,7 @@ const NoteCard = ({
     socialStatus,
     index,
     liveId,
+    solution,
   },
   handleClick,
   onEdit,
@@ -223,7 +230,7 @@ const NoteCard = ({
     <div className="card-wrapper">
       <Card
         onClick={handleClick(_id)}
-        style={{ height: type === "DROP" ? "auto" : "115px" }}
+        style={{ height: ["DROP", "QUIZ"].includes(type) ? "auto" : "115px" }}
       >
         {!!title && (
           <h3 className={type === "POST" ? "title post-title" : "title"}>
@@ -231,11 +238,14 @@ const NoteCard = ({
           </h3>
         )}
 
-        {type === "DROP" && (
+        {["DROP", "QUIZ"].includes(type) && (
           <div
             className="content"
             dangerouslySetInnerHTML={{ __html: marked(content) }}
           ></div>
+        )}
+        {type === "QUIZ" && solution && (
+          <div className="quiz-solution">{solution}</div>
         )}
         <Dropdown
           showDropdown={showDropdown}

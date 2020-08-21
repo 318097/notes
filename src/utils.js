@@ -1,11 +1,14 @@
 import { message } from "antd";
 
-export const generateSlug = (title = "", seperator = "-") =>
-  title
+export const generateSlug = (title = "", seperator = "-") => {
+  const slug = title
     .trim()
     .replace(/[^a-zA-Z0-9\-\s]/gi, "")
     .replace(/\s+/gi, seperator)
     .toLowerCase();
+  const timestamp = new Date().getTime();
+  return slug ? `${slug}-${timestamp}` : "";
+};
 
 export const copyToClipboard = (text) => {
   const textField = document.createElement("textarea");
