@@ -28,6 +28,10 @@ pre {
   }
 }
 
+.mb {
+  margin-bottom: 6px;
+}
+
 body {
   font-family: PatrickHand;
   h1,
@@ -37,6 +41,7 @@ body {
   h5,
   h6 {
     margin: 0;
+    font-family: RobotoMonoSemiBold;
   }
   margin: 0;
   padding: 0;

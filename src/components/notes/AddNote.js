@@ -75,8 +75,7 @@ const AddNote = ({
 
   const handleClose = async () => setModalMeta();
 
-  const setData = (key, value) =>
-    setNote((data) => ({ ...data, [key]: value }));
+  const setData = (update) => setNote((data) => ({ ...data, ...update }));
 
   const handleOk = async () => {
     setLoading(true);
@@ -123,11 +122,17 @@ const AddNote = ({
     >
       <StyledContainer>
         <div className="post-form">
-          <div className="flex space-between">
+          <div className="flex space-between mb">
             <Radio.Group
               buttonStyle="solid"
               value={note.type}
-              onChange={({ target: { value } }) => setData("type", value)}
+              onChange={({ target: { value } }) =>
+                setData({
+                  type: value,
+                  title: value === "QUIZ" ? "Quiz" : "",
+                  slug: value === "QUIZ" ? generateSlug("Quiz") : "",
+                })
+              }
             >
               <Radio.Button value="DROP">DROP</Radio.Button>
               <Radio.Button value="POST">POST</Radio.Button>
@@ -150,20 +155,23 @@ const AddNote = ({
           </div>
 
           <Input
+            className="mb"
             autoFocus
             placeholder="Title"
             value={note.title}
-            onChange={({ target: { value } }) => setData("title", value)}
-            onBlur={() => setData("slug", generateSlug(note.title))}
+            onChange={({ target: { value } }) => setData({ title: value })}
+            onBlur={() => setData({ slug: generateSlug(note.title) })}
           />
           <Input
+            className="mb"
             placeholder="Slug"
             value={note.slug}
-            onChange={({ target: { value } }) => setData("slug", value)}
+            onChange={({ target: { value } }) => setData({ slug: value })}
           />
           <SimpleMDE
+            className="mb"
             value={note.content}
-            onChange={(value) => setData("content", value)}
+            onChange={(value) => setData({ content: value })}
             options={{
               spellChecker: false,
               placeholder: "Content...",
@@ -175,14 +183,14 @@ const AddNote = ({
               rows={4}
               placeholder="Solution"
               value={note.solution}
-              onChange={({ target: { value } }) => setData("solution", value)}
+              onChange={({ target: { value } }) => setData({ solution: value })}
             />
           )}
           <div className="mt">
             <Checkbox.Group
               options={tags}
               value={note.tags}
-              onChange={(value) => setData("tags", value)}
+              onChange={(value) => setData({ tags: value })}
             />
           </div>
         </div>

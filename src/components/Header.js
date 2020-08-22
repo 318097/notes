@@ -26,13 +26,13 @@ const Container = styled.header`
   h3 {
     margin: 0;
     margin-left: 10px;
-    text-transform: uppercase;
     transition: 2s;
-    font-weight: bold;
     min-width: 100px;
     a {
       color: ${colors.bar};
+      font-family: RobotoMonoSemiBold;
       & > span {
+        font-family: RobotoMonoBold;
         text-decoration: underline;
         font-size: 2rem;
         color: ${colors.bar};
