@@ -33,8 +33,14 @@ const visibilityFilter = [
   { label: "INVISIBLE", value: "invisible" },
 ];
 
-const validateFilters = ({ socialStatus, status, search, tags = [] } = {}) =>
-  socialStatus || status || search || tags.length;
+const validateFilters = ({
+  socialStatus,
+  status,
+  search,
+  tags = [],
+  sortFilter,
+} = {}) =>
+  socialStatus || status || search || tags.length || sortFilter !== "createdAt";
 
 const Filters = ({
   dispatch,
@@ -144,7 +150,8 @@ const Filters = ({
               status: "",
               search: "",
               visibility: "visible",
-              sortOrder: "ASC",
+              sortOrder: "DESC",
+              sortFilter: "createdAt",
             })
           }
         />
