@@ -31,12 +31,12 @@ const Wrapper = styled.div`
     flex-direction: column;
     .title {
       text-align: center;
-      margin: 10px;
+      margin: 16px;
     }
     .content {
       flex: 1 1 auto;
       overflow: auto;
-      padding: 20px 10px;
+      padding: 20px 16px;
     }
     .quiz-solution {
       background: ${colors.strokeOne};

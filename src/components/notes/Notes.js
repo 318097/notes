@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
@@ -79,12 +79,6 @@ const PageWrapper = styled.div`
         overflow-x: auto;
         padding: 0;
       }
-      .quiz-solution {
-        background: ${colors.strokeOne};
-        padding: 8px 12px;
-        margin: 2px 0;
-        border-radius: 2px;
-      }
     }
     .action-row {
       position: relative;
@@ -113,7 +107,7 @@ const PageWrapper = styled.div`
       .index {
         font-style: italic;
         color: ${colors.bar};
-        margin-right: 3px;
+        margin: 2px;
       }
     }
   }
@@ -218,7 +212,6 @@ const NoteCard = ({
     socialStatus,
     index,
     liveId,
-    solution,
   },
   handleClick,
   onEdit,
@@ -244,9 +237,6 @@ const NoteCard = ({
             dangerouslySetInnerHTML={{ __html: marked(content) }}
           ></div>
         )}
-        {type === "QUIZ" && solution && (
-          <div className="quiz-solution">{solution}</div>
-        )}
         <Dropdown
           showDropdown={showDropdown}
           setShowDropdown={setShowDropdown}
@@ -262,25 +252,30 @@ const NoteCard = ({
         </div>
         <div className="status-row">
           <div>
-            {status !== "DRAFT" && (
-              <div
-                className="state"
-                style={{
-                  background: status === "POSTED" ? "seagreen" : "orange",
-                }}
-              >
-                STATUS
-              </div>
-            )}
-            {socialStatus !== "NONE" && (
-              <div
-                className="state"
-                style={{
-                  background: socialStatus === "POSTED" ? "seagreen" : "orange",
-                }}
-              >
-                SOCIAL STATUS
-              </div>
+            {status !== "POSTED" && socialStatus !== "POSTED" && (
+              <Fragment>
+                {status !== "DRAFT" && (
+                  <div
+                    className="state"
+                    style={{
+                      background: status === "POSTED" ? "seagreen" : "orange",
+                    }}
+                  >
+                    STATUS
+                  </div>
+                )}
+                {socialStatus !== "NONE" && (
+                  <div
+                    className="state"
+                    style={{
+                      background:
+                        socialStatus === "POSTED" ? "seagreen" : "orange",
+                    }}
+                  >
+                    SOCIAL STATUS
+                  </div>
+                )}
+              </Fragment>
             )}
             {liveId && <span className="state">{`Live Id: ${liveId}`}</span>}
           </div>
