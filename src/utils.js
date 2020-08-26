@@ -1,4 +1,6 @@
 import { message } from "antd";
+import moment from "moment";
+import _ from "lodash";
 
 export const generateSlug = (title = "", seperator = "-") => {
   const slug = title
@@ -30,3 +32,8 @@ export const getNextNote = ({
   const newIndex = currentNoteIndex + increment;
   return newIndex >= 0 && newIndex < data.length ? data[newIndex] : {};
 };
+
+export const generateNewResourceId = (note, index) =>
+  `${note.index || index}-${note.slug}-${
+    _.get(note, "resources.length", 0) + 1
+  }-${moment().format("DD_MM_YYYY")}`;

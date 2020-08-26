@@ -2,6 +2,7 @@ import axios from "axios";
 import moment from "moment";
 import _ from "lodash";
 
+import { getNextNote, generateNewResourceId } from "../utils";
 import {
   SET_SESSION,
   SET_SETTINGS,
@@ -19,8 +20,6 @@ import {
   UPDATE_UPLOAD_NOTE,
   SET_ACTIVE_COLLECTION,
 } from "./constants";
-
-import { getNextNote } from "../utils";
 
 export const setSession = (session) => ({
   type: SET_SESSION,
@@ -121,10 +120,12 @@ export const getNoteById = (noteId) => async (dispatch, getState) => {
 export const addNote = (note) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
-    const { activeCollection } = getState();
+    const { activeCollection, settings } = getState();
+
+    const resources = [generateNewResourceId(note, settings.index)];
     const { data } = await axios.post(
       `/posts?collectionId=${note.collection || activeCollection}`,
-      { data: note }
+      { data: { ...note, resources } }
     );
     dispatch({ type: ADD_NOTE, payload: _.get(data, "result.0") });
   } finally {
@@ -151,18 +152,15 @@ export const setNoteToEdit = (noteId, mode = "edit") => async (
 export const updateNote = (note, action) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
-    const { activeCollection } = getState();
+    const { activeCollection, settings } = getState();
     if (action === "CREATE_RESOURCE") {
-      const resourceId = `${note.slug}-${
-        _.get(note, "resources.length", 0) + 1
-      }-${moment().format("DD_MM_YYYY")}`;
+      const resourceId = generateNewResourceId(note, settings.index);
       await axios.put(
         `/posts/${note._id}?action=${action}&value=${resourceId}`,
         {}
       );
 
       if (!note["resources"]) note["resources"] = [];
-
       note["resources"].push(resourceId);
     } else {
       const {
