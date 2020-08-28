@@ -3,6 +3,7 @@ import { Radio, Switch, Input } from "antd";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import _ from "lodash";
+import moment from "moment";
 import colors, { Icon } from "@codedrops/react-ui";
 
 import { updateNote } from "../../store/actions";
@@ -86,6 +87,7 @@ const Controls = ({ note, dispatch }) => {
 
   const slug = note.slug.replace(/-/g, "_");
   const slugWithLiveId = `${note.liveId}-${slug}`;
+  const addedDays = moment().diff(moment(note.createdAt), "days");
 
   const copy = (text) => () => {
     copyToClipboard(text);
@@ -204,6 +206,9 @@ const Controls = ({ note, dispatch }) => {
             ))}
           </Radio.Group>
         </div>
+      </ControlsWrapper>
+      <ControlsWrapper>
+        <div>Added: {addedDays ? `${addedDays} days ago` : "today"}</div>
       </ControlsWrapper>
     </div>
   );
