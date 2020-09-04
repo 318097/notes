@@ -5,9 +5,8 @@
 
 ### Features
 
-- Auto deployment to Social handles
-- Create graphics for posts
-- Create new book option and generic
-- Add collection while uploading
-- Sort by id, with null at the end
-- 
+- [ ] Auto deployment to Social handles
+- [ ] Create graphics for posts
+- [x] Create collection
+- [x] Choose collection while uploading
+- [x] Sort by id

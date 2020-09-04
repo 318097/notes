@@ -51,7 +51,7 @@ const PageWrapper = styled.div`
     .card {
       break-inside: avoid-column;
       position: relative;
-      height: 115px;
+      height: auto;
       margin: 0;
       min-height: unset;
       cursor: pointer;
@@ -67,10 +67,8 @@ const PageWrapper = styled.div`
         text-align: center;
       }
       .post-title {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        margin: 30px 0;
+        font-size: 1.6rem;
       }
       .content {
         font-size: inherit;
@@ -123,7 +121,15 @@ const scrollToPosition = (ref, offset) => {
   }, 50);
 };
 
-const Notes = ({ notes, history, dispatch, meta, filters, session }) => {
+const Notes = ({
+  notes,
+  history,
+  dispatch,
+  meta,
+  filters,
+  session,
+  appLoading,
+}) => {
   const scrollRef = useRef();
 
   useEffect(() => {
@@ -193,7 +199,7 @@ const Notes = ({ notes, history, dispatch, meta, filters, session }) => {
             </div>
           )}
         </div>
-      ) : (
+      ) : appLoading ? null : (
         <MessageWrapper>Empty</MessageWrapper>
       )}
     </section>
@@ -221,15 +227,10 @@ const NoteCard = ({
 
   return (
     <div className="card-wrapper">
-      <Card
-        onClick={handleClick(_id)}
-        style={{ height: ["DROP", "QUIZ"].includes(type) ? "auto" : "115px" }}
-      >
-        {!!title && (
-          <h3 className={type === "POST" ? "title post-title" : "title"}>
-            {title}
-          </h3>
-        )}
+      <Card onClick={handleClick(_id)}>
+        <h3 className={`title ${type === "POST" ? "post-title" : ""}`}>
+          {title}
+        </h3>
 
         {["DROP", "QUIZ"].includes(type) && (
           <div
