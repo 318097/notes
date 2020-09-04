@@ -30,6 +30,7 @@ const Container = styled.header`
     min-width: 100px;
     a {
       color: ${colors.bar};
+      text-transform: uppercase;
       font-family: RobotoMonoSemiBold;
       & > span {
         font-family: RobotoMonoBold;

@@ -78,7 +78,7 @@ const Filters = ({
         onSearch={(value) => setFilterValues({ search: value })}
       />
       <Select
-        style={{ minWidth: "100px", margin: "2px" }}
+        style={{ minWidth: "80px", margin: "2px" }}
         mode="multiple"
         placeholder="Tags"
         value={filters.tags}
