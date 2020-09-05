@@ -109,3 +109,25 @@ body {
     background: $strokeOne;
   }
 }
+
+.settings-content {
+  .setting-group {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    h6 {
+      margin-bottom: 4px;
+    }
+  }
+  .add-tag {
+    margin: 12px 0;
+    padding: 12px;
+    background: $feather;
+    .add-tag-form {
+      display: grid;
+      grid-column-gap: 8px;
+      grid-auto-flow: column;
+      margin-bottom: 4px;
+    }
+  }
+}

@@ -94,7 +94,7 @@ const Header = ({
   };
 
   return (
-    <div className="flex space-between">
+    <div className="flex space-between mb">
       <Select
         onChange={setActive}
         style={{ width: 120 }}
@@ -131,9 +131,8 @@ const CollectionInfo = ({ settingData, saveSettings, loading }) => {
 
   const { name = "", tags = [] } = data;
   return (
-    <div>
-      <Divider />
-      <div>
+    <div className="settings-content">
+      <div className="setting-group">
         <h6>Name</h6>
         <Input
           placeholder="title"
@@ -141,22 +140,20 @@ const CollectionInfo = ({ settingData, saveSettings, loading }) => {
           onChange={(e) => handleChange({ name: e.target.value })}
         />
       </div>
-      <div>
+      <div className="setting-group">
         <h6>Tags</h6>
-        {tags.map(({ label, color }) => (
-          <Tag key={label} color={color}>
-            {label}
-          </Tag>
-        ))}
-        <div
-          style={{
-            margin: "12px 0",
-            padding: "8px",
-            background: colors.feather,
-          }}
-        >
-          <div style={{ display: "flex" }}>
+        <div>
+          {tags.map(({ label, color }) => (
+            <Tag key={label} color={color}>
+              {label}
+            </Tag>
+          ))}
+        </div>
+        <div className="add-tag">
+          <div className="add-tag-form">
             <Input
+              size="small"
+              className="tag-input"
               placeholder="Tag name"
               value={newTag.label}
               onChange={({ target: { value } }) =>
@@ -164,6 +161,8 @@ const CollectionInfo = ({ settingData, saveSettings, loading }) => {
               }
             />
             <Input
+              size="small"
+              className="tag-input"
               placeholder="Color code"
               value={newTag.color}
               onChange={({ target: { value } }) =>
@@ -176,9 +175,10 @@ const CollectionInfo = ({ settingData, saveSettings, loading }) => {
           </Button>
         </div>
       </div>
-      <div>
+      <div className="setting-group">
         <h6>Caption</h6>
         <TextArea
+          rows={6}
           placeholder="Caption"
           value={data.caption}
           onChange={(e) => handleChange({ caption: e.target.value })}
