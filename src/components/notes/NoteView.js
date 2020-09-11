@@ -97,20 +97,20 @@ const Wrapper = styled.div`
   }
 `;
 
-const NoteView = ({ dispatch, match, viewNote, session, history, notes }) => {
+const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
   useEffect(() => {
-    if (session) dispatch(getNoteById(match.params.id));
+    dispatch(getNoteById(match.params.id));
   }, [match.params.id]);
 
   useEffect(() => {
-    const codeblocks = document.querySelectorAll("pre");
-    codeblocks.forEach((block) => {
-      block.addEventListener("click", (e) => {
-        const code = e.target.textContent;
-        if (!code) return;
-        copyToClipboard(code);
-      });
-    });
+    // const codeblocks = document.querySelectorAll("pre");
+    // codeblocks.forEach((block) => {
+    //   block.addEventListener("click", (e) => {
+    //     const code = e.target.textContent;
+    //     if (!code) return;
+    //     copyToClipboard(code);
+    //   });
+    // });
   }, []);
 
   const handleEdit = () =>
@@ -199,10 +199,9 @@ const NoteView = ({ dispatch, match, viewNote, session, history, notes }) => {
   );
 };
 
-const mapStateToProps = ({ viewNote, session, notes }) => ({
+const mapStateToProps = ({ viewNote, notes }) => ({
   notes,
   viewNote,
-  session,
 });
 
 export default withRouter(connect(mapStateToProps)(NoteView));

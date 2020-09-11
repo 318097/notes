@@ -121,7 +121,7 @@ const Controls = ({ note, dispatch }) => {
         </div>
 
         {_.get(note, "resources", []).map((resource) => (
-          <div className="resource-id" onClick={copy(resource)}>
+          <div key={resource} className="resource-id" onClick={copy(resource)}>
             {resource}
           </div>
         ))}
