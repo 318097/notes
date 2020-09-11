@@ -1,6 +1,7 @@
 import { message } from "antd";
 import moment from "moment";
 import _ from "lodash";
+import colors from "@codedrops/react-ui";
 
 export const generateSlug = (title = "", seperator = "-") => {
   const slug = title
@@ -37,3 +38,13 @@ export const generateNewResourceId = (note, index) =>
   `${note.index || index}-${note.slug}-${
     _.get(note, "resources.length", 0) + 1
   }-${moment().format("DD_MM_YYYY")}`;
+
+export const extractTagCodes = (tags = []) =>
+  _.reduce(
+    tags,
+    (acc, { label, color }) => ({
+      ...acc,
+      [label]: color,
+    }),
+    { uncategorized: colors.red }
+  );

@@ -20,6 +20,7 @@ import {
   UPDATE_UPLOAD_NOTE,
   SET_ACTIVE_COLLECTION,
   TOGGLE_STATS_MODAL,
+  FETCH_STATS,
 } from "./constants";
 
 export const setSession = (session) => ({
@@ -66,6 +67,21 @@ export const toggleStatsModal = (status) => ({
   type: TOGGLE_STATS_MODAL,
   payload: status,
 });
+
+export const fetchStats = () => async (dispatch) => {
+  try {
+    dispatch(setAppLoading(true));
+    const {
+      data: { stats },
+    } = await axios.get("/posts/stats");
+
+    dispatch({ type: FETCH_STATS, payload: stats });
+  } catch (err) {
+    console.log(err);
+  } finally {
+    dispatch(setAppLoading(false));
+  }
+};
 
 export const setFilter = (filterUpdate, resetPage = true) => async (
   dispatch,

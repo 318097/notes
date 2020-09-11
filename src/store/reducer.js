@@ -16,6 +16,7 @@ import {
   UPDATE_UPLOAD_NOTE,
   SET_ACTIVE_COLLECTION,
   TOGGLE_STATS_MODAL,
+  FETCH_STATS,
 } from "./constants";
 
 const initialState = {
@@ -41,6 +42,7 @@ const initialState = {
   settings: {},
   viewNote: null,
   settingsDrawerVisibility: false,
+  stats: {},
   statsModal: false,
   uploadingData: {
     rawData: null,
@@ -94,6 +96,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         statsModal: action.payload,
+      };
+    case FETCH_STATS:
+      return {
+        ...state,
+        stats: action.payload,
       };
     case UPDATE_FILTER:
       return {

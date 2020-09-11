@@ -1,13 +1,12 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { Modal, Button } from "antd";
-import "easymde/dist/easymde.min.css";
 import _ from "lodash";
-import { toggleStatsModal } from "../store/actions";
+import { toggleStatsModal, fetchStats } from "../store/actions";
 import colors from "@codedrops/react-ui";
-import axios from "axios";
 import { Doughnut, HorizontalBar } from "react-chartjs-2";
+import { extractTagCodes } from "../utils";
 
 const StyledContainer = styled.div`
   height: 100%;
@@ -27,27 +26,14 @@ const StyledContainer = styled.div`
     justify-content: space-around;
   }
   .note-types-chart {
-    flex: 0 1 40%;
-    /* border: 1px dashed lightgrey; */
+    flex: 0 1 45%;
   }
 `;
 
-const Stats = ({ statsModal, toggleStatsModal, appLoading, tagsCodes }) => {
-  const [stats, setStats] = useState({});
-
+const Stats = ({ tagsCodes, stats, fetchStats }) => {
   useEffect(() => {
     fetchStats();
   }, []);
-
-  const fetchStats = async () => {
-    const {
-      data: { stats },
-    } = await axios.get("/posts/stats");
-    console.log(stats);
-    setStats(stats);
-  };
-
-  const handleClose = () => toggleStatsModal(false);
 
   const tagsData =
     _.reduce(
@@ -83,15 +69,105 @@ const Stats = ({ statsModal, toggleStatsModal, appLoading, tagsCodes }) => {
       { labels: [], values: [] }
     ) || {};
 
-  console.log("tagg", tagsCodes);
+  return (
+    <StyledContainer>
+      <div className="tags-chart">
+        <HorizontalBar
+          data={{
+            labels: tagsData.labels,
+            datasets: [
+              {
+                backgroundColor: tagsData.colors,
+                data: tagsData.values,
+              },
+            ],
+          }}
+          options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              yAxes: [
+                {
+                  ticks: {
+                    beginAtZero: true,
+                  },
+                },
+              ],
+            },
+            legend: {
+              display: false,
+            },
+          }}
+        />
+      </div>
 
+      <div className="pie-chart-wrapper">
+        <div className="note-types-chart">
+          <Doughnut
+            data={{
+              labels: typesData.labels,
+              datasets: [
+                {
+                  backgroundColor: [colors.coffee, colors.yellow, colors.blue],
+                  data: typesData.values,
+                },
+              ],
+            }}
+            options={{
+              cutoutPercentage: 0,
+              responsive: true,
+              maintainAspectRatio: false,
+              legend: {
+                position: "bottom",
+              },
+            }}
+          />
+        </div>
+        <div className="note-types-chart">
+          <Doughnut
+            data={{
+              labels: statusData.labels,
+              datasets: [
+                {
+                  backgroundColor: [colors.green, colors.orange, colors.orchid],
+                  data: statusData.values,
+                },
+              ],
+            }}
+            options={{
+              cutoutPercentage: 0,
+              responsive: true,
+              maintainAspectRatio: false,
+              legend: {
+                position: "bottom",
+              },
+              tooltips: {
+                enabled: true,
+              },
+            }}
+          />
+        </div>
+      </div>
+    </StyledContainer>
+  );
+};
+
+const StatsWrapper = ({ statsModal, toggleStatsModal, stats, ...rest }) => {
+  const handleClose = () => toggleStatsModal(false);
   return (
     <Modal
-      title={"STATS"}
+      title={
+        <div>
+          STATS{" "}
+          <span style={{ fontSize: "1.2rem", fontStyle: "italic" }}>
+            (Total:{stats.total})
+          </span>
+        </div>
+      }
       centered={true}
       style={{ padding: "0" }}
       visible={statsModal}
-      width="60vw"
+      width="900px"
       onCancel={handleClose}
       footer={[
         <Button key="cancel-button" onClick={handleClose}>
@@ -99,116 +175,17 @@ const Stats = ({ statsModal, toggleStatsModal, appLoading, tagsCodes }) => {
         </Button>,
       ]}
     >
-      <StyledContainer>
-        <div className="tags-chart">
-          <HorizontalBar
-            data={{
-              labels: tagsData.labels,
-              datasets: [
-                {
-                  backgroundColor: tagsData.colors,
-                  data: tagsData.values,
-                },
-              ],
-            }}
-            width={100}
-            height={50}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: {
-                yAxes: [
-                  {
-                    ticks: {
-                      beginAtZero: true,
-                    },
-                  },
-                ],
-              },
-              legend: {
-                display: false,
-              },
-            }}
-          />
-        </div>
-
-        <div className="pie-chart-wrapper">
-          <div className="note-types-chart">
-            <Doughnut
-              data={{
-                labels: typesData.labels,
-                datasets: [
-                  {
-                    backgroundColor: [
-                      colors.watermelon,
-                      colors.yellow,
-                      colors.blue,
-                    ],
-                    data: typesData.values,
-                  },
-                ],
-              }}
-              options={{
-                cutoutPercentage: 0,
-                responsive: true,
-                maintainAspectRatio: false,
-                legend: {
-                  position: "bottom",
-                },
-              }}
-            />
-          </div>
-          <div className="note-types-chart">
-            <Doughnut
-              data={{
-                labels: statusData.labels,
-                datasets: [
-                  {
-                    backgroundColor: [
-                      colors.green,
-                      colors.orange,
-                      colors.orchid,
-                    ],
-                    data: statusData.values,
-                  },
-                ],
-              }}
-              options={{
-                cutoutPercentage: 0,
-                responsive: true,
-                maintainAspectRatio: false,
-                legend: {
-                  position: "bottom",
-                },
-                tooltips: {
-                  enabled: true,
-                },
-              }}
-            />
-          </div>
-        </div>
-      </StyledContainer>
+      <Stats stats={stats} {...rest} />
     </Modal>
   );
 };
 
-const mapStateToProps = ({
-  session,
-  activeCollection,
-  settings,
-  appLoading,
+const mapStateToProps = ({ settings, statsModal, stats }) => ({
   statsModal,
-}) => ({
-  session,
-  activeCollection,
-  appLoading,
-  statsModal,
-  tagsCodes: _.reduce(_.get(settings, "tags", []), (acc, { label, color }) => ({
-    ...acc,
-    [label]: color,
-  })),
+  tagsCodes: extractTagCodes(settings.tags),
+  stats,
 });
 
-const mapDispatchToProps = { toggleStatsModal };
+const mapDispatchToProps = { toggleStatsModal, fetchStats };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Stats);
+export default connect(mapStateToProps, mapDispatchToProps)(StatsWrapper);
