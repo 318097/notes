@@ -59,6 +59,7 @@ const AddNote = ({
   updateUploadNote,
   setNextNoteForEditing,
   activeCollection,
+  appLoading,
 }) => {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
@@ -115,7 +116,12 @@ const AddNote = ({
             </Button>
           )}
         </Fragment>,
-        <Button type="primary" key="add-button" onClick={handleOk}>
+        <Button
+          type="primary"
+          key="add-button"
+          onClick={handleOk}
+          disabled={appLoading}
+        >
           {mode === "add" ? "Add" : "Update"}
         </Button>,
       ]}
@@ -240,6 +246,7 @@ const mapStateToProps = ({
   session,
   activeCollection,
   settings,
+  appLoading,
 }) => ({
   modalVisibility: visibility,
   selectedNote,
@@ -250,7 +257,9 @@ const mapStateToProps = ({
     value: label,
   })),
   activeCollection,
+  appLoading,
 });
+
 const mapDispatchToProps = {
   addNote,
   updateNote,

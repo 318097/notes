@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { Spin, Divider, Icon as AntIcon } from "antd";
+import { Divider } from "antd";
 import { withRouter, Link } from "react-router-dom";
 import colors, { Icon } from "@codedrops/react-ui";
 import _ from "lodash";
@@ -12,8 +12,6 @@ import {
   toggleSettingsDrawer,
   setModalMeta,
 } from "../store/actions";
-
-const antIcon = <AntIcon type="loading" spin />;
 
 const Container = styled.header`
   display: flex;
@@ -26,8 +24,6 @@ const Container = styled.header`
   h3 {
     margin: 0;
     margin-left: 10px;
-    transition: 2s;
-    min-width: 100px;
     a {
       color: ${colors.bar};
       text-transform: uppercase;
@@ -68,7 +64,7 @@ const UserInfo = styled.div`
   }
 `;
 
-const Header = ({ history, dispatch, appLoading, session, loading }) => {
+const Header = ({ history, dispatch, session }) => {
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
@@ -86,8 +82,7 @@ const Header = ({ history, dispatch, appLoading, session, loading }) => {
     <Container>
       <h3>
         <Link to="/home">
-          <span>N</span>otes App{" "}
-          {(appLoading || loading) && <Spin indicator={antIcon} />}
+          <span>N</span>otes App
         </Link>
       </h3>
       {showFilters && <Filters />}
@@ -122,8 +117,7 @@ const Header = ({ history, dispatch, appLoading, session, loading }) => {
   );
 };
 
-const mapStateToProps = ({ appLoading, session, settings }) => ({
-  appLoading,
+const mapStateToProps = ({ session, settings }) => ({
   session,
   settings,
 });

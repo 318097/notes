@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import axios from "axios";
-
+import { Spin, Icon as AntIcon } from "antd";
 import "./App.scss";
 
 import { setSession } from "./store/actions";
@@ -20,6 +20,8 @@ import Settings from "./components/Settings";
 import AddNote from "./components/notes/AddNote";
 import { getToken, hasToken } from "./authService";
 
+const antIcon = <AntIcon type="loading" spin />;
+
 // axios.defaults.baseURL = "https://bubblegum-server.herokuapp.com/api/";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL
@@ -28,7 +30,7 @@ axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL
 axios.defaults.headers.common["authorization"] = getToken();
 axios.defaults.headers.common["external-source"] = "NOTES_APP";
 
-const App = ({ setSession, session }) => {
+const App = ({ setSession, session, appLoading }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -49,7 +51,7 @@ const App = ({ setSession, session }) => {
 
   return (
     <div className="container">
-      <Header loading={loading} />
+      <Header />
       <div className="content">
         {!loading && (
           <Switch>
@@ -80,13 +82,19 @@ const App = ({ setSession, session }) => {
       </div>
       <AddNote />
       <Settings />
+      {(appLoading || loading) && (
+        <div className="spinner">
+          <Spin indicator={antIcon} size="large" />
+        </div>
+      )}
     </div>
   );
 };
 
-const mapStateToProps = ({ session, settings }) => ({
+const mapStateToProps = ({ session, settings, appLoading }) => ({
   session,
   settings,
+  appLoading,
 });
 
 const mapActionToProps = {
