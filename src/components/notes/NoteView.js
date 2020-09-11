@@ -100,7 +100,7 @@ const Wrapper = styled.div`
 const NoteView = ({ dispatch, match, viewNote, session, history, notes }) => {
   useEffect(() => {
     if (session) dispatch(getNoteById(match.params.id));
-  }, [match.params]);
+  }, [match.params.id]);
 
   useEffect(() => {
     const codeblocks = document.querySelectorAll("pre");
