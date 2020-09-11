@@ -144,7 +144,7 @@ const CollectionInfo = ({ settingData, saveSettings, loading }) => {
         <h6>Tags</h6>
         <div>
           {tags.map(({ label, color }) => (
-            <Tag key={label} color={color}>
+            <Tag style={{ marginBottom: "6px" }} key={label} color={color}>
               {label}
             </Tag>
           ))}

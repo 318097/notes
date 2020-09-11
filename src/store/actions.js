@@ -68,12 +68,13 @@ export const toggleStatsModal = (status) => ({
   payload: status,
 });
 
-export const fetchStats = () => async (dispatch) => {
+export const fetchStats = () => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
+    const { activeCollection } = getState();
     const {
       data: { stats },
-    } = await axios.get("/posts/stats");
+    } = await axios.get(`/posts/stats?collectionId=${activeCollection}`);
 
     dispatch({ type: FETCH_STATS, payload: stats });
   } catch (err) {
