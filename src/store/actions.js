@@ -19,6 +19,7 @@ import {
   SET_UPLOADING_DATA,
   UPDATE_UPLOAD_NOTE,
   SET_ACTIVE_COLLECTION,
+  TOGGLE_STATS_MODAL,
 } from "./constants";
 
 export const setSession = (session) => ({
@@ -58,6 +59,11 @@ export const setAppLoading = (status) => ({
 
 export const toggleSettingsDrawer = (status) => ({
   type: TOGGLE_SETTINGS_DRAWER,
+  payload: status,
+});
+
+export const toggleStatsModal = (status) => ({
+  type: TOGGLE_STATS_MODAL,
   payload: status,
 });
 

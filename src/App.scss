@@ -108,13 +108,19 @@ body {
   width: max-content;
 }
 
-.icon {
+.icon,
+.stats-icon {
   padding: 5px;
   border-radius: 30px;
   transition: 0.4s;
   &:hover {
     background: $strokeOne;
   }
+}
+
+.stats-icon {
+  cursor: pointer;
+  background: $bg;
 }
 
 .settings-content {

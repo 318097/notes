@@ -10,3 +10,10 @@
 - [x] Create collection
 - [x] Choose collection while uploading
 - [x] Sort by id
+- [ ] Dashboard
+  - [x] Show total number of quizes, posts and drops
+  - [ ] Graph of notes count added every week
+  - [x] Show total number of notes by tags - graph
+  - [x] Show total number of notes live, ready and draft
+  - [ ] Stats by all/visible/invisible notes
+- [ ] Trash - show deleted notes

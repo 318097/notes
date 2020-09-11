@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import axios from "axios";
@@ -18,6 +18,7 @@ import NoteView from "./components/notes/NoteView";
 import UploadContent from "./components/notes/UploadContent";
 import Settings from "./components/Settings";
 import AddNote from "./components/notes/AddNote";
+import Stats from "./components/Stats";
 import { getToken, hasToken } from "./authService";
 
 const antIcon = <AntIcon type="loading" spin />;
@@ -80,8 +81,13 @@ const App = ({ setSession, session, appLoading }) => {
           </Switch>
         )}
       </div>
-      <AddNote />
-      <Settings />
+      {session && session.loggedIn && (
+        <Fragment>
+          <AddNote />
+          <Stats />
+          <Settings />
+        </Fragment>
+      )}
       {(appLoading || loading) && (
         <div className="spinner">
           <Spin indicator={antIcon} size="large" />

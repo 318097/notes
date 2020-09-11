@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Divider } from "antd";
 import { withRouter, Link } from "react-router-dom";
 import colors, { Icon } from "@codedrops/react-ui";
+import { Icon as AntIcon } from "antd";
 import _ from "lodash";
 import Filters from "./Filters";
 
@@ -11,6 +12,7 @@ import {
   setSession,
   toggleSettingsDrawer,
   setModalMeta,
+  toggleStatsModal,
 } from "../store/actions";
 
 const Container = styled.header`
@@ -98,6 +100,11 @@ const Header = ({ history, dispatch, session }) => {
             background
             type="upload"
             onClick={() => history.push("/upload")}
+          />
+          <AntIcon
+            className="stats-icon"
+            type="line-chart"
+            onClick={() => dispatch(toggleStatsModal(true))}
           />
           <Divider type="vertical" />
 
