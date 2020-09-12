@@ -6,7 +6,7 @@ import colors, { Card, Icon, Tag } from "@codedrops/react-ui";
 import Dropdown from "./Dropdown";
 
 const StyledCard = styled.div`
-  margin-bottom: 8px;
+  margin-bottom: 16px;
   .card {
     break-inside: avoid-column;
     position: relative;
@@ -40,11 +40,11 @@ const StyledCard = styled.div`
   .action-row {
     position: relative;
     padding: 6px;
-    height: 53px;
+    height: auto;
     min-height: unset;
     overflow: visible;
     width: 100%;
-    top: -5px;
+    top: 0px;
     .tags {
       text-align: left;
       .tag {
@@ -65,6 +65,7 @@ const StyledCard = styled.div`
       font-style: italic;
       color: ${colors.bar};
       margin: 2px;
+      font-size: 1rem;
     }
   }
 `;
@@ -85,6 +86,7 @@ const NoteCard = ({
   handleClick,
   onEdit,
   onDelete,
+  tagsCodes,
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -111,11 +113,19 @@ const NoteCard = ({
       <Card className="action-row">
         <div className="tags">
           {tags.map((tag) => (
-            <Tag key={tag}>{tag.toUpperCase()}</Tag>
+            <Tag key={tag} color={tagsCodes && tagsCodes[tag]}>
+              {tag.toUpperCase()}
+            </Tag>
           ))}
         </div>
         <div className="status-row">
-          <div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              height: "max-content",
+            }}
+          >
             {status !== "POSTED" && socialStatus !== "POSTED" && (
               <Fragment>
                 {status !== "DRAFT" && (
@@ -144,7 +154,7 @@ const NoteCard = ({
             {liveId && <span className="state">{`Live Id: ${liveId}`}</span>}
           </div>
 
-          <div>
+          <div style={{ display: "flex", alignItems: "center" }}>
             {!!index && <span className="index">{`#${index}`}</span>}
             {type === "DROP" && (
               <Icon className="bulb-icon" type="bulb" size={12} />
