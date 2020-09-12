@@ -5,7 +5,7 @@ import { Modal, Button } from "antd";
 import _ from "lodash";
 import { toggleStatsModal, fetchStats } from "../store/actions";
 import colors from "@codedrops/react-ui";
-import { Doughnut, HorizontalBar } from "react-chartjs-2";
+import { Doughnut, HorizontalBar, Bar } from "react-chartjs-2";
 import { extractTagCodes } from "../utils";
 
 const StyledContainer = styled.div`
@@ -13,117 +13,45 @@ const StyledContainer = styled.div`
   padding: 10px 30px;
   display: flex;
   flex-direction: column;
-  .tags-chart {
+  .wrapper {
+    margin: 10px 0;
+    flex: 1 1 50%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .chart {
     flex: 1 1 50%;
     width: 100%;
     margin: 0 auto;
-    margin-bottom: 10px;
-  }
-  .pie-chart-wrapper {
-    margin-top: 10px;
-    flex: 1 1 50%;
-    display: flex;
-    justify-content: space-around;
-  }
-  .note-types-chart {
-    flex: 0 1 45%;
   }
 `;
+
+const getChartData = ({ data = {}, type, tagsCodes } = {}) =>
+  _.reduce(
+    _.get(data, type, {}),
+    (acc, value, label) => {
+      acc.labels.push(label.toUpperCase());
+      acc.values.push(value);
+      if (type === "tags") acc.colors.push(tagsCodes[label]);
+      return acc;
+    },
+    { labels: [], values: [], colors: [] }
+  ) || {};
 
 const Stats = ({ tagsCodes, stats, fetchStats }) => {
   useEffect(() => {
     fetchStats();
   }, []);
 
-  const tagsData =
-    _.reduce(
-      _.get(stats, "tags", {}),
-      (acc, value, label) => {
-        acc.labels.push(label.toUpperCase());
-        acc.values.push(value);
-        acc.colors.push(tagsCodes[label]);
-        return acc;
-      },
-      { labels: [], values: [], colors: [] }
-    ) || {};
-
-  const typesData =
-    _.reduce(
-      _.get(stats, "types", {}),
-      (acc, value, label) => {
-        acc.labels.push(label);
-        acc.values.push(value);
-        return acc;
-      },
-      { labels: [], values: [] }
-    ) || {};
-
-  const statusData =
-    _.reduce(
-      _.get(stats, "status", {}),
-      (acc, value, label) => {
-        acc.labels.push(label);
-        acc.values.push(value);
-        return acc;
-      },
-      { labels: [], values: [] }
-    ) || {};
+  const tagsData = getChartData({ data: stats, type: "tags", tagsCodes });
+  const typesData = getChartData({ data: stats, type: "types" });
+  const statusData = getChartData({ data: stats, type: "status" });
+  const createdOnData = getChartData({ data: stats, type: "created" });
 
   return (
     <StyledContainer>
-      <div className="tags-chart">
-        <HorizontalBar
-          data={{
-            labels: tagsData.labels,
-            datasets: [
-              {
-                backgroundColor: tagsData.colors,
-                data: tagsData.values,
-              },
-            ],
-          }}
-          options={{
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              yAxes: [
-                {
-                  ticks: {
-                    beginAtZero: true,
-                  },
-                },
-              ],
-            },
-            legend: {
-              display: false,
-            },
-          }}
-        />
-      </div>
-
-      <div className="pie-chart-wrapper">
-        <div className="note-types-chart">
-          <Doughnut
-            data={{
-              labels: typesData.labels,
-              datasets: [
-                {
-                  backgroundColor: [colors.coffee, colors.yellow, colors.blue],
-                  data: typesData.values,
-                },
-              ],
-            }}
-            options={{
-              cutoutPercentage: 0,
-              responsive: true,
-              maintainAspectRatio: false,
-              legend: {
-                position: "bottom",
-              },
-            }}
-          />
-        </div>
-        <div className="note-types-chart">
+      <div className="wrapper">
+        <div className="chart">
           <Doughnut
             data={{
               labels: statusData.labels,
@@ -147,6 +75,104 @@ const Stats = ({ tagsCodes, stats, fetchStats }) => {
             }}
           />
         </div>
+        <div className="chart">
+          <Bar
+            data={{
+              labels: createdOnData.labels,
+              datasets: [
+                {
+                  backgroundColor: Object.values(colors),
+                  data: createdOnData.values,
+                },
+              ],
+            }}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                yAxes: [
+                  {
+                    ticks: {
+                      beginAtZero: true,
+                      fontSize: 10,
+                    },
+                  },
+                ],
+                xAxes: [
+                  {
+                    ticks: {
+                      fontSize: 10,
+                    },
+                  },
+                ],
+              },
+              legend: {
+                display: false,
+              },
+            }}
+          />
+        </div>
+      </div>
+
+      <div className="wrapper">
+        <div className="chart">
+          <HorizontalBar
+            data={{
+              labels: tagsData.labels,
+              datasets: [
+                {
+                  backgroundColor: tagsData.colors,
+                  data: tagsData.values,
+                },
+              ],
+            }}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                yAxes: [
+                  {
+                    ticks: {
+                      beginAtZero: true,
+                      fontSize: 10,
+                    },
+                  },
+                ],
+                xAxes: [
+                  {
+                    ticks: {
+                      fontSize: 10,
+                    },
+                  },
+                ],
+              },
+              legend: {
+                display: false,
+              },
+            }}
+          />
+        </div>
+        <div className="chart">
+          <Doughnut
+            data={{
+              labels: typesData.labels,
+              datasets: [
+                {
+                  backgroundColor: [colors.coffee, colors.yellow, colors.blue],
+                  data: typesData.values,
+                },
+              ],
+            }}
+            options={{
+              cutoutPercentage: 0,
+              responsive: true,
+              maintainAspectRatio: false,
+              legend: {
+                position: "bottom",
+              },
+            }}
+          />
+        </div>
       </div>
     </StyledContainer>
   );
@@ -166,8 +192,8 @@ const StatsWrapper = ({ statsModal, toggleStatsModal, stats, ...rest }) => {
       }
       centered={true}
       style={{ padding: "0" }}
-      visible={statsModal}
-      width="900px"
+      visible={true || statsModal}
+      width="60vw"
       onCancel={handleClose}
       footer={[
         <Button key="cancel-button" onClick={handleClose}>
