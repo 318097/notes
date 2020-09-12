@@ -89,7 +89,6 @@ const NoteCard = ({
   tagsCodes,
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-
   return (
     <StyledCard>
       <Card onClick={handleClick(_id)}>
@@ -113,9 +112,7 @@ const NoteCard = ({
       <Card className="action-row">
         <div className="tags">
           {tags.map((tag) => (
-            <Tag key={tag} color={tagsCodes && tagsCodes[tag]}>
-              {tag.toUpperCase()}
-            </Tag>
+            <Tag key={tag}>{tag.toUpperCase()}</Tag>
           ))}
         </div>
         <div className="status-row">

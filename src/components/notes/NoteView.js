@@ -44,12 +44,12 @@ const Wrapper = styled.div`
       padding: 0 20px;
     }
     .quiz-solution {
-      background: ${colors.strokeOne};
-      padding: 8px 12px;
-      width: 96%;
+      background: ${colors.bg};
+      border: 1px solid ${colors.green};
+      margin: 0 20px 20px;
+      padding: 10px 0;
       text-align: center;
-      margin: 2px auto 8px;
-      border-radius: 2px;
+      border-radius: 4px;
     }
     .back-icon {
       position: absolute;
