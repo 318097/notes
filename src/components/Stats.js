@@ -192,7 +192,7 @@ const StatsWrapper = ({ statsModal, toggleStatsModal, stats, ...rest }) => {
       }
       centered={true}
       style={{ padding: "0" }}
-      visible={true || statsModal}
+      visible={statsModal}
       width="60vw"
       onCancel={handleClose}
       footer={[
