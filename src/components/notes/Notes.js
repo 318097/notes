@@ -12,6 +12,7 @@ import {
   setFilter,
   setSession,
 } from "../../store/actions";
+import { extractTagCodes } from "../../utils";
 
 const PageWrapper = styled.div`
   margin-bottom: 25px;
@@ -63,8 +64,8 @@ const Notes = ({
   dispatch,
   meta,
   filters,
-  session,
   appLoading,
+  tagsCodes,
 }) => {
   const scrollRef = useRef();
 
@@ -112,6 +113,7 @@ const Notes = ({
                     handleClick={handleClick}
                     onEdit={onEdit}
                     onDelete={onDelete}
+                    tagsCodes={tagsCodes}
                   />
                 ))}
               </div>
@@ -141,12 +143,12 @@ const Notes = ({
   );
 };
 
-const mapStateToProps = ({ notes, meta, appLoading, session, filters }) => ({
+const mapStateToProps = ({ notes, meta, appLoading, filters, settings }) => ({
   notes,
   appLoading,
-  session,
   filters,
   meta,
+  tagsCodes: extractTagCodes(settings.tags),
 });
 
 export default withRouter(connect(mapStateToProps)(Notes));
