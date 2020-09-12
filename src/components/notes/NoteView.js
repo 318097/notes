@@ -23,7 +23,7 @@ const Wrapper = styled.div`
     animation: 0.2s ${fadeInDownAnimation};
     height: 78vh;
     width: 100%;
-    padding: 10px 0 10px 5px;
+    padding: 30px 0;
     grid-column: 4/10;
     display: flex;
     background: white;
@@ -31,12 +31,17 @@ const Wrapper = styled.div`
     flex-direction: column;
     .title {
       text-align: center;
-      margin: 16px;
+      font-size: 2.6rem;
+      padding: 20px;
+      text-decoration: overline;
     }
     .content {
       flex: 1 1 auto;
       overflow: auto;
-      padding: 20px 16px;
+      padding: 20px;
+    }
+    .tags {
+      padding: 0 20px;
     }
     .quiz-solution {
       background: ${colors.strokeOne};
@@ -69,8 +74,8 @@ const Wrapper = styled.div`
     }
     .index {
       position: absolute;
-      top: 4px;
-      right: 10px;
+      top: 12px;
+      right: 16px;
       font-style: italic;
       color: ${colors.bar};
     }
@@ -136,6 +141,7 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
   if (!viewNote) return null;
 
   const { title, content, tags, index, type, solution } = viewNote || {};
+
   return (
     <Wrapper>
       <div className="previous-icon">
