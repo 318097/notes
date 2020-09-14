@@ -9,7 +9,7 @@ import _ from "lodash";
 import Filters from "./Filters";
 
 import {
-  setSession,
+  logout,
   toggleSettingsDrawer,
   setModalMeta,
   toggleStatsModal,
@@ -73,13 +73,6 @@ const Header = ({ history, dispatch, session }) => {
     setShowFilters(_.get(history, "location.pathname") === "/home");
   }, [history.location.pathname]);
 
-  const signOut = async () => {
-    dispatch(setSession(null));
-    sessionStorage.clear();
-    localStorage.clear();
-    return history.push("/signin");
-  };
-
   return (
     <Container>
       <h3>
@@ -117,7 +110,7 @@ const Header = ({ history, dispatch, session }) => {
             type="settings"
             onClick={() => dispatch(toggleSettingsDrawer(true))}
           />
-          <Icon background type="logout" onClick={signOut} />
+          <Icon background type="logout" onClick={() => dispatch(logout())} />
         </div>
       )}
     </Container>

@@ -17,6 +17,7 @@ import {
   SET_ACTIVE_COLLECTION,
   TOGGLE_STATS_MODAL,
   FETCH_STATS,
+  LOGOUT,
 } from "./constants";
 
 const initialState = {
@@ -81,6 +82,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         appLoading: action.payload,
+      };
+    case LOGOUT:
+      sessionStorage.clear();
+      localStorage.clear();
+      return {
+        ...state,
+        session: null,
       };
     case SET_ACTIVE_COLLECTION:
       return {

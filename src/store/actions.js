@@ -21,11 +21,16 @@ import {
   SET_ACTIVE_COLLECTION,
   TOGGLE_STATS_MODAL,
   FETCH_STATS,
+  LOGOUT,
 } from "./constants";
 
 export const setSession = (session) => ({
   type: SET_SESSION,
   payload: session,
+});
+
+export const logout = () => ({
+  type: LOGOUT,
 });
 
 export const setActiveCollection = (id) => async (dispatch, getState) => {
