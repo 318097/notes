@@ -85,8 +85,9 @@ const Controls = ({ note, dispatch }) => {
       updateNote({ _id: note._id, liveId: note.liveId, [key]: value })
     );
 
-  const slug = note.slug.replace(/-/g, "_");
-  const slugWithLiveId = `${note.liveId}-${slug}`;
+  const slugWithUnderscore = note.slug.replace(/-/g, "_");
+  const slug = `RDY${note.index}-${slugWithUnderscore}`;
+  const slugWithLiveId = `${note.liveId}-${slugWithUnderscore}`;
   const addedDays = moment().diff(moment(note.createdAt), "days");
 
   const copy = (text) => () => {

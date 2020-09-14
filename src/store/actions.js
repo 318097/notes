@@ -1,5 +1,4 @@
 import axios from "axios";
-import moment from "moment";
 import _ from "lodash";
 
 import { getNextNote, generateNewResourceId } from "../utils";
