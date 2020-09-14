@@ -31,7 +31,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     .title {
       text-align: center;
-      font-size: 2.6rem;
+      font-size: 2.2rem;
       padding: 20px;
       text-decoration: overline;
     }
@@ -45,7 +45,7 @@ const Wrapper = styled.div`
     }
     .quiz-solution {
       background: ${colors.bg};
-      border: 1px solid ${colors.green};
+      border: 1px solid ${colors.strokeTwo};
       margin: 0 20px 20px;
       padding: 10px 0;
       text-align: center;
@@ -64,8 +64,7 @@ const Wrapper = styled.div`
     }
     .copy-icon {
       position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
+      top: 10px;
       right: -10px;
       transition: 0.3s;
       &:hover {
@@ -78,6 +77,21 @@ const Wrapper = styled.div`
       right: 16px;
       font-style: italic;
       color: ${colors.bar};
+    }
+    .canonical-url {
+      position: absolute;
+      bottom: 8px;
+      left: 20px;
+      font-size: 1.2rem;
+      max-width: 80%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      cursor: pointer;
+      transition: all 0.4s;
+      &:hover {
+        color: ${colors.orchid};
+      }
     }
   }
   .controls {
@@ -140,7 +154,9 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
 
   if (!viewNote) return null;
 
-  const { title, content, tags, index, type, solution } = viewNote || {};
+  const { title, content, tags, index, type, solution, slug } = viewNote || {};
+
+  const canonicalURL = `https://www.codedrops.tech/posts/${slug}`;
 
   return (
     <Wrapper>
@@ -163,7 +179,7 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
             />
           )}
         </div>
-        <div className="relative">
+        <div style={{ flex: "1" }} className="relative">
           <div
             className="content"
             dangerouslySetInnerHTML={{ __html: marked(content) }}
@@ -191,6 +207,12 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
           type="edit"
         />
         {!!index && <span className="index">{`#${index}`}</span>}
+        <div
+          className="canonical-url"
+          onClick={() => copyToClipboard(canonicalURL)}
+        >
+          {canonicalURL}
+        </div>
       </Card>
       <Controls note={viewNote} />
       <div className="next-icon">

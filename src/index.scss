@@ -12,23 +12,13 @@
   font-family: RobotoMonoBold;
 }
 
-// .simplemde-editor-1-wrapper {
-//   width: 100%;
-// }
-
-// #simplemde-editor-1-wrapper {
-//   .editor-toolbar:before,
-//   .editor-toolbar:after {
-//     display: none;
-//   }
-// }
-
 * {
   font-family: RobotoMonoRegular;
 }
 
 html,
 body,
+html body,
 [class*="ant"] {
   font-size: 10px;
 }
@@ -38,6 +28,10 @@ body,
 .ant-select-dropdown-menu-item {
   font-size: 10px !important;
 }
+
+// body .ant-modal-body {
+//   font-size: 12px !important;
+// }
 
 .anticon {
   font-size: 14px;

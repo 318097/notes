@@ -28,17 +28,18 @@ const ControlsWrapper = styled.div`
   }
   .slug {
     background: ${colors.primary};
-    text-overflow: ellipsis;
     width: 100%;
     color: white;
     padding: 4px 4px;
-    overflow: hidden;
     text-align: center;
     border-radius: 4px;
     font-size: 1rem;
     transition: 0.4s;
     cursor: pointer;
     margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     &:hover {
       background: ${colors.orchid};
     }
@@ -50,14 +51,15 @@ const ControlsWrapper = styled.div`
   }
   .resource-id {
     background: ${colors.strokeOne};
-    text-overflow: ellipsis;
     padding: 2px 4px;
-    overflow: hidden;
     border-radius: 4px;
     font-size: 1rem;
     margin-bottom: 2px;
     cursor: pointer;
     transition: 0.4s;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
     &:hover {
       background: ${colors.strokeTwo};
     }
@@ -66,9 +68,6 @@ const ControlsWrapper = styled.div`
     font-size: 12px;
   }
 `;
-
-// const defaultTags =
-//   "#Web #WebDevelopment #Tech #Coding #Developer #DevelopersLife #DeveloperLife #WebDeveloper #SoftwareDeveloper #SoftwareEngineer #Javascript #JS #JavascriptDeveloper #JavascriptTutorial #JavascriptEngineer #JavascriptLearning #JavascriptLover #LearnJavascript #JavascriptTips #JavascriptIsLife #JavascriptNinja";
 
 const Controls = ({ note, dispatch }) => {
   const [hashtags, setHashtags] = useState("");
