@@ -69,7 +69,8 @@ body {
         display: flex;
         flex-direction: column;
       }
-      section#signin {
+      section#signin,
+      section#signup {
         height: auto;
       }
     }

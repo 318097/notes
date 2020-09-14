@@ -45,28 +45,28 @@ const Signin = ({ history, setSession, session }) => {
   };
 
   return (
-    <StyledSection id="signin">
+    <StyledSection id="signin" className="curve-border-1">
       <h3>Signin</h3>
       <form>
         <Input
+          className="mb"
           value={form.username}
           onChange={handleInput("username")}
           placeholder="Username"
         />
         <Input.Password
+          className="mb"
           value={form.password}
           onChange={handleInput("password")}
           placeholder="Password"
           onPressEnter={handleSignin}
         />
         <br />
-        <Button type="primary" onClick={handleSignin} loading={loading}>
+        <Button onClick={handleSignin} loading={loading}>
           Sign in
         </Button>
 
-        <Button type="danger" onClick={() => history.push("/signup")}>
-          Sign up
-        </Button>
+        <Button onClick={() => history.push("/signup")}>Sign up</Button>
       </form>
     </StyledSection>
   );

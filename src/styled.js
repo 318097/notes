@@ -1,5 +1,6 @@
 import { Icon } from "antd";
 import styled from "styled-components";
+import colors from "@codedrops/react-ui";
 
 const StyledIcon = styled(Icon)`
   margin: 0 3px;
@@ -33,21 +34,15 @@ const ProfileIcon = styled.div`
 
 const StyledSection = styled.section`
   margin: 0 auto;
-  background: white;
   max-width: 275px;
   padding: 50px 15px;
-  border-radius: 5px;
-  border: 1px solid lightgrey;
-  box-shadow: 3px 3px 3px lightgrey;
-  position: relative;
-  top: 50px;
   text-align: center;
+  background: ${colors.bg};
+  border: 1px solid ${colors.strokeOne};
   h3 {
     font-size: 1.4rem;
     text-align: center;
     text-transform: uppercase;
-    text-decoration: underline;
-    color: #808080;
     margin-bottom: 30px;
   }
   button {
