@@ -71,6 +71,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         session: updatedSession,
+        activeCollection: currentSettingKey,
         settings,
       };
     case SET_SETTINGS:
