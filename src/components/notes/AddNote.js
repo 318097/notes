@@ -98,9 +98,11 @@ const AddNote = ({
     <Modal
       title={mode === "add" ? "ADD NOTE" : "EDIT NOTE"}
       centered={true}
+      maskClosable={false}
+      destroyOnClose={true}
       style={{ padding: "0" }}
       visible={modalVisibility}
-      width="80vw"
+      width="60vw"
       confirmLoading={loading}
       okText={mode === "add" ? "Add" : "Update"}
       onOk={handleOk}

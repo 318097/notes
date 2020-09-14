@@ -182,6 +182,7 @@ const StatsWrapper = ({ statsModal, toggleStatsModal, stats, ...rest }) => {
   const handleClose = () => toggleStatsModal(false);
   return (
     <Modal
+      destroyOnClose={true}
       title={
         <div>
           STATS{" "}
