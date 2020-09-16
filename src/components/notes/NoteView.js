@@ -207,12 +207,14 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
           type="edit"
         />
         {!!index && <span className="index">{`#${index}`}</span>}
-        <div
-          className="canonical-url"
-          onClick={() => copyToClipboard(canonicalURL)}
-        >
-          {canonicalURL}
-        </div>
+        {status === "POSTED" && (
+          <div
+            className="canonical-url"
+            onClick={() => copyToClipboard(canonicalURL)}
+          >
+            {canonicalURL}
+          </div>
+        )}
       </Card>
       <Controls note={viewNote} />
       <div className="next-icon">
