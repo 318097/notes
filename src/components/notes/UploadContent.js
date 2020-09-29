@@ -58,7 +58,7 @@ const parseItem = (item, type = "POST") => {
   switch (type) {
     case "POST":
       [title, ...content] = item.split("\n");
-      title = title.replace(/#/gi, "");
+      title = title.replace(/###/gi, "");
       content = content.join("\n");
       break;
     case "DROP":
@@ -81,12 +81,12 @@ const UploadContent = ({
   setUploadingData,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [fileParsing, setFileParsing] = useState("===[\r\n]");
+  const [fileParsing, setFileParsing] = useState("---[\r\n]");
 
   const inputEl = useRef(null);
 
   useEffect(() => {
-    if (dataType === "POST") setFileParsing("===[\r\n]");
+    if (dataType === "POST") setFileParsing("---[\r\n]");
     else if (dataType === "DROP") setFileParsing("\n");
   }, [dataType]);
 
@@ -98,19 +98,23 @@ const UploadContent = ({
     const [document] = event.target.files;
 
     if (!document) return;
+
     const reader = new FileReader();
     reader.readAsText(document);
+
     reader.onload = () =>
       setUploadingData({
         rawData: reader.result,
         shouldProcessData: true,
         fileName: document.name,
       });
+
     event.target.value = null;
   };
 
   const processData = () => {
     if (!rawData) return;
+
     const fileContent = rawData
       .split(new RegExp(fileParsing))
       .map((item) => {

@@ -154,7 +154,8 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
 
   if (!viewNote) return null;
 
-  const { title, content, tags, index, type, solution, slug } = viewNote || {};
+  const { title, content, tags, index, type, solution, slug, status } =
+    viewNote || {};
 
   const canonicalURL = `https://www.codedrops.tech/posts/${slug}`;
 
