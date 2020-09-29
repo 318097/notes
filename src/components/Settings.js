@@ -166,7 +166,7 @@ const CollectionInfo = ({ settingData, saveSettings, loading }) => {
         />
       </div>
       <Button
-        loading={loading}
+        disabled={loading}
         type="primary"
         style={{ marginTop: "20px" }}
         onClick={() => saveSettings(data)}

@@ -62,7 +62,7 @@ const Signin = ({ history, setSession, session }) => {
           onPressEnter={handleSignin}
         />
         <br />
-        <Button onClick={handleSignin} loading={loading}>
+        <Button onClick={handleSignin} disabled={loading}>
           Sign in
         </Button>
 
