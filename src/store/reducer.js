@@ -128,9 +128,11 @@ const reducer = (state = initialState, action) => {
         viewNote: action.payload,
       };
     case ADD_NOTE:
+      const { notes, resourceIndex } = action.payload;
       return {
         ...state,
-        newNotes: action.payload,
+        newNotes: notes,
+        settings: { ...state.settings, index: resourceIndex },
       };
     case SET_NOTE_TO_EDIT: {
       const { selectedNote, mode } = action.payload;

@@ -3,13 +3,13 @@ import React, { useState, useEffect, useRef, Fragment } from "react";
 import { Button, message, PageHeader, Radio, Input, Tag } from "antd";
 import colors, { Card, Icon } from "@codedrops/react-ui";
 import { connect } from "react-redux";
-import axios from "axios";
 import styled from "styled-components";
 import uuid from "uuid";
 import marked from "marked";
 import { MessageWrapper } from "../../styled";
+import SelectCollection from "../SelectCollection";
 
-import { setModalMeta, setUploadingData } from "../../store/actions";
+import { setModalMeta, setUploadingData, addNote } from "../../store/actions";
 import { generateSlug } from "../../utils";
 
 const Wrapper = styled.div`
@@ -79,8 +79,11 @@ const UploadContent = ({
   setModalMeta,
   uploadingData: { rawData, data, dataType, shouldProcessData, fileName },
   setUploadingData,
+  addNote,
+  activeCollection,
 }) => {
   const [loading, setLoading] = useState(false);
+  const [collection, setCollection] = useState(activeCollection);
   const [fileParsing, setFileParsing] = useState("---[\r\n]");
 
   const inputEl = useRef(null);
@@ -128,6 +131,7 @@ const UploadContent = ({
           slug: generateSlug(title),
           viewed: false,
           fileName,
+          collection,
         };
       })
       .filter((item) => item.title || item.content);
@@ -137,7 +141,7 @@ const UploadContent = ({
   const addData = async () => {
     try {
       setLoading(true);
-      await axios.post("/posts", { data });
+      await addNote(data);
       message.success(`${data.length} notes added successfully.`);
     } catch (err) {
       console.log(err);
@@ -164,6 +168,10 @@ const UploadContent = ({
       <PageHeader
         title="File Upload"
         extra={[
+          <SelectCollection
+            collection={collection}
+            setCollection={setCollection}
+          />,
           <Input
             key="file-splitter"
             style={{ width: "110px" }}
@@ -260,10 +268,11 @@ const UploadContent = ({
   );
 };
 
-const mapStateToProps = ({ uploadingData }) => ({
+const mapStateToProps = ({ uploadingData, activeCollection }) => ({
   uploadingData,
+  activeCollection,
 });
 
-const mapDispatchToProps = { setModalMeta, setUploadingData };
+const mapDispatchToProps = { setModalMeta, setUploadingData, addNote };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UploadContent);

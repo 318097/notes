@@ -149,12 +149,24 @@ export const addNote = (note) => async (dispatch, getState) => {
     dispatch(setAppLoading(true));
     const { activeCollection, settings } = getState();
 
-    const resources = [generateNewResourceId(note, settings.index)];
+    const noteArr = [].concat(note);
+    let resourceIndex = settings.index;
+    const dataToSend = noteArr.map((note, index) => {
+      const resources = [generateNewResourceId(note, resourceIndex)];
+      resourceIndex++;
+      return { ...note, resources };
+    });
+
     const { data } = await axios.post(
-      `/posts?collectionId=${note.collection || activeCollection}`,
-      { data: { ...note, resources } }
+      `/posts?collectionId=${
+        _.get(dataToSend, "0.collection") || activeCollection
+      }`,
+      { data: dataToSend }
     );
-    dispatch({ type: ADD_NOTE, payload: _.get(data, "result.0") });
+    dispatch({
+      type: ADD_NOTE,
+      payload: { notes: data.result, resourceIndex },
+    });
   } finally {
     dispatch(setAppLoading(false));
   }
