@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import marked from "marked";
-import { Modal, Input, Radio, Checkbox, Button, Select } from "antd";
+import { Modal, Input, Radio, Checkbox, Button } from "antd";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import _ from "lodash";
@@ -15,8 +15,8 @@ import {
 } from "../../store/actions";
 import { generateSlug } from "../../utils";
 import colors from "@codedrops/react-ui";
+import SelectCollection from "../SelectCollection";
 
-const { Option } = Select;
 const { TextArea } = Input;
 
 const StyledContainer = styled.div`
@@ -58,13 +58,14 @@ const AddNote = ({
   tags,
   updateUploadNote,
   setNextNoteForEditing,
-  activeCollection,
   appLoading,
+  activeCollection,
 }) => {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [previewMode, setPreviewMode] = useState("PREVIEW");
   const [collection, setCollection] = useState(activeCollection);
+
   const [note, setNote] = useState(initialState);
 
   useEffect(() => {
@@ -146,20 +147,11 @@ const AddNote = ({
               <Radio.Button value="POST">POST</Radio.Button>
               <Radio.Button value="QUIZ">QUIZ</Radio.Button>
             </Radio.Group>
-            <Select
-              onChange={setCollection}
-              style={{ width: 120 }}
-              placeholder="Collections"
-              value={collection}
-            >
-              {Object.entries(_.get(session, "notesApp", [])).map(
-                ([id, config]) => (
-                  <Option key={id} value={id}>
-                    {_.get(config, "name", "")}
-                  </Option>
-                )
-              )}
-            </Select>
+
+            <SelectCollection
+              collection={collection}
+              setCollection={setCollection}
+            />
           </div>
 
           <Input

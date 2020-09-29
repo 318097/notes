@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Drawer, Tag, Input, Button, Select, Divider, message } from "antd";
+import { Drawer, Tag, Input, Button, message } from "antd";
 import { connect } from "react-redux";
 import _ from "lodash";
 import short from "short-uuid";
 import { toggleSettingsDrawer, setSession } from "../store/actions";
-import colors from "@codedrops/react-ui";
 import axios from "axios";
+import SelectCollection from "./SelectCollection";
 
 const { TextArea } = Input;
-const { Option } = Select;
 
 const Settings = ({
   settingsDrawerVisibility,
-  settings,
   session,
   activeCollection,
   toggleSettingsDrawer,
@@ -61,9 +59,8 @@ const Settings = ({
       visible={settingsDrawerVisibility}
     >
       <Header
-        collections={collections}
         setCollections={setCollections}
-        activeCollection={active}
+        active={active}
         setActive={setActive}
       />
       <CollectionInfo
@@ -75,12 +72,7 @@ const Settings = ({
   );
 };
 
-const Header = ({
-  collections,
-  setCollections,
-  activeCollection,
-  setActive,
-}) => {
+const Header = ({ setCollections, active, setActive }) => {
   const addNewCollection = () => {
     const id = short.generate();
     const details = {
@@ -95,18 +87,7 @@ const Header = ({
 
   return (
     <div className="flex space-between mb">
-      <Select
-        onChange={setActive}
-        style={{ width: 120 }}
-        placeholder="Collections"
-        value={activeCollection}
-      >
-        {collections.map(([id, config]) => (
-          <Option key={id} value={id}>
-            {_.get(config, "name", "")}
-          </Option>
-        ))}
-      </Select>
+      <SelectCollection collection={active} setCollection={setActive} />
       <Button onClick={addNewCollection} icon="plus"></Button>
     </div>
   );
@@ -199,12 +180,10 @@ const CollectionInfo = ({ settingData, saveSettings, loading }) => {
 const mapStateToProps = ({
   session,
   settingsDrawerVisibility,
-  settings,
   activeCollection,
 }) => ({
   session: session || {},
   settingsDrawerVisibility,
-  settings,
   activeCollection,
 });
 

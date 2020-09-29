@@ -1,8 +1,8 @@
 import React from "react";
 import { Input, Select, Icon } from "antd";
 import { connect } from "react-redux";
-import { setFilter, setActiveCollection } from "../store/actions";
-import _ from "lodash";
+import { setFilter } from "../store/actions";
+import SelectCollection from "./SelectCollection";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -48,28 +48,14 @@ const Filters = ({
   notes,
   meta,
   activeCollection,
-  session,
   settings,
 }) => {
   const setFilterValues = (filter) => dispatch(setFilter({ ...filter }));
 
-  const setActive = (id) => dispatch(setActiveCollection(id));
-
   const { tags = [] } = settings;
   return (
     <div className="flex center align-center" style={{ flexShrink: 0 }}>
-      <Select
-        onChange={setActive}
-        className="input-width"
-        placeholder="Collections"
-        value={activeCollection}
-      >
-        {Object.entries(_.get(session, "notesApp", [])).map(([id, config]) => (
-          <Option key={id} value={id}>
-            {_.get(config, "name", "")}
-          </Option>
-        ))}
-      </Select>
+      <SelectCollection collection={activeCollection} />
       <Search
         allowClear
         className="input-width"
@@ -184,14 +170,12 @@ const mapStateToProps = ({
   notes,
   meta,
   activeCollection,
-  session,
   settings,
 }) => ({
   filters,
   notes,
   meta,
   activeCollection,
-  session,
   settings,
 });
 

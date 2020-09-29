@@ -130,9 +130,8 @@ const reducer = (state = initialState, action) => {
     case ADD_NOTE:
       return {
         ...state,
-        notes: [...state.notes, action.payload],
+        newNotes: action.payload,
       };
-
     case SET_NOTE_TO_EDIT: {
       const { selectedNote, mode } = action.payload;
       return {
