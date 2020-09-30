@@ -1,22 +1,40 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef, Fragment } from "react";
-import { Button, message, PageHeader, Radio, Input, Tag } from "antd";
-import colors, { Card, Icon } from "@codedrops/react-ui";
+import { Button, message, Radio, Input, Tag, Select } from "antd";
+import { Card, Icon } from "@codedrops/react-ui";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import uuid from "uuid";
 import marked from "marked";
+import _ from "lodash";
+
 import { MessageWrapper } from "../../styled";
 import SelectCollection from "../SelectCollection";
-
 import { setModalMeta, setUploadingData, addNote } from "../../store/actions";
 import { generateSlug } from "../../utils";
+
+const { Option } = Select;
+
+const StyledPageHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px 8px;
+  .actions {
+    margin-left: 20px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-column-gap: 4px;
+    align-items: center;
+  }
+`;
 
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, 300px);
   column-gap: 6px;
   justify-content: center;
+
   .card-wrapper {
     height: 300px;
     margin: 3px 0;
@@ -25,6 +43,7 @@ const Wrapper = styled.div`
       height: 100%;
       width: 100%;
       padding: 20px 12px;
+      cursor: pointer;
       .title {
         margin-bottom: 10px;
       }
@@ -41,14 +60,9 @@ const Wrapper = styled.div`
       font-size: 1.1rem;
     }
     .actions {
-      display: flex;
-      flex-direction: column;
       position: absolute;
-      top: 6px;
+      top: 10px;
       right: 6px;
-      background: ${colors.bg};
-      padding: 8px 4px;
-      border-radius: 20px;
     }
   }
 `;
@@ -81,8 +95,10 @@ const UploadContent = ({
   setUploadingData,
   addNote,
   activeCollection,
+  settings,
 }) => {
   const [loading, setLoading] = useState(false);
+  const [tags, setTags] = useState([]);
   const [collection, setCollection] = useState(activeCollection);
   const [fileParsing, setFileParsing] = useState("---[\r\n]");
 
@@ -123,7 +139,7 @@ const UploadContent = ({
       .map((item) => {
         let { title = "", content = "" } = parseItem(item.trim(), dataType);
         return {
-          tags: [],
+          tags,
           type: dataType,
           title,
           content,
@@ -165,13 +181,34 @@ const UploadContent = ({
 
   return (
     <section>
-      <PageHeader
-        title="File Upload"
-        extra={[
+      <StyledPageHeader>
+        <h3>File Upload</h3>
+        <div className="actions">
+          <Button
+            key="clear-button"
+            onClick={() => setUploadingData({ shouldProcessData: true })}
+          >
+            Parse
+          </Button>
+          <Select
+            style={{ minWidth: "80px" }}
+            mode="multiple"
+            placeholder="Tags"
+            value={tags}
+            onChange={(values) => setTags(values)}
+          >
+            {_.get(settings, "tags", []).map(({ label }) => (
+              <Option key={label} value={label}>
+                {label}
+              </Option>
+            ))}
+          </Select>
+
           <SelectCollection
             collection={collection}
             setCollection={setCollection}
-          />,
+          />
+
           <Input
             key="file-splitter"
             style={{ width: "110px" }}
@@ -180,7 +217,8 @@ const UploadContent = ({
             onChange={({ target: { value } }) =>
               setFileParsing(JSON.parse(value))
             }
-          />,
+          />
+
           <Radio.Group
             key="data-type"
             buttonStyle="solid"
@@ -191,29 +229,29 @@ const UploadContent = ({
           >
             <Radio.Button value="POST">POST</Radio.Button>
             <Radio.Button value="DROP">DROP</Radio.Button>
-          </Radio.Group>,
-          <span key="upload-buttons">
-            {rawData ? (
-              <Fragment>
-                <Button onClick={addData} loading={loading}>
-                  {`Upload ${data.length} ${(dataType || "").toLowerCase()}`}
-                </Button>
-                <Button
-                  style={{ marginLeft: 2 }}
-                  key="clear-button"
-                  onClick={clearData}
-                >
-                  Clear
-                </Button>
-              </Fragment>
-            ) : (
-              <Button type="dashed" onClick={() => inputEl.current.click()}>
-                Select File
+          </Radio.Group>
+
+          {rawData ? (
+            <Fragment>
+              <Button onClick={addData} loading={loading}>
+                {`Upload ${data.length} ${(dataType || "").toLowerCase()}`}
               </Button>
-            )}
-          </span>,
-        ]}
-      />
+              <Button
+                style={{ marginLeft: 2 }}
+                key="clear-button"
+                onClick={clearData}
+              >
+                Clear
+              </Button>
+            </Fragment>
+          ) : (
+            <Button type="dashed" onClick={() => inputEl.current.click()}>
+              Select File
+            </Button>
+          )}
+        </div>
+      </StyledPageHeader>
+
       {data.length ? (
         <Wrapper>
           {data.map((item, i) => {
@@ -222,6 +260,7 @@ const UploadContent = ({
               <div
                 className={`card-wrapper ${viewed ? "viewed" : ""}`}
                 key={item.tempId}
+                onClick={editItem(item)}
               >
                 <Card>
                   <h3 className="title">{title}</h3>
@@ -238,12 +277,6 @@ const UploadContent = ({
 
                 <span className="index-number">#{i + 1}</span>
                 <div className="actions">
-                  <Icon
-                    size={12}
-                    onClick={editItem(item)}
-                    className="edit-icon"
-                    type="edit"
-                  />
                   <Icon
                     size={12}
                     onClick={removeItem(item.tempId)}
@@ -268,9 +301,10 @@ const UploadContent = ({
   );
 };
 
-const mapStateToProps = ({ uploadingData, activeCollection }) => ({
+const mapStateToProps = ({ uploadingData, activeCollection, settings }) => ({
   uploadingData,
   activeCollection,
+  settings,
 });
 
 const mapDispatchToProps = { setModalMeta, setUploadingData, addNote };

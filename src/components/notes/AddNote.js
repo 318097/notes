@@ -138,8 +138,11 @@ const AddNote = ({
               onChange={({ target: { value } }) =>
                 setData({
                   type: value,
-                  title: value === "QUIZ" ? "Quiz" : "",
-                  slug: value === "QUIZ" ? generateSlug("Quiz") : "",
+                  title: value === "QUIZ" ? "Quiz" : _.get(note, "title", ""),
+                  slug:
+                    value === "QUIZ"
+                      ? generateSlug("Quiz")
+                      : _.get(note, "slug", ""),
                 })
               }
             >

@@ -131,7 +131,7 @@ const reducer = (state = initialState, action) => {
       const { notes, resourceIndex } = action.payload;
       return {
         ...state,
-        newNotes: notes,
+        notes: [...notes, ...state.notes],
         settings: { ...state.settings, index: resourceIndex },
       };
     case SET_NOTE_TO_EDIT: {
