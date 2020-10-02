@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef, Fragment } from "react";
-import { Button, message, Radio, Input, Tag, Select } from "antd";
+import { Button, message, Radio, Input, Tag, Select, Divider } from "antd";
 import { Card, Icon } from "@codedrops/react-ui";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -184,12 +184,6 @@ const UploadContent = ({
       <StyledPageHeader>
         <h3>File Upload</h3>
         <div className="actions">
-          <Button
-            key="clear-button"
-            onClick={() => setUploadingData({ shouldProcessData: true })}
-          >
-            Parse
-          </Button>
           <Select
             style={{ minWidth: "80px" }}
             mode="multiple"
@@ -233,8 +227,16 @@ const UploadContent = ({
 
           {rawData ? (
             <Fragment>
+              <Divider type="vertical" />
               <Button onClick={addData} loading={loading}>
                 {`Upload ${data.length} ${(dataType || "").toLowerCase()}`}
+              </Button>
+              <Divider type="vertical" />
+              <Button
+                key="clear-button"
+                onClick={() => setUploadingData({ shouldProcessData: true })}
+              >
+                Parse
               </Button>
               <Button
                 style={{ marginLeft: 2 }}
