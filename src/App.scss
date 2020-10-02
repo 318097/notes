@@ -1,11 +1,13 @@
 @import "./Common.scss";
 @import "@codedrops/react-ui/dist/styles/colors.scss";
 
-.spinner {
+html body .spinner {
   position: absolute;
   right: 20px;
-  bottom: 8px;
-  z-index: 100;
+  bottom: 16px;
+  top: unset;
+  left: unset;
+  z-index: 10000;
 }
 
 pre,

@@ -2,13 +2,9 @@ import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import axios from "axios";
-import { Spin, Icon as AntIcon } from "antd";
 import "./App.scss";
-
 import { setSession } from "./store/actions";
-
 import ProtectedRoute from "./ProtectedRoute";
-
 import Header from "./components/Header";
 import Signup from "./components/Signup";
 import Signin from "./components/Signin";
@@ -20,10 +16,6 @@ import Settings from "./components/Settings";
 import AddNote from "./components/notes/AddNote";
 import Stats from "./components/Stats";
 import { getToken, hasToken } from "./authService";
-
-const antIcon = <AntIcon type="loading" spin />;
-
-// axios.defaults.baseURL = "https://bubblegum-server.herokuapp.com/api/";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL
   ? process.env.REACT_APP_SERVER_URL
@@ -88,11 +80,7 @@ const App = ({ setSession, session, appLoading }) => {
           <Settings />
         </Fragment>
       )}
-      {(appLoading || loading) && (
-        <div className="spinner">
-          <Spin indicator={antIcon} size="large" />
-        </div>
-      )}
+      {(appLoading || loading) && <div className="spinner" />}
     </div>
   );
 };
