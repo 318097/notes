@@ -13,6 +13,7 @@ import {
   toggleSettingsDrawer,
   setModalMeta,
   toggleStatsModal,
+  setQuickAddModalMeta,
 } from "../store/actions";
 
 const Container = styled.header`
@@ -89,13 +90,18 @@ const Header = ({ history, dispatch, session }) => {
             type="plus"
             onClick={() => dispatch(setModalMeta({ visibility: true }))}
           />
+          <AntIcon
+            className="ant-icon"
+            type="fire"
+            onClick={() => dispatch(setQuickAddModalMeta({ visibility: true }))}
+          />
           <Icon
             background
             type="upload"
             onClick={() => history.push("/upload")}
           />
           <AntIcon
-            className="stats-icon"
+            className="ant-icon"
             type="line-chart"
             onClick={() => dispatch(toggleStatsModal(true))}
           />

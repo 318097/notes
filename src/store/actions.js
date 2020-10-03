@@ -21,6 +21,7 @@ import {
   TOGGLE_STATS_MODAL,
   FETCH_STATS,
   LOGOUT,
+  SET_QUICK_ADD_MODAL_META,
 } from "./constants";
 
 export const setSession = (session) => ({
@@ -144,14 +145,14 @@ export const getNoteById = (noteId) => async (dispatch, getState) => {
   dispatch(setAppLoading(false));
 };
 
-export const addNote = (note) => async (dispatch, getState) => {
+export const addNote = (notes) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
     const { activeCollection, settings } = getState();
 
-    const noteArr = [].concat(note);
+    const noteArr = [].concat(notes);
     let resourceIndex = settings.index;
-    const dataToSend = noteArr.map((note, index) => {
+    const dataToSend = noteArr.map((note) => {
       const resources = [generateNewResourceId(note, resourceIndex)];
       resourceIndex++;
       return { ...note, resources };
@@ -281,3 +282,8 @@ export const setNextNoteForEditing = (currentNote) => async (
     })
   );
 };
+
+export const setQuickAddModalMeta = ({ visibility = false } = {}) => ({
+  type: SET_QUICK_ADD_MODAL_META,
+  payload: { visibility },
+});

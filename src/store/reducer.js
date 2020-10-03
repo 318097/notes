@@ -18,6 +18,7 @@ import {
   TOGGLE_STATS_MODAL,
   FETCH_STATS,
   LOGOUT,
+  SET_QUICK_ADD_MODAL_META,
 } from "./constants";
 
 const initialState = {
@@ -51,6 +52,9 @@ const initialState = {
     dataType: "POST",
     shouldProcessData: true,
     fileName: null,
+  },
+  quickaddModalMeta: {
+    visibility: false,
   },
 };
 
@@ -154,6 +158,7 @@ const reducer = (state = initialState, action) => {
           ...action.payload,
         },
       };
+
     case UPDATE_NOTE: {
       return {
         ...state,
@@ -194,6 +199,14 @@ const reducer = (state = initialState, action) => {
         },
       };
     }
+    case SET_QUICK_ADD_MODAL_META:
+      return {
+        ...state,
+        quickAddModalMeta: {
+          ...state.quickAddModalMeta,
+          ...action.payload,
+        },
+      };
     default:
       return state;
   }

@@ -14,6 +14,7 @@ import NoteView from "./components/notes/NoteView";
 import UploadContent from "./components/notes/UploadContent";
 import Settings from "./components/Settings";
 import AddNote from "./components/notes/AddNote";
+import QuickAdd from "./components/notes/QuickAdd";
 import Stats from "./components/Stats";
 import { getToken, hasToken } from "./authService";
 
@@ -76,6 +77,7 @@ const App = ({ setSession, session, appLoading }) => {
       {session && session.loggedIn && (
         <Fragment>
           <AddNote />
+          <QuickAdd />
           <Stats />
           <Settings />
         </Fragment>

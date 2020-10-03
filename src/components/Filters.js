@@ -9,6 +9,7 @@ const { Option } = Select;
 
 const status = [
   { label: "ALL", value: "" },
+  { label: "QUICK ADD", value: "QUICK_ADD" },
   { label: "DRAFT", value: "DRAFT" },
   { label: "READY", value: "READY" },
   { label: "POSTED", value: "POSTED" },
