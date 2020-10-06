@@ -88,9 +88,13 @@ body {
     height: 80vh;
     overflow: hidden;
   }
-  // .CodeMirror.CodeMirror-wrap {
-  //   height: 220px;
-  // }
+}
+
+// tags checkgroup in add modal
+.ant-checkbox-group {
+  .ant-checkbox-wrapper {
+    margin-bottom: 8px;
+  }
 }
 
 .viewed {
