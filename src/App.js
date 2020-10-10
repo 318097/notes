@@ -17,10 +17,9 @@ import AddNote from "./components/notes/AddNote";
 import QuickAdd from "./components/notes/QuickAdd";
 import Stats from "./components/Stats";
 import { getToken, hasToken } from "./authService";
+import config from "./config";
 
-axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL
-  ? process.env.REACT_APP_SERVER_URL
-  : "http://localhost:7000/api";
+axios.defaults.baseURL = config.SERVER_URL;
 axios.defaults.headers.common["authorization"] = getToken();
 axios.defaults.headers.common["external-source"] = "NOTES_APP";
 

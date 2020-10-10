@@ -208,7 +208,7 @@ const Controls = ({ note, dispatch }) => {
         </div>
       </ControlsWrapper>
       <ControlsWrapper>
-        <div>Added: {addedDays ? `${addedDays} days ago` : "today"}</div>
+        <div>Added: {addedDays ? `${addedDays} days ago` : "Today"}</div>
       </ControlsWrapper>
     </div>
   );

@@ -80,6 +80,7 @@ const Header = ({ setCollections, active, setActive }) => {
       name: "Untitled",
       caption: "",
       index: 1,
+      liveId: 1,
     };
     setCollections((prev) => [...prev, [id, details]]);
     setActive(id);
