@@ -24,87 +24,10 @@ import {
   SET_QUICK_ADD_MODAL_META,
 } from "./constants";
 
-export const setSession = (session) => ({
-  type: SET_SESSION,
-  payload: session,
-});
-
-export const logout = () => ({
-  type: LOGOUT,
-});
-
-export const setActiveCollection = (id) => async (dispatch, getState) => {
-  await dispatch({
-    type: SET_ACTIVE_COLLECTION,
-    payload: id,
-  });
-  await dispatch(setFilter());
-};
-
-export const setSettings = (updatedSettings, updateOnServer = false) => async (
-  dispatch,
-  getState
-) => {
-  const { settings = {}, session } = getState();
-
-  if (updateOnServer)
-    await axios.put(`/users/${session.userId}/settings`, updatedSettings);
-
-  const newSettings = { ...settings, ...updatedSettings };
-
-  dispatch({
-    type: SET_SETTINGS,
-    payload: newSettings,
-  });
-};
-
 export const setAppLoading = (status) => ({
   type: SET_APP_LOADING,
   payload: status,
 });
-
-export const toggleSettingsDrawer = (status) => ({
-  type: TOGGLE_SETTINGS_DRAWER,
-  payload: status,
-});
-
-export const toggleStatsModal = (status) => ({
-  type: TOGGLE_STATS_MODAL,
-  payload: status,
-});
-
-export const fetchStats = () => async (dispatch, getState) => {
-  try {
-    dispatch(setAppLoading(true));
-    const { activeCollection } = getState();
-    const {
-      data: { stats },
-    } = await axios.get(`/posts/stats?collectionId=${activeCollection}`);
-
-    dispatch({ type: FETCH_STATS, payload: stats });
-  } catch (err) {
-    console.log(err);
-  } finally {
-    dispatch(setAppLoading(false));
-  }
-};
-
-export const setFilter = (filterUpdate, resetPage = true) => async (
-  dispatch,
-  getState
-) => {
-  const {
-    filters,
-    session: { retainPage },
-  } = getState();
-  if (retainPage)
-    return dispatch({ type: SET_SESSION, payload: { retainPage: false } });
-
-  const updatedFiters = { ...filters, ...filterUpdate };
-  if (resetPage) updatedFiters["page"] = 1;
-  dispatch({ type: UPDATE_FILTER, payload: updatedFiters });
-  dispatch(fetchNotes());
-};
 
 export const fetchNotes = () => async (dispatch, getState) => {
   try {
@@ -232,8 +155,6 @@ export const deleteNote = (noteId) => async (dispatch, getState) => {
   }
 };
 
-export const toggleFavoriteNote = (noteId) => async (dispatch) => {};
-
 export const setModalMeta = ({
   visibility = false,
   mode = "add",
@@ -287,3 +208,80 @@ export const setQuickAddModalMeta = ({ visibility = false } = {}) => ({
   type: SET_QUICK_ADD_MODAL_META,
   payload: { visibility },
 });
+
+export const logout = () => ({
+  type: LOGOUT,
+});
+
+export const fetchStats = () => async (dispatch, getState) => {
+  try {
+    dispatch(setAppLoading(true));
+    const { activeCollection } = getState();
+    const {
+      data: { stats },
+    } = await axios.get(`/posts/stats?collectionId=${activeCollection}`);
+
+    dispatch({ type: FETCH_STATS, payload: stats });
+  } catch (err) {
+    console.log(err);
+  } finally {
+    dispatch(setAppLoading(false));
+  }
+};
+
+export const setSession = (session) => ({
+  type: SET_SESSION,
+  payload: session,
+});
+
+export const setActiveCollection = (id) => async (dispatch, getState) => {
+  await dispatch({
+    type: SET_ACTIVE_COLLECTION,
+    payload: id,
+  });
+  await dispatch(setFilter());
+};
+
+export const setSettings = (updatedSettings, updateOnServer = false) => async (
+  dispatch,
+  getState
+) => {
+  const { settings = {}, session } = getState();
+
+  if (updateOnServer)
+    await axios.put(`/users/${session.userId}/settings`, updatedSettings);
+
+  const newSettings = { ...settings, ...updatedSettings };
+
+  dispatch({
+    type: SET_SETTINGS,
+    payload: newSettings,
+  });
+};
+
+export const toggleSettingsDrawer = (status) => ({
+  type: TOGGLE_SETTINGS_DRAWER,
+  payload: status,
+});
+
+export const toggleStatsModal = (status) => ({
+  type: TOGGLE_STATS_MODAL,
+  payload: status,
+});
+
+export const setFilter = (filterUpdate, resetPage = true) => async (
+  dispatch,
+  getState
+) => {
+  const {
+    filters,
+    session: { retainPage },
+  } = getState();
+  if (retainPage)
+    return dispatch({ type: SET_SESSION, payload: { retainPage: false } });
+
+  const updatedFiters = { ...filters, ...filterUpdate };
+  if (resetPage) updatedFiters["page"] = 1;
+  dispatch({ type: UPDATE_FILTER, payload: updatedFiters });
+  dispatch(fetchNotes());
+};

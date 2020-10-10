@@ -13,6 +13,7 @@ import {
   setSession,
 } from "../../store/actions";
 import { extractTagCodes } from "../../utils";
+import config from "../../config";
 
 const PageWrapper = styled.div`
   margin-bottom: 25px;
@@ -91,9 +92,11 @@ const Notes = ({
 
   const onDelete = (_id) => dispatch(deleteNote(_id));
 
-  const noteChunks = Array(Math.ceil(notes.length / 25))
+  const noteChunks = Array(Math.ceil(notes.length / config.LIMIT))
     .fill(null)
-    .map((_, index) => notes.slice(index * 25, index * 25 + 25));
+    .map((_, index) =>
+      notes.slice(index * config.LIMIT, index * config.LIMIT + config.LIMIT)
+    );
 
   return (
     <section>

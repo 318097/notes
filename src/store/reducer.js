@@ -1,4 +1,5 @@
 import _ from "lodash";
+import config from "../config";
 import {
   SET_SESSION,
   SET_SETTINGS,
@@ -33,7 +34,7 @@ const initialState = {
     status: undefined,
     socialStatus: undefined,
     page: 1,
-    limit: 25,
+    limit: config.LIMIT,
     sortOrder: "ASC",
     visibility: "visible",
   },
