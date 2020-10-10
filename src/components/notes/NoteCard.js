@@ -2,6 +2,7 @@ import React, { useState, Fragment } from "react";
 import styled from "styled-components";
 import { Icon as AntIcon } from "antd";
 import marked from "marked";
+import moment from "moment";
 import colors, { Card, Icon, Tag } from "@codedrops/react-ui";
 import Dropdown from "./Dropdown";
 
@@ -47,11 +48,11 @@ const StyledCard = styled.div`
     top: 0px;
     .tags {
       text-align: left;
-      .tag {
-        cursor: pointer;
-        padding: 0px 4px;
-        font-size: 0.8rem;
-      }
+    }
+    .tag {
+      cursor: pointer;
+      padding: 0px 4px;
+      font-size: 0.8rem;
     }
     .status-row {
       display: flex;
@@ -82,6 +83,7 @@ const NoteCard = ({
     socialStatus,
     index,
     liveId,
+    createdAt,
   },
   handleClick,
   onEdit,
@@ -89,6 +91,9 @@ const NoteCard = ({
   tagsCodes,
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
+
+  const createdToday =
+    moment(createdAt).format("DD-MM-YYYY") === moment().format("DD-MM-YYYY");
   return (
     <StyledCard>
       <Card onClick={handleClick(_id)}>
@@ -152,11 +157,12 @@ const NoteCard = ({
           </div>
 
           <div style={{ display: "flex", alignItems: "center" }}>
-            {!!index && <span className="index">{`#${index}`}</span>}
+            <AntIcon type={`${visible ? "eye" : "eye-invisible"}`} />
             {type === "DROP" && (
               <Icon className="bulb-icon" type="bulb" size={12} />
             )}
-            <AntIcon type={`${visible ? "eye" : "eye-invisible"}`} />
+            {createdToday && <Tag>Today</Tag>}
+            {!!index && <span className="index">{`#${index}`}</span>}
           </div>
         </div>
       </Card>
