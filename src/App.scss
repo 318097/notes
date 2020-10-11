@@ -135,6 +135,10 @@ body {
       grid-column-gap: 8px;
       grid-auto-flow: column;
       margin-bottom: 4px;
+      .color-input {
+        border-color: $bg;
+        padding: 0;
+      }
     }
   }
 }

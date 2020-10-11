@@ -135,19 +135,18 @@ const CollectionInfo = ({ settingData, saveSettings, loading }) => {
           <div className="add-tag-form">
             <Input
               size="small"
-              className="tag-input"
               placeholder="Tag name"
               value={newTag.label}
               onChange={({ target: { value } }) =>
                 setNewTag((prev) => ({ ...prev, label: value }))
               }
             />
-            <Input
-              size="small"
-              className="tag-input"
-              placeholder="Color code"
+            <input
+              type="color"
+              className="color-input"
               value={newTag.color}
               onChange={({ target: { value } }) =>
+                console.log("value::-", value) ||
                 setNewTag((prev) => ({ ...prev, color: value }))
               }
             />
