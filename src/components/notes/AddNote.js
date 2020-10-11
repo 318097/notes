@@ -23,19 +23,22 @@ const StyledContainer = styled.div`
   display: flex;
   justify-content: space-between;
   height: 100%;
+  overflow: auto;
+  padding: 10px;
   .post-form {
-    padding: 10px;
-    flex: 1 1 59%;
-    overflow-y: auto;
+    flex: 1 1 60%;
+    margin-right: 10px;
   }
   div.preview {
-    padding: 10px;
-    margin: 8px;
     background: ${colors.shade1};
-    height: 96%;
     border-radius: 5px;
-    flex: 1 1 39%;
-    overflow: auto;
+    flex: 1 1 40%;
+    padding: 8px;
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 `;
 
@@ -199,8 +202,8 @@ const AddNote = ({
         </div>
         {showPreview && (
           <div className="preview">
-            <div className="flex space-between align-center">
-              <h3>Preview</h3>
+            <div className="preview-header">
+              <h4>Preview</h4>
               <Radio.Group
                 defaultValue={previewMode}
                 buttonStyle="solid"
@@ -214,6 +217,7 @@ const AddNote = ({
             {previewMode === "PREVIEW" ? (
               <Fragment>
                 <div
+                  style={{ textDecoration: "underline", fontWeight: "bold" }}
                   dangerouslySetInnerHTML={{
                     __html: marked(note.title || ""),
                   }}

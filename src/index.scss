@@ -25,16 +25,13 @@ html body,
 
 .ant-input,
 .ant-btn,
-.ant-select-dropdown-menu-item {
+.ant-select-dropdown-menu-item,
+.ant-checkbox-wrapper {
   font-size: 10px !important;
 }
 
 .anticon {
   font-size: 14px;
-}
-
-.spinner .anticon-loading svg {
-  font-size: 26px;
 }
 
 /* Custom scrollbar */

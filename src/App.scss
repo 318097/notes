@@ -18,9 +18,8 @@ code {
 }
 
 code {
-  background: $orchid;
+  background: $yellow;
   padding: 2px;
-  border-radius: 2px;
   color: $white;
   padding: 3px 2px 1px;
 }
@@ -42,7 +41,6 @@ pre {
 }
 
 body {
-  font-family: PatrickHand;
   h1,
   h2,
   h3,
@@ -97,7 +95,7 @@ body {
 // tags checkgroup in add modal
 .ant-checkbox-group {
   .ant-checkbox-wrapper {
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
 }
 
