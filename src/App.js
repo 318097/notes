@@ -16,6 +16,8 @@ import Settings from "./components/Settings";
 import AddNote from "./components/notes/AddNote";
 import QuickAdd from "./components/notes/QuickAdd";
 import Stats from "./components/Stats";
+import Navigation from "./components/Navigation";
+
 import { getToken, hasToken } from "./authService";
 import config from "./config";
 
@@ -44,34 +46,37 @@ const App = ({ setSession, session, appLoading }) => {
 
   return (
     <div className="container">
-      <Header />
-      <div className="content">
-        {!loading && (
-          <Switch>
-            <Route path="/signup" exact component={Signup} />
-            <Route path="/signin" exact component={Signin} />
-            <ProtectedRoute
-              session={session}
-              path="/home"
-              exact
-              component={Notes}
-            />
-            <ProtectedRoute
-              session={session}
-              path="/note/:id"
-              exact
-              component={NoteView}
-            />
-            <ProtectedRoute
-              session={session}
-              path="/upload"
-              exact
-              component={UploadContent}
-            />
-            <Route path="/" exact render={() => <Redirect to="/home" />} />
-            <Route component={NotFound} />
-          </Switch>
-        )}
+      <Navigation />
+      <div className="contentWrapper">
+        <Header />
+        <div className="content">
+          {!loading && (
+            <Switch>
+              <Route path="/signup" exact component={Signup} />
+              <Route path="/signin" exact component={Signin} />
+              <ProtectedRoute
+                session={session}
+                path="/home"
+                exact
+                component={Notes}
+              />
+              <ProtectedRoute
+                session={session}
+                path="/note/:id"
+                exact
+                component={NoteView}
+              />
+              <ProtectedRoute
+                session={session}
+                path="/upload"
+                exact
+                component={UploadContent}
+              />
+              <Route path="/" exact render={() => <Redirect to="/home" />} />
+              <Route component={NotFound} />
+            </Switch>
+          )}
+        </div>
       </div>
       {session && session.loggedIn && (
         <Fragment>

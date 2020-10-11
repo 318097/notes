@@ -62,7 +62,11 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column;
+    .contentWrapper {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+    }
     .content {
       flex: 1 1 auto;
       overflow: auto;
@@ -113,21 +117,6 @@ body {
   margin: 0 2px;
   display: inline-block;
   width: max-content;
-}
-
-.icon,
-.ant-icon {
-  padding: 5px;
-  border-radius: 30px;
-  transition: 0.4s;
-  &:hover {
-    background: $strokeOne;
-  }
-}
-
-.ant-icon {
-  cursor: pointer;
-  background: $bg;
 }
 
 .settings-content {
