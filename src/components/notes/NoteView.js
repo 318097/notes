@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   grid-template-columns: repeat(12, 1fr);
   column-gap: 8px;
   .card {
-    overflow-x: hidden;
+    overflow: hidden;
     animation: 0.2s ${fadeInDownAnimation};
     height: 78vh;
     width: 100%;
@@ -29,6 +29,10 @@ const Wrapper = styled.div`
     background: white;
     border-radius: 15px;
     flex-direction: column;
+    .card-content {
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
     .title {
       text-align: center;
       font-size: 2.2rem;
@@ -170,34 +174,36 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
         />
       </div>
       <Card>
-        <div className="relative">
-          <h3 className="title">{title}</h3>
-          {title && (
+        <div className="card-content">
+          <div className="relative">
+            <h3 className="title">{title}</h3>
+            {title && (
+              <Icon
+                className="copy-icon  icon"
+                type="copy"
+                onClick={() => copyToClipboard(title)}
+              />
+            )}
+          </div>
+          <div style={{ flex: "1" }} className="relative">
+            <div
+              className="content"
+              dangerouslySetInnerHTML={{ __html: marked(content) }}
+            ></div>
             <Icon
-              className="copy-icon  icon"
               type="copy"
-              onClick={() => copyToClipboard(title)}
+              className="copy-icon  icon"
+              onClick={() => copyToClipboard(content)}
             />
+          </div>
+          {type === "QUIZ" && solution && (
+            <div className="quiz-solution">{solution}</div>
           )}
-        </div>
-        <div style={{ flex: "1" }} className="relative">
-          <div
-            className="content"
-            dangerouslySetInnerHTML={{ __html: marked(content) }}
-          ></div>
-          <Icon
-            type="copy"
-            className="copy-icon  icon"
-            onClick={() => copyToClipboard(content)}
-          />
-        </div>
-        {type === "QUIZ" && solution && (
-          <div className="quiz-solution">{solution}</div>
-        )}
-        <div className="tags">
-          {tags.map((tag, index) => (
-            <Tag key={index}>{tag.toUpperCase()}</Tag>
-          ))}
+          <div className="tags">
+            {tags.map((tag, index) => (
+              <Tag key={index}>{tag.toUpperCase()}</Tag>
+            ))}
+          </div>
         </div>
 
         <Icon className="back-icon icon" onClick={goBack} type="caret-left" />
