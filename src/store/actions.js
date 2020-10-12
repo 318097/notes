@@ -68,7 +68,7 @@ export const getNoteById = (noteId) => async (dispatch, getState) => {
   dispatch(setAppLoading(false));
 };
 
-export const addNote = (notes) => async (dispatch, getState) => {
+export const addNote = (notes, collection) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
     const { activeCollection, settings } = getState();
@@ -81,15 +81,17 @@ export const addNote = (notes) => async (dispatch, getState) => {
       return { ...note, resources };
     });
 
+    const addToCollection = collection || activeCollection;
     const { data } = await axios.post(
-      `/posts?collectionId=${
-        _.get(dataToSend, "0.collection") || activeCollection
-      }`,
+      `/posts?collectionId=${addToCollection}`,
       { data: dataToSend }
     );
     dispatch({
       type: ADD_NOTE,
-      payload: { notes: data.result, resourceIndex },
+      payload: {
+        notes: activeCollection === addToCollection ? data.result : [],
+        resourceIndex,
+      },
     });
   } finally {
     dispatch(setAppLoading(false));

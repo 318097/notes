@@ -147,7 +147,6 @@ const UploadContent = ({
           slug: generateSlug(title),
           viewed: false,
           fileName,
-          collection,
         };
       })
       .filter((item) => item.title || item.content);
@@ -157,7 +156,7 @@ const UploadContent = ({
   const addData = async () => {
     try {
       setLoading(true);
-      await addNote(data);
+      await addNote(data, collection);
       message.success(`${data.length} notes added successfully.`);
     } catch (err) {
       console.log(err);

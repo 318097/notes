@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { Modal, Input, Button, Tag, Tabs } from "antd";
@@ -58,8 +58,6 @@ const QuickAdd = ({
   const [input, setInput] = useState(INITIAL_STATE);
   const [activeTab, setActiveTab] = useState("DETAILS");
 
-  useEffect(() => {}, []);
-
   const handleClose = async () => {
     setQuickAddModalMeta();
     clearData();
@@ -67,7 +65,7 @@ const QuickAdd = ({
 
   const clearData = () => {
     setData([]);
-    setInput("");
+    setInput(INITIAL_STATE);
   };
 
   const handleOk = async () => {
@@ -82,7 +80,7 @@ const QuickAdd = ({
         slug: generateSlug(item.title),
       }));
 
-      await addNote(inputData);
+      await addNote(inputData, collection);
       clearData();
     } finally {
       setLoading(false);
