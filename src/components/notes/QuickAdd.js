@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Modal, Input, Button, Tag } from "antd";
+import { Modal, Input, Button, Tag, Tabs } from "antd";
 import { addNote, setQuickAddModalMeta } from "../../store/actions";
 import SelectCollection from "../SelectCollection";
+import _ from "lodash";
+import { generateSlug } from "../../utils";
 
-const StyledContainer = styled.div`
+const { TabPane } = Tabs;
+
+const StyledQuickAdd = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 0 8px;
   .quick-add-header {
     display: flex;
     margin-bottom: 40px;
-    .ant-input {
-      margin-left: 20px;
-    }
   }
   .quick-add-tags {
     display: flex;
@@ -26,6 +27,24 @@ const StyledContainer = styled.div`
   }
 `;
 
+const StyledQuickGroup = styled.div`
+  padding: 0 8px;
+  .quick-add-row {
+    display: grid;
+    grid-auto-flow: column;
+    column-gap: 8px;
+    margin-bottom: 8px;
+  }
+`;
+
+const INITIAL_STATE = [
+  {
+    title: "",
+    content: "",
+    link: "",
+  },
+];
+
 const QuickAdd = ({
   addNote,
   modalVisibility,
@@ -36,7 +55,8 @@ const QuickAdd = ({
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [collection, setCollection] = useState(activeCollection);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(INITIAL_STATE);
+  const [activeTab, setActiveTab] = useState("DETAILS");
 
   useEffect(() => {}, []);
 
@@ -53,7 +73,16 @@ const QuickAdd = ({
   const handleOk = async () => {
     setLoading(true);
     try {
-      await addNote(data.map((title) => ({ title, status: "QUICK_ADD" })));
+      const inputData = (activeTab === "TITLE_ONLY"
+        ? data
+        : input.slice(0, input.length - 1)
+      ).map((item) => ({
+        ...item,
+        status: "QUICK_ADD",
+        slug: generateSlug(item.title),
+      }));
+
+      await addNote(inputData);
       clearData();
     } finally {
       setLoading(false);
@@ -61,20 +90,36 @@ const QuickAdd = ({
     }
   };
 
-  const handleChange = ({ target: { value } }) => {
-    setInput(value);
+  const handleChange = ({ key, value, index }) => {
+    const updatedInput = _.map(input, (data, i) =>
+      index === i ? { ...data, [key]: value } : data
+    );
+
+    if (
+      key === "title" &&
+      activeTab === "DETAILS" &&
+      value &&
+      updatedInput.length - 1 === index
+    ) {
+      updatedInput.push(INITIAL_STATE);
+    }
+
+    setInput(updatedInput);
   };
 
   const handleKeyDown = (e) => {
     if (e.which === 188) {
-      const tag = input.trim().replace(",", "");
-      setData((prev) => [...prev, tag]);
-      setTimeout(() => setInput(""));
+      const tag = _.get(input, "0.title").trim().replace(",", "");
+      setData((prev) => [...prev, { title: tag }]);
+      setTimeout(() => setInput(INITIAL_STATE));
     }
   };
 
   const removeTag = (removedTag) =>
-    setData((prev) => prev.filter((tag) => tag !== removedTag));
+    setData((prev) => prev.filter((obj) => obj.title !== removedTag));
+
+  const totalItems =
+    activeTab === "TITLE_ONLY" ? data.length : input.length - 1;
 
   return (
     <Modal
@@ -97,32 +142,76 @@ const QuickAdd = ({
           onClick={handleOk}
           disabled={appLoading}
         >
-          {data.length ? `Add ${data.length} items` : "Add"}
+          {totalItems ? `Add ${totalItems} items` : "Add"}
         </Button>,
       ]}
     >
-      <StyledContainer>
-        <div className="quick-add-header">
+      <Tabs
+        activeKey={activeTab}
+        type={"card"}
+        tabBarExtraContent={
           <SelectCollection
             collection={collection}
             setCollection={setCollection}
+            style={{ marginRight: "8px" }}
           />
-          <Input
-            autoFocus
-            placeholder="Items"
-            value={input}
-            onKeyDown={handleKeyDown}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="quick-add-tags">
-          {data.map((item) => (
-            <Tag closable key={item} onClose={() => removeTag(item)}>
-              {item}
-            </Tag>
-          ))}
-        </div>
-      </StyledContainer>
+        }
+        onChange={(value) => setActiveTab(value)}
+      >
+        <TabPane tab="Quick Add" key="TITLE_ONLY">
+          <StyledQuickAdd>
+            <div className="quick-add-header">
+              <Input
+                autoFocus
+                placeholder="Items"
+                value={_.get(input, "0.title", "")}
+                onKeyDown={handleKeyDown}
+                onChange={({ target: { value } }) =>
+                  handleChange({ key: "title", value, index: 0 })
+                }
+              />
+            </div>
+            <div className="quick-add-tags">
+              {data.map(({ title }) => (
+                <Tag closable key={title} onClose={() => removeTag(title)}>
+                  {title}
+                </Tag>
+              ))}
+            </div>
+          </StyledQuickAdd>
+        </TabPane>
+        <TabPane tab="Quick Add Info" key="DETAILS">
+          <StyledQuickGroup>
+            {_.map(input, ({ title, content, link }, index) => {
+              return (
+                <div className="quick-add-row" key={index}>
+                  <Input
+                    placeholder="Title"
+                    value={title}
+                    onChange={({ target: { value } }) =>
+                      handleChange({ key: "title", value, index })
+                    }
+                  />
+                  <Input
+                    placeholder="Content"
+                    value={content}
+                    onChange={({ target: { value } }) =>
+                      handleChange({ key: "content", value, index })
+                    }
+                  />
+                  <Input
+                    placeholder="Link"
+                    value={link}
+                    onChange={({ target: { value } }) =>
+                      handleChange({ key: "link", value, index })
+                    }
+                  />
+                </div>
+              );
+            })}
+          </StyledQuickGroup>
+        </TabPane>
+      </Tabs>
     </Modal>
   );
 };

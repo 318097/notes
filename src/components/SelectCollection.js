@@ -11,6 +11,7 @@ const SelectCollection = ({
   session,
   setActiveCollection,
   setCollection,
+  style = {},
 }) => {
   const handleChange = (id) => {
     setCollection ? setCollection(id) : setActiveCollection(id);
@@ -19,7 +20,7 @@ const SelectCollection = ({
   return (
     <Select
       onChange={handleChange}
-      style={{ width: 120 }}
+      style={{ width: 120, ...style }}
       placeholder="Collections"
       value={collection}
     >
