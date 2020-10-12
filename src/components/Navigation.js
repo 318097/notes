@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { Divider } from "antd";
-import colors, { Icon } from "@codedrops/react-ui";
+import colors from "@codedrops/react-ui";
 import { Icon as AntIcon } from "antd";
 import { withRouter } from "react-router-dom";
 import {
@@ -19,18 +19,14 @@ const StyledNavigation = styled.div`
   justify-content: flex-end;
   padding: 20px 10px;
   background: ${colors.bar};
-  .icon,
   .ant-icon {
-    background: ${colors.bg};
-    margin: 4px 0;
+    color: ${colors.chrome};
     height: 24px;
     width: 24px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    font-size: 20px;
+    margin-top: 10px;
     &:hover {
-      background: ${colors.strokeTwo};
+      color: ${colors.orange};
     }
   }
 `;
@@ -48,15 +44,19 @@ const Navigation = ({
 
   return (
     <StyledNavigation>
-      <Icon background type="home" onClick={() => history.push("/home")} />
+      <AntIcon
+        className="ant-icon"
+        type="home"
+        onClick={() => history.push("/home")}
+      />
       <AntIcon
         className="ant-icon"
         type="line-chart"
         onClick={() => toggleStatsModal(true)}
       />
       <Divider />
-      <Icon
-        background
+      <AntIcon
+        className="ant-icon"
         type="plus"
         onClick={() => setModalMeta({ visibility: true })}
       />
@@ -65,15 +65,19 @@ const Navigation = ({
         type="fire"
         onClick={() => setQuickAddModalMeta({ visibility: true })}
       />
-      <Icon background type="upload" onClick={() => history.push("/upload")} />
+      <AntIcon
+        className="ant-icon"
+        type="upload"
+        onClick={() => history.push("/upload")}
+      />
 
       <Divider />
-      <Icon
-        background
-        type="settings"
+      <AntIcon
+        className="ant-icon"
+        type="setting"
         onClick={() => toggleSettingsDrawer(true)}
       />
-      <Icon background type="logout" onClick={() => logout()} />
+      <AntIcon className="ant-icon" type="logout" onClick={() => logout()} />
     </StyledNavigation>
   );
 };
