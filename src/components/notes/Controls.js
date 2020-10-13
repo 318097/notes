@@ -70,24 +70,34 @@ const ControlsWrapper = styled.div`
 `;
 
 const Controls = ({ note, dispatch }) => {
+  const {
+    tags = [],
+    _id,
+    liveId,
+    slug: defaultSlug = "",
+    index,
+    createdAt,
+    resources = [],
+    visible,
+    status,
+    socialStatus,
+  } = note || {};
   const [hashtags, setHashtags] = useState("");
   const [liveIdEditor, setLiveIdEditor] = useState(false);
 
   useEffect(() => {
     if (!note) return;
-    const tags = note.tags.map((tag) => `#${tag}`).join(" ");
-    setHashtags(`${tags}`);
+    const tagsFormatted = tags.map((tag) => `#${tag}`).join(" ");
+    setHashtags(`${tagsFormatted}`);
   }, [note]);
 
   const updateProperties = async (key, value) =>
-    await dispatch(
-      updateNote({ _id: note._id, liveId: note.liveId, [key]: value })
-    );
+    await dispatch(updateNote({ _id, liveId, [key]: value }));
 
-  const slugWithUnderscore = note.slug.replace(/-/g, "_");
-  const slug = `RDY${note.index}-${slugWithUnderscore}`;
-  const slugWithLiveId = `${note.liveId}-${slugWithUnderscore}`;
-  const addedDays = moment().diff(moment(note.createdAt), "days");
+  const slugWithUnderscore = defaultSlug.replace(/-/g, "_");
+  const slug = `RDY${index}-${slugWithUnderscore}`;
+  const slugWithLiveId = `${liveId}-${slugWithUnderscore}`;
+  const addedDays = moment().diff(moment(createdAt), "days");
 
   const copy = (text) => () => {
     copyToClipboard(text);
@@ -106,7 +116,7 @@ const Controls = ({ note, dispatch }) => {
         <div className="slug" onClick={copy(slug)}>
           {slug}
         </div>
-        {!!note.liveId && (
+        {!!liveId && (
           <div className="slug" onClick={copy(slugWithLiveId)}>
             {slugWithLiveId}
           </div>
@@ -120,7 +130,7 @@ const Controls = ({ note, dispatch }) => {
           />
         </div>
 
-        {_.get(note, "resources", []).map((resource) => (
+        {resources.map((resource) => (
           <div key={resource} className="resource-id" onClick={copy(resource)}>
             {resource}
           </div>
@@ -146,7 +156,7 @@ const Controls = ({ note, dispatch }) => {
         <div className="flex align-center">
           <span style={{ marginRight: "4px" }}>Visible</span>
           <Switch
-            checked={note && note.visible}
+            checked={visible}
             onChange={(value) => updateProperties("visible", value)}
           />
         </div>
@@ -155,13 +165,13 @@ const Controls = ({ note, dispatch }) => {
         <div>
           <div className="header">
             <h4>Status</h4>
-            {note.liveId && (
+            {liveId && (
               <Fragment>
                 {liveIdEditor ? (
                   <Input
                     style={{ width: "30px", height: "18px", fontSize: "1rem" }}
                     size="small"
-                    defaultValue={note.liveId}
+                    defaultValue={liveId}
                     onBlur={updateLiveId}
                   />
                 ) : (
@@ -169,7 +179,7 @@ const Controls = ({ note, dispatch }) => {
                     style={{ cursor: "pointer" }}
                     onDoubleClick={() => setLiveIdEditor(true)}
                     className="state"
-                  >{`Live Id: ${note.liveId}`}</span>
+                  >{`Live Id: ${liveId}`}</span>
                 )}
               </Fragment>
             )}
@@ -178,7 +188,7 @@ const Controls = ({ note, dispatch }) => {
             onChange={({ target: { value } }) =>
               updateProperties("status", value)
             }
-            value={note && note.status}
+            value={status}
           >
             {["DRAFT", "READY", "POSTED"].map((state) => (
               <Radio className="radio-box" key={state} value={state}>
@@ -197,7 +207,7 @@ const Controls = ({ note, dispatch }) => {
             onChange={({ target: { value } }) =>
               updateProperties("socialStatus", value)
             }
-            value={(note && note.socialStatus) || "NONE"}
+            value={socialStatus || "NONE"}
           >
             {["NONE", "READY", "POSTED"].map((state) => (
               <Radio className="radio-box" key={state} value={state}>

@@ -156,9 +156,10 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
     if (!_.isEmpty(newNote)) history.push(`/note/${newNote._id}`);
   };
 
-  if (!viewNote) return null;
+  if (_.isEmpty(viewNote)) return null;
+  console.log("viewNote::-", viewNote);
 
-  const { title, content, tags, index, type, solution, slug, status } =
+  const { title, content = "", tags, index, type, solution, slug, status } =
     viewNote || {};
 
   const canonicalURL = `https://www.codedrops.tech/posts/${slug}`;
