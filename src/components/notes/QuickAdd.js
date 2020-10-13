@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Modal, Input, Button, Tag, Tabs } from "antd";
+import { Modal, Input, Button, Tag, Tabs, Checkbox } from "antd";
 import { addNote, setQuickAddModalMeta } from "../../store/actions";
 import SelectCollection from "../SelectCollection";
 import _ from "lodash";
@@ -15,12 +15,14 @@ const StyledQuickAdd = styled.div`
   padding: 0 8px;
   .quick-add-header {
     display: flex;
-    margin-bottom: 40px;
+  }
+  .tag-group {
+    padding: 10px 4px;
   }
   .quick-add-tags {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     .ant-tag {
       margin: 0 10px 10px 0;
     }
@@ -29,6 +31,10 @@ const StyledQuickAdd = styled.div`
 
 const StyledQuickGroup = styled.div`
   padding: 0 8px;
+  overflow-y: auto;
+  .tag-group {
+    padding: 20px 4px;
+  }
   .quick-add-row {
     display: grid;
     grid-auto-flow: column;
@@ -51,10 +57,12 @@ const QuickAdd = ({
   appLoading,
   activeCollection,
   setQuickAddModalMeta,
+  tagList,
 }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [collection, setCollection] = useState(activeCollection);
+  const [tags, setTags] = useState([]);
   const [input, setInput] = useState(INITIAL_STATE);
   const [activeTab, setActiveTab] = useState("DETAILS");
 
@@ -78,6 +86,7 @@ const QuickAdd = ({
         ...item,
         status: "QUICK_ADD",
         slug: generateSlug(item.title),
+        tags,
       }));
 
       await addNote(inputData, collection);
@@ -169,6 +178,13 @@ const QuickAdd = ({
                 }
               />
             </div>
+            <div className="tag-group">
+              <Checkbox.Group
+                options={tagList}
+                value={tags}
+                onChange={(value) => setTags(value)}
+              />
+            </div>
             <div className="quick-add-tags">
               {data.map(({ title }) => (
                 <Tag closable key={title} onClose={() => removeTag(title)}>
@@ -207,6 +223,13 @@ const QuickAdd = ({
                 </div>
               );
             })}
+            <div className="tag-group">
+              <Checkbox.Group
+                options={tagList}
+                value={tags}
+                onChange={(value) => setTags(value)}
+              />
+            </div>
           </StyledQuickGroup>
         </TabPane>
       </Tabs>
@@ -219,11 +242,16 @@ const mapStateToProps = ({
   session,
   activeCollection,
   appLoading,
+  settings,
 }) => ({
   modalVisibility: visibility,
   session,
   activeCollection,
   appLoading,
+  tagList: _.map(_.get(settings, "tags", []), ({ label }) => ({
+    label,
+    value: label,
+  })),
 });
 
 const mapDispatchToProps = { setQuickAddModalMeta, addNote };
