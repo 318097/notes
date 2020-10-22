@@ -20,4 +20,7 @@
 - [ ] Trash - show deleted notes
 - [ ] table view
 - [ ] show resources for every post view
-- [ ] quick add with categorization
+- [x] quick add with categorization
+- [ ] Notes for every post
+- [ ] Dynamic template/config
+- [ ] Update filters based on status
