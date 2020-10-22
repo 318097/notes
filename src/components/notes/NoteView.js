@@ -8,7 +8,7 @@ import marked from "marked";
 import _ from "lodash";
 import colors, { Card, Icon } from "@codedrops/react-ui";
 import Controls from "./Controls";
-import { getNoteById, setModalMeta, setSession } from "../../store/actions";
+import { getNoteById, setModalMeta } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
 import { fadeInDownAnimation } from "../../animations";
 import { getNextNote } from "../../utils";
@@ -69,10 +69,10 @@ const Wrapper = styled.div`
     .copy-icon {
       position: absolute;
       top: 10px;
-      right: -10px;
+      left: -10px;
       transition: 0.3s;
       &:hover {
-        right: -4px;
+        left: -4px;
       }
     }
     .index {
@@ -157,7 +157,6 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
   };
 
   if (_.isEmpty(viewNote)) return null;
-  console.log("viewNote::-", viewNote);
 
   const { title, content = "", tags, index, type, solution, slug, status } =
     viewNote || {};
@@ -180,7 +179,7 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
             <h3 className="title">{title}</h3>
             {title && (
               <Icon
-                className="copy-icon  icon"
+                className="copy-icon icon"
                 type="copy"
                 onClick={() => copyToClipboard(title)}
               />
@@ -193,7 +192,7 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
             ></div>
             <Icon
               type="copy"
-              className="copy-icon  icon"
+              className="copy-icon icon"
               onClick={() => copyToClipboard(content)}
             />
           </div>

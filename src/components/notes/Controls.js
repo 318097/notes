@@ -190,7 +190,7 @@ const Controls = ({ note, dispatch }) => {
             }
             value={status}
           >
-            {["DRAFT", "READY", "POSTED"].map((state) => (
+            {["QUICK_ADD", "DRAFT", "READY", "POSTED"].map((state) => (
               <Radio className="radio-box" key={state} value={state}>
                 {state}
               </Radio>
