@@ -51,7 +51,19 @@ const Filters = ({
   activeCollection,
   settings,
 }) => {
-  const setFilterValues = (filter) => dispatch(setFilter({ ...filter }));
+  const setFilterValues = (filter) => {
+    const props = Object.entries(filter);
+    let extraFilters = {};
+    if (props.length === 1) {
+      const [key, value] = props[0];
+      if (key === "search" && value)
+        extraFilters = { status: "", visibility: "" };
+      else if (key === "status" && value === "POSTED")
+        extraFilters = { sortFilter: "liveId", sortOrder: "DESC" };
+      else if (key === "status") extraFilters = { sortFilter: "createdAt" };
+    }
+    dispatch(setFilter({ ...filter, ...extraFilters }));
+  };
 
   const { tags = [] } = settings;
   return (
