@@ -8,8 +8,8 @@ import Dropdown from "./Dropdown";
 
 const StyledCard = styled.div`
   margin-bottom: 16px;
+  break-inside: avoid-column;
   .card {
-    break-inside: avoid-column;
     position: relative;
     height: auto;
     margin: 0;
@@ -88,7 +88,6 @@ const NoteCard = ({
   handleClick,
   onEdit,
   onDelete,
-  tagsCodes,
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
