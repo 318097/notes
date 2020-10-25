@@ -16,7 +16,7 @@ const StyledCard = styled.div`
     min-height: unset;
     cursor: pointer;
     width: 100%;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     overflow: visible;
     padding: 20px 8px;
     &:hover {
@@ -28,7 +28,7 @@ const StyledCard = styled.div`
     }
     .post-title {
       margin: 30px 0;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
     }
     .content {
       font-size: inherit;

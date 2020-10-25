@@ -35,9 +35,9 @@ const Wrapper = styled.div`
     }
     .title {
       text-align: center;
-      font-size: 2.2rem;
+      font-size: 2rem;
       padding: 20px;
-      text-decoration: overline;
+      color: ${colors.steel};
     }
     .content {
       flex: 1 1 auto;
@@ -86,7 +86,7 @@ const Wrapper = styled.div`
       position: absolute;
       bottom: 8px;
       left: 20px;
-      font-size: 1.2rem;
+      font-size: 0.9rem;
       max-width: 80%;
       overflow: hidden;
       white-space: nowrap;

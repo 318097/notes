@@ -5,8 +5,8 @@ import { Popconfirm } from "antd";
 
 const DropdownWrapper = styled.div`
   position: absolute;
-  top: 0px;
-  right: 0px;
+  top: 2px;
+  right: 2px;
   .dropdown-icon {
     padding: 4px;
   }
@@ -16,7 +16,7 @@ const DropdownWrapper = styled.div`
     flex-direction: column;
     position: absolute;
     padding: 4px 2px;
-    right: 0px;
+    right: 2px;
     top: 24px;
     border-radius: 15px;
     & > * {

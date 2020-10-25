@@ -57,7 +57,7 @@ const Wrapper = styled.div`
       left: 7px;
       text-decoration: underline;
       font-style: italics;
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
     .actions {
       position: absolute;
