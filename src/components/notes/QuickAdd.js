@@ -73,6 +73,7 @@ const QuickAdd = ({
 
   const clearData = () => {
     setData([]);
+    setTags([]);
     setInput(INITIAL_STATE);
   };
 

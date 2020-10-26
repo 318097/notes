@@ -34,6 +34,7 @@ const StyledContainer = styled.div`
     border-radius: 5px;
     flex: 0 0 40%;
     padding: 8px;
+    overflow-x: auto;
     .preview-header {
       display: flex;
       align-items: center;
