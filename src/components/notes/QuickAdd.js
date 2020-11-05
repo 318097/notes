@@ -116,11 +116,13 @@ const QuickAdd = ({
   };
 
   const handleKeyDown = (e) => {
-    if (e.which === 188) {
-      const tag = _.get(input, "0.title").trim().replace(",", "");
-      setData((prev) => [...prev, { title: tag }]);
-      setTimeout(() => setInput(INITIAL_STATE));
-    }
+    if (e.which === 188) addTagToInput();
+  };
+
+  const addTagToInput = () => {
+    const tag = _.get(input, "0.title").trim().replace(",", "");
+    setData((prev) => [...prev, { title: tag }]);
+    setTimeout(() => setInput(INITIAL_STATE));
   };
 
   const removeTag = (removedTag) =>
@@ -148,7 +150,7 @@ const QuickAdd = ({
           type="primary"
           key="add-button"
           onClick={handleOk}
-          disabled={appLoading}
+          disabled={appLoading || !totalItems}
         >
           {totalItems ? `Add ${totalItems} items` : "Add"}
         </Button>,
@@ -174,6 +176,7 @@ const QuickAdd = ({
                 placeholder="Items"
                 value={_.get(input, "0.title", "")}
                 onKeyDown={handleKeyDown}
+                onBlur={addTagToInput}
                 onChange={({ target: { value } }) =>
                   handleChange({ key: "title", value, index: 0 })
                 }
