@@ -146,7 +146,6 @@ const CollectionInfo = ({ settingData, saveSettings, loading }) => {
               className="color-input"
               value={newTag.color}
               onChange={({ target: { value } }) =>
-                console.log("value::-", value) ||
                 setNewTag((prev) => ({ ...prev, color: value }))
               }
             />

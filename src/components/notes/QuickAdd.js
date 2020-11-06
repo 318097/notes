@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Modal, Input, Button, Tag, Tabs, Checkbox } from "antd";
+import { Modal, Input, Button, Tag, Tabs, Checkbox, Popconfirm } from "antd";
 import { addNote, setQuickAddModalMeta } from "../../store/actions";
 import SelectCollection from "../SelectCollection";
 import _ from "lodash";
@@ -57,7 +57,7 @@ const QuickAdd = ({
   appLoading,
   activeCollection,
   setQuickAddModalMeta,
-  tagList,
+  session,
 }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -65,6 +65,16 @@ const QuickAdd = ({
   const [tags, setTags] = useState([]);
   const [input, setInput] = useState(INITIAL_STATE);
   const [activeTab, setActiveTab] = useState("DETAILS");
+
+  const { name: activeCollectionName, tags: activeCollectionTags } = _.get(
+    session,
+    ["notesApp", collection],
+    {}
+  );
+  const tagList = _.map(activeCollectionTags, ({ label }) => ({
+    label,
+    value: label,
+  }));
 
   const handleClose = async () => {
     setQuickAddModalMeta();
@@ -121,6 +131,7 @@ const QuickAdd = ({
 
   const addTagToInput = () => {
     const tag = _.get(input, "0.title").trim().replace(",", "");
+    if (!tag) return;
     setData((prev) => [...prev, { title: tag }]);
     setTimeout(() => setInput(INITIAL_STATE));
   };
@@ -143,17 +154,29 @@ const QuickAdd = ({
       onOk={handleOk}
       onCancel={handleClose}
       footer={[
-        <Button key="cancel-button" onClick={handleClose}>
+        <Button
+          key="cancel-button"
+          onClick={handleClose}
+          style={{ marginRight: "8px" }}
+        >
           Cancel
         </Button>,
-        <Button
-          type="primary"
+        <Popconfirm
+          title={`Add ${totalItems} item(s) to '${activeCollectionName}'`}
+          onConfirm={handleOk}
+          // onCancel={cancel}
+          okText="Yes"
           key="add-button"
-          onClick={handleOk}
-          disabled={appLoading || !totalItems}
+          cancelText="No"
         >
-          {totalItems ? `Add ${totalItems} items` : "Add"}
-        </Button>,
+          <Button
+            style={{ marginLeft: "0" }}
+            type="primary"
+            disabled={appLoading || !totalItems}
+          >
+            {totalItems ? `Add ${totalItems} items` : "Add"}
+          </Button>
+        </Popconfirm>,
       ]}
     >
       <Tabs
@@ -246,16 +269,11 @@ const mapStateToProps = ({
   session,
   activeCollection,
   appLoading,
-  settings,
 }) => ({
   modalVisibility: visibility,
   session,
   activeCollection,
   appLoading,
-  tagList: _.map(_.get(settings, "tags", []), ({ label }) => ({
-    label,
-    value: label,
-  })),
 });
 
 const mapDispatchToProps = { setQuickAddModalMeta, addNote };
