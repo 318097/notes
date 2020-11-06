@@ -18,10 +18,11 @@
   - [x] Show total number of notes live, ready and draft
   - [ ] Stats by all/visible/invisible notes
 - [ ] Trash - show deleted notes
-- [ ] table view
-- [ ] show resources for every post view
-- [x] quick add with categorization
+- [ ] Table view
+- [ ] Show resources for every post view
+- [x] Quick add with categorization
 - [ ] Notes for every post
 - [ ] Dynamic template/config
 - [ ] Update filters based on status
 - [ ] Rating for post
+- [ ] 
