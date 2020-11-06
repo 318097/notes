@@ -24,3 +24,4 @@
 - [ ] Notes for every post
 - [ ] Dynamic template/config
 - [ ] Update filters based on status
+- [ ] Rating for post
