@@ -47,7 +47,7 @@ const INITIAL_STATE = [
   {
     title: "",
     content: "",
-    link: "",
+    url: "",
   },
 ];
 
@@ -185,7 +185,10 @@ const QuickAdd = ({
         tabBarExtraContent={
           <SelectCollection
             collection={collection}
-            setCollection={setCollection}
+            setCollection={(value) => {
+              setCollection(value);
+              setTags([]);
+            }}
             style={{ marginRight: "8px" }}
           />
         }
@@ -223,7 +226,7 @@ const QuickAdd = ({
         </TabPane>
         <TabPane tab="Quick Add Info" key="DETAILS">
           <StyledQuickGroup>
-            {_.map(input, ({ title, content, link }, index) => {
+            {_.map(input, ({ title, content, url }, index) => {
               return (
                 <div className="quick-add-row" key={index}>
                   <Input
@@ -241,10 +244,10 @@ const QuickAdd = ({
                     }
                   />
                   <Input
-                    placeholder="Link"
-                    value={link}
+                    placeholder="URL"
+                    value={url}
                     onChange={({ target: { value } }) =>
-                      handleChange({ key: "link", value, index })
+                      handleChange({ key: "url", value, index })
                     }
                   />
                 </div>

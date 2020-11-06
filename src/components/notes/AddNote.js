@@ -48,6 +48,7 @@ const initialState = {
   title: "",
   content: "",
   slug: "",
+  url: "",
   tags: [],
 };
 
@@ -69,7 +70,6 @@ const AddNote = ({
   const [showPreview, setShowPreview] = useState(true);
   const [previewMode, setPreviewMode] = useState("PREVIEW");
   const [collection, setCollection] = useState(activeCollection);
-
   const [note, setNote] = useState(initialState);
 
   useEffect(() => {
@@ -184,6 +184,12 @@ const AddNote = ({
               placeholder: "Content...",
               hideIcons: ["guide", "preview", "fullscreen", "side-by-side"],
             }}
+          />
+          <Input
+            className="mb"
+            placeholder="URL"
+            value={note.url}
+            onChange={({ target: { value } }) => setData({ url: value })}
           />
           {note.type === "QUIZ" && (
             <TextArea
