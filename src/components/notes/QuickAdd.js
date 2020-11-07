@@ -5,7 +5,6 @@ import { Modal, Input, Button, Tag, Tabs, Checkbox, Popconfirm } from "antd";
 import { addNote, setQuickAddModalMeta } from "../../store/actions";
 import SelectCollection from "../SelectCollection";
 import _ from "lodash";
-import { generateSlug } from "../../utils";
 
 const { TabPane } = Tabs;
 
@@ -96,7 +95,6 @@ const QuickAdd = ({
       ).map((item) => ({
         ...item,
         status: "QUICK_ADD",
-        slug: generateSlug({ title: item.title }),
         tags,
       }));
 

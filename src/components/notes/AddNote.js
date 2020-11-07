@@ -13,7 +13,6 @@ import {
   updateUploadNote,
   setNextNoteForEditing,
 } from "../../store/actions";
-import { generateSlug } from "../../utils";
 import colors from "@codedrops/react-ui";
 import SelectCollection from "../SelectCollection";
 
@@ -47,7 +46,6 @@ const initialState = {
   type: "DROP",
   title: "",
   content: "",
-  slug: "",
   url: "",
   tags: [],
 };
@@ -146,10 +144,6 @@ const AddNote = ({
                 setData({
                   type: value,
                   title: value === "QUIZ" ? "Quiz" : _.get(note, "title", ""),
-                  slug:
-                    value === "QUIZ"
-                      ? generateSlug({ title: "Quiz", prevSlug: note.slug })
-                      : _.get(note, "slug", ""),
                 })
               }
             >
@@ -170,17 +164,6 @@ const AddNote = ({
             placeholder="Title"
             value={note.title}
             onChange={({ target: { value } }) => setData({ title: value })}
-            onBlur={() =>
-              setData({
-                slug: generateSlug({ title: note.title, prevSlug: note.slug }),
-              })
-            }
-          />
-          <Input
-            className="mb"
-            placeholder="Slug"
-            value={note.slug}
-            onChange={({ target: { value } }) => setData({ slug: value })}
           />
           <SimpleMDE
             className="mb"

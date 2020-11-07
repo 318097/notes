@@ -11,7 +11,6 @@ import _ from "lodash";
 import { MessageWrapper } from "../../styled";
 import SelectCollection from "../SelectCollection";
 import { setModalMeta, setUploadingData, addNote } from "../../store/actions";
-import { generateSlug } from "../../utils";
 
 const { Option } = Select;
 
@@ -144,7 +143,6 @@ const UploadContent = ({
           title,
           content,
           tempId: uuid(),
-          slug: generateSlug({ title }),
           viewed: false,
           fileName,
         };

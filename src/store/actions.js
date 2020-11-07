@@ -1,7 +1,7 @@
 import axios from "axios";
 import _ from "lodash";
 
-import { getNextNote, generateNewResourceId } from "../utils";
+import { getNextNote } from "../utils";
 import {
   SET_SESSION,
   SET_SETTINGS,
@@ -71,27 +71,18 @@ export const getNoteById = (noteId) => async (dispatch, getState) => {
 export const addNote = (notes, collection) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
-    const { activeCollection, settings } = getState();
+    const { activeCollection } = getState();
 
     const noteArr = [].concat(notes);
-    let resourceIndex = settings.index;
-    const dataToSend = noteArr.map((note) => {
-      const resources = [generateNewResourceId(note, resourceIndex)];
-      resourceIndex++;
-      return { ...note, resources };
-    });
 
     const addToCollection = collection || activeCollection;
     const { data } = await axios.post(
       `/posts?collectionId=${addToCollection}`,
-      { data: dataToSend }
+      { data: noteArr }
     );
     dispatch({
       type: ADD_NOTE,
-      payload: {
-        notes: activeCollection === addToCollection ? data.result : [],
-        resourceIndex,
-      },
+      payload: activeCollection === addToCollection ? data.result : [],
     });
   } finally {
     dispatch(setAppLoading(false));
@@ -117,29 +108,17 @@ export const setNoteToEdit = (noteId, mode = "edit") => async (
 export const updateNote = (note, action) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
-    const { activeCollection, settings } = getState();
-    if (action === "CREATE_RESOURCE") {
-      const resourceId = generateNewResourceId(note, settings.index);
-      await axios.put(
-        `/posts/${note._id}?action=${action}&value=${resourceId}`,
-        {}
-      );
+    const { activeCollection } = getState();
+    const {
+      data: { result },
+    } = await axios.put(
+      `/posts/${note._id}?collectionId=${activeCollection}&action=${action}`,
+      {
+        ...note,
+      }
+    );
 
-      if (!note["resources"]) note["resources"] = [];
-      note["resources"].push(resourceId);
-    } else {
-      const {
-        data: { result },
-      } = await axios.put(
-        `/posts/${note._id}?collectionId=${activeCollection}`,
-        {
-          ...note,
-        }
-      );
-      note = { ...result };
-    }
-
-    dispatch({ type: UPDATE_NOTE, payload: note });
+    dispatch({ type: UPDATE_NOTE, payload: result });
   } finally {
     dispatch(setAppLoading(false));
   }

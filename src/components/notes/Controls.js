@@ -1,11 +1,9 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, Fragment } from "react";
 import { Radio, Switch, Input } from "antd";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import _ from "lodash";
 import moment from "moment";
 import colors, { Icon } from "@codedrops/react-ui";
-
 import { updateNote } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
 
@@ -74,7 +72,7 @@ const Controls = ({ note, dispatch }) => {
     tags = [],
     _id,
     liveId,
-    slug: defaultSlug = "",
+    slug = "",
     index,
     createdAt,
     resources = [],
@@ -82,22 +80,10 @@ const Controls = ({ note, dispatch }) => {
     status,
     socialStatus,
   } = note || {};
-  const [hashtags, setHashtags] = useState("");
   const [liveIdEditor, setLiveIdEditor] = useState(false);
-
-  useEffect(() => {
-    if (!note) return;
-    const tagsFormatted = tags.map((tag) => `#${tag}`).join(" ");
-    setHashtags(`${tagsFormatted}`);
-  }, [note]);
 
   const updateProperties = async (key, value) =>
     await dispatch(updateNote({ _id, liveId, [key]: value }));
-
-  const slugWithUnderscore = defaultSlug.replace(/-/g, "_");
-  const slug = `RDY${index}-${slugWithUnderscore}`;
-  const slugWithLiveId = `${liveId}-${slugWithUnderscore}`;
-  const addedDays = moment().diff(moment(createdAt), "days");
 
   const copy = (text) => () => {
     copyToClipboard(text);
@@ -110,11 +96,74 @@ const Controls = ({ note, dispatch }) => {
     setLiveIdEditor(false);
   };
 
+  const hashtags = tags.map((tag) => `#${tag}`).join(" ");
+  const rdySlug = `RDY${index}-${slug}`;
+  const slugWithLiveId = `${liveId}-${slug}`;
+  const addedDays = moment().diff(moment(createdAt), "days");
+
   return (
     <div className="controls">
       <ControlsWrapper>
-        <div className="slug" onClick={copy(slug)}>
-          {slug}
+        <div>
+          <div className="header">
+            <h4>Status</h4>
+            {liveId && (
+              <Fragment>
+                {liveIdEditor ? (
+                  <Input
+                    style={{ width: "30px", height: "18px", fontSize: "1rem" }}
+                    size="small"
+                    defaultValue={liveId}
+                    onBlur={updateLiveId}
+                  />
+                ) : (
+                  <span
+                    style={{ cursor: "pointer" }}
+                    onDoubleClick={() => setLiveIdEditor(true)}
+                    className="state"
+                  >{`Live Id: ${liveId}`}</span>
+                )}
+              </Fragment>
+            )}
+          </div>
+          <Radio.Group
+            onChange={({ target: { value } }) =>
+              updateProperties("status", value)
+            }
+            value={status}
+          >
+            {["QUICK_ADD", "DRAFT", "READY", "POSTED"].map((state) => (
+              <Radio className="radio-box" key={state} value={state}>
+                {state}
+              </Radio>
+            ))}
+          </Radio.Group>
+        </div>
+      </ControlsWrapper>
+
+      <ControlsWrapper>
+        <div>
+          <div className="header">
+            <h4>Social status</h4>
+          </div>
+          <Radio.Group
+            onChange={({ target: { value } }) =>
+              updateProperties("socialStatus", value)
+            }
+            value={socialStatus}
+          >
+            {["NONE", "READY", "POSTED"].map((state) => (
+              <Radio className="radio-box" key={state} value={state}>
+                {state}
+              </Radio>
+            ))}
+          </Radio.Group>
+        </div>
+      </ControlsWrapper>
+
+      <ControlsWrapper>
+        <div className="slug" onClick={copy(rdySlug)}>
+          {rdySlug}
         </div>
         {!!liveId && (
           <div className="slug" onClick={copy(slugWithLiveId)}>
@@ -161,62 +210,7 @@ const Controls = ({ note, dispatch }) => {
           />
         </div>
       </ControlsWrapper>
-      <ControlsWrapper>
-        <div>
-          <div className="header">
-            <h4>Status</h4>
-            {liveId && (
-              <Fragment>
-                {liveIdEditor ? (
-                  <Input
-                    style={{ width: "30px", height: "18px", fontSize: "1rem" }}
-                    size="small"
-                    defaultValue={liveId}
-                    onBlur={updateLiveId}
-                  />
-                ) : (
-                  <span
-                    style={{ cursor: "pointer" }}
-                    onDoubleClick={() => setLiveIdEditor(true)}
-                    className="state"
-                  >{`Live Id: ${liveId}`}</span>
-                )}
-              </Fragment>
-            )}
-          </div>
-          <Radio.Group
-            onChange={({ target: { value } }) =>
-              updateProperties("status", value)
-            }
-            value={status}
-          >
-            {["QUICK_ADD", "DRAFT", "READY", "POSTED"].map((state) => (
-              <Radio className="radio-box" key={state} value={state}>
-                {state}
-              </Radio>
-            ))}
-          </Radio.Group>
-        </div>
-      </ControlsWrapper>
-      <ControlsWrapper>
-        <div>
-          <div className="header">
-            <h4>Social status</h4>
-          </div>
-          <Radio.Group
-            onChange={({ target: { value } }) =>
-              updateProperties("socialStatus", value)
-            }
-            value={socialStatus || "NONE"}
-          >
-            {["NONE", "READY", "POSTED"].map((state) => (
-              <Radio className="radio-box" key={state} value={state}>
-                {state}
-              </Radio>
-            ))}
-          </Radio.Group>
-        </div>
-      </ControlsWrapper>
+
       <ControlsWrapper>
         <div>Added: {addedDays ? `${addedDays} days ago` : "Today"}</div>
       </ControlsWrapper>
