@@ -18,6 +18,9 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   column-gap: 8px;
+  .controls.left {
+    grid-column: 3/4;
+  }
   .card {
     overflow: hidden;
     animation: 0.2s ${fadeInDownAnimation};
@@ -98,12 +101,12 @@ const Wrapper = styled.div`
       }
     }
   }
-  .controls {
+  .controls.right {
     grid-column: 10/11;
   }
   .previous-icon,
   .next-icon {
-    grid-column: 3;
+    grid-column: 2;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -173,6 +176,7 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
           type="caret-left"
         />
       </div>
+      <Controls note={viewNote} view="left" />
       <Card>
         <div className="card-content">
           <div className="relative">
@@ -223,7 +227,7 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
           </div>
         )}
       </Card>
-      <Controls note={viewNote} />
+      <Controls note={viewNote} view="right" />
       <div className="next-icon">
         <Icon
           size={40}

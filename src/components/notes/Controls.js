@@ -11,7 +11,7 @@ const ControlsWrapper = styled.div`
   background: white;
   margin-bottom: 8px;
   width: 218px;
-  padding: 16px 12px;
+  padding: 14px 12px;
   border-radius: 12px;
   border: 1px solid ${colors.shade2};
   box-shadow: 3px 3px 3px ${colors.shade2};
@@ -28,13 +28,12 @@ const ControlsWrapper = styled.div`
     background: ${colors.primary};
     width: 100%;
     color: white;
-    padding: 4px 4px;
-    text-align: center;
+    padding: 4px;
     border-radius: 2px;
     font-size: 0.8rem;
     transition: 0.4s;
     cursor: pointer;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -68,7 +67,7 @@ const ControlsWrapper = styled.div`
   }
 `;
 
-const Controls = ({ note, dispatch }) => {
+const Controls = ({ note, dispatch, view }) => {
   const {
     tags = [],
     _id,
@@ -102,44 +101,51 @@ const Controls = ({ note, dispatch }) => {
   const slugWithLiveId = `${liveId}-${slug}`;
   const addedDays = moment().diff(moment(createdAt), "days");
 
+  if (view === "left") {
+    return (
+      <div className={`controls ${view}`}>
+        <ControlsWrapper>
+          <div>Added: {addedDays ? `${addedDays} day(s) ago` : "Today"}</div>
+        </ControlsWrapper>
+      </div>
+    );
+  }
   return (
-    <div className="controls">
+    <div className={`controls ${view}`}>
       <ControlsWrapper>
-        <div>
-          <div className="header">
-            <h4>Status</h4>
-            {liveId && (
-              <Fragment>
-                {liveIdEditor ? (
-                  <Input
-                    style={{ width: "30px", height: "18px", fontSize: "1rem" }}
-                    size="small"
-                    defaultValue={liveId}
-                    onBlur={updateLiveId}
-                  />
-                ) : (
-                  <span
-                    style={{ cursor: "pointer" }}
-                    onDoubleClick={() => setLiveIdEditor(true)}
-                    className="state"
-                  >{`Live Id: ${liveId}`}</span>
-                )}
-              </Fragment>
-            )}
-          </div>
-          <Radio.Group
-            onChange={({ target: { value } }) =>
-              updateProperties("status", value)
-            }
-            value={status}
-          >
-            {["QUICK_ADD", "DRAFT", "READY", "POSTED"].map((state) => (
-              <Radio className="radio-box" key={state} value={state}>
-                {state}
-              </Radio>
-            ))}
-          </Radio.Group>
+        <div className="header">
+          <h4>Status</h4>
+          {liveId && (
+            <Fragment>
+              {liveIdEditor ? (
+                <Input
+                  style={{ width: "30px", height: "18px", fontSize: "1rem" }}
+                  size="small"
+                  defaultValue={liveId}
+                  onBlur={updateLiveId}
+                />
+              ) : (
+                <span
+                  style={{ cursor: "pointer" }}
+                  onDoubleClick={() => setLiveIdEditor(true)}
+                  className="state"
+                >{`Live Id: ${liveId}`}</span>
+              )}
+            </Fragment>
+          )}
         </div>
+        <Radio.Group
+          onChange={({ target: { value } }) =>
+            updateProperties("status", value)
+          }
+          value={status}
+        >
+          {["QUICK_ADD", "DRAFT", "READY", "POSTED"].map((state) => (
+            <Radio className="radio-box" key={state} value={state}>
+              {state}
+            </Radio>
+          ))}
+        </Radio.Group>
       </ControlsWrapper>
 
       <ControlsWrapper>
@@ -210,10 +216,6 @@ const Controls = ({ note, dispatch }) => {
             onChange={(value) => updateProperties("visible", value)}
           />
         </div>
-      </ControlsWrapper>
-
-      <ControlsWrapper>
-        <div>Added: {addedDays ? `${addedDays} days ago` : "Today"}</div>
       </ControlsWrapper>
     </div>
   );
