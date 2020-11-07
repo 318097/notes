@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from "react";
-import { Radio, Switch, Input } from "antd";
+import { Radio, Switch, Input, Rate } from "antd";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import moment from "moment";
@@ -79,6 +79,7 @@ const Controls = ({ note, dispatch, view }) => {
     visible,
     status,
     socialStatus,
+    rating,
   } = note || {};
   const [liveIdEditor, setLiveIdEditor] = useState(false);
 
@@ -106,6 +107,13 @@ const Controls = ({ note, dispatch, view }) => {
       <div className={`controls ${view}`}>
         <ControlsWrapper>
           <div>Added: {addedDays ? `${addedDays} day(s) ago` : "Today"}</div>
+        </ControlsWrapper>
+        <ControlsWrapper>
+          <h4>Rating</h4>
+          <Rate
+            value={rating}
+            onChange={(value) => updateProperties("rating", value)}
+          />
         </ControlsWrapper>
       </div>
     );
