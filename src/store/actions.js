@@ -72,17 +72,15 @@ export const addNote = (notes, collection) => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
     const { activeCollection } = getState();
-
-    const noteArr = [].concat(notes);
-
     const addToCollection = collection || activeCollection;
-    const { data } = await axios.post(
-      `/posts?collectionId=${addToCollection}`,
-      { data: noteArr }
-    );
+
+    const data = [].concat(notes);
+    const {
+      data: { result },
+    } = await axios.post(`/posts?collectionId=${addToCollection}`, { data });
     dispatch({
       type: ADD_NOTE,
-      payload: activeCollection === addToCollection ? data.result : [],
+      payload: activeCollection === addToCollection ? result : [],
     });
   } finally {
     dispatch(setAppLoading(false));
@@ -113,9 +111,7 @@ export const updateNote = (note, action) => async (dispatch, getState) => {
       data: { result },
     } = await axios.put(
       `/posts/${note._id}?collectionId=${activeCollection}&action=${action}`,
-      {
-        ...note,
-      }
+      note
     );
 
     dispatch({ type: UPDATE_NOTE, payload: result });
@@ -215,7 +211,7 @@ export const setSession = (session) => ({
   payload: session,
 });
 
-export const setActiveCollection = (id) => async (dispatch, getState) => {
+export const setActiveCollection = (id) => async (dispatch) => {
   await dispatch({
     type: SET_ACTIVE_COLLECTION,
     payload: id,

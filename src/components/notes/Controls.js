@@ -30,8 +30,8 @@ const ControlsWrapper = styled.div`
     color: white;
     padding: 4px 4px;
     text-align: center;
-    border-radius: 4px;
-    font-size: 1rem;
+    border-radius: 2px;
+    font-size: 0.8rem;
     transition: 0.4s;
     cursor: pointer;
     margin-bottom: 4px;
@@ -49,15 +49,16 @@ const ControlsWrapper = styled.div`
   }
   .resource-id {
     background: ${colors.strokeOne};
-    padding: 2px 4px;
-    border-radius: 4px;
-    font-size: 1rem;
-    margin-bottom: 2px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    font-size: 1.2rem;
+    margin-right: 4px;
     cursor: pointer;
     transition: 0.4s;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
     &:hover {
       background: ${colors.strokeTwo};
     }
@@ -179,9 +180,9 @@ const Controls = ({ note, dispatch }) => {
           />
         </div>
 
-        {resources.map((resource) => (
+        {resources.map((resource, index) => (
           <div key={resource} className="resource-id" onClick={copy(resource)}>
-            {resource}
+            {index + 1}
           </div>
         ))}
 
