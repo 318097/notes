@@ -148,7 +148,7 @@ const AddNote = ({
                   title: value === "QUIZ" ? "Quiz" : _.get(note, "title", ""),
                   slug:
                     value === "QUIZ"
-                      ? generateSlug("Quiz")
+                      ? generateSlug({ title: "Quiz", prevSlug: note.slug })
                       : _.get(note, "slug", ""),
                 })
               }
@@ -170,7 +170,11 @@ const AddNote = ({
             placeholder="Title"
             value={note.title}
             onChange={({ target: { value } }) => setData({ title: value })}
-            onBlur={() => setData({ slug: generateSlug(note.title) })}
+            onBlur={() =>
+              setData({
+                slug: generateSlug({ title: note.title, prevSlug: note.slug }),
+              })
+            }
           />
           <Input
             className="mb"

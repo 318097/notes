@@ -144,7 +144,7 @@ const UploadContent = ({
           title,
           content,
           tempId: uuid(),
-          slug: generateSlug(title),
+          slug: generateSlug({ title }),
           viewed: false,
           fileName,
         };

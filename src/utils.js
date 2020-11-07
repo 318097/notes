@@ -2,14 +2,16 @@ import { message } from "antd";
 import _ from "lodash";
 import colors from "@codedrops/react-ui";
 
-export const generateSlug = (title = "", seperator = "-") => {
+export const generateSlug = ({ title = "", seperator = "-", prevSlug }) => {
   const slug = title
     .trim()
-    .replace(/[^a-zA-Z0-9\-\s]/gi, "")
     .replace(/\s+/gi, seperator)
+    .replace(/[^a-zA-Z0-9\-\s]/gi, "")
     .toLowerCase();
-  const timestamp = new Date().getTime();
-  return slug ? `${slug}-${timestamp}` : "";
+  const timestamp = prevSlug
+    ? prevSlug.split(seperator).pop()
+    : new Date().getTime();
+  return slug ? `${slug}${seperator}${timestamp}` : "";
 };
 
 export const copyToClipboard = (text) => {

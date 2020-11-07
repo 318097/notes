@@ -96,7 +96,7 @@ const QuickAdd = ({
       ).map((item) => ({
         ...item,
         status: "QUICK_ADD",
-        slug: generateSlug(item.title),
+        slug: generateSlug({ title: item.title }),
         tags,
       }));
 
