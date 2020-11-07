@@ -75,7 +75,10 @@ const AddNote = ({
   useEffect(() => {
     if (modalVisibility) {
       if (mode === "add") setNote({ ...initialState, tags: [] });
-      else setNote({ ...selectedNote });
+      else {
+        setNote({ ...selectedNote });
+        setCollection(selectedNote.collectionId);
+      }
     }
   }, [mode, selectedNote, modalVisibility]);
 

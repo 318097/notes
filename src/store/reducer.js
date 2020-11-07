@@ -100,6 +100,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         activeCollection: action.payload,
+        settings: _.get(state, ["session", "notesApp", action.payload], {}),
       };
     case TOGGLE_SETTINGS_DRAWER:
       return {
