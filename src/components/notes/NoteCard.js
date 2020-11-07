@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Icon as AntIcon } from "antd";
 import marked from "marked";
@@ -46,14 +46,6 @@ const StyledCard = styled.div`
     overflow: visible;
     width: 100%;
     top: 0px;
-    .tags {
-      text-align: left;
-    }
-    .tag {
-      cursor: pointer;
-      padding: 0px 4px;
-      font-size: 0.8rem;
-    }
     .status-row {
       display: flex;
       align-items: center;
@@ -61,12 +53,6 @@ const StyledCard = styled.div`
       .anticon {
         margin: 0 2px;
       }
-    }
-    .index {
-      font-style: italic;
-      color: ${colors.bar};
-      margin: 2px;
-      font-size: 1rem;
     }
   }
 `;
@@ -80,7 +66,6 @@ const NoteCard = ({
     _id,
     status,
     visible,
-    socialStatus,
     index,
     liveId,
     createdAt,
@@ -88,11 +73,10 @@ const NoteCard = ({
   handleClick,
   onEdit,
   onDelete,
+  tagsCodes,
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-
-  const createdToday =
-    moment(createdAt).format("DD-MM-YYYY") === moment().format("DD-MM-YYYY");
+  const addedDays = moment().diff(moment(createdAt), "days");
   return (
     <StyledCard>
       <Card onClick={handleClick(_id)}>
@@ -116,7 +100,9 @@ const NoteCard = ({
       <Card className="action-row">
         <div className="tags">
           {tags.map((tag) => (
-            <Tag key={tag}>{tag.toUpperCase()}</Tag>
+            <Tag key={tag} color={tagsCodes[tag]}>
+              {tag.toUpperCase()}
+            </Tag>
           ))}
         </div>
         <div className="status-row">
@@ -127,32 +113,13 @@ const NoteCard = ({
               height: "max-content",
             }}
           >
-            {status !== "POSTED" && socialStatus !== "POSTED" && (
-              <Fragment>
-                {status !== "DRAFT" && (
-                  <div
-                    className="state"
-                    style={{
-                      background: status === "POSTED" ? "seagreen" : "orange",
-                    }}
-                  >
-                    STATUS
-                  </div>
-                )}
-                {socialStatus !== "NONE" && (
-                  <div
-                    className="state"
-                    style={{
-                      background:
-                        socialStatus === "POSTED" ? "seagreen" : "orange",
-                    }}
-                  >
-                    SOCIAL STATUS
-                  </div>
-                )}
-              </Fragment>
+            {liveId ? (
+              <Tag>{`Live Id: ${liveId}`}</Tag>
+            ) : (
+              <Tag color={status === "POSTED" ? "seagreen" : "orange"}>
+                {status}
+              </Tag>
             )}
-            {liveId && <span className="state">{`Live Id: ${liveId}`}</span>}
           </div>
 
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -160,8 +127,8 @@ const NoteCard = ({
             {type === "DROP" && (
               <Icon className="bulb-icon" type="bulb" size={12} />
             )}
-            {createdToday && <Tag>Today</Tag>}
-            {!!index && <span className="index">{`#${index}`}</span>}
+            <Tag>{addedDays ? `${addedDays}d ago` : "Today"}</Tag>
+            <Tag>{`#${index}`}</Tag>
           </div>
         </div>
       </Card>

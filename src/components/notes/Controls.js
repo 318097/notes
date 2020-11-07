@@ -3,7 +3,7 @@ import { Radio, Switch, Input, Rate } from "antd";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import moment from "moment";
-import colors, { Icon } from "@codedrops/react-ui";
+import colors, { Icon, Tag } from "@codedrops/react-ui";
 import { updateNote } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
 
@@ -106,7 +106,23 @@ const Controls = ({ note, dispatch, view }) => {
     return (
       <div className={`controls ${view}`}>
         <ControlsWrapper>
-          <div>Added: {addedDays ? `${addedDays} day(s) ago` : "Today"}</div>
+          <div>
+            <div className="header">
+              <h4>Social status</h4>
+            </div>
+            <Radio.Group
+              onChange={({ target: { value } }) =>
+                updateProperties("socialStatus", value)
+              }
+              value={socialStatus}
+            >
+              {["NONE", "READY", "POSTED"].map((state) => (
+                <Radio className="radio-box" key={state} value={state}>
+                  {state}
+                </Radio>
+              ))}
+            </Radio.Group>
+          </div>
         </ControlsWrapper>
         <ControlsWrapper>
           <h4>Rating</h4>
@@ -133,11 +149,10 @@ const Controls = ({ note, dispatch, view }) => {
                   onBlur={updateLiveId}
                 />
               ) : (
-                <span
+                <Tag
                   style={{ cursor: "pointer" }}
                   onDoubleClick={() => setLiveIdEditor(true)}
-                  className="state"
-                >{`Live Id: ${liveId}`}</span>
+                >{`Live Id: ${liveId}`}</Tag>
               )}
             </Fragment>
           )}
@@ -154,26 +169,6 @@ const Controls = ({ note, dispatch, view }) => {
             </Radio>
           ))}
         </Radio.Group>
-      </ControlsWrapper>
-
-      <ControlsWrapper>
-        <div>
-          <div className="header">
-            <h4>Social status</h4>
-          </div>
-          <Radio.Group
-            onChange={({ target: { value } }) =>
-              updateProperties("socialStatus", value)
-            }
-            value={socialStatus}
-          >
-            {["NONE", "READY", "POSTED"].map((state) => (
-              <Radio className="radio-box" key={state} value={state}>
-                {state}
-              </Radio>
-            ))}
-          </Radio.Group>
-        </div>
       </ControlsWrapper>
 
       <ControlsWrapper>
@@ -224,6 +219,9 @@ const Controls = ({ note, dispatch, view }) => {
             onChange={(value) => updateProperties("visible", value)}
           />
         </div>
+      </ControlsWrapper>
+      <ControlsWrapper>
+        <div>Added: {addedDays ? `${addedDays} day(s) ago` : "Today"}</div>
       </ControlsWrapper>
     </div>
   );

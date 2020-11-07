@@ -53,6 +53,11 @@ body {
     margin: 0;
     font-family: RobotoMonoSemiBold;
   }
+  .tag,
+  .ant-tag {
+    padding: 0px 4px !important;
+    font-size: 0.8rem !important;
+  }
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -106,18 +111,6 @@ body {
   .card {
     background: #d6e2c7;
   }
-}
-
-.state {
-  color: $white;
-  text-transform: uppercase;
-  font-size: 0.9rem;
-  background: $orange;
-  padding: 0px 4px;
-  border-radius: 2px;
-  margin: 0 2px;
-  display: inline-block;
-  width: max-content;
 }
 
 .settings-content {
