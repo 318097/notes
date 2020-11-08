@@ -21,7 +21,7 @@
 - [ ] Table view
 - [ ] Show resources for every post view
 - [x] Quick add with categorization
-- [ ] Notes for every post
+- [x] Notes for every post
 - [ ] Dynamic template/config
 - [ ] Update filters based on status
 - [x] Rating for post

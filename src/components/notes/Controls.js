@@ -6,6 +6,9 @@ import moment from "moment";
 import colors, { Icon, Tag } from "@codedrops/react-ui";
 import { updateNote } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
+import short from "short-uuid";
+
+const { TextArea } = Input;
 
 const ControlsWrapper = styled.div`
   background: white;
@@ -62,6 +65,15 @@ const ControlsWrapper = styled.div`
       background: ${colors.strokeTwo};
     }
   }
+  .notes-container {
+    padding: 8px 0px;
+    .note {
+      background: ${colors.feather};
+      border-radius: 4px;
+      padding: 8px;
+      margin-bottom: 4px;
+    }
+  }
   .ant-radio-wrapper {
     font-size: 12px;
   }
@@ -80,14 +92,25 @@ const Controls = ({ note, dispatch, view }) => {
     status,
     socialStatus,
     rating,
+    notes: personalNotes = [],
   } = note || {};
   const [liveIdEditor, setLiveIdEditor] = useState(false);
+  const [personalNote, setPersonalNote] = useState("");
 
   const updateProperties = async (key, value) =>
     await dispatch(updateNote({ _id, liveId, [key]: value }));
 
   const copy = (text) => () => {
     copyToClipboard(text);
+  };
+
+  const handleAddPersonalNote = () => {
+    const newNote = [
+      ...personalNotes,
+      { _id: short.generate(), content: personalNote },
+    ];
+    updateProperties("notes", newNote);
+    setTimeout(() => setPersonalNote(""));
   };
 
   const updateLiveId = (e) => {
@@ -130,6 +153,34 @@ const Controls = ({ note, dispatch, view }) => {
             value={rating}
             onChange={(value) => updateProperties("rating", value)}
           />
+        </ControlsWrapper>
+        <ControlsWrapper>
+          <div className="header">
+            <h4>Notes</h4>
+            <Tag>
+              {personalNotes.length ? `Total: ${personalNotes.length}` : null}
+            </Tag>
+          </div>
+          <div className="notes-container">
+            {personalNotes.length ? (
+              personalNotes.map((note, index) => (
+                <div key={note._id} className="note">
+                  {`${index + 1}. ${note.content}`}
+                </div>
+              ))
+            ) : (
+              <div className="empty">Empty</div>
+            )}
+          </div>
+          <div className="add-note-container">
+            <TextArea
+              rows={1}
+              placeholder="Add Note.."
+              value={personalNote}
+              onChange={({ target: { value } }) => setPersonalNote(value)}
+              onPressEnter={handleAddPersonalNote}
+            />
+          </div>
         </ControlsWrapper>
       </div>
     );
