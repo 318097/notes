@@ -25,7 +25,7 @@ code {
 
 pre {
   border: 1px solid $strokeOne;
-  background: $bg;
+  background: $feather;
   border-radius: 4px;
   padding: 12px;
   line-height: 1.5rem;
@@ -55,8 +55,8 @@ body {
   }
   .tag,
   .ant-tag {
-    padding: 0px 4px !important;
-    font-size: 0.8rem !important;
+    padding: 0px 4px;
+    font-size: 0.8rem;
   }
   margin: 0;
   padding: 0;
@@ -86,17 +86,33 @@ body {
         height: auto;
       }
     }
-    .showingCount {
-      padding: 4px 6px;
-      margin: 2px;
-      text-transform: uppercase;
-      font-size: 1rem;
+    .showing-count {
+      background: $bg;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 8px;
+      height: 30px;
+      border-radius: 4px;
+      margin-left: 8px;
     }
   }
   .ant-modal-body {
     padding: 0;
     height: 80vh;
     overflow: hidden;
+  }
+}
+
+.show-filters {
+  margin-right: 12px;
+}
+
+.icon-bg {
+  padding: 6px;
+  transition: 0.4s;
+  &:hover {
+    background: $strokeOne;
+    border-radius: 50%;
   }
 }
 

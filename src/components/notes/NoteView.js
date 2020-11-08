@@ -210,11 +210,15 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
           </div>
         </div>
 
-        <Icon className="back-icon icon" onClick={goBack} type="caret-left" />
+        <Icon
+          className="back-icon icon icon-bg"
+          onClick={goBack}
+          type="caret-left"
+        />
         <Icon
           size={12}
           onClick={handleEdit}
-          className="edit-icon icon"
+          className="edit-icon icon icon-bg"
           type="edit"
         />
         {!!index && <span className="index">{`#${index}`}</span>}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Input, Select, Icon } from "antd";
 import { connect } from "react-redux";
 import { setFilter } from "../store/actions";
@@ -51,6 +51,8 @@ const Filters = ({
   activeCollection,
   settings,
 }) => {
+  const [showAllFilters, setShowAllFilters] = useState(false);
+
   const setFilterValues = (filter) => {
     const props = Object.entries(filter);
     let extraFilters = {};
@@ -68,16 +70,23 @@ const Filters = ({
   const { tags = [] } = settings;
   return (
     <div className="flex center align-center" style={{ flexShrink: 0 }}>
-      <SelectCollection collection={activeCollection} />
-      <Search
-        allowClear
-        className="input-width"
-        placeholder="Search..."
-        defaultValue={filters.search}
-        onSearch={(value) => setFilterValues({ search: value })}
+      <Icon
+        type={showAllFilters ? "double-right" : "double-left"}
+        className="show-filters icon-bg"
+        onClick={() => setShowAllFilters((prev) => !prev)}
       />
+      <SelectCollection collection={activeCollection} />
+      {showAllFilters && (
+        <Search
+          allowClear
+          className="input-width"
+          placeholder="Search..."
+          defaultValue={filters.search}
+          onSearch={(value) => setFilterValues({ search: value })}
+        />
+      )}
       <Select
-        style={{ minWidth: "80px", margin: "2px" }}
+        style={{ minWidth: "100px", margin: "2px" }}
         mode="multiple"
         placeholder="Tags"
         value={filters.tags}
@@ -101,18 +110,20 @@ const Filters = ({
           </Option>
         ))}
       </Select>
-      <Select
-        className="input-width"
-        placeholder="Social Status"
-        value={filters.socialStatus}
-        onChange={(value) => setFilterValues({ socialStatus: value })}
-      >
-        {socialStatus.map(({ label, value }) => (
-          <Option key={value} value={value}>
-            {label}
-          </Option>
-        ))}
-      </Select>
+      {showAllFilters && (
+        <Select
+          className="input-width"
+          placeholder="Social Status"
+          value={filters.socialStatus}
+          onChange={(value) => setFilterValues({ socialStatus: value })}
+        >
+          {socialStatus.map(({ label, value }) => (
+            <Option key={value} value={value}>
+              {label}
+            </Option>
+          ))}
+        </Select>
+      )}
       <Select
         className="input-width"
         placeholder="Sort"
@@ -125,18 +136,20 @@ const Filters = ({
           </Option>
         ))}
       </Select>
-      <Select
-        className="input-width"
-        placeholder="Visibility"
-        value={filters.visibility}
-        onChange={(value) => setFilterValues({ visibility: value })}
-      >
-        {visibilityFilter.map(({ label, value }) => (
-          <Option key={value} value={value}>
-            {label}
-          </Option>
-        ))}
-      </Select>
+      {showAllFilters && (
+        <Select
+          className="input-width"
+          placeholder="Visibility"
+          value={filters.visibility}
+          onChange={(value) => setFilterValues({ visibility: value })}
+        >
+          {visibilityFilter.map(({ label, value }) => (
+            <Option key={value} value={value}>
+              {label}
+            </Option>
+          ))}
+        </Select>
+      )}
       {!!validateFilters(filters) && (
         <Icon
           style={{ margin: "0 4px" }}
@@ -158,7 +171,7 @@ const Filters = ({
 
       <Icon
         style={{ margin: "0 4px" }}
-        className="icon"
+        className="icon icon-bg"
         onClick={() =>
           setFilterValues({
             sortOrder: filters.sortOrder === "ASC" ? "DESC" : "ASC",
@@ -170,9 +183,7 @@ const Filters = ({
       />
 
       {meta && meta.count > 0 && (
-        <span className="showingCount">
-          Showing {notes.length} of {meta.count}
-        </span>
+        <span className="showing-count">{`${notes.length}/${meta.count}`}</span>
       )}
     </div>
   );
