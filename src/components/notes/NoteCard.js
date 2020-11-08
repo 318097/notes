@@ -20,7 +20,7 @@ const StyledCard = styled.div`
     overflow: visible;
     padding: 20px 8px;
     &:hover {
-      background: ${colors.feather};
+      background: ${colors.featherDark};
     }
     .title {
       font-size: inherit;
@@ -37,6 +37,10 @@ const StyledCard = styled.div`
       overflow-x: auto;
       padding: 0;
     }
+  }
+  .card.today,
+  .action-row.today {
+    background: ${colors.feather};
   }
   .action-row {
     position: relative;
@@ -79,7 +83,10 @@ const NoteCard = ({
   const addedDays = moment().diff(moment(createdAt), "days");
   return (
     <StyledCard>
-      <Card onClick={handleClick(_id)}>
+      <Card
+        onClick={handleClick(_id)}
+        className={`card ${addedDays ? null : "today"}`}
+      >
         <h3 className={`title ${type === "POST" ? "post-title" : ""}`}>
           {title}
         </h3>
@@ -97,7 +104,7 @@ const NoteCard = ({
           onDelete={() => onDelete(_id)}
         />
       </Card>
-      <Card className="action-row">
+      <Card className={`action-row ${addedDays ? null : "today"}`}>
         <div className="tags">
           {tags.map((tag) => (
             <Tag key={tag} color={tagsCodes[tag]}>
