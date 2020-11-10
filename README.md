@@ -27,3 +27,5 @@
 - [x] Rating for post
 - [x] Published date
 - [ ] Reorganize Filters
+- [ ] Keyboard shortcuts
+- [ ] Fix: Slug editable, default resource, switch collections, add rate filter
