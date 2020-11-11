@@ -15,6 +15,7 @@ import {
 } from "../../store/actions";
 import colors from "@codedrops/react-ui";
 import SelectCollection from "../SelectCollection";
+import { generateSlug } from "../../utils";
 
 const { TextArea } = Input;
 
@@ -100,6 +101,15 @@ const AddNote = ({
   const handleUpdateAndNext = () =>
     setNextNoteForEditing({ ...note, viewed: true });
 
+  const updateSlug = (e) => {
+    if (note.status === "POSTED") return;
+    const newSlug = generateSlug({
+      title: e.target.value,
+      prevSlug: note.slug,
+    });
+    setData({ slug: newSlug });
+  };
+
   return (
     <Modal
       title={mode === "add" ? "ADD NOTE" : "EDIT NOTE"}
@@ -157,13 +167,20 @@ const AddNote = ({
               setCollection={setCollection}
             />
           </div>
-
           <Input
             className="mb"
             autoFocus
             placeholder="Title"
             value={note.title}
+            onBlur={updateSlug}
             onChange={({ target: { value } }) => setData({ title: value })}
+          />
+          <Input
+            className="mb"
+            placeholder="Slug"
+            value={note.slug}
+            disabled={note.status === "POSTED"}
+            onChange={({ target: { value } }) => setData({ slug: value })}
           />
           <SimpleMDE
             className="mb"

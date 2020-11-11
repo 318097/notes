@@ -32,3 +32,16 @@ export const extractTagCodes = (tags = []) =>
     }),
     { uncategorized: colors.red }
   );
+
+export const generateSlug = ({ title = "", seperator = "-", prevSlug }) => {
+  const slug = title
+    .trim()
+    .replace(/\s+/gi, seperator)
+    .replace(/[^a-zA-Z0-9\-\s]/gi, "")
+    .toLowerCase();
+  const timestamp = prevSlug
+    ? prevSlug.split(seperator).pop()
+    : new Date().getTime();
+
+  return slug ? `${slug}${seperator}${timestamp}` : "";
+};
