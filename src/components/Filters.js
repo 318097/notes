@@ -50,8 +50,14 @@ const validateFilters = ({
   search,
   tags = [],
   sortFilter,
+  rating,
 } = {}) =>
-  socialStatus || status || search || tags.length || sortFilter !== "createdAt";
+  socialStatus ||
+  status ||
+  search ||
+  tags.length ||
+  sortFilter !== "createdAt" ||
+  rating;
 
 const Filters = ({
   dispatch,
@@ -186,6 +192,7 @@ const Filters = ({
               socialStatus: "",
               status: "",
               search: "",
+              rating: "",
               visibility: "visible",
               sortOrder: "DESC",
               sortFilter: "createdAt",
