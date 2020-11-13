@@ -18,14 +18,14 @@
   - [x] Show total number of notes live, ready and draft
   - [ ] Stats by all/visible/invisible notes
 - [ ] Trash - show deleted notes
-- [ ] Table view
+- [x] Table view
 - [ ] Show resources for every post view
 - [x] Quick add with categorization
 - [x] Notes for every post
 - [ ] Dynamic template/config
-- [ ] Update filters based on status
+- [x] Update filters based on status
 - [x] Rating for post
 - [x] Published date
-- [ ] Reorganize Filters
+- [x] Reorganize Filters
 - [ ] Keyboard shortcuts
-- [ ] Fix: Slug editable, default resource, switch collections, add rate filter
+- [x] Fix: Slug editable, default resource, switch collections, add rate filter

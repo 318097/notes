@@ -235,6 +235,7 @@ const Controls = ({ note, dispatch, view }) => {
           <h4>Resources</h4>
           <Icon
             type="plus"
+            className="icon-bg"
             size={10}
             onClick={() => dispatch(updateNote(note, "CREATE_RESOURCE"))}
           />
@@ -252,6 +253,7 @@ const Controls = ({ note, dispatch, view }) => {
           <h4>Hashtags</h4>
           <Icon
             type="copy"
+            className="icon-bg"
             onClick={() => copyToClipboard(hashtags.join(" "))}
           />
         </div>

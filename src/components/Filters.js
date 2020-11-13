@@ -3,6 +3,7 @@ import { Input, Select, Icon } from "antd";
 import { connect } from "react-redux";
 import { setFilter, setKey } from "../store/actions";
 import SelectCollection from "./SelectCollection";
+import config from "../config";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -226,7 +227,11 @@ const Filters = ({
       />
 
       {meta && meta.count > 0 && (
-        <span className="showing-count">{`${notes.length}/${meta.count}`}</span>
+        <span className="showing-count">
+          {displayType === "CARD"
+            ? `${notes.length}/${meta.count}`
+            : `${filters.page}/${Math.ceil(meta.count / config.LIMIT)}`}
+        </span>
       )}
     </div>
   );

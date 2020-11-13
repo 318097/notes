@@ -25,7 +25,13 @@ axios.defaults.baseURL = config.SERVER_URL;
 axios.defaults.headers.common["authorization"] = getToken();
 axios.defaults.headers.common["external-source"] = "NOTES_APP";
 
-const App = ({ setSession, session, appLoading }) => {
+const App = ({
+  setSession,
+  session,
+  appLoading,
+  quickAddModalVisibility,
+  addModalVisibility,
+}) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -80,8 +86,8 @@ const App = ({ setSession, session, appLoading }) => {
       </div>
       {session && session.loggedIn && (
         <Fragment>
-          <AddNote />
-          <QuickAdd />
+          {addModalVisibility && <AddNote />}
+          {quickAddModalVisibility && <QuickAdd />}
           <Stats />
           <Settings />
         </Fragment>
@@ -91,10 +97,18 @@ const App = ({ setSession, session, appLoading }) => {
   );
 };
 
-const mapStateToProps = ({ session, settings, appLoading }) => ({
+const mapStateToProps = ({
   session,
   settings,
   appLoading,
+  quickAddModalMeta,
+  modalMeta,
+}) => ({
+  session,
+  settings,
+  appLoading,
+  quickAddModalVisibility: quickAddModalMeta.visibility,
+  addModalVisibility: modalMeta.visibility,
 });
 
 const mapActionToProps = {

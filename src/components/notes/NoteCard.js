@@ -73,6 +73,7 @@ const NoteCard = ({
     index,
     liveId,
     createdAt,
+    rating,
   },
   handleClick,
   onEdit,
@@ -120,17 +121,24 @@ const NoteCard = ({
               height: "max-content",
             }}
           >
-            {liveId ? (
-              <Tag>{`Live Id: ${liveId}`}</Tag>
-            ) : (
-              <Tag color={status === "POSTED" ? "seagreen" : "orange"}>
-                {status}
-              </Tag>
-            )}
+            <Tag color={status === "POSTED" ? "seagreen" : "orange"}>
+              {status === "POSTED" ? `Live Id: ${liveId}` : status}
+            </Tag>
           </div>
 
           <div style={{ display: "flex", alignItems: "center" }}>
             <AntIcon type={`${visible ? "eye" : "eye-invisible"}`} />
+            {!!rating && (
+              <Tag>
+                {rating}
+                <AntIcon
+                  type="star"
+                  style={{
+                    fontSize: "12px",
+                  }}
+                />
+              </Tag>
+            )}
             {type === "DROP" && (
               <Icon className="bulb-icon" type="bulb" size={12} />
             )}

@@ -68,13 +68,15 @@ const AddNote = ({
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [previewMode, setPreviewMode] = useState("PREVIEW");
-  const [collection, setCollection] = useState(activeCollection);
+  const [collection, setCollection] = useState();
   const [note, setNote] = useState(initialState);
 
   useEffect(() => {
     if (modalVisibility) {
-      if (mode === "add") setNote({ ...initialState, tags: [] });
-      else {
+      if (mode === "add") {
+        setNote({ ...initialState, tags: [] });
+        setCollection(activeCollection);
+      } else {
         setNote({ ...selectedNote });
         setCollection(selectedNote.collectionId);
       }
@@ -164,7 +166,10 @@ const AddNote = ({
 
             <SelectCollection
               collection={collection}
-              setCollection={setCollection}
+              setCollection={(value) => {
+                setCollection(value);
+                // if (mode !== "add") setData({ collectionId: value });
+              }}
             />
           </div>
           <Input
