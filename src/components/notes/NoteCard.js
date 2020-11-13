@@ -84,7 +84,7 @@ const NoteCard = ({
   return (
     <StyledCard>
       <Card
-        onClick={handleClick(_id)}
+        onClick={(e) => handleClick(e, _id)}
         className={`card ${addedDays ? null : "today"}`}
       >
         <h3 className={`title ${type === "POST" ? "post-title" : ""}`}>

@@ -20,6 +20,7 @@ import {
   FETCH_STATS,
   LOGOUT,
   SET_QUICK_ADD_MODAL_META,
+  SET_KEY,
 } from "./constants";
 
 const initialState = {
@@ -47,6 +48,7 @@ const initialState = {
   settingsDrawerVisibility: false,
   stats: {},
   statsModal: false,
+  displayType: "CARD",
   uploadingData: {
     rawData: null,
     data: [],
@@ -57,6 +59,7 @@ const initialState = {
   quickaddModalMeta: {
     visibility: false,
   },
+  retainPage: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -158,7 +161,6 @@ const reducer = (state = initialState, action) => {
           ...action.payload,
         },
       };
-
     case UPDATE_NOTE: {
       return {
         ...state,
@@ -206,6 +208,11 @@ const reducer = (state = initialState, action) => {
           ...state.quickAddModalMeta,
           ...action.payload,
         },
+      };
+    case SET_KEY:
+      return {
+        ...state,
+        ...action.payload,
       };
     default:
       return state;

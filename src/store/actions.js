@@ -22,6 +22,7 @@ import {
   FETCH_STATS,
   LOGOUT,
   SET_QUICK_ADD_MODAL_META,
+  SET_KEY,
 } from "./constants";
 
 export const setAppLoading = (status) => ({
@@ -29,12 +30,18 @@ export const setAppLoading = (status) => ({
   payload: status,
 });
 
+export const setKey = (obj) => ({
+  type: SET_KEY,
+  payload: obj,
+});
+
 export const fetchNotes = () => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
-    const { filters, notes = [], activeCollection } = getState();
+    const { filters, notes = [], activeCollection, displayType } = getState();
 
-    const data = filters && filters.page > 1 ? [...notes] : [];
+    const data =
+      filters && filters.page > 1 && displayType === "CARD" ? [...notes] : [];
 
     const {
       data: { posts, meta },
@@ -250,12 +257,9 @@ export const setFilter = (filterUpdate, resetPage = true) => async (
   dispatch,
   getState
 ) => {
-  const {
-    filters,
-    session: { retainPage },
-  } = getState();
+  const { filters, retainPage } = getState();
   if (retainPage)
-    return dispatch({ type: SET_SESSION, payload: { retainPage: false } });
+    return dispatch({ type: SET_KEY, payload: { retainPage: false } });
 
   const updatedFiters = { ...filters, ...filterUpdate };
   if (resetPage) updatedFiters["page"] = 1;

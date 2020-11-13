@@ -17,6 +17,11 @@ code {
   color: $bar;
 }
 
+.table-row {
+  // table view - row
+  cursor: pointer;
+}
+
 code {
   background: $yellow;
   color: $white;
@@ -101,10 +106,6 @@ body {
     height: 80vh;
     overflow: hidden;
   }
-}
-
-.show-filters {
-  margin-right: 12px;
 }
 
 .icon-bg {

@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
-import { Button } from "antd";
+import { Button, Table, Tag, Pagination, Badge } from "antd";
 import colors from "@codedrops/react-ui";
 import { MessageWrapper } from "../../styled";
 import NoteCard from "./NoteCard";
@@ -10,10 +10,11 @@ import {
   setNoteToEdit,
   deleteNote,
   setFilter,
-  setSession,
+  setKey,
 } from "../../store/actions";
 import { extractTagCodes } from "../../utils";
 import config from "../../config";
+import moment from "moment";
 
 const PageWrapper = styled.div`
   margin-bottom: 25px;
@@ -60,13 +61,13 @@ const scrollToPosition = (ref, offset) => {
 };
 
 const Notes = ({
-  notes,
-  history,
-  dispatch,
-  meta,
-  filters,
+  displayType,
   appLoading,
-  tagsCodes,
+  history,
+  notes,
+  dispatch,
+  filters,
+  ...others
 }) => {
   const scrollRef = useRef();
 
@@ -77,26 +78,21 @@ const Notes = ({
   useEffect(() => {
     if (!scrollRef.current) return;
     const offset = sessionStorage.getItem("scroll");
+    if (!offset) return;
     scrollToPosition(scrollRef.current, offset);
     sessionStorage.clear();
   }, [scrollRef]);
 
-  const handleClick = (_id) => (event) => {
+  const handleClick = (event, _id) => {
     event.stopPropagation();
     history.push(`/note/${_id}`);
     sessionStorage.setItem("scroll", scrollRef.current.scrollTop);
-    dispatch(setSession({ retainPage: true }));
+    dispatch(setKey({ retainPage: { postId: _id, page: filters.page } }));
   };
 
   const onEdit = (_id) => dispatch(setNoteToEdit(_id));
 
   const onDelete = (_id) => dispatch(deleteNote(_id));
-
-  const noteChunks = Array(Math.ceil(notes.length / config.LIMIT))
-    .fill(null)
-    .map((_, index) =>
-      notes.slice(index * config.LIMIT, index * config.LIMIT + config.LIMIT)
-    );
 
   return (
     <section>
@@ -105,38 +101,28 @@ const Notes = ({
           style={{ overflow: "auto", height: "100%", paddingBottom: "30px" }}
           ref={scrollRef}
         >
-          {noteChunks.map((chunk, index) => (
-            <PageWrapper key={index}>
-              <div className="notes-wrapper">
-                {chunk.map((note) => (
-                  <NoteCard
-                    key={note._id}
-                    note={note}
-                    history={history}
-                    handleClick={handleClick}
-                    onEdit={onEdit}
-                    onDelete={onDelete}
-                    tagsCodes={tagsCodes}
-                  />
-                ))}
-              </div>
-              {index < noteChunks.length - 1 && (
-                <div className="page-splitter">
-                  <span>{`Page: ${index + 2}`}</span>
-                </div>
-              )}
-            </PageWrapper>
-          ))}
-          {notes.length && notes.length < meta.count && (
-            <div className="flex center">
-              <Button
-                onClick={() =>
-                  dispatch(setFilter({ page: filters.page + 1 }, false))
-                }
-              >
-                Load
-              </Button>
-            </div>
+          {displayType === "CARD" ? (
+            <CardView
+              notes={notes}
+              handleClick={handleClick}
+              onEdit={onEdit}
+              onDelete={onDelete}
+              scrollRef={scrollRef}
+              dispatch={dispatch}
+              filters={filters}
+              {...others}
+            />
+          ) : (
+            <TableView
+              notes={notes}
+              handleClick={handleClick}
+              onEdit={onEdit}
+              onDelete={onDelete}
+              dispatch={dispatch}
+              filters={filters}
+              scrollRef={scrollRef}
+              {...others}
+            />
           )}
         </div>
       ) : appLoading ? null : (
@@ -146,12 +132,181 @@ const Notes = ({
   );
 };
 
-const mapStateToProps = ({ notes, meta, appLoading, filters, settings }) => ({
+const CardView = ({
+  notes,
+  handleClick,
+  onEdit,
+  onDelete,
+  tagsCodes,
+  meta,
+  filters,
+  dispatch,
+}) => {
+  const noteChunks = Array(Math.ceil(notes.length / config.LIMIT))
+    .fill(null)
+    .map((_, index) =>
+      notes.slice(index * config.LIMIT, index * config.LIMIT + config.LIMIT)
+    );
+
+  return (
+    <Fragment>
+      {noteChunks.map((chunk, index) => (
+        <PageWrapper key={index}>
+          <div className="notes-wrapper">
+            {chunk.map((note) => (
+              <NoteCard
+                key={note._id}
+                note={note}
+                handleClick={handleClick}
+                onEdit={onEdit}
+                onDelete={onDelete}
+                tagsCodes={tagsCodes}
+              />
+            ))}
+          </div>
+          {index < noteChunks.length - 1 && (
+            <div className="page-splitter">
+              <span>{`Page: ${index + 2}`}</span>
+            </div>
+          )}
+        </PageWrapper>
+      ))}
+      {notes.length && notes.length < meta.count && (
+        <div className="flex center">
+          <Button
+            onClick={() =>
+              dispatch(setFilter({ page: filters.page + 1 }, false))
+            }
+          >
+            Load
+          </Button>
+        </div>
+      )}
+    </Fragment>
+  );
+};
+
+const TableView = ({
+  notes,
+  handleClick,
+  onEdit,
+  onDelete,
+  tagsCodes,
+  meta,
+  dispatch,
+  filters,
+  scrollRef,
+}) => {
+  const onPageChange = (page) => {
+    dispatch(setFilter({ page }, false));
+    scrollRef.current.scrollTop = 0;
+  };
+
+  const columns = [
+    {
+      title: "Id",
+      dataIndex: "index",
+      key: "index",
+      width: "50px",
+    },
+    {
+      title: "Title",
+      dataIndex: "title",
+      key: "title",
+      width: "60%",
+      render: (title, row) => (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          {title}&nbsp;
+          {row.status === "POSTED" && <Badge status="success" />}
+        </div>
+      ),
+    },
+    // {
+    //   title: "Content",
+    //   dataIndex: "content",
+    //   key: "content",
+    // },
+    {
+      title: "Tags",
+      dataIndex: "tags",
+      key: "tags",
+      align: "center",
+      width: "150px",
+      render: (tags) => (
+        <Fragment>
+          {tags.map((tag) => (
+            <Tag color={tagsCodes[tag]} style={{ marginBottom: "4px" }}>
+              {tag}
+            </Tag>
+          ))}
+        </Fragment>
+      ),
+    },
+    {
+      title: "Status",
+      key: "status",
+      dataIndex: "status",
+      align: "center",
+      render: (status) => <Tag>{status}</Tag>,
+    },
+    {
+      title: "Created",
+      key: "createdAt",
+      dataIndex: "createdAt",
+      align: "center",
+      render: (createdAt) => {
+        const addedDays = moment().diff(moment(createdAt), "days");
+        return <Tag>{addedDays ? `${addedDays}d ago` : "Today"}</Tag>;
+      },
+    },
+  ];
+  return (
+    <div
+      style={{
+        width: "90%",
+        margin: "0 auto",
+        background: "white",
+        paddingBottom: "10px",
+      }}
+    >
+      <Table
+        size="middle"
+        tableLayout="fixed"
+        // bordered
+        columns={columns}
+        dataSource={notes}
+        onRow={(record) => ({
+          onClick: (e) => handleClick(e, record._id),
+        })}
+        pagination={false}
+        rowClassName="table-row"
+      />
+      <br />
+      <Pagination
+        current={filters.page}
+        onChange={onPageChange}
+        size="small"
+        total={meta.count}
+        pageSize={config.LIMIT}
+      />
+    </div>
+  );
+};
+
+const mapStateToProps = ({
+  notes,
+  meta,
+  appLoading,
+  filters,
+  settings,
+  displayType,
+}) => ({
   notes,
   appLoading,
   filters,
   meta,
   tagsCodes: extractTagCodes(settings.tags),
+  displayType,
 });
 
 export default withRouter(connect(mapStateToProps)(Notes));

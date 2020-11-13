@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Input, Select, Icon } from "antd";
 import { connect } from "react-redux";
-import { setFilter } from "../store/actions";
+import { setFilter, setKey } from "../store/actions";
 import SelectCollection from "./SelectCollection";
 
 const { Search } = Input;
@@ -66,6 +66,7 @@ const Filters = ({
   meta,
   activeCollection,
   settings,
+  displayType,
 }) => {
   const [showAllFilters, setShowAllFilters] = useState(false);
 
@@ -88,8 +89,18 @@ const Filters = ({
     <div className="flex center align-center" style={{ flexShrink: 0 }}>
       <Icon
         type={showAllFilters ? "double-right" : "double-left"}
-        className="show-filters icon-bg"
+        className="icon icon-bg"
         onClick={() => setShowAllFilters((prev) => !prev)}
+      />
+      <Icon
+        style={{ margin: "0 4px" }}
+        className="icon icon-bg"
+        type={displayType === "CARD" ? "table" : "border"}
+        onClick={() =>
+          dispatch(
+            setKey({ displayType: displayType === "CARD" ? "TABLE" : "CARD" })
+          )
+        }
       />
       <SelectCollection collection={activeCollection} />
       {showAllFilters && (
@@ -184,7 +195,7 @@ const Filters = ({
       {!!validateFilters(filters) && (
         <Icon
           style={{ margin: "0 4px" }}
-          className="icon"
+          className="icon icon-bg"
           type="close"
           onClick={() =>
             setFilterValues({
@@ -227,12 +238,14 @@ const mapStateToProps = ({
   meta,
   activeCollection,
   settings,
+  displayType,
 }) => ({
   filters,
   notes,
   meta,
   activeCollection,
   settings,
+  displayType,
 });
 
 export default connect(mapStateToProps)(Filters);

@@ -17,3 +17,4 @@ export const TOGGLE_STATS_MODAL = "TOGGLE_STATS_MODAL";
 export const FETCH_STATS = "FETCH_STATS";
 export const LOGOUT = "LOGOUT";
 export const SET_QUICK_ADD_MODAL_META = "SET_QUICK_ADD_MODAL_META";
+export const SET_KEY = "SET_KEY";
