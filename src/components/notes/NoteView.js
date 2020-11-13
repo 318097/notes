@@ -183,7 +183,7 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
             <h3 className="title">{title}</h3>
             {title && (
               <Icon
-                className="copy-icon icon"
+                className="copy-icon icon icon-bg"
                 type="copy"
                 onClick={() => copyToClipboard(title)}
               />
@@ -196,7 +196,7 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
             ></div>
             <Icon
               type="copy"
-              className="copy-icon icon"
+              className="copy-icon icon icon-bg"
               onClick={() => copyToClipboard(content)}
             />
           </div>

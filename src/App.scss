@@ -108,8 +108,9 @@ body {
   }
 }
 
-.icon-bg {
+body .icon-bg {
   padding: 6px;
+  border-radius: 0;
   transition: 0.4s;
   &:hover {
     background: $strokeOne;
