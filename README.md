@@ -29,3 +29,4 @@
 - [x] Reorganize Filters
 - [ ] Keyboard shortcuts
 - [x] Fix: Slug editable, default resource, switch collections, add rate filter
+- [ ] Find post by index, liveId

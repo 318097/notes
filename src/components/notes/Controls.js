@@ -150,7 +150,7 @@ const Controls = ({ note, dispatch, view }) => {
         <ControlsWrapper>
           <h4>Rating</h4>
           <Rate
-            value={rating}
+            value={rating || 0}
             onChange={(value) => updateProperties("rating", value)}
           />
         </ControlsWrapper>

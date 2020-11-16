@@ -150,11 +150,11 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
 
   const goBack = () => history.push("/home");
 
-  const navigateNote = (newIndex) => {
+  const navigateNote = (newPosition) => {
     const newNote = getNextNote({
       data: notes,
       id: viewNote._id,
-      increment: newIndex,
+      increment: newPosition,
     });
     if (!_.isEmpty(newNote)) history.push(`/note/${newNote._id}`);
   };
