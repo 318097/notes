@@ -22,6 +22,13 @@ const socialStatus = [
   { label: "POSTED", value: "POSTED" },
 ];
 
+const noteType = [
+  { label: "ALL", value: "" },
+  { label: "DROP", value: "DROP" },
+  { label: "POST", value: "POST" },
+  { label: "QUIZ", value: "QUIZ" },
+];
+
 const sortFilter = [
   { label: "NONE", value: "" },
   { label: "INDEX", value: "index" },
@@ -52,13 +59,15 @@ const validateFilters = ({
   tags = [],
   sortFilter,
   rating,
+  type,
 } = {}) =>
   socialStatus ||
   status ||
   search ||
   tags.length ||
   sortFilter !== "createdAt" ||
-  rating;
+  rating ||
+  type;
 
 const Filters = ({
   dispatch,
@@ -141,6 +150,21 @@ const Filters = ({
           ))}
         </Select>
       )}
+      {showAllFilters && (
+        <Select
+          className="input-width"
+          style={{ width: "66px" }}
+          placeholder="Note Type"
+          value={filters.type}
+          onChange={(value) => setFilterValues({ type: value })}
+        >
+          {noteType.map(({ label, value }) => (
+            <Option key={value} value={value}>
+              {label}
+            </Option>
+          ))}
+        </Select>
+      )}
       <Select
         className="input-width"
         placeholder="Post Status"
@@ -205,6 +229,7 @@ const Filters = ({
               status: "",
               search: "",
               rating: "",
+              type: "",
               visibility: "visible",
               sortOrder: "DESC",
               sortFilter: "createdAt",
