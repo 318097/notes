@@ -106,13 +106,22 @@ const NoteCard = ({
         />
       </Card>
       <Card className={`action-row ${addedDays ? null : "today"}`}>
-        <div className="tags">
-          {tags.map((tag) => (
-            <Tag key={tag} color={tagsCodes[tag]}>
-              {tag.toUpperCase()}
-            </Tag>
-          ))}
+        <div className="status-row">
+          <div className="tags">
+            {tags.map((tag) => (
+              <Tag key={tag} color={tagsCodes[tag]}>
+                {tag.toUpperCase()}
+              </Tag>
+            ))}
+          </div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <AntIcon type={`${visible ? "eye" : "eye-invisible"}`} />
+            {type === "DROP" && (
+              <Icon className="bulb-icon" type="bulb" size={12} />
+            )}
+          </div>
         </div>
+
         <div className="status-row">
           <div
             style={{
@@ -127,7 +136,6 @@ const NoteCard = ({
           </div>
 
           <div style={{ display: "flex", alignItems: "center" }}>
-            <AntIcon type={`${visible ? "eye" : "eye-invisible"}`} />
             {!!rating && (
               <Tag>
                 {rating}
@@ -138,9 +146,6 @@ const NoteCard = ({
                   }}
                 />
               </Tag>
-            )}
-            {type === "DROP" && (
-              <Icon className="bulb-icon" type="bulb" size={12} />
             )}
             <Tag>{addedDays ? `${addedDays}d ago` : "Today"}</Tag>
             <Tag>{`#${index}`}</Tag>
