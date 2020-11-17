@@ -60,6 +60,7 @@ const initialState = {
     visibility: false,
   },
   retainPage: false,
+  showAllFilters: false,
 };
 
 const reducer = (state = initialState, action) => {

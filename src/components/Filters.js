@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Input, Select, Icon } from "antd";
 import { connect } from "react-redux";
 import { setFilter, setKey } from "../store/actions";
@@ -71,9 +71,8 @@ const Filters = ({
   activeCollection,
   settings,
   displayType,
+  showAllFilters,
 }) => {
-  const [showAllFilters, setShowAllFilters] = useState(false);
-
   const setFilterValues = (filter) => {
     const props = Object.entries(filter);
     let extraFilters = {};
@@ -92,7 +91,7 @@ const Filters = ({
       <Icon
         type={showAllFilters ? "double-right" : "double-left"}
         className="icon icon-bg"
-        onClick={() => setShowAllFilters((prev) => !prev)}
+        onClick={() => dispatch(setKey({ showAllFilters: !showAllFilters }))}
       />
       <Icon
         style={{ margin: "0 4px" }}
@@ -133,11 +132,11 @@ const Filters = ({
           allowClear
           className="input-width"
           style={{ width: "66px" }}
-          placeholder="Rating"
-          value={filters.rating}
-          onChange={(value) => setFilterValues({ rating: value })}
+          placeholder="Note Type"
+          value={filters.type}
+          onChange={(value) => setFilterValues({ type: value })}
         >
-          {ratingsFilter.map(({ label, value }) => (
+          {noteType.map(({ label, value }) => (
             <Option key={value} value={value}>
               {label}
             </Option>
@@ -149,11 +148,11 @@ const Filters = ({
           allowClear
           className="input-width"
           style={{ width: "66px" }}
-          placeholder="Note Type"
-          value={filters.type}
-          onChange={(value) => setFilterValues({ type: value })}
+          placeholder="Rating"
+          value={filters.rating}
+          onChange={(value) => setFilterValues({ rating: value })}
         >
-          {noteType.map(({ label, value }) => (
+          {ratingsFilter.map(({ label, value }) => (
             <Option key={value} value={value}>
               {label}
             </Option>
@@ -268,6 +267,7 @@ const mapStateToProps = ({
   activeCollection,
   settings,
   displayType,
+  showAllFilters,
 }) => ({
   filters,
   notes,
@@ -275,6 +275,7 @@ const mapStateToProps = ({
   activeCollection,
   settings,
   displayType,
+  showAllFilters,
 });
 
 export default connect(mapStateToProps)(Filters);
