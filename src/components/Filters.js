@@ -9,7 +9,6 @@ const { Search } = Input;
 const { Option } = Select;
 
 const status = [
-  { label: "ALL", value: "" },
   { label: "QUICK ADD", value: "QUICK_ADD" },
   { label: "DRAFT", value: "DRAFT" },
   { label: "READY", value: "READY" },
@@ -17,20 +16,17 @@ const status = [
 ];
 
 const socialStatus = [
-  { label: "NONE", value: "" },
   { label: "READY", value: "READY" },
   { label: "POSTED", value: "POSTED" },
 ];
 
 const noteType = [
-  { label: "ALL", value: "" },
   { label: "DROP", value: "DROP" },
   { label: "POST", value: "POST" },
   { label: "QUIZ", value: "QUIZ" },
 ];
 
 const sortFilter = [
-  { label: "NONE", value: "" },
   { label: "INDEX", value: "index" },
   { label: "RATING", value: "rating" },
   { label: "LIVE ID", value: "liveId" },
@@ -38,13 +34,11 @@ const sortFilter = [
 ];
 
 const visibilityFilter = [
-  { label: "ALL", value: "" },
   { label: "VISIBLE", value: "visible" },
   { label: "INVISIBLE", value: "invisible" },
 ];
 
 const ratingsFilter = [
-  { label: "ALL", value: "" },
   { label: "5", value: "5" },
   { label: "4", value: "4" },
   { label: "3", value: "3" },
@@ -121,6 +115,7 @@ const Filters = ({
         />
       )}
       <Select
+        allowClear
         style={{ minWidth: "100px", margin: "2px" }}
         mode="multiple"
         placeholder="Tags"
@@ -135,6 +130,7 @@ const Filters = ({
       </Select>
       {showAllFilters && (
         <Select
+          allowClear
           className="input-width"
           style={{ width: "66px" }}
           placeholder="Rating"
@@ -150,6 +146,7 @@ const Filters = ({
       )}
       {showAllFilters && (
         <Select
+          allowClear
           className="input-width"
           style={{ width: "66px" }}
           placeholder="Note Type"
@@ -164,6 +161,7 @@ const Filters = ({
         </Select>
       )}
       <Select
+        allowClear
         className="input-width"
         placeholder="Post Status"
         value={filters.status}
@@ -177,6 +175,7 @@ const Filters = ({
       </Select>
       {showAllFilters && (
         <Select
+          allowClear
           className="input-width"
           placeholder="Social Status"
           value={filters.socialStatus}
@@ -190,6 +189,7 @@ const Filters = ({
         </Select>
       )}
       <Select
+        allowClear
         className="input-width"
         placeholder="Sort"
         value={filters.sortFilter}
@@ -203,6 +203,7 @@ const Filters = ({
       </Select>
       {showAllFilters && (
         <Select
+          allowClear
           className="input-width"
           placeholder="Visibility"
           value={filters.visibility}
