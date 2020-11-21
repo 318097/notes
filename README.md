@@ -30,3 +30,7 @@
 - [ ] Keyboard shortcuts
 - [x] Fix: Slug editable, default resource, switch collections, add rate filter
 - [x] Find post by index, liveId
+- [ ] Chaining posts
+  - [x] Add post to a chain
+  - [x] View chain
+  - [ ] Create chain post

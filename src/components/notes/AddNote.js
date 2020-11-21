@@ -162,6 +162,7 @@ const AddNote = ({
               <Radio.Button value="DROP">DROP</Radio.Button>
               <Radio.Button value="POST">POST</Radio.Button>
               <Radio.Button value="QUIZ">QUIZ</Radio.Button>
+              <Radio.Button value="CHAIN">CHAIN</Radio.Button>
             </Radio.Group>
 
             <SelectCollection

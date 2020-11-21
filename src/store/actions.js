@@ -23,6 +23,7 @@ import {
   LOGOUT,
   SET_QUICK_ADD_MODAL_META,
   SET_KEY,
+  FETCH_CHAINS,
 } from "./constants";
 
 export const setAppLoading = (status) => ({
@@ -265,4 +266,20 @@ export const setFilter = (filterUpdate, resetPage = true) => async (
   if (resetPage) updatedFiters["page"] = 1;
   dispatch({ type: UPDATE_FILTER, payload: updatedFiters });
   dispatch(fetchNotes());
+};
+
+export const getChains = () => async (dispatch, getState) => {
+  try {
+    dispatch(setAppLoading(true));
+    const { activeCollection } = getState();
+    const {
+      data: { chains },
+    } = await axios.get(`/posts/chains?collectionId=${activeCollection}`);
+
+    dispatch({ type: FETCH_CHAINS, payload: chains });
+  } catch (err) {
+    console.log(err);
+  } finally {
+    dispatch(setAppLoading(false));
+  }
 };

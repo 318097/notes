@@ -21,6 +21,7 @@ import {
   LOGOUT,
   SET_QUICK_ADD_MODAL_META,
   SET_KEY,
+  FETCH_CHAINS,
 } from "./constants";
 
 const initialState = {
@@ -61,6 +62,7 @@ const initialState = {
   },
   retainPage: false,
   showAllFilters: false,
+  chains: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -214,6 +216,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         ...action.payload,
+      };
+    case FETCH_CHAINS:
+      return {
+        ...state,
+        chains: [...action.payload],
       };
     default:
       return state;

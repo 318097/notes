@@ -12,6 +12,7 @@ import { getNoteById, setModalMeta } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
 import { fadeInDownAnimation } from "../../animations";
 import { getNextNote } from "../../utils";
+import queryString from "query-string";
 
 const Wrapper = styled.div`
   margin-top: 20px;
@@ -46,6 +47,37 @@ const Wrapper = styled.div`
       flex: 1 1 auto;
       overflow: auto;
       padding: 20px;
+    }
+    .chain-wrapper {
+      padding: 0 20px;
+      .chain-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        .chain-item-id {
+          background: ${colors.strokeOne};
+          border-radius: 50%;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 25px;
+          height: 25px;
+          font-size: 1.2rem;
+          margin-right: 4px;
+          cursor: pointer;
+          transition: 0.4s;
+          margin-right: 10px;
+          &:hover {
+            background: ${colors.strokeTwo};
+          }
+        }
+        .chain-item-title {
+          cursor: pointer;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
     }
     .tags {
       padding: 0 20px;
@@ -123,11 +155,18 @@ const Wrapper = styled.div`
   }
 `;
 
-const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
+const NoteView = ({
+  dispatch,
+  match,
+  viewNote,
+  history,
+  notes,
+  chains,
+  location,
+}) => {
   useEffect(() => {
     dispatch(getNoteById(match.params.id));
   }, [match.params.id]);
-
   useEffect(() => {
     // const codeblocks = document.querySelectorAll("pre");
     // codeblocks.forEach((block) => {
@@ -148,7 +187,10 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
       })
     );
 
-  const goBack = () => history.push("/home");
+  const goBack = () => {
+    const parsed = queryString.parse(location.search);
+    history.push(parsed.src ? `/note/${parsed.src}` : "/home");
+  };
 
   const navigateNote = (newPosition) => {
     const newNote = getNextNote({
@@ -159,10 +201,22 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
     if (!_.isEmpty(newNote)) history.push(`/note/${newNote._id}`);
   };
 
+  const goToPost = (id, src) => history.push(`/note/${id}?src=${src}`);
+
   if (_.isEmpty(viewNote)) return null;
 
-  const { title, content = "", tags, index, type, solution, slug, status } =
-    viewNote || {};
+  const {
+    title,
+    content = "",
+    tags,
+    index,
+    type,
+    solution,
+    slug,
+    status,
+    chainedPosts = [],
+    _id,
+  } = viewNote || {};
 
   const canonicalURL = `https://www.codedrops.tech/posts/${slug}`;
 
@@ -176,7 +230,7 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
           type="caret-left"
         />
       </div>
-      <Controls note={viewNote} view="left" />
+      <Controls note={viewNote} view="left" chains={chains} />
       <Card>
         <div className="card-content">
           <div className="relative">
@@ -189,17 +243,36 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
               />
             )}
           </div>
-          <div style={{ flex: "1" }} className="relative">
-            <div
-              className="content"
-              dangerouslySetInnerHTML={{ __html: marked(content) }}
-            ></div>
-            <Icon
-              type="copy"
-              className="copy-icon icon icon-bg"
-              onClick={() => copyToClipboard(content)}
-            />
-          </div>
+          {type === "CHAIN" ? (
+            <div className="chain-wrapper">
+              {chainedPosts.map((post, index) => (
+                <div className="chain-item" key={post._id}>
+                  <div className="chain-item-id">{index + 1}</div>
+                  <div
+                    className="chain-item-title"
+                    onClick={() => goToPost(post._id, _id)}
+                  >
+                    {post.title}
+                  </div>
+                  {/* <div>
+                    {post.title}
+                  </div> */}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ flex: "1" }} className="relative">
+              <div
+                className="content"
+                dangerouslySetInnerHTML={{ __html: marked(content) }}
+              ></div>
+              <Icon
+                type="copy"
+                className="copy-icon icon icon-bg"
+                onClick={() => copyToClipboard(content)}
+              />
+            </div>
+          )}
           {type === "QUIZ" && solution && (
             <div className="quiz-solution">{solution}</div>
           )}
@@ -244,9 +317,10 @@ const NoteView = ({ dispatch, match, viewNote, history, notes }) => {
   );
 };
 
-const mapStateToProps = ({ viewNote, notes }) => ({
+const mapStateToProps = ({ viewNote, notes, chains }) => ({
   notes,
   viewNote,
+  chains,
 });
 
 export default withRouter(connect(mapStateToProps)(NoteView));

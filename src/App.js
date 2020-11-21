@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import axios from "axios";
 import "./App.scss";
-import { setSession } from "./store/actions";
+import { setSession, getChains } from "./store/actions";
 import ProtectedRoute from "./ProtectedRoute";
 import Header from "./components/Header";
 import Signup from "./components/Signup";
@@ -31,6 +31,7 @@ const App = ({
   appLoading,
   quickAddModalVisibility,
   addModalVisibility,
+  getChains,
 }) => {
   const [loading, setLoading] = useState(true);
 
@@ -41,6 +42,7 @@ const App = ({
           const token = getToken();
           const { data } = await axios.post(`/auth/account-status`, { token });
           setSession({ loggedIn: true, info: "ON_LOAD", ...data });
+          getChains();
         } catch (err) {
         } finally {
           setTimeout(() => setLoading(false), 300);
@@ -113,6 +115,7 @@ const mapStateToProps = ({
 
 const mapActionToProps = {
   setSession,
+  getChains,
 };
 
 export default withRouter(connect(mapStateToProps, mapActionToProps)(App));

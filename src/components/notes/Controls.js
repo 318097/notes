@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from "react";
-import { Radio, Switch, Input, Rate } from "antd";
+import { Radio, Switch, Input, Rate, Select } from "antd";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import moment from "moment";
@@ -9,6 +9,7 @@ import { copyToClipboard } from "../../utils";
 import short from "short-uuid";
 
 const { TextArea } = Input;
+const { Option } = Select;
 
 const ControlsWrapper = styled.div`
   background: white;
@@ -79,7 +80,7 @@ const ControlsWrapper = styled.div`
   }
 `;
 
-const Controls = ({ note, dispatch, view }) => {
+const Controls = ({ note, dispatch, view, chains = [] }) => {
   const {
     tags = [],
     _id,
@@ -93,12 +94,14 @@ const Controls = ({ note, dispatch, view }) => {
     socialStatus,
     rating,
     notes: personalNotes = [],
+    type,
+    chainedTo = [],
   } = note || {};
   const [liveIdEditor, setLiveIdEditor] = useState(false);
   const [personalNote, setPersonalNote] = useState("");
 
-  const updateProperties = async (key, value) =>
-    await dispatch(updateNote({ _id, liveId, [key]: value }));
+  const updateProperties = async (update) =>
+    await dispatch(updateNote({ _id, liveId, ...update }));
 
   const copy = (text) => () => {
     copyToClipboard(text);
@@ -109,16 +112,19 @@ const Controls = ({ note, dispatch, view }) => {
       ...personalNotes,
       { _id: short.generate(), content: personalNote },
     ];
-    updateProperties("notes", newNote);
+    updateProperties({ notes: newNote });
     setTimeout(() => setPersonalNote(""));
   };
 
   const updateLiveId = (e) => {
     const { value: id } = e.target;
     if (!/^\d+$/.test(id)) return;
-    updateProperties("liveId", id);
+    updateProperties({ liveId: id });
     setLiveIdEditor(false);
   };
+
+  const toggleChain = (value) =>
+    updateProperties({ updatedChainedTo: value, chainedTo });
 
   const hashtags = tags.map((tag) => `#${tag}`).join(" ");
   const rdySlug = `RDY${index}-${slug}`;
@@ -129,29 +135,27 @@ const Controls = ({ note, dispatch, view }) => {
     return (
       <div className={`controls ${view}`}>
         <ControlsWrapper>
-          <div>
-            <div className="header">
-              <h4>Social status</h4>
-            </div>
-            <Radio.Group
-              onChange={({ target: { value } }) =>
-                updateProperties("socialStatus", value)
-              }
-              value={socialStatus}
-            >
-              {["NONE", "READY", "POSTED"].map((state) => (
-                <Radio className="radio-box" key={state} value={state}>
-                  {state}
-                </Radio>
-              ))}
-            </Radio.Group>
+          <div className="header">
+            <h4>Social status</h4>
           </div>
+          <Radio.Group
+            onChange={({ target: { value } }) =>
+              updateProperties({ socialStatus: value })
+            }
+            value={socialStatus}
+          >
+            {["NONE", "READY", "POSTED"].map((state) => (
+              <Radio className="radio-box" key={state} value={state}>
+                {state}
+              </Radio>
+            ))}
+          </Radio.Group>
         </ControlsWrapper>
         <ControlsWrapper>
           <h4>Rating</h4>
           <Rate
             value={rating || 0}
-            onChange={(value) => updateProperties("rating", value)}
+            onChange={(value) => updateProperties({ rating: value })}
           />
         </ControlsWrapper>
         <ControlsWrapper>
@@ -182,6 +186,26 @@ const Controls = ({ note, dispatch, view }) => {
             />
           </div>
         </ControlsWrapper>
+        {type !== "CHAIN" && (
+          <ControlsWrapper>
+            <div className="header">
+              <h4>Chains</h4>
+            </div>
+            <Select
+              mode="multiple"
+              style={{ width: "100%" }}
+              placeholder="Chains"
+              value={chainedTo}
+              onChange={toggleChain}
+            >
+              {chains.map(({ _id, title }) => (
+                <Option key={_id} value={_id}>
+                  {title}
+                </Option>
+              ))}
+            </Select>
+          </ControlsWrapper>
+        )}
       </div>
     );
   }
@@ -210,7 +234,7 @@ const Controls = ({ note, dispatch, view }) => {
         </div>
         <Radio.Group
           onChange={({ target: { value } }) =>
-            updateProperties("status", value)
+            updateProperties({ status: value })
           }
           value={status}
         >
@@ -269,7 +293,7 @@ const Controls = ({ note, dispatch, view }) => {
           <span style={{ marginRight: "4px" }}>Visible</span>
           <Switch
             checked={visible}
-            onChange={(value) => updateProperties("visible", value)}
+            onChange={(value) => updateProperties({ visible: value })}
           />
         </div>
       </ControlsWrapper>
