@@ -98,8 +98,8 @@ const Wrapper = styled.div`
     }
     .edit-icon {
       position: absolute;
-      right: 5px;
-      bottom: 5px;
+      right: 8px;
+      bottom: 6px;
     }
     .copy-icon {
       position: absolute;
@@ -112,10 +112,10 @@ const Wrapper = styled.div`
     }
     .index {
       position: absolute;
-      top: 12px;
+      top: 8px;
       right: 16px;
-      font-style: italic;
-      color: ${colors.bar};
+      color: ${colors.strokeTwo};
+      font-size: 1rem;
     }
     .canonical-url {
       position: absolute;

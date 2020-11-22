@@ -7,6 +7,7 @@ import colors, { Icon, Tag } from "@codedrops/react-ui";
 import { updateNote } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
 import short from "short-uuid";
+import { statusFilter } from "../../constants";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -26,7 +27,7 @@ const ControlsWrapper = styled.div`
     margin-bottom: 4px;
   }
   .hashtag {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   .slug {
     background: ${colors.primary};
@@ -238,9 +239,9 @@ const Controls = ({ note, dispatch, view, chains = [] }) => {
           }
           value={status}
         >
-          {["QUICK_ADD", "DRAFT", "READY", "POSTED"].map((state) => (
-            <Radio className="radio-box" key={state} value={state}>
-              {state}
+          {statusFilter.map(({ label, value }) => (
+            <Radio className="radio-box" key={value} value={value}>
+              {label}
             </Radio>
           ))}
         </Radio.Group>

@@ -74,6 +74,7 @@ const NoteCard = ({
     liveId,
     createdAt,
     rating,
+    chainedPosts = [],
   },
   handleClick,
   onEdit,
@@ -88,7 +89,7 @@ const NoteCard = ({
         onClick={(e) => handleClick(e, _id)}
         className={`card ${addedDays ? null : "today"}`}
       >
-        <h3 className={`title ${type === "POST" ? "post-title" : ""}`}>
+        <h3 className={`title ${type === "DROP" ? "" : "post-title"}`}>
           {title}
         </h3>
 
@@ -147,8 +148,10 @@ const NoteCard = ({
                 />
               </Tag>
             )}
+
+            {type === "CHAIN" && <Tag>{`${chainedPosts.length} chained`}</Tag>}
             <Tag>{addedDays ? `${addedDays}d ago` : "Today"}</Tag>
-            <Tag>{`#${index}`}</Tag>
+            {index && <Tag>{`#${index}`}</Tag>}
           </div>
         </div>
       </Card>

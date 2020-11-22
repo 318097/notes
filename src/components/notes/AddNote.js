@@ -16,6 +16,7 @@ import {
 import colors from "@codedrops/react-ui";
 import SelectCollection from "../SelectCollection";
 import { generateSlug } from "../../utils";
+import { noteType } from "../../constants";
 
 const { TextArea } = Input;
 
@@ -159,10 +160,9 @@ const AddNote = ({
                 })
               }
             >
-              <Radio.Button value="DROP">DROP</Radio.Button>
-              <Radio.Button value="POST">POST</Radio.Button>
-              <Radio.Button value="QUIZ">QUIZ</Radio.Button>
-              <Radio.Button value="CHAIN">CHAIN</Radio.Button>
+              {noteType.map(({ value }) => (
+                <Radio.Button value={value}>{value}</Radio.Button>
+              ))}
             </Radio.Group>
 
             <SelectCollection

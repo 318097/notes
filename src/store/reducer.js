@@ -140,9 +140,11 @@ const reducer = (state = initialState, action) => {
         viewNote: action.payload,
       };
     case ADD_NOTE:
+      const chainNotes = action.payload.filter((note) => note.type === "CHAIN");
       return {
         ...state,
         notes: [...action.payload, ...state.notes],
+        chains: [...state.chains, ...chainNotes],
       };
     case SET_NOTE_TO_EDIT: {
       const { selectedNote, mode } = action.payload;

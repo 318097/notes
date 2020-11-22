@@ -4,47 +4,17 @@ import { connect } from "react-redux";
 import { setFilter, setKey } from "../store/actions";
 import SelectCollection from "./SelectCollection";
 import config from "../config";
+import {
+  statusFilter,
+  socialStatusFilter,
+  noteType,
+  sortFilter,
+  visibilityFilter,
+  ratingsFilter,
+} from "../constants";
 
 const { Search } = Input;
 const { Option } = Select;
-
-const status = [
-  { label: "QUICK ADD", value: "QUICK_ADD" },
-  { label: "DRAFT", value: "DRAFT" },
-  { label: "READY", value: "READY" },
-  { label: "POSTED", value: "POSTED" },
-];
-
-const socialStatus = [
-  { label: "READY", value: "READY" },
-  { label: "POSTED", value: "POSTED" },
-];
-
-const noteType = [
-  { label: "DROP", value: "DROP" },
-  { label: "POST", value: "POST" },
-  { label: "QUIZ", value: "QUIZ" },
-];
-
-const sortFilter = [
-  { label: "INDEX", value: "index" },
-  { label: "RATING", value: "rating" },
-  { label: "LIVE ID", value: "liveId" },
-  { label: "CREATED", value: "createdAt" },
-];
-
-const visibilityFilter = [
-  { label: "VISIBLE", value: "visible" },
-  { label: "INVISIBLE", value: "invisible" },
-];
-
-const ratingsFilter = [
-  { label: "5", value: "5" },
-  { label: "4", value: "4" },
-  { label: "3", value: "3" },
-  { label: "2", value: "2" },
-  { label: "1", value: "1" },
-];
 
 const validateFilters = ({
   socialStatus,
@@ -166,7 +136,7 @@ const Filters = ({
         value={filters.status}
         onChange={(value) => setFilterValues({ status: value })}
       >
-        {status.map(({ label, value }) => (
+        {statusFilter.map(({ label, value }) => (
           <Option key={value} value={value}>
             {label}
           </Option>
@@ -180,7 +150,7 @@ const Filters = ({
           value={filters.socialStatus}
           onChange={(value) => setFilterValues({ socialStatus: value })}
         >
-          {socialStatus.map(({ label, value }) => (
+          {socialStatusFilter.map(({ label, value }) => (
             <Option key={value} value={value}>
               {label}
             </Option>
