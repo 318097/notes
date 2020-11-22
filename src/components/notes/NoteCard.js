@@ -61,8 +61,8 @@ const StyledCard = styled.div`
   }
 `;
 
-const NoteCard = ({
-  note: {
+const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
+  const {
     title = "",
     content = "",
     type = "DROP",
@@ -77,12 +77,7 @@ const NoteCard = ({
     chainedPosts = [],
     chainedItems = [],
     chainedTo = [],
-  },
-  handleClick,
-  onEdit,
-  onDelete,
-  tagsCodes,
-}) => {
+  } = note;
   const [showDropdown, setShowDropdown] = useState(false);
   const addedDays = moment().diff(moment(createdAt), "days");
   return (
@@ -118,7 +113,9 @@ const NoteCard = ({
             ))}
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
-            {!!chainedTo.length && <Tag>{`In ${chainedTo.length} chains`}</Tag>}
+            {chainedTo && chainedTo.length ? (
+              <Tag>{`In ${chainedTo.length} chains`}</Tag>
+            ) : null}
             <AntIcon type={`${visible ? "eye" : "eye-invisible"}`} />
             {type === "DROP" && (
               <Icon className="bulb-icon" type="bulb" size={12} />
