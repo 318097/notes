@@ -9,7 +9,7 @@ import Filters from "./Filters";
 const Container = styled.header`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 8px 16px 12px;
   position: sticky;
   top: 0;
@@ -40,11 +40,11 @@ const Header = ({ history }) => {
 
   return (
     <Container>
-      <h3>
+      {/* <h3>
         <Link to="/home">
           <span>N</span>otes App
         </Link>
-      </h3>
+      </h3> */}
       {showFilters && <Filters />}
     </Container>
   );

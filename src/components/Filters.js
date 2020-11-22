@@ -58,25 +58,11 @@ const Filters = ({
   const { tags = [] } = settings;
   return (
     <div className="flex center align-center" style={{ flexShrink: 0 }}>
-      <Icon
-        type={showAllFilters ? "double-right" : "double-left"}
-        className="icon icon-bg"
-        onClick={() => dispatch(setKey({ showAllFilters: !showAllFilters }))}
-      />
-      <Icon
-        style={{ margin: "0 4px" }}
-        className="icon icon-bg"
-        type={displayType === "CARD" ? "table" : "border"}
-        onClick={() =>
-          dispatch(
-            setKey({ displayType: displayType === "CARD" ? "TABLE" : "CARD" })
-          )
-        }
-      />
       <SelectCollection collection={activeCollection} />
       {showAllFilters && (
         <Search
           allowClear
+          style={{ width: "120px" }}
           className="input-width"
           placeholder="Search..."
           defaultValue={filters.search}
@@ -101,8 +87,8 @@ const Filters = ({
         <Select
           allowClear
           className="input-width"
-          style={{ width: "66px" }}
-          placeholder="Note Type"
+          style={{ width: "76px" }}
+          placeholder="Type"
           value={filters.type}
           onChange={(value) => setFilterValues({ type: value })}
         >
@@ -117,7 +103,7 @@ const Filters = ({
         <Select
           allowClear
           className="input-width"
-          style={{ width: "66px" }}
+          style={{ width: "90px" }}
           placeholder="Rating"
           value={filters.rating}
           onChange={(value) => setFilterValues({ rating: value })}
@@ -132,7 +118,7 @@ const Filters = ({
       <Select
         allowClear
         className="input-width"
-        placeholder="Post Status"
+        placeholder="Status"
         value={filters.status}
         onChange={(value) => setFilterValues({ status: value })}
       >
@@ -219,6 +205,17 @@ const Filters = ({
         }
       />
 
+      <Icon
+        style={{ margin: "0 4px" }}
+        className="icon icon-bg"
+        type={displayType === "CARD" ? "table" : "border"}
+        onClick={() =>
+          dispatch(
+            setKey({ displayType: displayType === "CARD" ? "TABLE" : "CARD" })
+          )
+        }
+      />
+
       {meta && meta.count > 0 && (
         <span className="showing-count">
           {displayType === "CARD"
@@ -226,6 +223,11 @@ const Filters = ({
             : `${filters.page}/${Math.ceil(meta.count / config.LIMIT)}`}
         </span>
       )}
+      <Icon
+        type={showAllFilters ? "double-left" : "double-right"}
+        className="icon icon-bg"
+        onClick={() => dispatch(setKey({ showAllFilters: !showAllFilters }))}
+      />
     </div>
   );
 };

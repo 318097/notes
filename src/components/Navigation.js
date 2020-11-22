@@ -16,17 +16,27 @@ import {
 const StyledNavigation = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: 20px 10px;
+  justify-content: space-between;
   background: ${colors.bar};
-  .ant-icon {
-    color: ${colors.chrome};
-    height: 24px;
-    width: 24px;
-    font-size: 20px;
-    margin-top: 10px;
-    &:hover {
-      color: ${colors.orange};
+  padding: 10px;
+  .app-name {
+    color: ${colors.white};
+    font-size: 2.6rem;
+    position: relative;
+    top: -4px;
+  }
+  nav {
+    display: flex;
+    flex-direction: column;
+    .ant-icon {
+      color: ${colors.chrome};
+      height: 24px;
+      width: 24px;
+      font-size: 20px;
+      margin-top: 10px;
+      &:hover {
+        color: ${colors.orange};
+      }
     }
   }
 `;
@@ -44,40 +54,43 @@ const Navigation = ({
 
   return (
     <StyledNavigation>
-      <AntIcon
-        className="ant-icon"
-        type="home"
-        onClick={() => history.push("/home")}
-      />
-      <AntIcon
-        className="ant-icon"
-        type="line-chart"
-        onClick={() => toggleStatsModal(true)}
-      />
-      <Divider />
-      <AntIcon
-        className="ant-icon"
-        type="plus"
-        onClick={() => setModalMeta({ visibility: true })}
-      />
-      <AntIcon
-        className="ant-icon"
-        type="fire"
-        onClick={() => setQuickAddModalMeta({ visibility: true })}
-      />
-      <AntIcon
-        className="ant-icon"
-        type="upload"
-        onClick={() => history.push("/upload")}
-      />
+      <div className="app-name">N</div>
+      <nav>
+        <AntIcon
+          className="ant-icon"
+          type="home"
+          onClick={() => history.push("/home")}
+        />
+        <AntIcon
+          className="ant-icon"
+          type="line-chart"
+          onClick={() => toggleStatsModal(true)}
+        />
+        <Divider />
+        <AntIcon
+          className="ant-icon"
+          type="plus"
+          onClick={() => setModalMeta({ visibility: true })}
+        />
+        <AntIcon
+          className="ant-icon"
+          type="fire"
+          onClick={() => setQuickAddModalMeta({ visibility: true })}
+        />
+        <AntIcon
+          className="ant-icon"
+          type="upload"
+          onClick={() => history.push("/upload")}
+        />
 
-      <Divider />
-      <AntIcon
-        className="ant-icon"
-        type="setting"
-        onClick={() => toggleSettingsDrawer(true)}
-      />
-      <AntIcon className="ant-icon" type="logout" onClick={() => logout()} />
+        <Divider />
+        <AntIcon
+          className="ant-icon"
+          type="setting"
+          onClick={() => toggleSettingsDrawer(true)}
+        />
+        <AntIcon className="ant-icon" type="logout" onClick={() => logout()} />
+      </nav>
     </StyledNavigation>
   );
 };
