@@ -20,10 +20,15 @@ const StyledNavigation = styled.div`
   background: ${colors.bar};
   padding: 10px;
   .app-name {
-    color: ${colors.white};
+    color: ${colors.chrome};
     font-size: 2.6rem;
     position: relative;
-    top: -4px;
+    top: -6px;
+    left: 1px;
+    transition: 0.6s;
+    &:hover {
+      color: ${colors.steel};
+    }
   }
   nav {
     display: flex;
@@ -33,6 +38,7 @@ const StyledNavigation = styled.div`
       height: 24px;
       width: 24px;
       font-size: 20px;
+      transition: 0.6s;
       margin-top: 10px;
       &:hover {
         color: ${colors.orange};
