@@ -76,12 +76,12 @@ const NoteCard = ({
     rating,
     chainedPosts = [],
     chainedItems = [],
+    chainedTo = [],
   },
   handleClick,
   onEdit,
   onDelete,
   tagsCodes,
-  chainedTo = [],
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const addedDays = moment().diff(moment(createdAt), "days");
@@ -118,7 +118,7 @@ const NoteCard = ({
             ))}
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
-            {chainedTo.length && <Tag>{`In ${chainedTo.length} chains`}</Tag>}
+            {!!chainedTo.length && <Tag>{`In ${chainedTo.length} chains`}</Tag>}
             <AntIcon type={`${visible ? "eye" : "eye-invisible"}`} />
             {type === "DROP" && (
               <Icon className="bulb-icon" type="bulb" size={12} />
