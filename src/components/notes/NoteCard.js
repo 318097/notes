@@ -75,6 +75,7 @@ const NoteCard = ({
     createdAt,
     rating,
     chainedPosts = [],
+    chainedItems = [],
   },
   handleClick,
   onEdit,
@@ -149,7 +150,11 @@ const NoteCard = ({
               </Tag>
             )}
 
-            {type === "CHAIN" && <Tag>{`${chainedPosts.length} chained`}</Tag>}
+            {type === "CHAIN" && (
+              <Tag
+                color={chainedItems.length !== chainedPosts.length ? "red" : ""}
+              >{`${chainedItems.length} chained`}</Tag>
+            )}
             <Tag>{addedDays ? `${addedDays}d ago` : "Today"}</Tag>
             {index && <Tag>{`#${index}`}</Tag>}
           </div>
