@@ -192,12 +192,12 @@ const Filters = ({
           type="close"
           onClick={() =>
             setFilterValues({
-              tags: [],
-              socialStatus: "",
-              status: "",
-              search: "",
-              rating: "",
-              type: "",
+              tags: undefined,
+              socialStatus: undefined,
+              status: undefined,
+              search: undefined,
+              rating: undefined,
+              type: undefined,
               visibility: "visible",
               sortOrder: "DESC",
               sortFilter: "createdAt",
