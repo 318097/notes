@@ -79,9 +79,15 @@ const ControlsWrapper = styled.div`
   .ant-radio-wrapper {
     font-size: 12px;
   }
+  .chain-title {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 `;
 
-const Controls = ({ note, dispatch, view, chains = [] }) => {
+const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
   const {
     tags = [],
     _id,
@@ -89,6 +95,8 @@ const Controls = ({ note, dispatch, view, chains = [] }) => {
     slug = "",
     index,
     createdAt,
+    updatedAt,
+    publishedAt,
     resources = [],
     visible,
     status,
@@ -131,7 +139,11 @@ const Controls = ({ note, dispatch, view, chains = [] }) => {
   const rdySlug = `RDY${index}-${slug}`;
   const slugWithLiveId = `${liveId}-${slug}`;
   const addedDays = moment().diff(moment(createdAt), "days");
-
+  const lastUpdated = moment().diff(moment(updatedAt), "days");
+  const publishedOn = moment(publishedAt).format("DD MMM, YYYY");
+  const chainedPosts = chains.filter((chain) =>
+    chain.chainedItems.includes(_id)
+  );
   if (view === "left") {
     return (
       <div className={`controls ${view}`}>
@@ -190,7 +202,7 @@ const Controls = ({ note, dispatch, view, chains = [] }) => {
         {type !== "CHAIN" && (
           <ControlsWrapper>
             <div className="header">
-              <h4>Chains</h4>
+              <h4>Chained In</h4>
             </div>
             <Select
               mode="multiple"
@@ -205,6 +217,25 @@ const Controls = ({ note, dispatch, view, chains = [] }) => {
                 </Option>
               ))}
             </Select>
+            {!!chainedTo.length && (
+              <Fragment>
+                <br />
+                <br />
+                <div className="header">
+                  <h4>Chains</h4>
+                </div>
+                <div>
+                  {chainedPosts.map((chain) => (
+                    <div
+                      className="chain-title"
+                      onClick={() => goToPost(chain._id, _id)}
+                    >
+                      {chain.title}
+                    </div>
+                  ))}
+                </div>
+              </Fragment>
+            )}
           </ControlsWrapper>
         )}
       </div>
@@ -299,7 +330,19 @@ const Controls = ({ note, dispatch, view, chains = [] }) => {
         </div>
       </ControlsWrapper>
       <ControlsWrapper>
-        <div>Added: {addedDays ? `${addedDays} day(s) ago` : "Today"}</div>
+        <div className="mb">
+          Added:
+          <strong>{addedDays ? `${addedDays} day(s) ago` : "Today"}</strong>
+        </div>
+        <div className="mb">
+          Last Updated:
+          <strong>{lastUpdated ? `${lastUpdated} day(s) ago` : "Today"}</strong>
+        </div>
+        {status === "POSTED" && publishedOn ? (
+          <div>
+            Published On: <strong>{publishedOn}</strong>
+          </div>
+        ) : null}
       </ControlsWrapper>
     </div>
   );

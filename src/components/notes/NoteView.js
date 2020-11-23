@@ -230,7 +230,12 @@ const NoteView = ({
           type="caret-left"
         />
       </div>
-      <Controls note={viewNote} view="left" chains={chains} />
+      <Controls
+        note={viewNote}
+        view="left"
+        chains={chains}
+        goToPost={goToPost}
+      />
       <Card>
         <div className="card-content">
           <div className="relative">
