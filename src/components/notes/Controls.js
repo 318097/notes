@@ -140,7 +140,9 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
   const slugWithLiveId = `${liveId}-${slug}`;
   const addedDays = moment().diff(moment(createdAt), "days");
   const lastUpdated = moment().diff(moment(updatedAt), "days");
-  const publishedOn = moment(publishedAt).format("DD MMM, YYYY");
+  const publishedOn = publishedAt
+    ? moment(publishedAt).format("DD MMM, YYYY")
+    : "-";
   const chainedPosts = chains.filter((chain) =>
     chain.chainedItems.includes(_id)
   );
@@ -338,11 +340,11 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
           Last Updated:
           <strong>{lastUpdated ? `${lastUpdated} day(s) ago` : "Today"}</strong>
         </div>
-        {status === "POSTED" && publishedOn ? (
+        {status === "POSTED" && (
           <div>
             Published On: <strong>{publishedOn}</strong>
           </div>
-        ) : null}
+        )}
       </ControlsWrapper>
     </div>
   );
