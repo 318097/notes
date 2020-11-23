@@ -80,9 +80,12 @@ const ControlsWrapper = styled.div`
     font-size: 12px;
   }
   .chain-title {
-    cursor: pointer;
-    &:hover {
-      text-decoration: underline;
+    margin-bottom: 4px;
+    span {
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 `;
@@ -219,7 +222,7 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
                 </Option>
               ))}
             </Select>
-            {!!chainedTo.length && (
+            {chainedTo && !!chainedTo.length && (
               <Fragment>
                 <br />
                 <br />
@@ -228,11 +231,11 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
                 </div>
                 <div>
                   {chainedPosts.map((chain) => (
-                    <div
-                      className="chain-title"
-                      onClick={() => goToPost(chain._id, _id)}
-                    >
-                      {chain.title}
+                    <div className="chain-title">
+                      &#9679;{" "}
+                      <span onClick={() => goToPost(chain._id, _id)}>
+                        {chain.title}
+                      </span>
                     </div>
                   ))}
                 </div>

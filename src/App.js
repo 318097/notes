@@ -44,6 +44,7 @@ const App = ({
           setSession({ loggedIn: true, info: "ON_LOAD", ...data });
           getChains();
         } catch (err) {
+          console.log("Error:", err);
         } finally {
           setTimeout(() => setLoading(false), 300);
         }

@@ -52,30 +52,32 @@ const Wrapper = styled.div`
       padding: 0 20px;
       .chain-item {
         display: flex;
-        align-items: center;
-        margin-bottom: 10px;
+        align-items: flex-start;
+        margin-bottom: 16px;
         .chain-item-id {
           background: ${colors.strokeOne};
           border-radius: 50%;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 25px;
-          height: 25px;
-          font-size: 1.2rem;
-          margin-right: 4px;
+          width: 22px;
+          height: 22px;
+          font-size: 1rem;
           cursor: pointer;
           transition: 0.4s;
           margin-right: 10px;
-          &:hover {
-            background: ${colors.strokeTwo};
-          }
+          position: relative;
+          top: 3px;
         }
         .chain-item-title {
           cursor: pointer;
           &:hover {
             text-decoration: underline;
           }
+        }
+        .chain-item-subtext {
+          font-size: 0.8rem;
+          color: ${colors.bar};
         }
       }
     }
@@ -219,7 +221,6 @@ const NoteView = ({
   } = viewNote || {};
 
   const canonicalURL = `https://www.codedrops.tech/posts/${slug}`;
-
   return (
     <Wrapper>
       <div className="previous-icon">
@@ -253,11 +254,17 @@ const NoteView = ({
               {chainedPosts.map((post, index) => (
                 <div className="chain-item" key={post._id}>
                   <div className="chain-item-id">{index + 1}</div>
-                  <div
-                    className="chain-item-title"
-                    onClick={() => goToPost(post._id, _id)}
-                  >
-                    {post.title}
+                  <div className="flex column">
+                    <h5
+                      className="chain-item-title"
+                      onClick={() => goToPost(post._id, _id)}
+                    >
+                      {post.title}
+                    </h5>
+                    <div className="chain-item-subtext">
+                      {`Index: ${post.index}`}
+                      {post.liveId && ` | Live Id: ${post.liveId}`}
+                    </div>
                   </div>
                   {/* <div>
                     {post.title}
@@ -309,7 +316,12 @@ const NoteView = ({
           </div>
         )}
       </Card>
-      <Controls note={viewNote} view="right" />
+      <Controls
+        note={viewNote}
+        view="right"
+        chains={chains}
+        goToPost={goToPost}
+      />
       <div className="next-icon">
         <Icon
           size={40}

@@ -23,6 +23,11 @@ html body,
   font-size: 12px;
 }
 
+strong {
+  font-weight: normal;
+  font-family: RobotoMonoBold;
+}
+
 .ant-input,
 .ant-btn,
 .ant-select-dropdown-menu-item,
@@ -32,6 +37,10 @@ html body,
 
 .anticon {
   font-size: 14px;
+}
+
+.flex.column {
+  flex-direction: column;
 }
 
 /* Custom scrollbar */
