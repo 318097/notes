@@ -216,8 +216,8 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
               value={chainedTo}
               onChange={toggleChain}
             >
-              {chains.map(({ _id, title }) => (
-                <Option key={_id} value={_id}>
+              {chains.map(({ _id, title, status }) => (
+                <Option key={_id} value={_id} disabled={status === "POSTED"}>
                   {title}
                 </Option>
               ))}
