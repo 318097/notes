@@ -35,7 +35,7 @@ const ControlsWrapper = styled.div`
     color: white;
     padding: 4px;
     border-radius: 2px;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     transition: 0.4s;
     cursor: pointer;
     margin-bottom: 6px;
@@ -337,15 +337,19 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
       <ControlsWrapper>
         <div className="mb">
           Added:
-          <strong>{addedDays ? `${addedDays} day(s) ago` : "Today"}</strong>
+          <span className="bold">
+            {addedDays ? `${addedDays} day(s) ago` : "Today"}
+          </span>
         </div>
         <div className="mb">
           Last Updated:
-          <strong>{lastUpdated ? `${lastUpdated} day(s) ago` : "Today"}</strong>
+          <span className="bold">
+            {lastUpdated ? `${lastUpdated} day(s) ago` : "Today"}
+          </span>
         </div>
         {status === "POSTED" && (
           <div>
-            Published On: <strong>{publishedOn}</strong>
+            Published On: <span className="bold">{publishedOn}</span>
           </div>
         )}
       </ControlsWrapper>

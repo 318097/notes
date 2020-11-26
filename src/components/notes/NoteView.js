@@ -40,7 +40,7 @@ const Wrapper = styled.div`
     .title {
       text-align: center;
       font-size: 2rem;
-      padding: 20px;
+      padding: 0 20px 20px;
       color: ${colors.steel};
     }
     .content {
@@ -94,8 +94,8 @@ const Wrapper = styled.div`
     }
     .back-icon {
       position: absolute;
-      top: 5px;
-      left: 5px;
+      top: 2px;
+      left: 3px;
       z-index: 10;
     }
     .edit-icon {
@@ -105,7 +105,7 @@ const Wrapper = styled.div`
     }
     .copy-icon {
       position: absolute;
-      top: 10px;
+      top: 4px;
       left: -10px;
       transition: 0.3s;
       &:hover {
