@@ -200,12 +200,24 @@ const NoteView = ({
       id: viewNote._id,
       increment: newPosition,
     });
-    if (!_.isEmpty(newNote)) history.push(`/note/${newNote._id}`);
+    if (newNote) history.push(`/note/${newNote._id}`);
   };
 
   const goToPost = (id, src) => history.push(`/note/${id}?src=${src}`);
 
   if (_.isEmpty(viewNote)) return null;
+
+  const hasNextNote = !!getNextNote({
+    data: notes,
+    id: viewNote._id,
+    increment: 1,
+  });
+
+  const hasPreviousNote = !!getNextNote({
+    data: notes,
+    id: viewNote._id,
+    increment: -1,
+  });
 
   const {
     title,
@@ -223,14 +235,16 @@ const NoteView = ({
   const canonicalURL = `https://www.codedrops.tech/posts/${slug}`;
   return (
     <Wrapper>
-      <div className="previous-icon">
-        <Icon
-          size={40}
-          className="prev"
-          onClick={() => navigateNote(-1)}
-          type="caret-left"
-        />
-      </div>
+      {hasPreviousNote && (
+        <div className="previous-icon">
+          <Icon
+            size={40}
+            className="prev icon-bg"
+            onClick={() => navigateNote(-1)}
+            type="caret-left"
+          />
+        </div>
+      )}
       <Controls
         note={viewNote}
         view="left"
@@ -319,14 +333,16 @@ const NoteView = ({
         chains={chains}
         goToPost={goToPost}
       />
-      <div className="next-icon">
-        <Icon
-          size={40}
-          className="next"
-          onClick={() => navigateNote(1)}
-          type="caret-left"
-        />
-      </div>
+      {hasNextNote && (
+        <div className="next-icon">
+          <Icon
+            size={40}
+            className="next icon-bg"
+            onClick={() => navigateNote(1)}
+            type="caret-left"
+          />
+        </div>
+      )}
     </Wrapper>
   );
 };

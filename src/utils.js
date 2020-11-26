@@ -20,7 +20,7 @@ export const getNextNote = ({
 } = {}) => {
   const currentNoteIndex = data.findIndex((note) => note[matchKey] === id);
   const newIndex = currentNoteIndex + increment;
-  return newIndex >= 0 && newIndex < data.length ? data[newIndex] : {};
+  return newIndex >= 0 && newIndex < data.length ? data[newIndex] : null;
 };
 
 export const extractTagCodes = (tags = []) =>

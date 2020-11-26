@@ -182,7 +182,7 @@ export const setNextNoteForEditing = (currentNote) => async (
   }
   dispatch(
     setModalMeta({
-      selectedNote: nextNote,
+      selectedNote: nextNote || {},
       mode,
       visibility: !!nextNote,
     })

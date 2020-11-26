@@ -35,5 +35,5 @@
   - [x] View chain
   - [ ] Create chain post
   - [ ] D&D
-- [ ] Hide Next and back button when over
+- [x] Hide Next and back button when over
 - [ ] Parse bookmarks and toby data
