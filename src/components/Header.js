@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import colors from "@codedrops/react-ui";
 import _ from "lodash";
 import Filters from "./Filters";
@@ -20,9 +20,9 @@ const Container = styled.header`
     a {
       color: ${colors.bar};
       text-transform: uppercase;
-      font-family: RobotoMonoSemiBold;
+      font-family: Cascadia-SemiBold;
       & > span {
-        font-family: RobotoMonoBold;
+        font-family: CascadiaMonoPL-Bold;
         text-decoration: underline;
         font-size: 2rem;
         color: ${colors.bar};
@@ -38,16 +38,7 @@ const Header = ({ history }) => {
     setShowFilters(_.get(history, "location.pathname") === "/home");
   }, [history.location.pathname]);
 
-  return (
-    <Container>
-      {/* <h3>
-        <Link to="/home">
-          <span>N</span>otes App
-        </Link>
-      </h3> */}
-      {showFilters && <Filters />}
-    </Container>
-  );
+  return <Container>{showFilters && <Filters />}</Container>;
 };
 
 const mapStateToProps = ({ session }) => ({});
