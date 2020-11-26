@@ -161,7 +161,9 @@ const AddNote = ({
               }
             >
               {noteType.map(({ value }) => (
-                <Radio.Button value={value}>{value}</Radio.Button>
+                <Radio.Button key={value} value={value}>
+                  {value}
+                </Radio.Button>
               ))}
             </Radio.Group>
 

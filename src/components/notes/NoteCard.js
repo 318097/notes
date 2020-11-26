@@ -103,7 +103,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
           onDelete={() => onDelete(_id)}
         />
       </Card>
-      <Card className={`action-row ${addedDays ? null : "today"}`}>
+      <Card className={`action-row ${addedDays ? "" : "today"}`}>
         <div className="status-row">
           <div className="tags">
             {tags.map((tag) => (
@@ -113,29 +113,24 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
             ))}
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
+            {type === "CHAIN" && (
+              <Tag
+                color={chainedItems.length !== chainedPosts.length ? "red" : ""}
+              >{`${chainedItems.length} posts`}</Tag>
+            )}
             {chainedTo && chainedTo.length ? (
               <Tag>{`In ${chainedTo.length} chains`}</Tag>
             ) : null}
-            <AntIcon type={`${visible ? "eye" : "eye-invisible"}`} />
-            {type === "DROP" && (
-              <Icon className="bulb-icon" type="bulb" size={12} />
-            )}
+            {!visible && <AntIcon type="eye-invisible" />}
+            {type === "DROP" && <Icon type="bulb" size={12} />}
+            {type === "CHAIN" && <AntIcon type="deployment-unit" size={12} />}
           </div>
         </div>
 
         <div className="status-row">
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              height: "max-content",
-            }}
-          >
-            <Tag color={status === "POSTED" ? "seagreen" : "orange"}>
-              {status === "POSTED" ? `Live Id: ${liveId}` : status}
-            </Tag>
-          </div>
-
+          <Tag color={status === "POSTED" ? "seagreen" : "orange"}>
+            {status === "POSTED" ? `Live Id: ${liveId}` : status}
+          </Tag>
           <div style={{ display: "flex", alignItems: "center" }}>
             {!!rating && (
               <Tag>
@@ -147,12 +142,6 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
                   }}
                 />
               </Tag>
-            )}
-
-            {type === "CHAIN" && (
-              <Tag
-                color={chainedItems.length !== chainedPosts.length ? "red" : ""}
-              >{`${chainedItems.length} chained`}</Tag>
             )}
             <Tag>{addedDays ? `${addedDays}d ago` : "Today"}</Tag>
             {index && <Tag>{`#${index}`}</Tag>}

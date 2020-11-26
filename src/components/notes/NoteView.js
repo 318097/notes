@@ -266,9 +266,6 @@ const NoteView = ({
                       {post.liveId && ` | Live Id: ${post.liveId}`}
                     </div>
                   </div>
-                  {/* <div>
-                    {post.title}
-                  </div> */}
                 </div>
               ))}
             </div>
