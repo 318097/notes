@@ -104,8 +104,8 @@ const mapStateToProps = ({
   session,
   settings,
   appLoading,
-  quickAddModalMeta,
-  modalMeta,
+  quickAddModalMeta = {},
+  modalMeta = {},
 }) => ({
   session,
   settings,

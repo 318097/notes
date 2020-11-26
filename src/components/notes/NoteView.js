@@ -255,12 +255,12 @@ const NoteView = ({
                 <div className="chain-item" key={post._id}>
                   <div className="chain-item-id">{index + 1}</div>
                   <div className="flex column">
-                    <h5
+                    <h4
                       className="chain-item-title"
                       onClick={() => goToPost(post._id, _id)}
                     >
                       {post.title}
-                    </h5>
+                    </h4>
                     <div className="chain-item-subtext">
                       {`Index: ${post.index}`}
                       {post.liveId && ` | Live Id: ${post.liveId}`}
