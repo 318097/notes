@@ -26,6 +26,7 @@ code {
   background: $yellow;
   color: $white;
   padding: 1px 2px;
+  border-radius: 2px;
 }
 
 pre {
@@ -35,7 +36,7 @@ pre {
   padding: 12px;
   line-height: 1.5rem;
   & > code {
-    cursor: pointer;
+    // cursor: pointer;
     background: none;
   }
 }
