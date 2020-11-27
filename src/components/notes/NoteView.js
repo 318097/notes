@@ -165,6 +165,7 @@ const NoteView = ({
   notes,
   chains,
   location,
+  appLoading,
 }) => {
   useEffect(() => {
     dispatch(getNoteById(match.params.id));
@@ -240,7 +241,7 @@ const NoteView = ({
           <Icon
             size={40}
             className="prev icon-bg"
-            onClick={() => navigateNote(-1)}
+            onClick={() => (appLoading ? null : navigateNote(-1))}
             type="caret-left"
           />
         </div>
@@ -338,7 +339,7 @@ const NoteView = ({
           <Icon
             size={40}
             className="next icon-bg"
-            onClick={() => navigateNote(1)}
+            onClick={() => (appLoading ? null : navigateNote(1))}
             type="caret-left"
           />
         </div>
@@ -347,10 +348,11 @@ const NoteView = ({
   );
 };
 
-const mapStateToProps = ({ viewNote, notes, chains }) => ({
+const mapStateToProps = ({ viewNote, notes, chains, appLoading }) => ({
   notes,
   viewNote,
   chains,
+  appLoading,
 });
 
 export default withRouter(connect(mapStateToProps)(NoteView));
