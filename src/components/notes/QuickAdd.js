@@ -142,6 +142,7 @@ const QuickAdd = ({
 
   return (
     <Modal
+      wrapClassName="react-ui"
       title="QUICK ADD"
       centered={true}
       maskClosable={false}

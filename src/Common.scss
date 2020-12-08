@@ -1,43 +1,8 @@
-.flex {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.flex.space-between {
-  justify-content: space-between;
-}
-
-.flex.space-around {
-  justify-content: space-around;
-}
-
-.flex.center {
-  justify-content: center;
-}
-
-.flex.align-center {
-  align-items: center;
-}
-
-.input-width {
+.form-field {
   width: 90px;
   margin: 2px;
 }
 
-.radio-box {
+.block {
   display: block;
-}
-
-.ml {
-  margin-left: 10px;
-}
-
-.divider {
-  height: 1px;
-  background: #e8e8e8;
-  margin: 8px auto;
-}
-
-.relative {
-  position: relative;
 }

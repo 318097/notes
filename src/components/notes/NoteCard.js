@@ -9,19 +9,24 @@ import Dropdown from "./Dropdown";
 const StyledCard = styled.div`
   margin-bottom: 16px;
   break-inside: avoid-column;
-  .card {
+  .card,
+  .action-row {
+    border: 1px solid ${colors.bg};
+    box-shadow: ${colors.bg} 3px 3px 3px;
     position: relative;
-    height: auto;
-    margin: 0;
-    min-height: unset;
-    cursor: pointer;
     width: 100%;
-    font-size: 1.1rem;
+    height: auto;
+    min-height: unset;
     overflow: visible;
-    padding: 20px 8px;
     &:hover {
       background: ${colors.featherDark};
     }
+  }
+  .card {
+    margin: 0;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 20px 8px;
     .title {
       font-size: inherit;
       text-align: center;
@@ -43,13 +48,11 @@ const StyledCard = styled.div`
     background: ${colors.feather};
   }
   .action-row {
-    position: relative;
     padding: 6px;
-    height: auto;
-    min-height: unset;
-    overflow: visible;
-    width: 100%;
     top: 0px;
+    &:hover {
+      background: ${colors.white};
+    }
     .status-row {
       display: flex;
       align-items: center;

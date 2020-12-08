@@ -38,7 +38,8 @@ const Header = ({ history }) => {
     setShowFilters(_.get(history, "location.pathname") === "/home");
   }, [history.location.pathname]);
 
-  return <Container>{showFilters && <Filters />}</Container>;
+  if (showFilters) return <Container>{<Filters />}</Container>;
+  else return null;
 };
 
 const mapStateToProps = ({ session }) => ({});

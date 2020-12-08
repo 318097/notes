@@ -53,6 +53,7 @@ const Settings = ({
   return (
     <Drawer
       title="Settings"
+      className="react-ui"
       placement="right"
       closable={true}
       onClose={handleClose}

@@ -182,6 +182,7 @@ const StatsWrapper = ({ statsModal, toggleStatsModal, stats, ...rest }) => {
   const handleClose = () => toggleStatsModal(false);
   return (
     <Modal
+      wrapClassName="react-ui"
       destroyOnClose={true}
       title={
         <div>

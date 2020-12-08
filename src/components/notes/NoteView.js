@@ -33,6 +33,8 @@ const Wrapper = styled.div`
     background: white;
     border-radius: 15px;
     flex-direction: column;
+    border: 1px solid ${colors.bg};
+    box-shadow: ${colors.bg} 3px 3px 3px;
     .card-content {
       overflow-y: auto;
       overflow-x: hidden;
@@ -61,6 +63,7 @@ const Wrapper = styled.div`
           align-items: center;
           justify-content: center;
           width: 22px;
+          min-width: 22px;
           height: 22px;
           font-size: 1rem;
           cursor: pointer;

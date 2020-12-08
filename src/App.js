@@ -54,7 +54,7 @@ const App = ({
   }, []);
 
   return (
-    <div className="container">
+    <div className="container" id="react-ui">
       <Navigation />
       <div className="contentWrapper">
         <Header />

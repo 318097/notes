@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Input, Button, message } from "antd";
 import { withRouter } from "react-router-dom";
-
 import { StyledSection } from "../styled";
+
 const initialState = {
   name: "",
   password: "",

@@ -18,7 +18,7 @@ const StyledPageHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 20px 8px;
+  padding: 8px 16px 12px;
   .actions {
     margin-left: 20px;
     display: grid;

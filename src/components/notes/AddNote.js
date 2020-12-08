@@ -118,6 +118,7 @@ const AddNote = ({
       title={mode === "add" ? "ADD NOTE" : "EDIT NOTE"}
       centered={true}
       maskClosable={false}
+      wrapClassName="react-ui"
       destroyOnClose={true}
       style={{ padding: "0" }}
       visible={modalVisibility}
@@ -190,16 +191,18 @@ const AddNote = ({
             disabled={note.status === "POSTED"}
             onChange={({ target: { value } }) => setData({ slug: value })}
           />
-          <SimpleMDE
-            className="mb"
-            value={note.content}
-            onChange={(value) => setData({ content: value })}
-            options={{
-              spellChecker: false,
-              placeholder: "Content...",
-              hideIcons: ["guide", "preview", "fullscreen", "side-by-side"],
-            }}
-          />
+          {note.type !== "CHAIN" && (
+            <SimpleMDE
+              className="mb"
+              value={note.content}
+              onChange={(value) => setData({ content: value })}
+              options={{
+                spellChecker: false,
+                placeholder: "Content...",
+                hideIcons: ["guide", "preview", "fullscreen", "side-by-side"],
+              }}
+            />
+          )}
           <Input
             className="mb"
             placeholder="URL"

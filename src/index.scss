@@ -1,3 +1,5 @@
+@import "@codedrops/react-ui/dist/styles/defaults.scss";
+
 @font-face {
   font-family: Cascadia-Regular;
   src: url("./assets/fonts/Cascadia/CascadiaMono-Regular.woff2");
@@ -41,31 +43,4 @@ strong {
 
 .anticon {
   font-size: 14px;
-}
-
-.flex.column {
-  flex-direction: column;
-}
-
-/* Custom scrollbar */
-/* width */
-::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: rgba($color: #363636, $alpha: 0.5);
-  border-radius: 15px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: rgb(37, 37, 37);
 }

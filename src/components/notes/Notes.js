@@ -172,7 +172,7 @@ const CardView = ({
         </PageWrapper>
       ))}
       {notes.length && notes.length < meta.count && (
-        <div className="flex center">
+        <div className="fcc">
           <Button
             onClick={() =>
               dispatch(setFilter({ page: filters.page + 1 }, false))

@@ -57,13 +57,16 @@ const Filters = ({
 
   const { tags = [] } = settings;
   return (
-    <div className="flex center align-center" style={{ flexShrink: 0 }}>
-      <SelectCollection collection={activeCollection} />
+    <div className="flex center" style={{ flexShrink: 0 }}>
+      <SelectCollection
+        style={{ margin: "2px" }}
+        collection={activeCollection}
+      />
       {showAllFilters && (
         <Search
           allowClear
           style={{ width: "120px" }}
-          className="input-width"
+          className="form-field"
           placeholder="Search..."
           defaultValue={filters.search}
           onSearch={(value) => setFilterValues({ search: value })}
@@ -71,7 +74,8 @@ const Filters = ({
       )}
       <Select
         allowClear
-        style={{ minWidth: "100px", margin: "2px" }}
+        style={{ minWidth: "100px" }}
+        className="form-field"
         mode="multiple"
         placeholder="Tags"
         value={filters.tags}
@@ -86,7 +90,7 @@ const Filters = ({
       {showAllFilters && (
         <Select
           allowClear
-          className="input-width"
+          className="form-field"
           style={{ width: "76px" }}
           placeholder="Type"
           value={filters.type}
@@ -102,7 +106,7 @@ const Filters = ({
       {showAllFilters && (
         <Select
           allowClear
-          className="input-width"
+          className="form-field"
           style={{ width: "90px" }}
           placeholder="Rating"
           value={filters.rating}
@@ -117,7 +121,7 @@ const Filters = ({
       )}
       <Select
         allowClear
-        className="input-width"
+        className="form-field"
         placeholder="Status"
         value={filters.status}
         onChange={(value) => setFilterValues({ status: value })}
@@ -131,7 +135,7 @@ const Filters = ({
       {showAllFilters && (
         <Select
           allowClear
-          className="input-width"
+          className="form-field"
           placeholder="Social Status"
           value={filters.socialStatus}
           onChange={(value) => setFilterValues({ socialStatus: value })}
@@ -145,7 +149,7 @@ const Filters = ({
       )}
       <Select
         allowClear
-        className="input-width"
+        className="form-field"
         placeholder="Sort"
         value={filters.sortFilter}
         onChange={(value) => setFilterValues({ sortFilter: value })}
@@ -159,7 +163,7 @@ const Filters = ({
       {showAllFilters && (
         <Select
           allowClear
-          className="input-width"
+          className="form-field"
           placeholder="Visibility"
           value={filters.visibility}
           onChange={(value) => setFilterValues({ visibility: value })}

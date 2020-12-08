@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from "react";
-import { Radio, Switch, Input, Rate, Select } from "antd";
+import { Radio, Switch, Input, Rate, Select, Popover } from "antd";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import moment from "moment";
@@ -163,7 +163,7 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
             value={socialStatus}
           >
             {["NONE", "READY", "POSTED"].map((state) => (
-              <Radio className="radio-box" key={state} value={state}>
+              <Radio className="block" key={state} value={state}>
                 {state}
               </Radio>
             ))}
@@ -262,6 +262,7 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
                 />
               ) : (
                 <Tag
+                  color={colors.green}
                   style={{ cursor: "pointer" }}
                   onDoubleClick={() => setLiveIdEditor(true)}
                 >{`Live Id: ${liveId}`}</Tag>
@@ -276,7 +277,7 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
           value={status}
         >
           {statusFilter.map(({ label, value }) => (
-            <Radio className="radio-box" key={value} value={value}>
+            <Radio className="block" key={value} value={value}>
               {label}
             </Radio>
           ))}
@@ -303,9 +304,15 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
         </div>
 
         {resources.map((resource, index) => (
-          <div key={resource} className="resource-id" onClick={copy(resource)}>
-            {index + 1}
-          </div>
+          <Popover placement="bottom" content={resource}>
+            <div
+              key={resource}
+              className="resource-id"
+              onClick={copy(resource)}
+            >
+              {index + 1}
+            </div>
+          </Popover>
         ))}
 
         <div className="divider"></div>
@@ -326,7 +333,7 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
           )}
         </div>
         <div className="divider"></div>
-        <div className="flex align-center">
+        <div className="flex center">
           <span style={{ marginRight: "4px" }}>Visible</span>
           <Switch
             checked={visible}
