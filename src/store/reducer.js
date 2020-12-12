@@ -98,10 +98,7 @@ const reducer = (state = initialState, action) => {
     case LOGOUT:
       sessionStorage.clear();
       localStorage.clear();
-      return {
-        ...state,
-        session: null,
-      };
+      return initialState;
     case SET_ACTIVE_COLLECTION:
       return {
         ...state,

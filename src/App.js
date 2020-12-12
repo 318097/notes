@@ -6,8 +6,8 @@ import "./App.scss";
 import { setSession, getChains } from "./store/actions";
 import ProtectedRoute from "./ProtectedRoute";
 import Header from "./components/Header";
-import Signup from "./components/Signup";
-import Signin from "./components/Signin";
+import Register from "./components/Register";
+import Login from "./components/Login";
 import NotFound from "./components/NotFound";
 import Notes from "./components/notes/Notes";
 import NoteView from "./components/notes/NoteView";
@@ -61,8 +61,8 @@ const App = ({
         <div className="content">
           {!loading && (
             <Switch>
-              <Route path="/signup" exact component={Signup} />
-              <Route path="/signin" exact component={Signin} />
+              <Route path="/register" exact component={Register} />
+              <Route path="/login" exact component={Login} />
               <ProtectedRoute
                 session={session}
                 path="/home"

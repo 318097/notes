@@ -12,7 +12,7 @@ const initialState = {
   username: "",
 };
 
-const Signin = ({ history, setSession, session }) => {
+const Login = ({ history, setSession, session }) => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(initialState);
 
@@ -23,7 +23,7 @@ const Signin = ({ history, setSession, session }) => {
   const handleInput = (key) => ({ target: { value } }) =>
     setForm((data) => ({ ...data, [key]: value }));
 
-  const handleSignin = async () => {
+  const handleLogin = async () => {
     setLoading(true);
     try {
       const { data } = await axios.post("/auth/login", form);
@@ -35,7 +35,7 @@ const Signin = ({ history, setSession, session }) => {
         ...data,
       });
       axios.defaults.headers.common["authorization"] = data.token;
-      setTimeout(() => history.push("/"), 400);
+      history.push("/");
     } catch (err) {
       const { response: { data: errorMessage = "Error." } = {} } = err;
       message.error(errorMessage);
@@ -45,8 +45,8 @@ const Signin = ({ history, setSession, session }) => {
   };
 
   return (
-    <StyledSection id="signin" className="curve-border-1">
-      <h3>Signin</h3>
+    <StyledSection id="login" className="curve-border-1">
+      <h3>Login</h3>
       <form>
         <Input
           className="mb"
@@ -59,14 +59,14 @@ const Signin = ({ history, setSession, session }) => {
           value={form.password}
           onChange={handleInput("password")}
           placeholder="Password"
-          onPressEnter={handleSignin}
+          onPressEnter={handleLogin}
         />
         <br />
-        <Button onClick={handleSignin} disabled={loading}>
-          Sign in
+        <Button onClick={handleLogin} loading={loading}>
+          Login
         </Button>
 
-        <Button onClick={() => history.push("/signup")}>Sign up</Button>
+        <Button onClick={() => history.push("/register")}>Register</Button>
       </form>
     </StyledSection>
   );
@@ -76,4 +76,4 @@ const mapStateToProps = ({ session }) => ({
   session,
 });
 
-export default connect(mapStateToProps, { setSession })(withRouter(Signin));
+export default connect(mapStateToProps, { setSession })(withRouter(Login));
