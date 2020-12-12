@@ -4,7 +4,7 @@ import colors from "@codedrops/react-ui";
 
 export const copyToClipboard = (text) => {
   const textField = document.createElement("textarea");
-  textField.innerText = text;
+  textField.innerHTML = text;
   document.body.appendChild(textField);
   textField.select();
   document.execCommand("copy");
@@ -36,8 +36,10 @@ export const extractTagCodes = (tags = []) =>
 export const generateSlug = ({ title = "", seperator = "-", prevSlug }) => {
   const slug = title
     .trim()
-    .replace(/\s+/gi, seperator)
+    .replace(/\//, "-")
+    .replace(/&/, "and")
     .replace(/[^a-zA-Z0-9\-\s]/gi, "")
+    .replace(/\s+/gi, seperator)
     .toLowerCase();
   const timestamp = prevSlug
     ? prevSlug.split(seperator).pop()
