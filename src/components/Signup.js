@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import { StyledSection } from "../styled";
 
 const initialState = {
-  name: "",
+  username: "",
   password: "",
   email: "",
 };
@@ -24,9 +24,9 @@ const Signup = ({ history }) => {
       <form>
         <Input
           className="mb"
-          value={form.name}
-          onChange={handleInput("name")}
-          placeholder="Name"
+          value={form.username}
+          onChange={handleInput("username")}
+          placeholder="Username"
         />
         <Input
           className="mb"
