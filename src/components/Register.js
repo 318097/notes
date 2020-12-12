@@ -65,7 +65,7 @@ const Register = ({ history }) => {
         />
         <br />
         <Button onClick={handleRegister} loading={loading}>
-          Sign up
+          Register
         </Button>
       </form>
     </StyledSection>

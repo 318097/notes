@@ -179,9 +179,9 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
         <ControlsWrapper>
           <div className="header">
             <h4>Notes</h4>
-            <Tag>
-              {personalNotes.length ? `Total: ${personalNotes.length}` : null}
-            </Tag>
+            {personalNotes.length ? (
+              <Tag>`Total: ${personalNotes.length}` </Tag>
+            ) : null}
           </div>
           <div className="notes-container">
             {personalNotes.length ? (

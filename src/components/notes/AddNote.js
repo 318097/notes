@@ -47,7 +47,7 @@ const StyledContainer = styled.div`
 const initialState = {
   type: "DROP",
   title: "",
-  content: "",
+  content: "```js\n\n```",
   url: "",
   tags: [],
 };
@@ -210,11 +210,15 @@ const AddNote = ({
             onChange={({ target: { value } }) => setData({ url: value })}
           />
           {note.type === "QUIZ" && (
-            <TextArea
-              rows={4}
-              placeholder="Solution"
+            <SimpleMDE
+              className="mb"
               value={note.solution}
-              onChange={({ target: { value } }) => setData({ solution: value })}
+              onChange={(value) => setData({ solution: value })}
+              options={{
+                spellChecker: false,
+                placeholder: "Solution",
+                hideIcons: ["guide", "preview", "fullscreen", "side-by-side"],
+              }}
             />
           )}
           <div className="mt">
