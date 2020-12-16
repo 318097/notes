@@ -110,6 +110,7 @@ const Notes = ({
               scrollRef={scrollRef}
               dispatch={dispatch}
               filters={filters}
+              appLoading={appLoading}
               {...others}
             />
           ) : (
@@ -140,6 +141,7 @@ const CardView = ({
   tagsCodes,
   meta,
   filters,
+  appLoading,
   dispatch,
 }) => {
   const noteChunks = Array(Math.ceil(notes.length / config.LIMIT))
@@ -174,6 +176,7 @@ const CardView = ({
       {notes.length && notes.length < meta.count && (
         <div className="fcc">
           <Button
+            disabled={appLoading}
             onClick={() =>
               dispatch(setFilter({ page: filters.page + 1 }, false))
             }

@@ -28,6 +28,7 @@ const ControlsWrapper = styled.div`
   }
   .hashtag {
     font-size: 1rem;
+    font-family: Cascadia-SemiBold;
   }
   .slug {
     background: ${colors.primary};
@@ -231,7 +232,7 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
                 </div>
                 <div>
                   {chainedPosts.map((chain) => (
-                    <div className="chain-title">
+                    <div key={chain.title} className="chain-title">
                       &#9679;{" "}
                       <span onClick={() => goToPost(chain._id, _id)}>
                         {chain.title}
@@ -304,12 +305,8 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
         </div>
 
         {resources.map((resource, index) => (
-          <Popover placement="bottom" content={resource}>
-            <div
-              key={resource}
-              className="resource-id"
-              onClick={copy(resource)}
-            >
+          <Popover key={resource} placement="bottom" content={resource}>
+            <div className="resource-id" onClick={copy(resource)}>
               {index + 1}
             </div>
           </Popover>

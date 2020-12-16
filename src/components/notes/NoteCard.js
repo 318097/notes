@@ -25,10 +25,10 @@ const StyledCard = styled.div`
   .card {
     margin: 0;
     cursor: pointer;
-    font-size: 1.1rem;
+    font-size: 1rem;
     padding: 20px 8px;
     .title {
-      font-size: inherit;
+      font-size: 1.2rem;
       text-align: center;
     }
     .post-title {
@@ -41,6 +41,10 @@ const StyledCard = styled.div`
       margin-top: 8px;
       overflow-x: auto;
       padding: 0;
+      pre,
+      code {
+        font-size: 1rem;
+      }
     }
   }
   .card.today,
