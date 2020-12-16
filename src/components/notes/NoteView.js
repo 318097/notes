@@ -171,18 +171,32 @@ const NoteView = ({
   appLoading,
 }) => {
   useEffect(() => {
+    return () => {
+      const codeblocks = document.querySelectorAll("pre");
+      codeblocks.forEach((block) => {
+        block.removeEventListener("click", copyCodeToClipboard);
+      });
+    };
+  }, []);
+
+  useEffect(() => {
     dispatch(getNoteById(match.params.id));
   }, [match.params.id]);
+
   useEffect(() => {
+    if (_.isEmpty(viewNote)) return;
+
     const codeblocks = document.querySelectorAll("pre");
     codeblocks.forEach((block) => {
-      block.addEventListener("click", (e) => {
-        const code = e.target.textContent;
-        if (!code) return;
-        copyToClipboard(code);
-      });
+      block.addEventListener("click", copyCodeToClipboard);
     });
-  }, []);
+  }, [viewNote]);
+
+  const copyCodeToClipboard = (e) => {
+    const code = e.target.textContent;
+    if (!code) return;
+    copyToClipboard(code);
+  };
 
   const handleEdit = () =>
     dispatch(
