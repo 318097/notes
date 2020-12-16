@@ -180,7 +180,7 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
           <div className="header">
             <h4>Notes</h4>
             {personalNotes.length ? (
-              <Tag>`Total: ${personalNotes.length}` </Tag>
+              <Tag>{`Total: ${personalNotes.length}`}</Tag>
             ) : null}
           </div>
           <div className="notes-container">
