@@ -35,8 +35,8 @@ pre {
   border-radius: 4px;
   padding: 12px;
   line-height: 1.5rem;
+  cursor: pointer;
   & > code {
-    // cursor: pointer;
     background: none;
   }
 }

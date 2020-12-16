@@ -174,14 +174,14 @@ const NoteView = ({
     dispatch(getNoteById(match.params.id));
   }, [match.params.id]);
   useEffect(() => {
-    // const codeblocks = document.querySelectorAll("pre");
-    // codeblocks.forEach((block) => {
-    //   block.addEventListener("click", (e) => {
-    //     const code = e.target.textContent;
-    //     if (!code) return;
-    //     copyToClipboard(code);
-    //   });
-    // });
+    const codeblocks = document.querySelectorAll("pre");
+    codeblocks.forEach((block) => {
+      block.addEventListener("click", (e) => {
+        const code = e.target.textContent;
+        if (!code) return;
+        copyToClipboard(code);
+      });
+    });
   }, []);
 
   const handleEdit = () =>
