@@ -16,7 +16,7 @@
   - [x] Graph of notes count added every week
   - [x] Show total number of notes by tags - graph
   - [x] Show total number of notes live, ready and draft
-  - [ ] Stats by all/visible/invisible notes
+  - [ ] Stats by filter
 - [ ] Trash - show deleted notes
 - [x] Table view
 - [ ] Show resources for every post view

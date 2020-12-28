@@ -48,7 +48,7 @@ const Wrapper = styled.div`
     .content {
       flex: 1 1 auto;
       overflow: auto;
-      padding: 20px;
+      padding: 0 20px 20px;
     }
     .chain-wrapper {
       padding: 0 20px;
@@ -95,6 +95,21 @@ const Wrapper = styled.div`
       text-align: center;
       border-radius: 4px;
     }
+    .url {
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: block;
+      font-size: 1rem;
+      padding: 0 20px;
+      a {
+        color: ${colors.steel};
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    }
     .back-icon {
       position: absolute;
       top: 2px;
@@ -111,6 +126,9 @@ const Wrapper = styled.div`
       top: 4px;
       left: -10px;
       transition: 0.3s;
+      &.url-copy-icon {
+        top: -8px;
+      }
       &:hover {
         left: -4px;
       }
@@ -248,6 +266,7 @@ const NoteView = ({
     status,
     chainedPosts = [],
     _id,
+    url,
   } = viewNote || {};
 
   const canonicalURL = `https://www.codedrops.tech/posts/${slug}`;
@@ -273,6 +292,10 @@ const NoteView = ({
         <div className="card-content">
           <div className="relative">
             <h3 className="title">{title}</h3>
+            {/* <h3
+              className="title"
+              dangerouslySetInnerHTML={{ __html: marked(title) }}
+            /> */}
             {title && (
               <Icon
                 className="copy-icon icon icon-bg"
@@ -281,7 +304,7 @@ const NoteView = ({
               />
             )}
           </div>
-          {type === "CHAIN" ? (
+          {type === "CHAIN" && (
             <div className="chain-wrapper">
               {chainedPosts.map((post, index) => (
                 <div className="chain-item" key={post._id}>
@@ -301,7 +324,9 @@ const NoteView = ({
                 </div>
               ))}
             </div>
-          ) : (
+          )}
+
+          {!!content && (
             <div style={{ flex: "1" }} className="relative">
               <div
                 className="content"
@@ -314,9 +339,27 @@ const NoteView = ({
               />
             </div>
           )}
+
           {type === "QUIZ" && solution && (
             <div className="quiz-solution">{solution}</div>
           )}
+
+          {url && (
+            <div className="relative" style={{ marginBottom: "20px" }}>
+              <div className="url">
+                <span style={{ color: colors.orange }}>URL: </span>
+                <a href={url} target="_blank" rel="noopener noreferrer">
+                  {url}
+                </a>
+              </div>
+              <Icon
+                className="copy-icon url-copy-icon icon icon-bg"
+                type="copy"
+                onClick={() => copyToClipboard(url)}
+              />
+            </div>
+          )}
+
           <div className="tags">
             {tags.map((tag, index) => (
               <Tag key={index}>{tag.toUpperCase()}</Tag>

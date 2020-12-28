@@ -75,6 +75,7 @@ const ControlsWrapper = styled.div`
       border-radius: 4px;
       padding: 8px;
       margin-bottom: 4px;
+      overflow-wrap: break-word;
     }
   }
   .ant-radio-wrapper {
