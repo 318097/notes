@@ -4,12 +4,11 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { Tag } from "antd";
-import marked from "marked";
 import _ from "lodash";
 import colors, { Card, Icon } from "@codedrops/react-ui";
 import Controls from "./Controls";
 import { getNoteById, setModalMeta } from "../../store/actions";
-import { copyToClipboard } from "../../utils";
+import { md, copyToClipboard } from "../../utils";
 import { fadeInDownAnimation } from "../../animations";
 import { getNextNote } from "../../utils";
 import queryString from "query-string";
@@ -94,6 +93,9 @@ const Wrapper = styled.div`
       padding: 10px 0;
       text-align: center;
       border-radius: 4px;
+      p {
+        margin: 0;
+      }
     }
     .url {
       text-align: center;
@@ -291,11 +293,11 @@ const NoteView = ({
       <Card>
         <div className="card-content">
           <div className="relative">
-            <h3 className="title">{title}</h3>
-            {/* <h3
+            {/* <h3 className="title">{title}</h3> */}
+            <h3
               className="title"
-              dangerouslySetInnerHTML={{ __html: marked(title) }}
-            /> */}
+              dangerouslySetInnerHTML={{ __html: md.renderInline(title) }}
+            />
             {title && (
               <Icon
                 className="copy-icon icon icon-bg"
@@ -330,7 +332,9 @@ const NoteView = ({
             <div style={{ flex: "1" }} className="relative">
               <div
                 className="content"
-                dangerouslySetInnerHTML={{ __html: marked(content) }}
+                dangerouslySetInnerHTML={{
+                  __html: md.render(content),
+                }}
               ></div>
               <Icon
                 type="copy"
@@ -341,7 +345,12 @@ const NoteView = ({
           )}
 
           {type === "QUIZ" && solution && (
-            <div className="quiz-solution">{solution}</div>
+            <div
+              className="quiz-solution"
+              dangerouslySetInnerHTML={{
+                __html: md.render(solution),
+              }}
+            />
           )}
 
           {url && (

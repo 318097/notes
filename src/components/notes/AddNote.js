@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import marked from "marked";
 import { Modal, Input, Radio, Checkbox, Button } from "antd";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
@@ -15,7 +14,7 @@ import {
 } from "../../store/actions";
 import colors from "@codedrops/react-ui";
 import SelectCollection from "../SelectCollection";
-import { generateSlug } from "../../utils";
+import { generateSlug, md } from "../../utils";
 import { noteType } from "../../constants";
 
 const { TextArea } = Input;
@@ -245,23 +244,24 @@ const AddNote = ({
             <div className="divider"></div>
             {previewMode === "PREVIEW" ? (
               <Fragment>
-                <div
-                  style={{ textDecoration: "underline", fontWeight: "bold" }}
+                <h3
                   dangerouslySetInnerHTML={{
-                    __html: marked(note.title || ""),
+                    __html: md.render(note.title || ""),
                   }}
-                ></div>
+                ></h3>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: marked(note.content || ""),
+                    __html: md.render(note.content || ""),
                   }}
                 ></div>
               </Fragment>
             ) : (
               <div className="preview">
-                {marked(note.title)}
+                {md.render(note.title || "")}
                 <br />
-                <div className="preview-body">{marked(note.content)}</div>
+                <div className="preview-body">
+                  {md.render(note.content || "")}
+                </div>
               </div>
             )}
           </div>

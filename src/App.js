@@ -46,7 +46,7 @@ const App = ({
         } catch (err) {
           console.log("Error:", err);
         } finally {
-          setTimeout(() => setLoading(false), 300);
+          setTimeout(() => setLoading(false), 100);
         }
       } else setLoading(false);
     };

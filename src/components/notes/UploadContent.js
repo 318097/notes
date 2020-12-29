@@ -5,12 +5,11 @@ import { Card, Icon } from "@codedrops/react-ui";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import uuid from "uuid";
-import marked from "marked";
 import _ from "lodash";
-
 import { MessageWrapper } from "../../styled";
 import SelectCollection from "../SelectCollection";
 import { setModalMeta, setUploadingData, addNote } from "../../store/actions";
+import { md } from "../../utils";
 
 const { Option } = Select;
 
@@ -265,7 +264,7 @@ const UploadContent = ({
                   <h3 className="title">{title}</h3>
                   <div
                     className="content"
-                    dangerouslySetInnerHTML={{ __html: marked(content) }}
+                    dangerouslySetInnerHTML={{ __html: md.render(content) }}
                   ></div>
                   <div className="tags">
                     {tags.map((tag) => (

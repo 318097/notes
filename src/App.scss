@@ -43,6 +43,13 @@ pre {
   }
 }
 
+h3 code {
+  font-size: inherit;
+  font-family: inherit;
+  color: $white;
+  background: $coffee;
+}
+
 body {
   h1,
   h2,

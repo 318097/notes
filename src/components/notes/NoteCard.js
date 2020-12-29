@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Icon as AntIcon } from "antd";
-import marked from "marked";
 import moment from "moment";
 import colors, { Card, Icon, Tag } from "@codedrops/react-ui";
 import Dropdown from "./Dropdown";
+import { md } from "../../utils";
 
 const StyledCard = styled.div`
   margin-bottom: 16px;
@@ -93,14 +93,15 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
         onClick={(e) => handleClick(e, _id)}
         className={`card ${addedDays ? null : "today"}`}
       >
-        <h3 className={`title ${type === "DROP" ? "" : "post-title"}`}>
-          {title}
-        </h3>
+        <h3
+          className={`title ${type === "DROP" ? "" : "post-title"}`}
+          dangerouslySetInnerHTML={{ __html: md.renderInline(title) }}
+        />
 
         {["DROP", "QUIZ"].includes(type) && (
           <div
             className="content"
-            dangerouslySetInnerHTML={{ __html: marked(content) }}
+            dangerouslySetInnerHTML={{ __html: md.render(content) }}
           ></div>
         )}
         <Dropdown
