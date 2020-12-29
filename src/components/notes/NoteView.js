@@ -192,9 +192,9 @@ const NoteView = ({
 }) => {
   useEffect(() => {
     return () => {
-      const codeblocks = document.querySelectorAll("pre");
+      const codeblocks = document.querySelectorAll(".content pre");
       codeblocks.forEach((block) => {
-        block.removeEventListener("click", copyCodeToClipboard);
+        block.removeEventListener("click", copyCodeToClipboard, false);
       });
     };
   }, []);
@@ -206,13 +206,14 @@ const NoteView = ({
   useEffect(() => {
     if (_.isEmpty(viewNote)) return;
 
-    const codeblocks = document.querySelectorAll("pre");
+    const codeblocks = document.querySelectorAll(".content pre");
     codeblocks.forEach((block) => {
-      block.addEventListener("click", copyCodeToClipboard);
+      block.addEventListener("click", copyCodeToClipboard, false);
     });
   }, [viewNote]);
 
   const copyCodeToClipboard = (e) => {
+    e.stopPropagation();
     const code = e.target.textContent;
     if (!code) return;
     copyToClipboard(code);
