@@ -90,8 +90,7 @@ const Wrapper = styled.div`
       background: ${colors.bg};
       border: 1px solid ${colors.strokeTwo};
       margin: 0 20px 20px;
-      padding: 10px 0;
-      text-align: center;
+      padding: 10px;
       border-radius: 4px;
       p {
         margin: 0;
@@ -294,7 +293,6 @@ const NoteView = ({
       <Card>
         <div className="card-content">
           <div className="relative">
-            {/* <h3 className="title">{title}</h3> */}
             <h3
               className="title"
               dangerouslySetInnerHTML={{ __html: md.renderInline(title) }}
