@@ -27,12 +27,13 @@ const StyledContainer = styled.div`
   padding: 10px;
   .post-form {
     flex: 0 0 60%;
-    margin-right: 10px;
+    overflow-x: auto;
+    padding-right: 8px;
   }
   div.preview {
     background: ${colors.shade1};
     border-radius: 5px;
-    flex: 0 0 40%;
+    flex: 0 0 39%;
     padding: 8px;
     overflow-x: auto;
     .preview-header {
