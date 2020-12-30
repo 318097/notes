@@ -87,11 +87,13 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
   } = note;
   const [showDropdown, setShowDropdown] = useState(false);
   const addedDays = moment().diff(moment(createdAt), "days");
+  const isToday = moment().isSame(moment(createdAt));
+
   return (
     <StyledCard>
       <Card
         onClick={(e) => handleClick(e, _id)}
-        className={`card ${addedDays ? null : "today"}`}
+        className={`card ${isToday ? "today" : null}`}
       >
         <h3
           className={`title ${type === "DROP" ? "" : "post-title"}`}
@@ -111,7 +113,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
           onDelete={() => onDelete(_id)}
         />
       </Card>
-      <Card className={`action-row ${addedDays ? "" : "today"}`}>
+      <Card className={`action-row ${addedDays ? "today" : ""}`}>
         <div className="status-row">
           <div className="tags">
             {tags.map((tag) => (
@@ -137,7 +139,9 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
 
         <div className="status-row">
           <Tag color={status === "POSTED" ? "seagreen" : "orange"}>
-            {status === "POSTED" ? `Live Id: ${liveId}` : status}
+            {status === "POSTED"
+              ? `Live Id: ${liveId}`
+              : status.replace("_", " ")}
           </Tag>
           <div style={{ display: "flex", alignItems: "center" }}>
             {!!rating && (
@@ -151,7 +155,13 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
                 />
               </Tag>
             )}
-            <Tag>{addedDays ? `${addedDays}d ago` : "Today"}</Tag>
+            <Tag>
+              {isToday
+                ? "Today"
+                : addedDays === 0
+                ? "Yesterday"
+                : `${addedDays}d ago`}
+            </Tag>
             {index && <Tag>{`#${index}`}</Tag>}
           </div>
         </div>

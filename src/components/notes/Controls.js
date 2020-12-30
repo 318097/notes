@@ -143,10 +143,13 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
   const hashtags = tags.map((tag) => `#${tag}`).join(" ");
   const rdySlug = `RDY${index}-${slug}`;
   const slugWithLiveId = `${liveId}-${slug}`;
+
   const addedDays = moment().diff(moment(createdAt), "days");
+  const isToday = moment().isSame(moment(createdAt));
+
   const lastUpdated = moment().diff(moment(updatedAt), "days");
   const publishedOn = publishedAt
-    ? moment(publishedAt).format("DD MMM, YYYY")
+    ? moment(publishedAt).format("DD MMM, YY")
     : "-";
   const chainedPosts = chains.filter((chain) =>
     chain.chainedItems.includes(_id)
@@ -343,18 +346,22 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
         <div className="mb">
           Added:
           <span className="bold">
-            {addedDays ? `${addedDays} day(s) ago` : "Today"}
+            {isToday
+              ? "Today"
+              : addedDays === 0
+              ? "Yesterday"
+              : `${moment(createdAt).format("DD MMM, YY")} (${addedDays}d ago)`}
           </span>
         </div>
         <div className="mb">
           Last Updated:
           <span className="bold">
-            {lastUpdated ? `${lastUpdated} day(s) ago` : "Today"}
+            {lastUpdated ? `${lastUpdated}d ago` : "Today"}
           </span>
         </div>
         {status === "POSTED" && (
           <div>
-            Published On: <span className="bold">{publishedOn}</span>
+            Published: <span className="bold">{publishedOn}</span>
           </div>
         )}
       </ControlsWrapper>
