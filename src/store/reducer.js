@@ -32,13 +32,17 @@ const initialState = {
     selectedNote: null,
   },
   filters: {
-    search: "",
-    status: undefined,
+    tags: undefined,
     socialStatus: undefined,
+    status: undefined,
+    search: undefined,
+    rating: undefined,
+    type: undefined,
+    visibility: "visible",
+    sortOrder: "DESC",
+    sortFilter: "index",
     page: 1,
     limit: config.LIMIT,
-    sortOrder: "ASC",
-    visibility: "visible",
   },
   activeCollection: null,
   notes: [],
@@ -227,3 +231,4 @@ const reducer = (state = initialState, action) => {
 };
 
 export default reducer;
+export { initialState };

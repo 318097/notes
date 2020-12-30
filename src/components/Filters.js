@@ -12,6 +12,7 @@ import {
   visibilityFilter,
   ratingsFilter,
 } from "../constants";
+import { initialState } from "../store/reducer";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -61,6 +62,8 @@ const Filters = ({
       <SelectCollection
         style={{ margin: "2px" }}
         collection={activeCollection}
+        resetFilter={true}
+        setFilterValues={() => setFilterValues({ ...initialState.filters })}
       />
       {showAllFilters && (
         <Search
@@ -74,7 +77,7 @@ const Filters = ({
       )}
       <Select
         allowClear
-        style={{ minWidth: "100px" }}
+        style={{ minWidth: "100px", width: "auto" }}
         className="form-field"
         mode="multiple"
         placeholder="Tags"
@@ -190,7 +193,7 @@ const Filters = ({
               type: undefined,
               visibility: "visible",
               sortOrder: "DESC",
-              sortFilter: "createdAt",
+              sortFilter: "index",
             })
           }
         />

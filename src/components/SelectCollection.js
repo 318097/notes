@@ -12,9 +12,12 @@ const SelectCollection = ({
   setActiveCollection,
   setCollection,
   style = {},
+  resetFilter,
+  setFilterValues,
 }) => {
   const handleChange = (id) => {
     setCollection ? setCollection(id) : setActiveCollection(id);
+    if (resetFilter) setFilterValues();
   };
 
   return (
