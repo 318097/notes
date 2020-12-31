@@ -9,7 +9,6 @@ import {
   logout,
   toggleSettingsDrawer,
   setModalMeta,
-  toggleStatsModal,
   setQuickAddModalMeta,
 } from "../store/actions";
 
@@ -51,7 +50,6 @@ const Navigation = ({
   logout,
   toggleSettingsDrawer,
   setModalMeta,
-  toggleStatsModal,
   setQuickAddModalMeta,
   history,
   session,
@@ -70,7 +68,7 @@ const Navigation = ({
         <AntIcon
           className="ant-icon"
           type="line-chart"
-          onClick={() => toggleStatsModal(true)}
+          onClick={() => history.push("/stats")}
         />
         <Divider />
         <AntIcon
@@ -109,7 +107,6 @@ const mapDispatchToProps = {
   logout,
   toggleSettingsDrawer,
   setModalMeta,
-  toggleStatsModal,
   setQuickAddModalMeta,
 };
 

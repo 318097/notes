@@ -18,7 +18,6 @@ import {
   SET_UPLOADING_DATA,
   UPDATE_UPLOAD_NOTE,
   SET_ACTIVE_COLLECTION,
-  TOGGLE_STATS_MODAL,
   FETCH_STATS,
   LOGOUT,
   SET_QUICK_ADD_MODAL_META,
@@ -201,10 +200,12 @@ export const logout = () => ({
 export const fetchStats = () => async (dispatch, getState) => {
   try {
     dispatch(setAppLoading(true));
-    const { activeCollection } = getState();
+    const { activeCollection, filters } = getState();
     const {
       data: { stats },
-    } = await axios.get(`/posts/stats?collectionId=${activeCollection}`);
+    } = await axios.get(`/posts/stats?collectionId=${activeCollection}`, {
+      params: filters,
+    });
 
     dispatch({ type: FETCH_STATS, payload: stats });
   } catch (err) {
@@ -249,11 +250,6 @@ export const toggleSettingsDrawer = (status) => ({
   payload: status,
 });
 
-export const toggleStatsModal = (status) => ({
-  type: TOGGLE_STATS_MODAL,
-  payload: status,
-});
-
 export const setFilter = (filterUpdate, resetPage = true) => async (
   dispatch,
   getState
@@ -265,7 +261,7 @@ export const setFilter = (filterUpdate, resetPage = true) => async (
   const updatedFiters = { ...filters, ...filterUpdate };
   if (resetPage) updatedFiters["page"] = 1;
   dispatch({ type: UPDATE_FILTER, payload: updatedFiters });
-  dispatch(fetchNotes());
+  dispatch(window.location.pathname === "/stats" ? fetchStats() : fetchNotes());
 };
 
 export const getChains = () => async (dispatch, getState) => {

@@ -81,6 +81,12 @@ const App = ({
                 exact
                 component={UploadContent}
               />
+              <ProtectedRoute
+                session={session}
+                path="/stats"
+                exact
+                component={Stats}
+              />
               <Route path="/" exact render={() => <Redirect to="/home" />} />
               <Route component={NotFound} />
             </Switch>
@@ -91,7 +97,6 @@ const App = ({
         <Fragment>
           {addModalVisibility && <AddNote />}
           {quickAddModalVisibility && <QuickAdd />}
-          <Stats />
           <Settings />
         </Fragment>
       )}

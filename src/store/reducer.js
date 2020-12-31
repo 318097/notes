@@ -16,7 +16,6 @@ import {
   SET_UPLOADING_DATA,
   UPDATE_UPLOAD_NOTE,
   SET_ACTIVE_COLLECTION,
-  TOGGLE_STATS_MODAL,
   FETCH_STATS,
   LOGOUT,
   SET_QUICK_ADD_MODAL_META,
@@ -52,7 +51,6 @@ const initialState = {
   viewNote: null,
   settingsDrawerVisibility: false,
   stats: {},
-  statsModal: false,
   displayType: "CARD",
   uploadingData: {
     rawData: null,
@@ -113,11 +111,6 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         settingsDrawerVisibility: action.payload,
-      };
-    case TOGGLE_STATS_MODAL:
-      return {
-        ...state,
-        statsModal: action.payload,
       };
     case FETCH_STATS:
       return {

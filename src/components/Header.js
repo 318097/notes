@@ -35,7 +35,9 @@ const Header = ({ history }) => {
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
-    setShowFilters(_.get(history, "location.pathname") === "/home");
+    setShowFilters(
+      ["/home", "/stats"].includes(_.get(history, "location.pathname"))
+    );
   }, [history.location.pathname]);
 
   if (showFilters) return <Container>{<Filters />}</Container>;

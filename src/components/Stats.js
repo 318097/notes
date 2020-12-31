@@ -1,20 +1,17 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Modal, Button } from "antd";
 import _ from "lodash";
-import { toggleStatsModal, fetchStats } from "../store/actions";
+import { fetchStats } from "../store/actions";
 import colors from "@codedrops/react-ui";
 import { Doughnut, HorizontalBar, Bar } from "react-chartjs-2";
 import { extractTagCodes } from "../utils";
 
-const StyledContainer = styled.div`
-  height: 100%;
-  padding: 10px 30px;
+const StyledContainer = styled.section`
   display: flex;
   flex-direction: column;
+  padding: 0 40px;
   .wrapper {
-    margin: 10px 0;
     flex: 1 1 50%;
     display: flex;
     justify-content: space-between;
@@ -22,7 +19,29 @@ const StyledContainer = styled.div`
   .chart {
     flex: 1 1 50%;
     width: 100%;
+    padding: 10px;
     margin: 0 auto;
+    position: relative;
+    .chart-name {
+      position: absolute;
+      text-transform: uppercase;
+      font-size: 1.4rem;
+      color: ${colors.strokeThree};
+      bottom: 32px;
+      right: 32px;
+      &.created {
+        top: 32px;
+        bottom: unset;
+      }
+      &.type {
+        top: 32px;
+        left: 32px;
+      }
+      &.status {
+        bottom: 32px;
+        left: 32px;
+      }
+    }
   }
 `;
 
@@ -52,6 +71,7 @@ const Stats = ({ tagsCodes, stats, fetchStats }) => {
     <StyledContainer>
       <div className="wrapper">
         <div className="chart">
+          <div className="chart-name status">Status</div>
           <Doughnut
             data={{
               labels: statusData.labels,
@@ -76,6 +96,7 @@ const Stats = ({ tagsCodes, stats, fetchStats }) => {
           />
         </div>
         <div className="chart">
+          <div className="chart-name created">Created</div>
           <Bar
             data={{
               labels: createdOnData.labels,
@@ -116,6 +137,7 @@ const Stats = ({ tagsCodes, stats, fetchStats }) => {
 
       <div className="wrapper">
         <div className="chart">
+          <div className="chart-name tags">Tags</div>
           <HorizontalBar
             data={{
               labels: tagsData.labels,
@@ -153,6 +175,7 @@ const Stats = ({ tagsCodes, stats, fetchStats }) => {
           />
         </div>
         <div className="chart">
+          <div className="chart-name type">Type</div>
           <Doughnut
             data={{
               labels: typesData.labels,
@@ -178,42 +201,11 @@ const Stats = ({ tagsCodes, stats, fetchStats }) => {
   );
 };
 
-const StatsWrapper = ({ statsModal, toggleStatsModal, stats, ...rest }) => {
-  const handleClose = () => toggleStatsModal(false);
-  return (
-    <Modal
-      wrapClassName="react-ui"
-      destroyOnClose={true}
-      title={
-        <div>
-          STATS{" "}
-          <span style={{ fontSize: "1.2rem", fontStyle: "italic" }}>
-            (Total:{stats.total})
-          </span>
-        </div>
-      }
-      centered={true}
-      style={{ padding: "0" }}
-      visible={statsModal}
-      width="60vw"
-      onCancel={handleClose}
-      footer={[
-        <Button key="cancel-button" onClick={handleClose}>
-          Close
-        </Button>,
-      ]}
-    >
-      <Stats stats={stats} {...rest} />
-    </Modal>
-  );
-};
-
-const mapStateToProps = ({ settings, statsModal, stats }) => ({
-  statsModal,
+const mapStateToProps = ({ settings, stats }) => ({
   tagsCodes: extractTagCodes(settings.tags),
   stats,
 });
 
-const mapDispatchToProps = { toggleStatsModal, fetchStats };
+const mapDispatchToProps = { fetchStats };
 
-export default connect(mapStateToProps, mapDispatchToProps)(StatsWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(Stats);
