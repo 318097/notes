@@ -107,15 +107,29 @@ const QuickAdd = ({
   };
 
   const handleChange = ({ key, value, index }) => {
-    const updatedInput = _.map(input, (data, i) =>
-      index === i ? { ...data, [key]: value } : data
-    );
+    let addNewRow = false;
+    const updatedInput = _.map(input, (data, i) => {
+      if (index === i) {
+        const updatedData = { ...data, [key]: value };
+        if (key === "url" && value && !data.title) {
+          const { host } = new URL(value);
+          const title = host.split(".").shift();
+          if (title) {
+            addNewRow = true;
+            updatedData["title"] = `${title[0].toUpperCase()}${title.slice(1)}`;
+          }
+        }
+        return updatedData;
+      }
+      return data;
+    });
 
     if (
-      key === "title" &&
-      activeTab === "DETAILS" &&
-      value &&
-      updatedInput.length - 1 === index
+      addNewRow ||
+      (key === "title" &&
+        activeTab === "DETAILS" &&
+        value &&
+        updatedInput.length - 1 === index)
     ) {
       updatedInput.push(INITIAL_STATE);
     }
