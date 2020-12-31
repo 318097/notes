@@ -10,7 +10,6 @@ import {
   toggleSettingsDrawer,
   setModalMeta,
   setQuickAddModalMeta,
-  setKey,
 } from "../store/actions";
 
 const StyledNavigation = styled.div`
@@ -92,7 +91,6 @@ const Navigation = ({
   setQuickAddModalMeta,
   history,
   session,
-  setKey,
   activePage,
 }) => {
   if (!session) return null;
@@ -119,7 +117,6 @@ const Navigation = ({
       default:
         return;
     }
-    setKey({ activePage: key });
   };
 
   return (
@@ -152,7 +149,6 @@ const mapDispatchToProps = {
   toggleSettingsDrawer,
   setModalMeta,
   setQuickAddModalMeta,
-  setKey,
 };
 
 export default withRouter(

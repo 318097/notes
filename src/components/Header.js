@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { connect } from "react-redux";
 import Filters from "./Filters";
 
 const Container = styled.header`
@@ -13,11 +12,9 @@ const Container = styled.header`
   z-index: 10;
 `;
 
-const Header = ({ activePage }) =>
-  ["home", "stats"].includes(activePage) ? (
+const Header = () =>
+  ["home", "stats"].includes(window.location.pathname.slice(1)) ? (
     <Container>{<Filters />}</Container>
   ) : null;
 
-const mapStateToProps = ({ activePage }) => ({ activePage });
-
-export default connect(mapStateToProps)(Header);
+export default Header;

@@ -56,6 +56,15 @@ const App = ({
     isAccountActive();
   }, []);
 
+  useEffect(() => {
+    setActivePage();
+  }, [
+    quickAddModalVisibility,
+    addModalVisibility,
+    settingsDrawerVisibility,
+    window.location.pathname,
+  ]);
+
   const setActivePage = async () => {
     let activePage;
 

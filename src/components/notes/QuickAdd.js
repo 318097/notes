@@ -113,7 +113,7 @@ const QuickAdd = ({
         const updatedData = { ...data, [key]: value };
         if (key === "url" && value && !data.title) {
           const { host } = new URL(value);
-          const title = host.split(".").shift();
+          const title = host.replace(/www\./, "").split(".").shift();
           if (title) {
             addNewRow = true;
             updatedData["title"] = `${title[0].toUpperCase()}${title.slice(1)}`;
