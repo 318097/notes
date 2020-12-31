@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
-import colors from "@codedrops/react-ui";
-import _ from "lodash";
 import Filters from "./Filters";
 
 const Container = styled.header`
@@ -14,36 +11,13 @@ const Container = styled.header`
   position: sticky;
   top: 0;
   z-index: 10;
-  h3 {
-    margin: 0;
-    margin-left: 10px;
-    a {
-      color: ${colors.bar};
-      text-transform: uppercase;
-      font-family: Cascadia-SemiBold;
-      & > span {
-        font-family: CascadiaMonoPL-Bold;
-        text-decoration: underline;
-        font-size: 2rem;
-        color: ${colors.bar};
-      }
-    }
-  }
 `;
 
-const Header = ({ history }) => {
-  const [showFilters, setShowFilters] = useState(false);
+const Header = ({ activePage }) =>
+  ["home", "stats"].includes(activePage) ? (
+    <Container>{<Filters />}</Container>
+  ) : null;
 
-  useEffect(() => {
-    setShowFilters(
-      ["/home", "/stats"].includes(_.get(history, "location.pathname"))
-    );
-  }, [history.location.pathname]);
+const mapStateToProps = ({ activePage }) => ({ activePage });
 
-  if (showFilters) return <Container>{<Filters />}</Container>;
-  else return null;
-};
-
-const mapStateToProps = ({ session }) => ({});
-
-export default withRouter(connect(mapStateToProps)(Header));
+export default connect(mapStateToProps)(Header);

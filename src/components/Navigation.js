@@ -10,6 +10,7 @@ import {
   toggleSettingsDrawer,
   setModalMeta,
   setQuickAddModalMeta,
+  setKey,
 } from "../store/actions";
 
 const StyledNavigation = styled.div`
@@ -39,12 +40,50 @@ const StyledNavigation = styled.div`
       font-size: 20px;
       transition: 0.6s;
       margin-top: 10px;
+      &.active,
       &:hover {
         color: ${colors.orange};
       }
     }
   }
 `;
+
+const navItems = [
+  {
+    type: "home",
+    key: "home",
+  },
+  {
+    type: "line-chart",
+    key: "stats",
+  },
+  {
+    type: "divider",
+  },
+  {
+    type: "plus",
+    key: "add",
+  },
+  {
+    type: "fire",
+    key: "quick-add",
+  },
+  {
+    type: "upload",
+    key: "upload",
+  },
+  {
+    type: "divider",
+  },
+  {
+    type: "setting",
+    key: "setting",
+  },
+  {
+    type: "logout",
+    key: "logout",
+  },
+];
 
 const Navigation = ({
   logout,
@@ -53,54 +92,59 @@ const Navigation = ({
   setQuickAddModalMeta,
   history,
   session,
+  setKey,
+  activePage,
 }) => {
   if (!session) return null;
+
+  const handleNavigation = (key) => {
+    switch (key) {
+      case "home":
+      case "stats":
+      case "upload":
+        history.push(`/${key}`);
+        break;
+      case "add":
+        setModalMeta({ visibility: true });
+        break;
+      case "quick-add":
+        setQuickAddModalMeta({ visibility: true });
+        break;
+      case "setting":
+        toggleSettingsDrawer(true);
+        break;
+      case "logout":
+        logout();
+        break;
+      default:
+        return;
+    }
+    setKey({ activePage: key });
+  };
 
   return (
     <StyledNavigation>
       <div className="app-name">N</div>
       <nav>
-        <AntIcon
-          className="ant-icon"
-          type="home"
-          onClick={() => history.push("/home")}
-        />
-        <AntIcon
-          className="ant-icon"
-          type="line-chart"
-          onClick={() => history.push("/stats")}
-        />
-        <Divider />
-        <AntIcon
-          className="ant-icon"
-          type="plus"
-          onClick={() => setModalMeta({ visibility: true })}
-        />
-        <AntIcon
-          className="ant-icon"
-          type="fire"
-          onClick={() => setQuickAddModalMeta({ visibility: true })}
-        />
-        <AntIcon
-          className="ant-icon"
-          type="upload"
-          onClick={() => history.push("/upload")}
-        />
-
-        <Divider />
-        <AntIcon
-          className="ant-icon"
-          type="setting"
-          onClick={() => toggleSettingsDrawer(true)}
-        />
-        <AntIcon className="ant-icon" type="logout" onClick={() => logout()} />
+        {navItems.map(({ type, key }) => {
+          if (type === "divider") return <Divider />;
+          return (
+            <AntIcon
+              className={`ant-icon ${activePage === key ? "active" : ""}`}
+              type={type}
+              key={key}
+              onClick={() => handleNavigation(key)}
+            />
+          );
+        })}
       </nav>
     </StyledNavigation>
   );
 };
 
-const mapStateToProps = ({ session }) => ({
+const mapStateToProps = ({ session, activePage }) => ({
   session,
+  activePage,
 });
 
 const mapDispatchToProps = {
@@ -108,6 +152,7 @@ const mapDispatchToProps = {
   toggleSettingsDrawer,
   setModalMeta,
   setQuickAddModalMeta,
+  setKey,
 };
 
 export default withRouter(

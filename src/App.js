@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import axios from "axios";
 import "./App.scss";
-import { setSession, getChains } from "./store/actions";
+import { setSession, getChains, setKey } from "./store/actions";
 import ProtectedRoute from "./ProtectedRoute";
 import Header from "./components/Header";
 import Register from "./components/Register";
@@ -32,6 +32,8 @@ const App = ({
   quickAddModalVisibility,
   addModalVisibility,
   getChains,
+  settingsDrawerVisibility,
+  setKey,
 }) => {
   const [loading, setLoading] = useState(true);
 
@@ -43,6 +45,7 @@ const App = ({
           const { data } = await axios.post(`/auth/account-status`, { token });
           setSession({ loggedIn: true, info: "ON_LOAD", ...data });
           getChains();
+          setActivePage();
         } catch (err) {
           console.log("Error:", err);
         } finally {
@@ -52,6 +55,16 @@ const App = ({
     };
     isAccountActive();
   }, []);
+
+  const setActivePage = async () => {
+    let activePage;
+
+    if (quickAddModalVisibility) activePage = "quick-add";
+    else if (addModalVisibility) activePage = "add";
+    else if (settingsDrawerVisibility) activePage = "setting";
+    else activePage = window.location.pathname.slice(1);
+    setKey({ activePage });
+  };
 
   return (
     <div className="container" id="react-ui">
@@ -111,17 +124,20 @@ const mapStateToProps = ({
   appLoading,
   quickAddModalMeta = {},
   modalMeta = {},
+  settingsDrawerVisibility,
 }) => ({
   session,
   settings,
   appLoading,
   quickAddModalVisibility: quickAddModalMeta.visibility,
   addModalVisibility: modalMeta.visibility,
+  settingsDrawerVisibility,
 });
 
 const mapActionToProps = {
   setSession,
   getChains,
+  setKey,
 };
 
 export default withRouter(connect(mapStateToProps, mapActionToProps)(App));

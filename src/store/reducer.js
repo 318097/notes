@@ -65,6 +65,7 @@ const initialState = {
   retainPage: false,
   showAllFilters: false,
   chains: [],
+  activePage: null,
 };
 
 const reducer = (state = initialState, action) => {
