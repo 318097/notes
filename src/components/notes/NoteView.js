@@ -10,7 +10,6 @@ import Controls from "./Controls";
 import { getNoteById, setModalMeta } from "../../store/actions";
 import { md, copyToClipboard } from "../../utils";
 import { fadeInDownAnimation } from "../../animations";
-import { getNextNote } from "../../utils";
 import queryString from "query-string";
 
 const Wrapper = styled.div`
@@ -160,22 +159,26 @@ const Wrapper = styled.div`
   .controls.right {
     grid-column: 10/11;
   }
-  .previous-icon,
-  .next-icon {
+  .previous-icon {
     grid-column: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    .prev {
+      right: 9px;
+    }
+  }
+  .next-icon {
+    grid-column: 11;
+    position: relative;
+    .next {
+      transform: rotate(180deg);
+      left: 9px;
+    }
   }
   .prev,
   .next {
     color: ${colors.strokeTwo};
-  }
-  .next-icon {
-    grid-column: 11;
-    .next {
-      transform: rotate(180deg);
-    }
+    top: 220px;
+    position: absolute;
   }
 `;
 
@@ -184,11 +187,13 @@ const NoteView = ({
   match,
   viewNote,
   history,
-  notes,
   chains,
   location,
   appLoading,
+  viewNoteMeta,
 }) => {
+  const { nextNote, previousNote } = viewNoteMeta || {};
+
   useEffect(() => {
     return () => {
       const codeblocks = document.querySelectorAll(".content pre");
@@ -233,29 +238,13 @@ const NoteView = ({
   };
 
   const navigateNote = (newPosition) => {
-    const newNote = getNextNote({
-      data: notes,
-      id: viewNote._id,
-      increment: newPosition,
-    });
-    if (newNote) history.push(`/note/${newNote._id}`);
+    const newNoteId = newPosition > 0 ? nextNote : previousNote;
+    if (newNoteId) history.push(`/note/${newNoteId}`);
   };
 
   const goToPost = (id, src) => history.push(`/note/${id}?src=${src}`);
 
   if (_.isEmpty(viewNote)) return null;
-
-  const hasNextNote = !!getNextNote({
-    data: notes,
-    id: viewNote._id,
-    increment: 1,
-  });
-
-  const hasPreviousNote = !!getNextNote({
-    data: notes,
-    id: viewNote._id,
-    increment: -1,
-  });
 
   const {
     title,
@@ -274,7 +263,7 @@ const NoteView = ({
   const canonicalURL = `https://www.codedrops.tech/posts/${slug}`;
   return (
     <Wrapper>
-      {hasPreviousNote && (
+      {previousNote && (
         <div className="previous-icon">
           <Icon
             size={40}
@@ -402,7 +391,7 @@ const NoteView = ({
         chains={chains}
         goToPost={goToPost}
       />
-      {hasNextNote && (
+      {nextNote && (
         <div className="next-icon">
           <Icon
             size={40}
@@ -416,11 +405,11 @@ const NoteView = ({
   );
 };
 
-const mapStateToProps = ({ viewNote, notes, chains, appLoading }) => ({
-  notes,
+const mapStateToProps = ({ viewNote, chains, appLoading, viewNoteMeta }) => ({
   viewNote,
   chains,
   appLoading,
+  viewNoteMeta,
 });
 
 export default withRouter(connect(mapStateToProps)(NoteView));

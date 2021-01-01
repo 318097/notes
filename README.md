@@ -11,12 +11,12 @@
 - [x] Create collection
 - [x] Choose collection while uploading
 - [x] Sort by id
-- [ ] Dashboard
+- [x] Dashboard
   - [x] Show total number of quizes, posts and drops
   - [x] Graph of notes count added every week
   - [x] Show total number of notes by tags - graph
   - [x] Show total number of notes live, ready and draft
-  - [ ] Stats by filter
+  - [x] Stats by filter
 - [ ] Trash - show deleted notes
 - [x] Table view
 - [ ] Show resources for every post view
@@ -27,7 +27,7 @@
 - [x] Rating for post
 - [x] Published date
 - [x] Reorganize Filters
-- [ ] Keyboard shortcuts
+- [x] Keyboard shortcuts
 - [x] Fix: Slug editable, default resource, switch collections, add rate filter
 - [x] Find post by index, liveId
 - [ ] Chaining posts

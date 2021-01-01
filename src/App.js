@@ -1,9 +1,15 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useRef } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import axios from "axios";
 import "./App.scss";
-import { setSession, getChains, setKey } from "./store/actions";
+import {
+  setSession,
+  getChains,
+  setKey,
+  setModalMeta,
+  setQuickAddModalMeta,
+} from "./store/actions";
 import ProtectedRoute from "./ProtectedRoute";
 import Header from "./components/Header";
 import Register from "./components/Register";
@@ -34,8 +40,19 @@ const App = ({
   getChains,
   settingsDrawerVisibility,
   setKey,
+  setModalMeta,
+  setQuickAddModalMeta,
+  history,
+  activePage,
+  viewNoteMeta,
 }) => {
   const [loading, setLoading] = useState(true);
+  const viewNoteMetaRef = useRef();
+
+  useEffect(() => {
+    if (!viewNoteMeta) return;
+    viewNoteMetaRef.current = viewNoteMeta;
+  }, [viewNoteMeta]);
 
   useEffect(() => {
     const isAccountActive = async () => {
@@ -46,6 +63,7 @@ const App = ({
           setSession({ loggedIn: true, info: "ON_LOAD", ...data });
           getChains();
           setActivePage();
+          document.addEventListener("keypress", handleShortcut);
         } catch (err) {
           console.log("Error:", err);
         } finally {
@@ -54,6 +72,7 @@ const App = ({
       } else setLoading(false);
     };
     isAccountActive();
+    return () => document.removeEventListener("keypress", handleShortcut);
   }, []);
 
   useEffect(() => {
@@ -64,6 +83,26 @@ const App = ({
     settingsDrawerVisibility,
     window.location.pathname,
   ]);
+
+  const handleShortcut = (e) => {
+    // console.log(e.code, e.target.nodeName, e.shiftKey);
+    const { code, shiftKey, target } = e;
+    const { nodeName } = target;
+
+    if (nodeName !== "BODY" || !shiftKey) return;
+
+    if (code === "KeyA") setModalMeta({ visibility: true });
+    else if (code === "KeyQ") setQuickAddModalMeta({ visibility: true });
+    else if (code === "KeyS") history.push("/stats");
+
+    if (activePage.startsWith("note")) {
+      const { nextNote, previousNote } = viewNoteMetaRef.current || {};
+
+      if (code === "ArrowRight" && nextNote) history.push(`/note/${nextNote}`);
+      else if (code === "ArrowLeft" && previousNote)
+        history.push(`/note/${previousNote}`);
+    }
+  };
 
   const setActivePage = async () => {
     let activePage;
@@ -134,6 +173,8 @@ const mapStateToProps = ({
   quickAddModalMeta = {},
   modalMeta = {},
   settingsDrawerVisibility,
+  activePage,
+  viewNoteMeta,
 }) => ({
   session,
   settings,
@@ -141,12 +182,16 @@ const mapStateToProps = ({
   quickAddModalVisibility: quickAddModalMeta.visibility,
   addModalVisibility: modalMeta.visibility,
   settingsDrawerVisibility,
+  activePage,
+  viewNoteMeta,
 });
 
 const mapActionToProps = {
   setSession,
   getChains,
   setKey,
+  setModalMeta,
+  setQuickAddModalMeta,
 };
 
 export default withRouter(connect(mapStateToProps, mapActionToProps)(App));

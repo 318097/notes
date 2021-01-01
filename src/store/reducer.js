@@ -1,5 +1,6 @@
 import _ from "lodash";
 import config from "../config";
+import { getNextNote } from "../utils";
 import {
   SET_SESSION,
   SET_SETTINGS,
@@ -66,6 +67,7 @@ const initialState = {
   showAllFilters: false,
   chains: [],
   activePage: null,
+  viewNoteMeta: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -129,11 +131,28 @@ const reducer = (state = initialState, action) => {
         notes: [...action.payload.notes],
         meta: action.payload.meta,
       };
-    case GET_NOTE_BY_ID:
+    case GET_NOTE_BY_ID: {
+      const { notes = [] } = state;
+      const nextNote = getNextNote({
+        data: notes,
+        id: _.get(action, "payload._id"),
+        increment: 1,
+      });
+      const previousNote = getNextNote({
+        data: notes,
+        id: _.get(action, "payload._id"),
+        increment: -1,
+      });
+      // console.log(previousNote, nextNote);
       return {
         ...state,
         viewNote: action.payload,
+        viewNoteMeta: {
+          nextNote: nextNote ? nextNote._id : null,
+          previousNote: previousNote ? previousNote._id : null,
+        },
       };
+    }
     case ADD_NOTE:
       const chainNotes = action.payload.filter((note) => note.type === "CHAIN");
       return {
