@@ -63,7 +63,7 @@ const App = ({
           setSession({ loggedIn: true, info: "ON_LOAD", ...data });
           getChains();
           setActivePage();
-          document.addEventListener("keypress", handleShortcut);
+          document.addEventListener("keydown", handleShortcut);
         } catch (err) {
           console.log("Error:", err);
         } finally {
@@ -72,7 +72,7 @@ const App = ({
       } else setLoading(false);
     };
     isAccountActive();
-    return () => document.removeEventListener("keypress", handleShortcut);
+    return () => document.removeEventListener("keydown", handleShortcut);
   }, []);
 
   useEffect(() => {
@@ -97,11 +97,12 @@ const App = ({
 
     if (activePage.startsWith("note")) {
       const { nextNote, previousNote } = viewNoteMetaRef.current || {};
-
       if (code === "ArrowRight" && nextNote) history.push(`/note/${nextNote}`);
       else if (code === "ArrowLeft" && previousNote)
         history.push(`/note/${previousNote}`);
     }
+
+    e.preventDefault();
   };
 
   const setActivePage = async () => {
