@@ -63,7 +63,6 @@ const App = ({
           setSession({ loggedIn: true, info: "ON_LOAD", ...data });
           getChains();
           setActivePage();
-          document.addEventListener("keydown", handleShortcut);
         } catch (err) {
           console.log("Error:", err);
         } finally {
@@ -72,6 +71,7 @@ const App = ({
       } else setLoading(false);
     };
     isAccountActive();
+    document.addEventListener("keydown", handleShortcut);
     return () => document.removeEventListener("keydown", handleShortcut);
   }, []);
 
@@ -86,23 +86,28 @@ const App = ({
 
   const handleShortcut = (e) => {
     // console.log(e.code, e.target.nodeName, e.shiftKey);
-    const { code, shiftKey, target } = e;
-    const { nodeName } = target;
+    try {
+      const { code, shiftKey, target } = e;
+      const { nodeName } = target;
 
-    if (nodeName !== "BODY" || !shiftKey) return;
+      if (nodeName !== "BODY" || !shiftKey) return;
 
-    if (code === "KeyA") setModalMeta({ visibility: true });
-    else if (code === "KeyQ") setQuickAddModalMeta({ visibility: true });
-    else if (code === "KeyS") history.push("/stats");
+      if (code === "KeyA") setModalMeta({ visibility: true });
+      else if (code === "KeyQ") setQuickAddModalMeta({ visibility: true });
+      else if (code === "KeyS") history.push("/stats");
 
-    if (activePage.startsWith("note")) {
-      const { nextNote, previousNote } = viewNoteMetaRef.current || {};
-      if (code === "ArrowRight" && nextNote) history.push(`/note/${nextNote}`);
-      else if (code === "ArrowLeft" && previousNote)
-        history.push(`/note/${previousNote}`);
+      if (activePage.startsWith("note")) {
+        const { nextNote, previousNote } = viewNoteMetaRef.current || {};
+        if (code === "ArrowRight" && nextNote)
+          history.push(`/note/${nextNote}`);
+        else if (code === "ArrowLeft" && previousNote)
+          history.push(`/note/${previousNote}`);
+      }
+
+      e.preventDefault();
+    } catch (err) {
+      console.log(err);
     }
-
-    e.preventDefault();
   };
 
   const setActivePage = async () => {
