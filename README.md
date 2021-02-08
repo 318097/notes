@@ -22,7 +22,12 @@
 - [ ] Show resources for every post view
 - [x] Quick add with categorization
 - [x] Notes for every post
-- [ ] Dynamic template/config
+- [ ] Dynamic template/config - Show JSON settings
+  - [ ] Default text in `content`
+  - [ ] Card view display status
+  - [ ] Fields required when adding post
+  - [ ] Post types available
+  - [ ] Define default view and default filters
 - [x] Update filters based on status
 - [x] Rating for post
 - [x] Published date
@@ -37,3 +42,8 @@
   - [ ] D&D
 - [x] Hide Next and back button when over
 - [ ] Parse bookmarks and toby data
+
+### Bugs
+- [ ] When added, it shows yesterday
+- [ ] Hide filters when empty (ex., tags)
+- [ ] Keyboard events dont work when a note is opened for the first time. It works after going back and then opening a note again
