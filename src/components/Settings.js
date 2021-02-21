@@ -9,6 +9,14 @@ import SelectCollection from "./SelectCollection";
 
 const { TextArea } = Input;
 
+const DEFAULT_SETTING_STATE = {
+  tags: [],
+  name: "Untitled",
+  caption: "",
+  index: 1,
+  liveId: 1,
+};
+
 const Settings = ({
   settingsDrawerVisibility,
   session,
@@ -19,6 +27,7 @@ const Settings = ({
   const [collections, setCollections] = useState([]);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(activeCollection);
+  const [showJSON, setShowJSON] = useState(true);
 
   useEffect(() => {
     if (!session.notesApp) return;
@@ -52,6 +61,7 @@ const Settings = ({
 
   return (
     <Drawer
+      width={400}
       title="Settings"
       className="react-ui"
       placement="right"
@@ -63,34 +73,88 @@ const Settings = ({
         setCollections={setCollections}
         active={active}
         setActive={setActive}
+        showJSON={showJSON}
+        setShowJSON={setShowJSON}
       />
-      <CollectionInfo
-        settingData={settingData}
-        saveSettings={saveSettings}
-        loading={loading}
-      />
+      {showJSON ? (
+        <JSONView
+          settingData={settingData}
+          saveSettings={saveSettings}
+          loading={loading}
+        />
+      ) : (
+        <CollectionInfo
+          settingData={settingData}
+          saveSettings={saveSettings}
+          loading={loading}
+        />
+      )}
     </Drawer>
   );
 };
 
-const Header = ({ setCollections, active, setActive }) => {
+const Header = ({
+  setCollections,
+  active,
+  setActive,
+  showJSON,
+  setShowJSON,
+}) => {
   const addNewCollection = () => {
     const id = short.generate();
-    const details = {
-      tags: [],
-      name: "Untitled",
-      caption: "",
-      index: 1,
-      liveId: 1,
-    };
-    setCollections((prev) => [...prev, [id, details]]);
+    setCollections((prev) => [...prev, [id, DEFAULT_SETTING_STATE]]);
     setActive(id);
   };
 
   return (
     <div className="flex space-between mb">
       <SelectCollection collection={active} setCollection={setActive} />
-      <Button onClick={addNewCollection} icon="plus"></Button>
+      <div className="fcc">
+        <Button
+          type={showJSON ? "primary" : "dashed"}
+          className="mr"
+          onClick={() => setShowJSON((prev) => !prev)}
+        >
+          JSON
+        </Button>
+        <Button onClick={addNewCollection} icon="plus"></Button>
+      </div>
+    </div>
+  );
+};
+
+const JSONView = ({ settingData, saveSettings, loading }) => {
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    if (!settingData) return;
+    setData(JSON.stringify(settingData, undefined, 2));
+  }, [settingData]);
+
+  const validateJSON = () => {
+    try {
+      JSON.parse(data);
+    } catch (err) {
+      message.error("Invalid JSON");
+    }
+  };
+
+  return (
+    <div className="settings-content">
+      <TextArea
+        rows={24}
+        value={data}
+        onChange={(e) => setData(e.target.value)}
+        onBlur={validateJSON}
+      />
+      <Button
+        disabled={loading}
+        type="primary"
+        className="mt"
+        onClick={() => saveSettings(JSON.parse(data))}
+      >
+        Save
+      </Button>
     </div>
   );
 };

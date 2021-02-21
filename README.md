@@ -23,7 +23,7 @@
 - [x] Quick add with categorization
 - [x] Notes for every post
 - [ ] Dynamic template/config - Show JSON settings
-  - [ ] Default text in `content`
+  - [ ] Default value for `content`
   - [ ] Card view display status
   - [ ] Fields required when adding post
   - [ ] Post types available
@@ -45,5 +45,5 @@
 - [ ] Search for title before adding (Vocab)
 ### Bugs
 - [x] When added, it shows yesterday
-- [ ] Hide filters when empty (ex., tags)
+- [ ] Hide filters when empty dropdown (ex., tags)
 - [ ] Keyboard events dont work when a note is opened for the first time. It works after going back and then opening a note again
