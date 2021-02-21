@@ -87,7 +87,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
   } = note;
   const [showDropdown, setShowDropdown] = useState(false);
   const addedDays = moment().diff(moment(createdAt), "days");
-  const isToday = moment().isSame(moment(createdAt));
+  const isToday = moment().isSame(moment(createdAt), "day");
 
   return (
     <StyledCard>

@@ -145,7 +145,7 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
   const slugWithLiveId = `${liveId}-${slug}`;
 
   const addedDays = moment().diff(moment(createdAt), "days");
-  const isToday = moment().isSame(moment(createdAt));
+  const isToday = moment().isSame(moment(createdAt), "day");
 
   const lastUpdated = moment().diff(moment(updatedAt), "days");
   const publishedOn = publishedAt

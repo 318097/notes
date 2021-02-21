@@ -42,8 +42,8 @@
   - [ ] D&D
 - [x] Hide Next and back button when over
 - [ ] Parse bookmarks and toby data
-
+- [ ] Search for title before adding (Vocab)
 ### Bugs
-- [ ] When added, it shows yesterday
+- [x] When added, it shows yesterday
 - [ ] Hide filters when empty (ex., tags)
 - [ ] Keyboard events dont work when a note is opened for the first time. It works after going back and then opening a note again
