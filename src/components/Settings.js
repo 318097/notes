@@ -15,6 +15,11 @@ const DEFAULT_SETTING_STATE = {
   caption: "",
   index: 1,
   liveId: 1,
+  displayType: "CARD",
+  defaultContentValue: "",
+  fields: ["TITLE", "CONTENT", "URL"],
+  defaultLimit: 25,
+  postTypes: ["POST", "DROP"],
 };
 
 const Settings = ({

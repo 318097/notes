@@ -23,10 +23,9 @@
 - [x] Quick add with categorization
 - [x] Notes for every post
 - [ ] Dynamic template/config - Show JSON settings
-  - [ ] Default value for `content`
-  - [ ] Card view display status
+  - [ ] Default value for title, content 
   - [ ] Fields required when adding post
-  - [ ] Post types available
+  - [ ] Post types available for collection
   - [ ] Define default view and default filters
 - [x] Update filters based on status
 - [x] Rating for post
