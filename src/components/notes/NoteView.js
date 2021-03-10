@@ -13,7 +13,7 @@ import { fadeInDownAnimation } from "../../animations";
 import queryString from "query-string";
 
 const Wrapper = styled.div`
-  margin-top: 20px;
+  padding-top: 20px;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   column-gap: 8px;
@@ -179,6 +179,29 @@ const Wrapper = styled.div`
     color: ${colors.strokeTwo};
     top: 220px;
     position: absolute;
+  }
+  @media (max-width: 1024px) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 100%;
+    padding: 20px 28px;
+    overflow: auto;
+    .card {
+      order: -1;
+      margin-bottom: 8px;
+    }
+    .controls.left,
+    .controls.right {
+      flex: 0 0 46%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-column-gap: 4px;
+    }
+    .previous-icon,
+    .next-icon {
+      display: none;
+    }
   }
 `;
 
