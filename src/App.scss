@@ -83,9 +83,10 @@ body {
     }
     .content {
       flex: 1 1 auto;
-      overflow: auto;
+      overflow: hidden;
       section {
-        height: calc(100vh - 60px);
+        height: 100%;
+        overflow: auto;
         display: flex;
         flex-direction: column;
       }

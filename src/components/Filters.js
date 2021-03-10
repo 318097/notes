@@ -58,7 +58,7 @@ const Filters = ({
 
   const { tags = [] } = settings;
   return (
-    <div className="flex center" style={{ flexShrink: 0 }}>
+    <div className="flex center wrap">
       <SelectCollection
         style={{ margin: "2px" }}
         collection={activeCollection}

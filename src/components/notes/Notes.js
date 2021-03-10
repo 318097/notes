@@ -79,7 +79,7 @@ const Notes = ({
     if (!scrollRef.current) return;
     const offset = sessionStorage.getItem("scroll");
     if (!offset) return;
-    scrollToPosition(scrollRef.current, offset);
+    scrollToPosition(scrollRef.current, offset + 300);
     sessionStorage.clear();
   }, [scrollRef]);
 
@@ -95,12 +95,9 @@ const Notes = ({
   const onDelete = (_id) => dispatch(deleteNote(_id));
 
   return (
-    <section>
+    <section ref={scrollRef} style={{ paddingBottom: "30px" }}>
       {notes.length ? (
-        <div
-          style={{ overflow: "auto", height: "100%", paddingBottom: "30px" }}
-          ref={scrollRef}
-        >
+        <>
           {displayType === "CARD" ? (
             <CardView
               notes={notes}
@@ -125,7 +122,7 @@ const Notes = ({
               {...others}
             />
           )}
-        </div>
+        </>
       ) : appLoading ? null : (
         <MessageWrapper>Empty</MessageWrapper>
       )}
@@ -216,7 +213,7 @@ const TableView = ({
       title: "Title",
       dataIndex: "title",
       key: "title",
-      width: "60%",
+      width: "50%",
       render: (title, row) => (
         <div style={{ display: "flex", alignItems: "center" }}>
           {title}&nbsp;
