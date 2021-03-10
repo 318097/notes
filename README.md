@@ -1,8 +1,8 @@
 ## Notes App
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/4b034bd0-06d8-4087-a4e1-fb0c99603985/deploy-status)](https://app.netlify.com/sites/bbox-notes-app/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/4b034bd0-06d8-4087-a4e1-fb0c99603985/deploy-status)](https://app.netlify.com/sites/notes-appx/deploys)
 
-[Public URL](https://bbox-notes-app.netlify.com)
+[Public URL](https://notes-appx.netlify.com)
 
 ### Features
 
@@ -23,7 +23,7 @@
 - [x] Quick add with categorization
 - [x] Notes for every post
 - [ ] Dynamic template/config - Show JSON settings
-  - [ ] Default value for title, content 
+  - [ ] Default value for title, content
   - [ ] Fields required when adding post
   - [ ] Post types available for collection
   - [ ] Define default view and default filters
@@ -42,7 +42,9 @@
 - [x] Hide Next and back button when over
 - [ ] Parse bookmarks and toby data
 - [ ] Search for title before adding (Vocab)
+
 ### Bugs
+
 - [x] When added, it shows yesterday
 - [ ] Hide filters when empty dropdown (ex., tags)
 - [ ] Keyboard events dont work when a note is opened for the first time. It works after going back and then opening a note again
