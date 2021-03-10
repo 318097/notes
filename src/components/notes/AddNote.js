@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Modal, Input, Radio, Checkbox, Button } from "antd";
+import { Modal, Input, Radio, Checkbox, Button, Divider } from "antd";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import _ from "lodash";
@@ -24,22 +24,29 @@ const StyledContainer = styled.div`
   justify-content: space-between;
   height: 100%;
   overflow: auto;
-  padding: 10px;
+  padding: 10px 0 10px 10px;
   .post-form {
-    flex: 0 0 60%;
+    flex: 1 0 auto;
     overflow-x: auto;
     padding-right: 8px;
   }
   div.preview {
     background: ${colors.shade1};
     border-radius: 5px;
-    flex: 0 0 39%;
+    flex: 0 0 40%;
     padding: 8px;
+    margin-left: 8px;
+    margin-right: 10px;
     overflow-x: auto;
     .preview-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
+    }
+  }
+  @media (max-width: 1024px) {
+    div.preview {
+      display: none;
     }
   }
 `;
@@ -128,6 +135,14 @@ const AddNote = ({
       onOk={handleOk}
       onCancel={handleClose}
       footer={[
+        <Button
+          key="preview-button"
+          type="link"
+          onClick={() => setShowPreview((prev) => !prev)}
+        >
+          Preview
+        </Button>,
+        <Divider type="vertical" />,
         <Button key="cancel-button" onClick={handleClose}>
           Cancel
         </Button>,
