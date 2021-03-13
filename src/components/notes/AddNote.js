@@ -17,7 +17,7 @@ import SelectCollection from "../SelectCollection";
 import { generateSlug, md } from "../../utils";
 import { noteType } from "../../constants";
 
-const { TextArea } = Input;
+// const { TextArea } = Input;
 
 const StyledContainer = styled.div`
   display: flex;
@@ -26,7 +26,7 @@ const StyledContainer = styled.div`
   overflow: auto;
   padding: 10px 0 10px 10px;
   .post-form {
-    flex: 1 0 auto;
+    flex: 1 0 0%;
     overflow-x: auto;
     padding-right: 8px;
   }
