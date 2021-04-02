@@ -75,6 +75,7 @@ const AddNote = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
+  const [createAnotherPost, setCreateAnotherPost] = useState(true);
   const [previewMode, setPreviewMode] = useState("PREVIEW");
   const [collection, setCollection] = useState();
   const [note, setNote] = useState(initialState);
@@ -91,7 +92,12 @@ const AddNote = ({
     }
   }, [mode, selectedNote, modalVisibility]);
 
-  const handleClose = async () => setModalMeta();
+  const handleClose = async (event) => {
+    if (createAnotherPost && event === "add-event")
+      return setNote(initialState);
+
+    setModalMeta();
+  };
 
   const setData = (update) => setNote((data) => ({ ...data, ...update }));
 
@@ -104,7 +110,7 @@ const AddNote = ({
       else await updateUploadNote({ ...note, viewed: true });
     } finally {
       setLoading(false);
-      handleClose();
+      handleClose("add-event");
     }
   };
 
@@ -120,6 +126,46 @@ const AddNote = ({
     setData({ slug: newSlug });
   };
 
+  const footerItems = [
+    <Button
+      key="preview-button"
+      type="link"
+      onClick={() => setShowPreview((prev) => !prev)}
+    >
+      Preview
+    </Button>,
+    <Divider type="vertical" />,
+    <Button key="cancel-button" onClick={handleClose}>
+      Cancel
+    </Button>,
+    <Fragment key="update-and-next-button">
+      {mode !== "add" && (
+        <Button type="danger" onClick={handleUpdateAndNext}>
+          Update and next
+        </Button>
+      )}
+    </Fragment>,
+    <Button
+      type="primary"
+      key="add-button"
+      onClick={handleOk}
+      disabled={appLoading}
+    >
+      {mode === "add" ? "Add" : "Update"}
+    </Button>,
+  ];
+
+  if (mode === "add")
+    footerItems.unshift(
+      <Checkbox
+        key={"create-another-post"}
+        value={createAnotherPost}
+        onChange={(e) => setCreateAnotherPost(e.target.value)}
+      >
+        Create another
+      </Checkbox>
+    );
+
   return (
     <Modal
       title={mode === "add" ? "ADD NOTE" : "EDIT NOTE"}
@@ -134,34 +180,7 @@ const AddNote = ({
       okText={mode === "add" ? "Add" : "Update"}
       onOk={handleOk}
       onCancel={handleClose}
-      footer={[
-        <Button
-          key="preview-button"
-          type="link"
-          onClick={() => setShowPreview((prev) => !prev)}
-        >
-          Preview
-        </Button>,
-        <Divider type="vertical" />,
-        <Button key="cancel-button" onClick={handleClose}>
-          Cancel
-        </Button>,
-        <Fragment key="update-and-next-button">
-          {mode !== "add" && (
-            <Button type="danger" onClick={handleUpdateAndNext}>
-              Update and next
-            </Button>
-          )}
-        </Fragment>,
-        <Button
-          type="primary"
-          key="add-button"
-          onClick={handleOk}
-          disabled={appLoading}
-        >
-          {mode === "add" ? "Add" : "Update"}
-        </Button>,
-      ]}
+      footer={footerItems}
     >
       <StyledContainer>
         <div className="post-form">
