@@ -48,6 +48,7 @@ const App = ({
 }) => {
   const [loading, setLoading] = useState(true);
   const viewNoteMetaRef = useRef();
+  const activePageRef = useRef();
 
   useEffect(() => {
     if (!viewNoteMeta) return;
@@ -85,8 +86,8 @@ const App = ({
   ]);
 
   const handleShortcut = (e) => {
-    // console.log(e.code, e.target.nodeName, e.shiftKey);
     try {
+      // console.log(e.code, e.target.nodeName, e.shiftKey, activePageRef);
       const { code, shiftKey, target } = e;
       const { nodeName } = target;
 
@@ -96,7 +97,7 @@ const App = ({
       else if (code === "KeyQ") setQuickAddModalMeta({ visibility: true });
       else if (code === "KeyS") history.push("/stats");
 
-      if (activePage.startsWith("note")) {
+      if (activePageRef.current.startsWith("note")) {
         const { nextNote, previousNote } = viewNoteMetaRef.current || {};
         if (code === "ArrowRight" && nextNote)
           history.push(`/note/${nextNote}`);
@@ -117,6 +118,8 @@ const App = ({
     else if (addModalVisibility) activePage = "add";
     else if (settingsDrawerVisibility) activePage = "setting";
     else activePage = window.location.pathname.slice(1);
+
+    activePageRef.current = activePage;
     setKey({ activePage });
   };
 
