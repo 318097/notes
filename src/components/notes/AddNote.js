@@ -14,7 +14,8 @@ import {
 } from "../../store/actions";
 import colors from "@codedrops/react-ui";
 import SelectCollection from "../SelectCollection";
-import { generateSlug, md } from "../../utils";
+import { md } from "../../utils";
+import { generateSlug } from "@bit/codedrops.lib.utils";
 import { noteType } from "../../constants";
 
 // const { TextArea } = Input;
