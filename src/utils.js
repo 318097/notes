@@ -3,6 +3,7 @@ import _ from "lodash";
 import colors from "@codedrops/react-ui";
 import hljs from "highlight.js";
 import markdown from "markdown-it";
+import * as lib from "./lib/basic";
 
 export const md = markdown({
   highlight: function (str, lang) {
@@ -17,12 +18,7 @@ export const md = markdown({
 });
 
 export const copyToClipboard = (text) => {
-  const textField = document.createElement("textarea");
-  textField.innerHTML = text;
-  document.body.appendChild(textField);
-  textField.select();
-  document.execCommand("copy");
-  textField.remove();
+  lib.copyToClipboard(text);
   message.info(`Copied - ${text}`);
 };
 
@@ -46,19 +42,3 @@ export const extractTagCodes = (tags = []) =>
     }),
     { uncategorized: colors.red }
   );
-
-export const generateSlug = ({ title = "", seperator = "-", prevSlug }) => {
-  const slug = title
-    .trim()
-    .replace(/-/, " ")
-    .replace(/\//, "-")
-    .replace(/&/, "and")
-    .replace(/[^a-zA-Z0-9\-\s]/gi, "")
-    .replace(/\s+/gi, seperator)
-    .toLowerCase();
-  const timestamp = prevSlug
-    ? prevSlug.split(seperator).pop()
-    : new Date().getTime();
-
-  return slug ? `${slug}${seperator}${timestamp}` : "";
-};
