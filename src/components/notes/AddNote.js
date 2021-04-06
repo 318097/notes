@@ -93,8 +93,8 @@ const AddNote = ({
     }
   }, [mode, selectedNote, modalVisibility]);
 
-  const handleClose = async (event) => {
-    if (createAnotherPost && event === "add-event")
+  const handleClose = async (srcEvent) => {
+    if (createAnotherPost && srcEvent === "add-event")
       return setNote(initialState);
 
     setModalMeta();
@@ -150,7 +150,7 @@ const AddNote = ({
       type="primary"
       key="add-button"
       onClick={handleOk}
-      disabled={appLoading}
+      disabled={appLoading || !note.title}
     >
       {mode === "add" ? "Add" : "Update"}
     </Button>,
@@ -160,8 +160,8 @@ const AddNote = ({
     footerItems.unshift(
       <Checkbox
         key={"create-another-post"}
-        value={createAnotherPost}
-        onChange={(e) => setCreateAnotherPost(e.target.value)}
+        checked={createAnotherPost}
+        onChange={(e) => setCreateAnotherPost(e.target.checked)}
       >
         Create another
       </Checkbox>
