@@ -32,7 +32,6 @@
   "scripts": {
     "start": "react-scripts start",
     "dev": "react-scripts start",
-    "prebuild": "npm config set @bit:registry https://node.bit.dev",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
