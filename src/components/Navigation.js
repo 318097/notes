@@ -123,8 +123,8 @@ const Navigation = ({
     <StyledNavigation>
       <div className="app-name">N</div>
       <nav>
-        {navItems.map(({ type, key }) => {
-          if (type === "divider") return <Divider />;
+        {navItems.map(({ type, key }, idx) => {
+          if (type === "divider") return <Divider key={`divider-${idx}`} />;
           return (
             <AntIcon
               className={`ant-icon ${activePage === key ? "active" : ""}`}

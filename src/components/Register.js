@@ -3,9 +3,9 @@ import { Input, Button, message } from "antd";
 import { withRouter } from "react-router-dom";
 import { StyledSection } from "../styled";
 import axios from "axios";
-import { setSessionInStorage } from "../authService";
-import { setSession } from "../store/actions";
-import { connect } from "react-redux";
+// import { setSessionInStorage } from "../authService";
+// import { setSession } from "../store/actions";
+// import { connect } from "react-redux";
 
 const initialState = {
   name: "",
