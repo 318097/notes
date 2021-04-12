@@ -94,7 +94,7 @@ const AddNote = ({
   }, [mode, selectedNote, modalVisibility]);
 
   const handleClose = async (srcEvent) => {
-    if (createAnotherPost && srcEvent === "add-event")
+    if (createAnotherPost && mode === "add" && srcEvent === "add-event")
       return setNote(initialState);
 
     setModalMeta();
