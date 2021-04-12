@@ -87,7 +87,11 @@ const AddNote = ({
         setNote({ ...initialState, tags: [] });
         setCollection(activeCollection);
       } else {
-        setNote({ ...selectedNote });
+        const clone = { ...selectedNote };
+        delete clone.updatedAt;
+        delete clone.createdAt;
+        setNote(clone);
+
         setCollection(selectedNote.collectionId);
       }
     }

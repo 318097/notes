@@ -339,7 +339,7 @@ const NoteView = ({
             </div>
           )}
 
-          {!!content && (
+          {!!content && type !== "CHAIN" && (
             <div style={{ flex: "1" }} className="relative">
               <div
                 className="content"
