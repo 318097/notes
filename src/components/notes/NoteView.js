@@ -289,7 +289,8 @@ const NoteView = ({
       {previousNote && (
         <div className="previous-icon">
           <Icon
-            size={40}
+            size={28}
+            fill={colors.strokeThree}
             className="prev icon-bg"
             onClick={() => (appLoading ? null : navigateNote(-1))}
             type="caret-left"
@@ -391,6 +392,8 @@ const NoteView = ({
           className="back-icon icon icon-bg"
           onClick={goBack}
           type="caret-left"
+          size={14}
+          fill={colors.strokeThree}
         />
         <Icon
           size={12}
@@ -417,7 +420,8 @@ const NoteView = ({
       {nextNote && (
         <div className="next-icon">
           <Icon
-            size={40}
+            size={28}
+            fill={colors.strokeThree}
             className="next icon-bg"
             onClick={() => (appLoading ? null : navigateNote(1))}
             type="caret-left"
