@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useRef } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { Modal, Input, Radio, Checkbox, Button, Divider } from "antd";
@@ -12,11 +12,12 @@ import {
   updateUploadNote,
   setNextNoteForEditing,
 } from "../../store/actions";
-import colors from "@codedrops/react-ui";
+import colors, { Icon } from "@codedrops/react-ui";
 import SelectCollection from "../SelectCollection";
 import { md } from "../../utils";
 import { generateSlug } from "@bit/codedrops.lib.utils";
 import { noteType } from "../../constants";
+import axios from "axios";
 
 // const { TextArea } = Input;
 
@@ -30,6 +31,41 @@ const StyledContainer = styled.div`
     flex: 1 0 0%;
     overflow-x: auto;
     padding-right: 8px;
+    .title-container {
+      position: relative;
+      .arrow-icon {
+        position: absolute;
+        top: 4px;
+        right: 8px;
+      }
+      .search-results {
+        position: absolute;
+        background: ${colors.bg};
+        border-radius: 4px;
+        display: flex;
+        z-index: 1000;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        top: calc(100% + 4px);
+        left: 0;
+        width: 100%;
+        overflow: auto;
+        max-height: 150px;
+        border: 1px solid ${colors.iron};
+        .empty {
+          padding: 12px 0;
+          text-align: center;
+          width: 100%;
+        }
+        .item {
+          border-bottom: 1px solid ${colors.feather};
+          padding: 8px;
+          width: 100%;
+          box-sizing: border-box;
+        }
+      }
+    }
   }
   div.preview {
     background: ${colors.shade1};
@@ -74,12 +110,21 @@ const AddNote = ({
   appLoading,
   activeCollection,
 }) => {
+  const searchDbDebounced = useRef();
+
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
   const [createAnotherPost, setCreateAnotherPost] = useState(true);
   const [previewMode, setPreviewMode] = useState("PREVIEW");
   const [collection, setCollection] = useState();
   const [note, setNote] = useState(initialState);
+
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+
+  useEffect(() => {
+    searchDbDebounced.current = _.debounce(searchDb, 2000);
+  }, []);
 
   useEffect(() => {
     if (modalVisibility) {
@@ -129,6 +174,43 @@ const AddNote = ({
       prevSlug: note.slug,
     });
     setData({ slug: newSlug });
+    setShowSearchResults(false);
+  };
+
+  const searchDb = async (value) => {
+    try {
+      //  setAppLoading(true);
+      const result = await axios.get(
+        `/posts?collectionId=${activeCollection}`,
+        {
+          params: {
+            search: value,
+          },
+        }
+      );
+      setSearchResults(result.data.posts);
+      setShowSearchResults(true);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      //  setAppLoading(false);
+    }
+  };
+
+  const getSearchResults = () => {
+    if (showSearchResults && !!note.title)
+      return (
+        <div className="search-results">
+          {searchResults.length ? (
+            searchResults.map(({ index, title, _id }) => (
+              <div className="flex item" key={_id}>{`${index}. ${title}`}</div>
+            ))
+          ) : (
+            <div className="empty">No search result.</div>
+          )}
+        </div>
+      );
+    else return null;
   };
 
   const footerItems = [
@@ -215,14 +297,33 @@ const AddNote = ({
               }}
             />
           </div>
-          <Input
-            className="mb"
-            autoFocus
-            placeholder="Title"
-            value={note.title}
-            onBlur={updateSlug}
-            onChange={({ target: { value } }) => setData({ title: value })}
-          />
+          <div className="mb title-container">
+            <Input
+              autoFocus
+              placeholder="Title"
+              value={note.title}
+              onBlur={updateSlug}
+              onChange={({ target: { value } }) => {
+                setData({ title: value });
+                searchDbDebounced.current(value);
+              }}
+            />
+            <span className="arrow-icon">
+              {!!note.title && (
+                <Icon
+                  type="arrow"
+                  direction={showSearchResults ? "up" : "down"}
+                  size={14}
+                  fill={colors.strokeOne}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowSearchResults((prev) => !prev);
+                  }}
+                />
+              )}
+            </span>
+            {getSearchResults()}
+          </div>
           <Input
             className="mb"
             placeholder="Slug"

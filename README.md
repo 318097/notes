@@ -26,6 +26,7 @@
 - [x] Fix: Slug editable, default resource, switch collections, add rate filter
 - [x] Find post by index, liveId
 - [x] Hide Next and back button when over
+- [x] Search for title before adding
 - [ ] Chaining posts
   - [x] Add post to a chain
   - [x] View chain
@@ -34,7 +35,6 @@
 - [ ] Trash - show deleted notes
 - [ ] Parse bookmarks and toby data
 - [ ] Show resources for every post view
-- [ ] Search for title before adding (Vocab)
 - [ ] Dynamic template/config - Show JSON settings
   - [ ] Default value for title, content
   - [ ] Fields required when adding post
