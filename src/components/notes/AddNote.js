@@ -156,7 +156,14 @@ const AddNote = ({
     try {
       if (mode === "edit") await updateNote({ ...note });
       else if (mode === "add")
-        await addNote({ ...note, userId: session.uid }, collection);
+        await addNote(
+          {
+            ...note,
+            userId: session.uid,
+            content: note.content === "```js\n\n```" ? "" : note.content,
+          },
+          collection
+        );
       else await updateUploadNote({ ...note, viewed: true });
     } finally {
       setLoading(false);
