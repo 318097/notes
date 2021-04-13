@@ -7,8 +7,11 @@ import Dropdown from "./Dropdown";
 import { md } from "../../utils";
 
 const StyledCard = styled.div`
-  margin-bottom: 16px;
-  break-inside: avoid-column;
+  height: 300px;
+  max-height: 300px;
+  display: flex;
+  flex-direction: column;
+  /* break-inside: avoid-column; */
   .card,
   .action-row {
     border: 1px solid ${colors.bg};
@@ -23,17 +26,22 @@ const StyledCard = styled.div`
     }
   }
   .card {
-    margin: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+    margin: 0 0 2px 0;
     cursor: pointer;
     font-size: 1rem;
     padding: 20px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     .title {
       font-size: 1.2rem;
       text-align: center;
     }
     .post-title {
-      margin: 30px 0;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
     }
     .content {
       font-size: inherit;
@@ -93,7 +101,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
     <StyledCard>
       <Card
         onClick={(e) => handleClick(e, _id)}
-        className={`card ${isToday ? "today" : null}`}
+        className={`card${isToday ? " today" : ""}`}
       >
         <h3
           className={`title ${type === "DROP" ? "" : "post-title"}`}

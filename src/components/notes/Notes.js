@@ -44,9 +44,12 @@ const PageWrapper = styled.div`
     }
   }
   .notes-wrapper {
-    columns: 240px;
     padding: 0 28px;
-    column-gap: 12px;
+    /* columns: 240px; */
+    /* column-gap: 12px; */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-gap: 16px;
   }
 `;
 
