@@ -144,10 +144,12 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
   const rdySlug = `RDY${index}-${slug}`;
   const slugWithLiveId = `${liveId}-${slug}`;
 
-  const addedDays = moment().diff(moment(createdAt), "days");
-  const isToday = moment().isSame(moment(createdAt), "day");
+  const createdAtFormatted = moment(createdAt).format("DD MMM, YY");
+  const updatedAtFormatted = moment(updatedAt).format("DD MMM, YY");
 
-  const lastUpdated = moment().diff(moment(updatedAt), "days");
+  const createdTimeAgo = moment(createdAt).fromNow();
+  const updatedTimeAgo = moment(updatedAt).fromNow();
+
   const publishedOn = publishedAt
     ? moment(publishedAt).format("DD MMM, YY")
     : "-";
@@ -345,19 +347,15 @@ const Controls = ({ note, dispatch, view, chains = [], goToPost }) => {
       <ControlsWrapper>
         <div className="mb">
           Added:
-          <span className="bold">
-            {isToday
-              ? "Today"
-              : addedDays === 0
-              ? "Yesterday"
-              : `${moment(createdAt).format("DD MMM, YY")} (${addedDays}d ago)`}
-          </span>
+          <span className="bold">{createdAtFormatted}</span>
+          <br />
+          <span>{createdTimeAgo}</span>
         </div>
         <div className="mb">
           Last Updated:
-          <span className="bold">
-            {lastUpdated ? `${lastUpdated}d ago` : "Today"}
-          </span>
+          <span className="bold">{updatedAtFormatted}</span>
+          <br />
+          <span>{updatedTimeAgo}</span>
         </div>
         {status === "POSTED" && (
           <div>

@@ -94,14 +94,14 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
     chainedTo = [],
   } = note;
   const [showDropdown, setShowDropdown] = useState(false);
-  const addedDays = moment().diff(moment(createdAt), "days");
-  const isToday = moment().isSame(moment(createdAt), "day");
+  const isCreatedToday = moment().isSame(moment(createdAt), "day");
+  const createdTimeAgo = moment(createdAt).fromNow();
 
   return (
     <StyledCard>
       <Card
         onClick={(e) => handleClick(e, _id)}
-        className={`card${isToday ? " today" : ""}`}
+        className={`card${isCreatedToday ? " today" : ""}`}
       >
         <h3
           className={`title ${type === "DROP" ? "" : "post-title"}`}
@@ -121,7 +121,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
           onDelete={() => onDelete(_id)}
         />
       </Card>
-      <Card className={`action-row ${addedDays ? "today" : ""}`}>
+      <Card className={`action-row${isCreatedToday ? " today" : ""}`}>
         <div className="status-row">
           <div className="tags">
             {tags.map((tag) => (
@@ -163,13 +163,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
                 />
               </Tag>
             )}
-            <Tag>
-              {isToday
-                ? "Today"
-                : addedDays === 0
-                ? "Yesterday"
-                : `${addedDays}d ago`}
-            </Tag>
+            <Tag>{createdTimeAgo}</Tag>
             {index && <Tag>{`#${index}`}</Tag>}
           </div>
         </div>
