@@ -131,6 +131,17 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
             ))}
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
+            {!!rating && (
+              <Tag>
+                {rating}
+                <AntIcon
+                  type="star"
+                  style={{
+                    fontSize: "12px",
+                  }}
+                />
+              </Tag>
+            )}
             {type === "CHAIN" && (
               <Tag
                 color={chainedItems.length !== chainedPosts.length ? "red" : ""}
@@ -152,17 +163,6 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
               : status.replace("_", " ")}
           </Tag>
           <div style={{ display: "flex", alignItems: "center" }}>
-            {!!rating && (
-              <Tag>
-                {rating}
-                <AntIcon
-                  type="star"
-                  style={{
-                    fontSize: "12px",
-                  }}
-                />
-              </Tag>
-            )}
             <Tag>{createdTimeAgo}</Tag>
             {index && <Tag>{`#${index}`}</Tag>}
           </div>

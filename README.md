@@ -42,6 +42,8 @@
   - [ ] Define default view and default filters
 - [ ] Auto deployment to Social handles
 - [ ] Create graphics for posts
+- [ ] Update index directly
+- [ ] Add social posted status
 
 ### Bugs
 
