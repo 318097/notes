@@ -157,14 +157,14 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
         </div>
 
         <div className="status-row">
-          <Tag color={status === "POSTED" ? "seagreen" : "orange"}>
+          <Tag color={status === "POSTED" ? "foBlue" : "nbOrange"}>
             {status === "POSTED"
               ? `Live Id: ${liveId}`
               : status.replace("_", " ")}
           </Tag>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <Tag>{createdTimeAgo}</Tag>
-            {index && <Tag>{`#${index}`}</Tag>}
+            <Tag color="steel">{createdTimeAgo}</Tag>
+            {index && <Tag color="steel">{`#${index}`}</Tag>}
           </div>
         </div>
       </Card>
