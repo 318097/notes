@@ -10,16 +10,76 @@ import SelectCollection from "./SelectCollection";
 const { TextArea } = Input;
 
 const DEFAULT_SETTING_STATE = {
-  tags: [],
   name: "Untitled",
   caption: "",
   index: 1,
   liveId: 1,
-  displayType: "CARD",
-  defaultContentValue: "",
-  fields: ["TITLE", "CONTENT", "URL"],
-  defaultLimit: 25,
-  postTypes: ["POST", "DROP"],
+  tags: [],
+  postTypes: [
+    {
+      label: "POST",
+      key: "post",
+      fields: ["title", "content"],
+    },
+    {
+      label: "DROP",
+      key: "drop",
+    },
+  ],
+  fields: [
+    {
+      label: "TITLE",
+      key: "title",
+      type: "TEXT",
+      defaultValue: "",
+    },
+    {
+      label: "CONTENT",
+      key: "content",
+      type: "RICH_TEXT",
+      defaultValue: "",
+    },
+    {
+      label: "URL",
+      key: "url",
+      type: "TEXT",
+      defaultValue: "",
+    },
+  ],
+  socialPlatforms: [
+    {
+      label: "FB",
+      key: "facebook",
+    },
+    {
+      label: "Medium",
+      key: "medium",
+    },
+    {
+      label: "Instagram",
+      key: "instagram",
+    },
+    {
+      label: "Twitter",
+      key: "twitter",
+    },
+    {
+      label: "Dev.to",
+      key: "dev",
+    },
+    {
+      label: "Hashnode",
+      key: "hashnode",
+    },
+    {
+      label: "Linkedin",
+      key: "linkedin",
+    },
+  ],
+  pageLimit: 25,
+  cardSmStyles: {},
+  defaultDisplayType: "CARD",
+  defaultCollectionId: "", // collection to load on siginin
 };
 
 const Settings = ({

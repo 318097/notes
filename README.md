@@ -43,7 +43,7 @@
 - [ ] Auto deployment to Social handles
 - [ ] Create graphics for posts
 - [ ] Update index directly
-- [ ] Add social posted status
+- [x] Add social platform status
 - [ ] Add suffix for file names
 
 ### Bugs
