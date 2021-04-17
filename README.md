@@ -50,4 +50,4 @@
 
 - [x] When added, it shows yesterday
 - [x] Keyboard events dont work when a note is opened for the first time. It works after going back and then opening a note again
-- [ ] Hide filters when empty dropdown (ex., tags)
+- [x] Hide filters when empty dropdown (ex., tags)

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Input, Select, Icon } from "antd";
 import { connect } from "react-redux";
+import _ from "lodash";
 import { setFilter, setKey } from "../store/actions";
 import SelectCollection from "./SelectCollection";
 import config from "../config";
@@ -16,6 +17,18 @@ import { initialState } from "../store/reducer";
 
 const { Search } = Input;
 const { Option } = Select;
+
+const RESET_FILTER = {
+  tags: undefined,
+  socialStatus: undefined,
+  status: undefined,
+  search: undefined,
+  rating: undefined,
+  type: undefined,
+  visibility: "visible",
+  sortOrder: "DESC",
+  sortFilter: "index",
+};
 
 const validateFilters = ({
   socialStatus,
@@ -57,145 +70,216 @@ const Filters = ({
   };
 
   const { tags = [] } = settings;
+
+  const ActiveCollection = (
+    <SelectCollection
+      style={{ margin: "2px" }}
+      collection={activeCollection}
+      resetFilter={true}
+      setFilterValues={() => setFilterValues({ ...initialState.filters })}
+    />
+  );
+
+  const SearchBox = (
+    <Search
+      allowClear
+      style={{ width: "120px" }}
+      className="form-field"
+      placeholder="Search..."
+      defaultValue={filters.search}
+      onSearch={(value) => setFilterValues({ search: value })}
+    />
+  );
+
+  const Tags = (
+    <Select
+      allowClear
+      style={{ minWidth: "100px", width: "auto" }}
+      className="form-field"
+      mode="multiple"
+      placeholder="Tags"
+      value={filters.tags}
+      onChange={(values) => setFilterValues({ tags: values })}
+    >
+      {tags.map(({ label }) => (
+        <Option key={label} value={label}>
+          {label}
+        </Option>
+      ))}
+    </Select>
+  );
+
+  const PostType = (
+    <Select
+      allowClear
+      className="form-field"
+      style={{ width: "76px" }}
+      placeholder="Type"
+      value={filters.type}
+      onChange={(value) => setFilterValues({ type: value })}
+    >
+      {noteType.map(({ label, value }) => (
+        <Option key={value} value={value}>
+          {label}
+        </Option>
+      ))}
+    </Select>
+  );
+
+  const Ratings = (
+    <Select
+      allowClear
+      className="form-field"
+      style={{ width: "90px" }}
+      placeholder="Rating"
+      value={filters.rating}
+      onChange={(value) => setFilterValues({ rating: value })}
+    >
+      {ratingsFilter.map(({ label, value }) => (
+        <Option key={value} value={value}>
+          {label}
+        </Option>
+      ))}
+    </Select>
+  );
+
+  const Status = (
+    <Select
+      allowClear
+      className="form-field"
+      placeholder="Status"
+      value={filters.status}
+      onChange={(value) => setFilterValues({ status: value })}
+    >
+      {statusFilter.map(({ label, value }) => (
+        <Option key={value} value={value}>
+          {label}
+        </Option>
+      ))}
+    </Select>
+  );
+
+  const SocialStatus = (
+    <Select
+      allowClear
+      className="form-field"
+      placeholder="Social Status"
+      value={filters.socialStatus}
+      onChange={(value) => setFilterValues({ socialStatus: value })}
+    >
+      {socialStatusFilter.map(({ label, value }) => (
+        <Option key={value} value={value}>
+          {label}
+        </Option>
+      ))}
+    </Select>
+  );
+
+  const SortBy = (
+    <Select
+      allowClear
+      className="form-field"
+      placeholder="Sort"
+      value={filters.sortFilter}
+      onChange={(value) => setFilterValues({ sortFilter: value })}
+    >
+      {sortFilter.map(({ label, value }) => (
+        <Option key={value} value={value}>
+          {label}
+        </Option>
+      ))}
+    </Select>
+  );
+
+  const Visibility = (
+    <Select
+      allowClear
+      className="form-field"
+      placeholder="Visibility"
+      value={filters.visibility}
+      onChange={(value) => setFilterValues({ visibility: value })}
+    >
+      {visibilityFilter.map(({ label, value }) => (
+        <Option key={value} value={value}>
+          {label}
+        </Option>
+      ))}
+    </Select>
+  );
+
+  const menuList = [
+    {
+      id: "ActiveCollection",
+      component: ActiveCollection,
+      visible: true,
+      showInMinimized: true,
+    },
+    {
+      id: "SearchBox",
+      component: SearchBox,
+      visible: true,
+      showInMinimized: true,
+    },
+    {
+      id: "Tags",
+      component: Tags,
+      visible: !_.isEmpty(tags),
+      showInMinimized: true,
+    },
+    {
+      id: "PostType",
+      component: PostType,
+      visible: true,
+      showInMinimized: false,
+    },
+    {
+      id: "Ratings",
+      component: Ratings,
+      visible: true,
+      showInMinimized: false,
+    },
+    {
+      id: "Status",
+      component: Status,
+      visible: true,
+      showInMinimized: true,
+    },
+    {
+      id: "SocialStatus",
+      component: SocialStatus,
+      visible: false,
+      showInMinimized: false,
+    },
+    {
+      id: "SortBy",
+      component: SortBy,
+      visible: true,
+      showInMinimized: true,
+    },
+    {
+      id: "Visibility",
+      component: Visibility,
+      visible: true,
+      showInMinimized: false,
+    },
+  ];
+
   return (
     <div className="flex center wrap">
-      <SelectCollection
-        style={{ margin: "2px" }}
-        collection={activeCollection}
-        resetFilter={true}
-        setFilterValues={() => setFilterValues({ ...initialState.filters })}
-      />
-      {showAllFilters && (
-        <Search
-          allowClear
-          style={{ width: "120px" }}
-          className="form-field"
-          placeholder="Search..."
-          defaultValue={filters.search}
-          onSearch={(value) => setFilterValues({ search: value })}
-        />
-      )}
-      <Select
-        allowClear
-        style={{ minWidth: "100px", width: "auto" }}
-        className="form-field"
-        mode="multiple"
-        placeholder="Tags"
-        value={filters.tags}
-        onChange={(values) => setFilterValues({ tags: values })}
-      >
-        {tags.map(({ label }) => (
-          <Option key={label} value={label}>
-            {label}
-          </Option>
+      {menuList
+        .filter((item) =>
+          item.visible && showAllFilters ? true : item.showInMinimized
+        )
+        .map((item) => (
+          <Fragment key={item.id}>{item.component}</Fragment>
         ))}
-      </Select>
-      {showAllFilters && (
-        <Select
-          allowClear
-          className="form-field"
-          style={{ width: "76px" }}
-          placeholder="Type"
-          value={filters.type}
-          onChange={(value) => setFilterValues({ type: value })}
-        >
-          {noteType.map(({ label, value }) => (
-            <Option key={value} value={value}>
-              {label}
-            </Option>
-          ))}
-        </Select>
-      )}
-      {showAllFilters && (
-        <Select
-          allowClear
-          className="form-field"
-          style={{ width: "90px" }}
-          placeholder="Rating"
-          value={filters.rating}
-          onChange={(value) => setFilterValues({ rating: value })}
-        >
-          {ratingsFilter.map(({ label, value }) => (
-            <Option key={value} value={value}>
-              {label}
-            </Option>
-          ))}
-        </Select>
-      )}
-      <Select
-        allowClear
-        className="form-field"
-        placeholder="Status"
-        value={filters.status}
-        onChange={(value) => setFilterValues({ status: value })}
-      >
-        {statusFilter.map(({ label, value }) => (
-          <Option key={value} value={value}>
-            {label}
-          </Option>
-        ))}
-      </Select>
-      {showAllFilters && (
-        <Select
-          allowClear
-          className="form-field"
-          placeholder="Social Status"
-          value={filters.socialStatus}
-          onChange={(value) => setFilterValues({ socialStatus: value })}
-        >
-          {socialStatusFilter.map(({ label, value }) => (
-            <Option key={value} value={value}>
-              {label}
-            </Option>
-          ))}
-        </Select>
-      )}
-      <Select
-        allowClear
-        className="form-field"
-        placeholder="Sort"
-        value={filters.sortFilter}
-        onChange={(value) => setFilterValues({ sortFilter: value })}
-      >
-        {sortFilter.map(({ label, value }) => (
-          <Option key={value} value={value}>
-            {label}
-          </Option>
-        ))}
-      </Select>
-      {showAllFilters && (
-        <Select
-          allowClear
-          className="form-field"
-          placeholder="Visibility"
-          value={filters.visibility}
-          onChange={(value) => setFilterValues({ visibility: value })}
-        >
-          {visibilityFilter.map(({ label, value }) => (
-            <Option key={value} value={value}>
-              {label}
-            </Option>
-          ))}
-        </Select>
-      )}
+
       {!!validateFilters(filters) && (
         <Icon
           style={{ margin: "0 4px" }}
           className="icon icon-bg"
           type="close"
-          onClick={() =>
-            setFilterValues({
-              tags: undefined,
-              socialStatus: undefined,
-              status: undefined,
-              search: undefined,
-              rating: undefined,
-              type: undefined,
-              visibility: "visible",
-              sortOrder: "DESC",
-              sortFilter: "index",
-            })
-          }
+          onClick={() => setFilterValues(RESET_FILTER)}
         />
       )}
 
@@ -223,7 +307,7 @@ const Filters = ({
         }
       />
 
-      {meta && meta.count > 0 && (
+      {_.get(meta, "count", 0) > 0 && (
         <span className="showing-count">
           {displayType === "CARD"
             ? `${notes.length}/${meta.count}`
