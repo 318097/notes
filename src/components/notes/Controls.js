@@ -135,14 +135,15 @@ const Controls = ({
     socialPlatforms,
   } = note || {};
   const [liveIdEditor, setLiveIdEditor] = useState(false);
+  const [suffix, setSuffix] = useState();
   const [personalNote, setPersonalNote] = useState("");
   const [blockSocialPlatforms, setBlockSocialPlatforms] = useState(true);
 
   const updateProperties = async (update) =>
     await dispatch(updateNote({ _id, liveId, ...update }));
 
-  const copy = (text) => () => {
-    copyToClipboard(text);
+  const copy = (text, addSuffix) => () => {
+    copyToClipboard(addSuffix && suffix ? `${text}_${suffix}` : text);
   };
 
   const handleAddPersonalNote = () => {
@@ -159,6 +160,10 @@ const Controls = ({
     if (!/^\d+$/.test(id)) return;
     updateProperties({ liveId: id });
     setLiveIdEditor(false);
+  };
+
+  const updateSuffix = (e) => {
+    setSuffix(e.target.value);
   };
 
   const toggleChain = (value) =>
@@ -271,7 +276,7 @@ const Controls = ({
       </div>
       <Select
         mode="multiple"
-        style={{ width: "100%" }}
+        className="w-100"
         placeholder="Chains"
         value={chainedTo}
         onChange={toggleChain}
@@ -319,8 +324,9 @@ const Controls = ({
               />
             ) : (
               <Tag
+                style={{ margin: 0, fontSize: "10px" }}
                 color={colors.green}
-                style={{ cursor: "pointer" }}
+                className="pointer"
                 onDoubleClick={() => setLiveIdEditor(true)}
               >{`Live Id: ${liveId}`}</Tag>
             )}
@@ -344,19 +350,48 @@ const Controls = ({
 
   const Naming = (
     <ControlsWrapper>
-      <div className="slug" onClick={copy(rdySlug)}>
+      <div className="header">
+        <h4>Naming/Suffix</h4>
+      </div>
+      <Select
+        allowClear
+        size="small"
+        className="w-100 mb"
+        placeholder="Suffix Options"
+        value={suffix}
+        onChange={(value) => setSuffix(value)}
+      >
+        {socialPlatformsList.map(({ label, key }) => (
+          <Option key={label} value={key}>
+            {label}
+          </Option>
+        ))}
+      </Select>
+
+      <Input
+        className="mb"
+        size="small"
+        allowClear
+        placeholder="Suffix"
+        value={suffix}
+        autoComplete={false}
+        onChange={updateSuffix}
+      />
+      <div className="slug" onClick={copy(rdySlug, true)}>
         {rdySlug}
       </div>
       {!!liveId && (
-        <div className="slug" onClick={copy(slugWithLiveId)}>
+        <div className="slug" onClick={copy(slugWithLiveId, true)}>
           {slugWithLiveId}
         </div>
       )}
+
+      <div className="divider"></div>
       <div className="header">
         <h4>Resources</h4>
         <Icon
           type="plus"
-          className="icon-bg"
+          hover
           size={10}
           onClick={() => dispatch(updateNote(note, "CREATE_RESOURCE"))}
         />
@@ -370,26 +405,31 @@ const Controls = ({
         </Popover>
       ))}
 
-      <div className="divider"></div>
+      {!!hashtags && (
+        <Fragment>
+          <div className="divider"></div>
 
-      <div className="header">
-        <h4>Hashtags</h4>
-        <Icon
-          type="copy"
-          className="icon-bg"
-          onClick={() => copyToClipboard(hashtags.join(" "))}
-        />
-      </div>
-      <div>
-        {hashtags ? (
-          <div className="hashtag">{hashtags}</div>
-        ) : (
-          <div className="empty">No Tags</div>
-        )}
-      </div>
+          <div className="header">
+            <h4>Hashtags</h4>
+            <Icon
+              type="copy"
+              hover
+              onClick={() => copyToClipboard(hashtags.join(" "))}
+            />
+          </div>
+          <div>
+            {hashtags ? (
+              <div className="hashtag">{hashtags}</div>
+            ) : (
+              <div className="empty">No Tags</div>
+            )}
+          </div>
+        </Fragment>
+      )}
+
       <div className="divider"></div>
       <div className="flex center">
-        <span style={{ marginRight: "4px" }}>Visible</span>
+        <span className="mr">Visible</span>
         <Switch
           checked={visible}
           onChange={(value) => updateProperties({ visible: value })}
