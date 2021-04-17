@@ -291,7 +291,8 @@ const NoteView = ({
           <Icon
             size={28}
             fill={colors.strokeThree}
-            className="prev icon-bg"
+            className="prev"
+            hover
             onClick={() => (appLoading ? null : navigateNote(-1))}
             type="caret-left"
           />
@@ -312,7 +313,8 @@ const NoteView = ({
             />
             {title && (
               <Icon
-                className="copy-icon icon icon-bg"
+                className="copy-icon icon"
+                hover
                 type="copy"
                 onClick={() => copyToClipboard(title)}
               />
@@ -350,7 +352,8 @@ const NoteView = ({
               ></div>
               <Icon
                 type="copy"
-                className="copy-icon icon icon-bg"
+                className="copy-icon icon"
+                hover
                 onClick={() => copyToClipboard(content)}
               />
             </div>
@@ -366,7 +369,7 @@ const NoteView = ({
           )}
 
           {url && (
-            <div className="relative" style={{ marginBottom: "20px" }}>
+            <div className="relative mb-16">
               <div className="url">
                 <span style={{ color: colors.orange }}>URL: </span>
                 <a href={url} target="_blank" rel="noopener noreferrer">
@@ -374,7 +377,8 @@ const NoteView = ({
                 </a>
               </div>
               <Icon
-                className="copy-icon url-copy-icon icon icon-bg"
+                className="copy-icon url-copy-icon icon"
+                hover
                 type="copy"
                 onClick={() => copyToClipboard(url)}
               />
@@ -389,7 +393,8 @@ const NoteView = ({
         </div>
 
         <Icon
-          className="back-icon icon icon-bg"
+          className="back-icon icon"
+          hover
           onClick={goBack}
           type="caret-left"
           size={14}
@@ -398,7 +403,8 @@ const NoteView = ({
         <Icon
           size={12}
           onClick={handleEdit}
-          className="edit-icon icon icon-bg"
+          className="edit-icon icon"
+          hover
           type="edit"
         />
         {!!index && <span className="index">{`#${index}`}</span>}
@@ -422,7 +428,8 @@ const NoteView = ({
           <Icon
             size={28}
             fill={colors.strokeThree}
-            className="next icon-bg"
+            className="next"
+            hover
             onClick={() => (appLoading ? null : navigateNote(1))}
             type="caret-left"
           />

@@ -113,16 +113,6 @@ body {
   }
 }
 
-body .icon-bg {
-  padding: 6px;
-  border-radius: 0;
-  transition: 0.4s;
-  &:hover {
-    background: $strokeOne;
-    border-radius: 50%;
-  }
-}
-
 // tags checkgroup in add modal
 .ant-checkbox-group {
   .ant-checkbox-wrapper {
