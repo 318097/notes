@@ -132,7 +132,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
             {!!rating && (
-              <Tag>
+              <Tag color="steel">
                 {rating}
                 <AntIcon
                   type="star"
@@ -144,11 +144,13 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
             )}
             {type === "CHAIN" && (
               <Tag
-                color={chainedItems.length !== chainedPosts.length ? "red" : ""}
+                color={
+                  chainedItems.length !== chainedPosts.length ? "red" : "steel"
+                }
               >{`${chainedItems.length} posts`}</Tag>
             )}
             {chainedTo && chainedTo.length ? (
-              <Tag>{`In ${chainedTo.length} chains`}</Tag>
+              <Tag color="steel">{`In ${chainedTo.length} chains`}</Tag>
             ) : null}
             {!visible && <AntIcon type="eye-invisible" />}
             {type === "DROP" && <Icon type="bulb" size={12} />}

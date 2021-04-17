@@ -44,6 +44,7 @@
 - [ ] Create graphics for posts
 - [ ] Update index directly
 - [ ] Add social posted status
+- [ ] Add suffix for file names
 
 ### Bugs
 
