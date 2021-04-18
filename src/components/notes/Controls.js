@@ -324,9 +324,7 @@ const Controls = ({
               />
             ) : (
               <Tag
-                style={{ margin: 0, fontSize: "10px" }}
                 color={colors.green}
-                className="pointer"
                 onDoubleClick={() => setLiveIdEditor(true)}
               >{`Live Id: ${liveId}`}</Tag>
             )}
