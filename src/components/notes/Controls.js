@@ -1,5 +1,16 @@
 import React, { useState, Fragment } from "react";
-import { Radio, Switch, Input, Rate, Select, Popover, Checkbox } from "antd";
+import {
+  Radio,
+  Switch,
+  Input,
+  Rate,
+  Select,
+  Popover,
+  Checkbox,
+  Card,
+  Modal,
+  Empty,
+} from "antd";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import moment from "moment";
@@ -113,7 +124,7 @@ const Controls = ({
   view,
   chains = [],
   goToPost,
-  socialPlatforms: socialPlatformsList,
+  socialPlatforms: socialPlatformsList = [],
 }) => {
   const {
     tags = [],
@@ -135,6 +146,7 @@ const Controls = ({
     socialPlatforms,
   } = note || {};
   const [liveIdEditor, setLiveIdEditor] = useState(false);
+  const [showCaptionModal, setShowCaptionModal] = useState(false);
   const [suffix, setSuffix] = useState();
   const [personalNote, setPersonalNote] = useState("");
   const [blockSocialPlatforms, setBlockSocialPlatforms] = useState(true);
@@ -184,6 +196,11 @@ const Controls = ({
     : "-";
   const chainedPosts = chains.filter((chain) =>
     chain.chainedItems.includes(_id)
+  );
+
+  const availableSocialPlatformCaptions = _.filter(
+    socialPlatformsList,
+    "caption"
   );
 
   const SocialPlatforms = (
@@ -347,9 +364,14 @@ const Controls = ({
   );
 
   const Naming = (
-    <ControlsWrapper>
+    <ControlsWrapper className="naming">
       <div className="header">
         <h4>Naming/Suffix</h4>
+        {!_.isEmpty(availableSocialPlatformCaptions) && (
+          <Tag onClick={() => setShowCaptionModal(true)} color="nbPink">
+            Caption
+          </Tag>
+        )}
       </div>
       <Select
         allowClear
@@ -509,6 +531,35 @@ const Controls = ({
     },
   ];
 
+  const CaptionModal = (
+    <Modal
+      title={"Social Plaform Captions"}
+      centered={true}
+      width={"50vw"}
+      wrapClassName="react-ui caption-modal"
+      visible={showCaptionModal}
+      footer={null}
+      onCancel={() => setShowCaptionModal(false)}
+    >
+      {_.isEmpty(availableSocialPlatformCaptions) ? (
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      ) : (
+        <div className="social-platform-caption-container">
+          {_.map(availableSocialPlatformCaptions, ({ key, label, caption }) => (
+            <Card
+              size="small"
+              title={label}
+              key={key}
+              onClick={() => copyToClipboard(caption)}
+            >
+              <p>{caption}</p>
+            </Card>
+          ))}
+        </div>
+      )}
+    </Modal>
+  );
+
   return (
     <div className={`controls ${view}`}>
       {menuList
@@ -516,6 +567,7 @@ const Controls = ({
         .map((item) => (
           <Fragment key={item.id}>{item.component}</Fragment>
         ))}
+      {CaptionModal}
     </div>
   );
 };

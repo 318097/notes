@@ -31,20 +31,21 @@
   - [x] Add post to a chain
   - [x] View chain
   - [ ] Create chain post
-  - [ ] D&D
+  - [ ] D&G
 - [ ] Trash - show deleted notes
 - [ ] Parse bookmarks and toby data
 - [ ] Show resources for every post view
 - [ ] Dynamic template/config - Show JSON settings
-  - [ ] Default value for title, content
-  - [ ] Fields required when adding post
-  - [ ] Post types available for collection
-  - [ ] Define default view and default filters
+  - [ ] Post types based on collection
+  - [ ] Default values, Fields required based on type
+  - [ ] Default filters
 - [ ] Auto deployment to Social handles
 - [ ] Create graphics for posts
 - [ ] Update index directly
 - [x] Add social platform status
 - [x] Add suffix for file names
+- [x] Show Social Platform captions
+  - [ ] Edit caption from
 
 ### Bugs
 

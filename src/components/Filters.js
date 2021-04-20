@@ -277,8 +277,7 @@ const Filters = ({
       {!!validateFilters(filters) && (
         <Icon
           style={{ margin: "0 4px" }}
-          className="icon"
-          hover={true}
+          className="ant-icon"
           type="close"
           onClick={() => setFilterValues(RESET_FILTER)}
         />
@@ -286,8 +285,7 @@ const Filters = ({
 
       <Icon
         style={{ margin: "0 4px" }}
-        className="icon"
-        hover={true}
+        className="ant-icon"
         onClick={() =>
           setFilterValues({
             sortOrder: filters.sortOrder === "ASC" ? "DESC" : "ASC",
@@ -300,8 +298,7 @@ const Filters = ({
 
       <Icon
         style={{ margin: "0 4px" }}
-        className="icon"
-        hover={true}
+        className="ant-icon"
         type={displayType === "CARD" ? "table" : "border"}
         onClick={() =>
           dispatch(
@@ -319,8 +316,7 @@ const Filters = ({
       )}
       <Icon
         type={showAllFilters ? "double-left" : "double-right"}
-        className="icon"
-        hover={true}
+        className="ant-icon"
         onClick={() => dispatch(setKey({ showAllFilters: !showAllFilters }))}
       />
     </div>

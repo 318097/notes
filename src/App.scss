@@ -111,6 +111,38 @@ body {
     height: 80vh;
     overflow: hidden;
   }
+  .caption-modal .ant-modal-body {
+    padding: 24px;
+    overflow: auto;
+    .social-platform-caption-container {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(300px, 1fr));
+      grid-column-gap: 12px;
+      // display: flex;
+      // flex-direction: column;
+      .ant-card {
+        margin-bottom: 12px;
+        &:hover {
+          background: $feather;
+          cursor: pointer;
+          p {
+            white-space: break-spaces;
+          }
+        }
+      }
+    }
+  }
+}
+
+.ant-icon {
+  padding: 6px;
+  margin: 2px;
+  border-radius: 0;
+  transition: 0.4s;
+  &:hover {
+    border-radius: 50%;
+    background: $strokeOne;
+  }
 }
 
 // tags checkgroup in add modal

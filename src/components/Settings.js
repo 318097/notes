@@ -20,10 +20,12 @@ const DEFAULT_SETTING_STATE = {
       label: "POST",
       key: "post",
       fields: ["title", "content"],
+      required: ["title", "content"],
     },
     {
       label: "DROP",
       key: "drop",
+      required: ["title"],
     },
   ],
   fields: [
@@ -50,6 +52,7 @@ const DEFAULT_SETTING_STATE = {
     {
       label: "FB",
       key: "facebook",
+      caption: "",
     },
     {
       label: "Medium",
