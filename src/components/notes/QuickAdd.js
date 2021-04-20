@@ -63,7 +63,7 @@ const QuickAdd = ({
   const [collection, setCollection] = useState(activeCollection);
   const [tags, setTags] = useState([]);
   const [input, setInput] = useState(INITIAL_STATE);
-  const [activeTab, setActiveTab] = useState("DETAILS");
+  const [activeTab, setActiveTab] = useState("TITLE_ONLY");
 
   const { name: activeCollectionName, tags: activeCollectionTags } = _.get(
     session,
@@ -167,11 +167,7 @@ const QuickAdd = ({
       onOk={handleOk}
       onCancel={handleClose}
       footer={[
-        <Button
-          key="cancel-button"
-          onClick={handleClose}
-          style={{ marginRight: "8px" }}
-        >
+        <Button key="cancel-button" onClick={handleClose} className="mr">
           Cancel
         </Button>,
         <Popconfirm

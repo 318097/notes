@@ -16,32 +16,33 @@ const StyledNavigation = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   background: ${colors.bar};
   padding: 10px;
   .app-name {
-    color: ${colors.chrome};
+    color: ${colors.nbPink};
     font-size: 2.6rem;
     position: relative;
     top: -6px;
     left: 1px;
     transition: 0.6s;
-    &:hover {
+    /* &:hover {
       color: ${colors.steel};
-    }
+    } */
   }
   nav {
     display: flex;
     flex-direction: column;
     .ant-icon {
       color: ${colors.chrome};
-      height: 24px;
-      width: 24px;
       font-size: 20px;
-      transition: 0.6s;
-      margin-top: 10px;
-      &.active,
+      margin: 10px 0 0 0;
+      &.active {
+        color: ${colors.nbPink};
+      }
       &:hover {
-        color: ${colors.orange};
+        background: ${colors.nbPink};
+        color: ${colors.white};
       }
     }
   }
