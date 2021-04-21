@@ -3,8 +3,7 @@ import { Drawer, Tag, Input, Button, message } from "antd";
 import { connect } from "react-redux";
 import _ from "lodash";
 import short from "short-uuid";
-import { toggleSettingsDrawer, setSession } from "../store/actions";
-import axios from "axios";
+import { toggleSettingsDrawer, saveSettings } from "../store/actions";
 import SelectCollection from "./SelectCollection";
 
 const { TextArea } = Input;
@@ -90,7 +89,7 @@ const Settings = ({
   session,
   activeCollection,
   toggleSettingsDrawer,
-  setSession,
+  saveSettings,
 }) => {
   const [collections, setCollections] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -107,21 +106,11 @@ const Settings = ({
 
   const handleClose = () => toggleSettingsDrawer(false);
 
-  const saveSettings = async (data) => {
-    setLoading(true);
+  const handleSave = (data) => {
     try {
-      const updatedSettings = {
-        ..._.get(session, "notesApp", {}),
-        [settingId]: data,
-      };
-      const newSettings = {
-        notesApp: updatedSettings,
-      };
-      await axios.put(`/users/${session._id}`, newSettings);
-      await setSession(newSettings);
-      message.success(`Settings updated.`);
-      toggleSettingsDrawer();
-    } catch (err) {
+      setLoading(true);
+      saveSettings({ data, settingId });
+      handleClose();
     } finally {
       setLoading(false);
     }
@@ -147,13 +136,13 @@ const Settings = ({
       {showJSON ? (
         <JSONView
           settingData={settingData}
-          saveSettings={saveSettings}
+          handleSave={handleSave}
           loading={loading}
         />
       ) : (
         <CollectionInfo
           settingData={settingData}
-          saveSettings={saveSettings}
+          handleSave={handleSave}
           loading={loading}
         />
       )}
@@ -191,7 +180,7 @@ const Header = ({
   );
 };
 
-const JSONView = ({ settingData, saveSettings, loading }) => {
+const JSONView = ({ settingData, handleSave, loading }) => {
   const [data, setData] = useState({});
 
   useEffect(() => {
@@ -219,7 +208,7 @@ const JSONView = ({ settingData, saveSettings, loading }) => {
         disabled={loading}
         type="primary"
         className="mt"
-        onClick={() => saveSettings(JSON.parse(data))}
+        onClick={() => handleSave(JSON.parse(data))}
       >
         Save
       </Button>
@@ -227,7 +216,7 @@ const JSONView = ({ settingData, saveSettings, loading }) => {
   );
 };
 
-const CollectionInfo = ({ settingData, saveSettings, loading }) => {
+const CollectionInfo = ({ settingData, handleSave, loading }) => {
   const [data, setData] = useState({});
   const [newTag, setNewTag] = useState({ label: "", color: "" });
 
@@ -301,7 +290,7 @@ const CollectionInfo = ({ settingData, saveSettings, loading }) => {
         disabled={loading}
         type="primary"
         style={{ marginTop: "20px" }}
-        onClick={() => saveSettings(data)}
+        onClick={() => handleSave(data)}
       >
         Save
       </Button>
@@ -321,5 +310,5 @@ const mapStateToProps = ({
 
 export default connect(mapStateToProps, {
   toggleSettingsDrawer,
-  setSession,
+  saveSettings,
 })(Settings);

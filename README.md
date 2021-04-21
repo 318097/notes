@@ -45,7 +45,7 @@
 - [x] Add social platform status
 - [x] Add suffix for file names
 - [x] Show Social Platform captions
-  - [ ] Edit caption from
+  - [x] Edit caption from modal
 
 ### Bugs
 

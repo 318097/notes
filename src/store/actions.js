@@ -1,5 +1,6 @@
 import axios from "axios";
-// import _ from "lodash";
+import _ from "lodash";
+import { message } from "antd";
 
 import { getNextNote } from "../utils";
 import {
@@ -24,6 +25,7 @@ import {
   SET_KEY,
   FETCH_CHAINS,
 } from "./constants";
+import { constants } from "short-uuid";
 
 export const setAppLoading = (status) => ({
   type: SET_APP_LOADING,
@@ -273,6 +275,29 @@ export const getChains = () => async (dispatch, getState) => {
     } = await axios.get(`/posts/chains?collectionId=${activeCollection}`);
 
     dispatch({ type: FETCH_CHAINS, payload: chains });
+  } catch (err) {
+    console.log(err);
+  } finally {
+    dispatch(setAppLoading(false));
+  }
+};
+
+export const saveSettings = (input) => async (dispatch, getState) => {
+  try {
+    dispatch(setAppLoading(true));
+    const { session, activeCollection } = getState();
+    const key = input.settingId || activeCollection;
+
+    const updatedSettings = {
+      ..._.get(session, "notesApp", {}),
+      [key]: { ..._.get(session, ["notesApp", key]), ...input.data },
+    };
+    const newSettings = {
+      notesApp: updatedSettings,
+    };
+    await axios.put(`/users/${session._id}`, newSettings);
+    await dispatch({ type: SET_SESSION, payload: newSettings });
+    message.success(`Settings updated.`);
   } catch (err) {
     console.log(err);
   } finally {

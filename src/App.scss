@@ -117,16 +117,20 @@ body {
     .social-platform-caption-container {
       display: grid;
       grid-template-columns: repeat(2, minmax(300px, 1fr));
-      grid-column-gap: 12px;
-      // display: flex;
-      // flex-direction: column;
-      .ant-card {
-        margin-bottom: 12px;
-        &:hover {
-          background: $feather;
-          cursor: pointer;
+      grid-gap: 12px;
+      .social-caption-item-wrapper {
+        .ant-input {
+          height: 100%;
+        }
+        .ant-card {
+          height: 100%;
+          margin: 0;
           p {
             white-space: break-spaces;
+          }
+          &:hover {
+            background: $feather;
+            cursor: pointer;
           }
         }
       }

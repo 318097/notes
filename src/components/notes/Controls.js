@@ -16,7 +16,7 @@ import { connect } from "react-redux";
 import moment from "moment";
 import _ from "lodash";
 import colors, { Icon, Tag } from "@codedrops/react-ui";
-import { updateNote } from "../../store/actions";
+import { saveSettings, updateNote } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
 import short from "short-uuid";
 import { statusFilter } from "../../constants";
@@ -125,6 +125,7 @@ const Controls = ({
   chains = [],
   goToPost,
   socialPlatforms: socialPlatformsList = [],
+  saveSettings,
 }) => {
   const {
     tags = [],
@@ -147,6 +148,7 @@ const Controls = ({
   } = note || {};
   const [liveIdEditor, setLiveIdEditor] = useState(false);
   const [showCaptionModal, setShowCaptionModal] = useState(false);
+  const [editCaptionId, setEditCaptionId] = useState(null);
   const [suffix, setSuffix] = useState();
   const [personalNote, setPersonalNote] = useState("");
   const [blockSocialPlatforms, setBlockSocialPlatforms] = useState(true);
@@ -196,11 +198,6 @@ const Controls = ({
     : "-";
   const chainedPosts = chains.filter((chain) =>
     chain.chainedItems.includes(_id)
-  );
-
-  const availableSocialPlatformCaptions = _.filter(
-    socialPlatformsList,
-    "caption"
   );
 
   const SocialPlatforms = (
@@ -367,7 +364,7 @@ const Controls = ({
     <ControlsWrapper className="naming">
       <div className="header">
         <h4>Naming/Suffix</h4>
-        {!_.isEmpty(availableSocialPlatformCaptions) && (
+        {!_.isEmpty(socialPlatformsList) && (
           <Tag onClick={() => setShowCaptionModal(true)} color="nbPink">
             Caption
           </Tag>
@@ -538,22 +535,53 @@ const Controls = ({
       width={"50vw"}
       wrapClassName="react-ui caption-modal"
       visible={showCaptionModal}
+      // visible={true}
       footer={null}
       onCancel={() => setShowCaptionModal(false)}
     >
-      {_.isEmpty(availableSocialPlatformCaptions) ? (
+      {_.isEmpty(socialPlatformsList) ? (
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
       ) : (
         <div className="social-platform-caption-container">
-          {_.map(availableSocialPlatformCaptions, ({ key, label, caption }) => (
-            <Card
-              size="small"
-              title={label}
-              key={key}
-              onClick={() => copyToClipboard(caption)}
-            >
-              <p>{caption}</p>
-            </Card>
+          {_.map(socialPlatformsList, ({ key, label, caption }) => (
+            <div className="social-caption-item-wrapper">
+              {editCaptionId === key ? (
+                <TextArea
+                  defaultValue={caption}
+                  onBlur={(e) => {
+                    const updatedCaptions = _.map(socialPlatformsList, (item) =>
+                      item.key === editCaptionId
+                        ? { ...item, caption: e.target.value }
+                        : item
+                    );
+                    saveSettings({
+                      data: { socialPlatforms: updatedCaptions },
+                    });
+                    setEditCaptionId(null);
+                  }}
+                />
+              ) : (
+                <Card
+                  size="small"
+                  title={label}
+                  key={key}
+                  extra={
+                    <Icon
+                      type="edit"
+                      hover
+                      size={12}
+                      onClick={() => setEditCaptionId(key)}
+                    />
+                  }
+                >
+                  {caption ? (
+                    <p onClick={() => copyToClipboard(caption)}>{caption}</p>
+                  ) : (
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                  )}
+                </Card>
+              )}
+            </div>
           ))}
         </div>
       )}
@@ -574,4 +602,4 @@ const Controls = ({
 
 const mapStateToProps = ({ settings }) => _.pick(settings, ["socialPlatforms"]);
 
-export default connect(mapStateToProps)(Controls);
+export default connect(mapStateToProps, { saveSettings })(Controls);
