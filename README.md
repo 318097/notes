@@ -45,6 +45,7 @@
 - [x] Add social platform status
   - [x] Check all
 - [x] Add suffix for file names
+  - [x] Add suffix for resources, show file name on hover
 - [x] Show Social Platform captions
   - [x] Edit caption from modal
 

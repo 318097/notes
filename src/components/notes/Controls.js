@@ -43,7 +43,7 @@ const ControlsWrapper = styled.div`
     font-family: Cascadia-SemiBold;
   }
   .slug {
-    background: ${colors.primary};
+    background: ${colors.iron};
     width: 100%;
     color: white;
     padding: 4px;
@@ -56,7 +56,7 @@ const ControlsWrapper = styled.div`
     text-overflow: ellipsis;
     white-space: nowrap;
     &:hover {
-      background: ${colors.orchid};
+      background: ${colors.blue};
     }
   }
   .empty {
@@ -73,7 +73,7 @@ const ControlsWrapper = styled.div`
     width: 25px;
     height: 25px;
     font-size: 1.2rem;
-    margin-right: 4px;
+    margin: 0 4px 4px 0;
     cursor: pointer;
     transition: 0.4s;
     &:hover {
@@ -164,8 +164,8 @@ const Controls = ({
   const updateProperties = async (update) =>
     await updateNote({ _id, liveId, ...update });
 
-  const copy = (text, addSuffix) => () => {
-    copyToClipboard(addSuffix && suffix ? `${text}_${suffix}` : text);
+  const copy = (text) => () => {
+    copyToClipboard(text);
   };
 
   const onCheckAllChange = ({ target: { checked } }) => {
@@ -199,8 +199,8 @@ const Controls = ({
     updateProperties({ updatedChainedTo: value, chainedTo });
 
   const hashtags = tags.map((tag) => `#${tag}`).join(" ");
-  const rdySlug = `RDY${index}-${slug}`;
-  const slugWithLiveId = `${liveId}-${slug}`;
+  const rdySlug = `RDY${index}-${slug}_${suffix || ""}`;
+  const slugWithLiveId = `${liveId}-${slug}_${suffix || ""}`;
 
   const createdAtFormatted = moment(createdAt).format("DD MMM, YY");
   const updatedAtFormatted = moment(updatedAt).format("DD MMM, YY");
@@ -417,13 +417,17 @@ const Controls = ({
         autoComplete={false}
         onChange={updateSuffix}
       />
-      <div className="slug" onClick={copy(rdySlug, true)}>
-        {rdySlug}
-      </div>
-      {!!liveId && (
-        <div className="slug" onClick={copy(slugWithLiveId, true)}>
-          {slugWithLiveId}
+      <Popover placement="top" content={rdySlug}>
+        <div className="slug" onClick={copy(rdySlug)}>
+          {rdySlug}
         </div>
+      </Popover>
+      {!!liveId && (
+        <Popover placement="bottom" content={slugWithLiveId}>
+          <div className="slug" onClick={copy(slugWithLiveId)}>
+            {slugWithLiveId}
+          </div>
+        </Popover>
       )}
 
       <div className="divider"></div>
@@ -433,7 +437,7 @@ const Controls = ({
           type="plus"
           hover
           size={10}
-          onClick={() => updateNote(note, "CREATE_RESOURCE")}
+          onClick={() => updateNote({ ...note, suffix }, "CREATE_RESOURCE")}
         />
       </div>
 
