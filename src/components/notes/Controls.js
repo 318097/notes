@@ -120,12 +120,12 @@ const ControlsWrapper = styled.div`
 
 const Controls = ({
   note,
-  dispatch,
   view,
   chains = [],
   goToPost,
   socialPlatforms: socialPlatformsList = [],
   saveSettings,
+  updateNote,
 }) => {
   const {
     tags = [],
@@ -144,20 +144,35 @@ const Controls = ({
     notes: personalNotes = [],
     type,
     chainedTo = [],
-    socialPlatforms,
+    socialPlatforms = [],
   } = note || {};
+  const allSocialHandlesSelected =
+    socialPlatformsList &&
+    socialPlatforms?.length === socialPlatformsList?.length;
+
   const [liveIdEditor, setLiveIdEditor] = useState(false);
   const [showCaptionModal, setShowCaptionModal] = useState(false);
   const [editCaptionId, setEditCaptionId] = useState(null);
   const [suffix, setSuffix] = useState();
   const [personalNote, setPersonalNote] = useState("");
   const [blockSocialPlatforms, setBlockSocialPlatforms] = useState(true);
+  const [
+    socialPlatformCaptionCheckAll,
+    setSocialPlatformCaptionCheckAll,
+  ] = React.useState(allSocialHandlesSelected);
 
   const updateProperties = async (update) =>
-    await dispatch(updateNote({ _id, liveId, ...update }));
+    await updateNote({ _id, liveId, ...update });
 
   const copy = (text, addSuffix) => () => {
     copyToClipboard(addSuffix && suffix ? `${text}_${suffix}` : text);
+  };
+
+  const onCheckAllChange = ({ target: { checked } }) => {
+    updateProperties({
+      socialPlatforms: checked ? _.map(socialPlatformsList, "value") : [],
+    });
+    setSocialPlatformCaptionCheckAll(checked);
   };
 
   const handleAddPersonalNote = () => {
@@ -204,14 +219,22 @@ const Controls = ({
     <ControlsWrapper className="social-platforms">
       <div className="header">
         <h4>Social Platforms</h4>
+        <Checkbox
+          onChange={onCheckAllChange}
+          checked={socialPlatformCaptionCheckAll}
+        >
+          All
+        </Checkbox>
       </div>
       <Checkbox.Group
-        onChange={(values) => updateProperties({ socialPlatforms: values })}
+        onChange={(list) => {
+          setSocialPlatformCaptionCheckAll(
+            list.length === socialPlatforms.length
+          );
+          updateProperties({ socialPlatforms: list });
+        }}
         value={socialPlatforms}
-        options={_.map(socialPlatformsList, (item) => ({
-          ...item,
-          value: item.key,
-        }))}
+        options={socialPlatformsList}
       />
       {blockSocialPlatforms && (
         <div
@@ -378,8 +401,8 @@ const Controls = ({
         value={suffix}
         onChange={(value) => setSuffix(value)}
       >
-        {socialPlatformsList.map(({ label, key }) => (
-          <Option key={label} value={key}>
+        {socialPlatformsList.map(({ label, value }) => (
+          <Option key={label} value={value}>
             {label}
           </Option>
         ))}
@@ -410,7 +433,7 @@ const Controls = ({
           type="plus"
           hover
           size={10}
-          onClick={() => dispatch(updateNote(note, "CREATE_RESOURCE"))}
+          onClick={() => updateNote(note, "CREATE_RESOURCE")}
         />
       </div>
 
@@ -543,14 +566,14 @@ const Controls = ({
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
       ) : (
         <div className="social-platform-caption-container">
-          {_.map(socialPlatformsList, ({ key, label, caption }) => (
+          {_.map(socialPlatformsList, ({ value, label, caption }) => (
             <div className="social-caption-item-wrapper">
-              {editCaptionId === key ? (
+              {editCaptionId === value ? (
                 <TextArea
                   defaultValue={caption}
                   onBlur={(e) => {
                     const updatedCaptions = _.map(socialPlatformsList, (item) =>
-                      item.key === editCaptionId
+                      item.value === editCaptionId
                         ? { ...item, caption: e.target.value }
                         : item
                     );
@@ -564,13 +587,13 @@ const Controls = ({
                 <Card
                   size="small"
                   title={label}
-                  key={key}
+                  key={value}
                   extra={
                     <Icon
                       type="edit"
                       hover
                       size={12}
-                      onClick={() => setEditCaptionId(key)}
+                      onClick={() => setEditCaptionId(value)}
                     />
                   }
                 >
@@ -602,4 +625,4 @@ const Controls = ({
 
 const mapStateToProps = ({ settings }) => _.pick(settings, ["socialPlatforms"]);
 
-export default connect(mapStateToProps, { saveSettings })(Controls);
+export default connect(mapStateToProps, { saveSettings, updateNote })(Controls);

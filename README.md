@@ -43,6 +43,7 @@
 - [ ] Create graphics for posts
 - [ ] Update index directly
 - [x] Add social platform status
+  - [x] Check all
 - [x] Add suffix for file names
 - [x] Show Social Platform captions
   - [x] Edit caption from modal

@@ -50,32 +50,31 @@ const DEFAULT_SETTING_STATE = {
   socialPlatforms: [
     {
       label: "FB",
-      key: "facebook",
-      caption: "",
+      value: "facebook",
     },
     {
       label: "Medium",
-      key: "medium",
+      value: "medium",
     },
     {
       label: "Instagram",
-      key: "instagram",
+      value: "instagram",
     },
     {
       label: "Twitter",
-      key: "twitter",
+      value: "twitter",
     },
     {
       label: "Dev.to",
-      key: "dev",
+      value: "dev",
     },
     {
       label: "Hashnode",
-      key: "hashnode",
+      value: "hashnode",
     },
     {
       label: "Linkedin",
-      key: "linkedin",
+      value: "linkedin",
     },
   ],
   pageLimit: 25,
