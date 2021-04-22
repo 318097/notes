@@ -33,7 +33,9 @@
   - [ ] Create chain post
   - [ ] D&G
 - [ ] Trash - show deleted notes
-- [ ] Parse bookmarks and toby data
+- [ ] Parse external data
+  - [x] Toby
+  - [ ] Chrome bookmarks
 - [ ] Show resources for every post view
 - [ ] Dynamic template/config - Show JSON settings
   - [ ] Post types based on collection

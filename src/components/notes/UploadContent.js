@@ -34,7 +34,7 @@ const config = {
   },
 };
 
-const { Option } = Select;
+const { Option, OptGroup } = Select;
 
 const StyledPageHeader = styled.div`
   display: flex;
@@ -88,30 +88,6 @@ const Wrapper = styled.div`
   }
 `;
 
-const parseItem = (item, type = "POST") => {
-  let title, content;
-  const { itemSplitter, titleRegex, contentRegex } = _.get(config, type);
-
-  switch (type) {
-    case "POST":
-      [title, ...content] = item.split(itemSplitter);
-      title = title.replace(titleRegex, "");
-      content = content.join(contentRegex);
-      break;
-    case "DROP":
-      [title, content] = item.split(itemSplitter);
-      title = title.replace(titleRegex, "");
-      content = `${title} - ${content}`;
-      break;
-    default:
-      return;
-  }
-  return {
-    title,
-    content,
-  };
-};
-
 const UploadContent = ({
   setModalMeta,
   uploadingData: { rawData, data, dataType, status, fileName, tags },
@@ -153,25 +129,75 @@ const UploadContent = ({
     // event.target.value = null;
   };
 
+  const parseItem = (item, { isCustomSource, collection } = {}) => {
+    const parsed = {
+      tags,
+      type: "QUICK_ADD",
+      tempId: uuid(),
+      viewed: false,
+      sourceInfo: {
+        id: fileName, // cloudinary id
+        fileName,
+        type: isCustomSource ? "FILE" : dataType,
+      },
+    };
+
+    const { itemSplitter, titleRegex, contentRegex } = _.get(config, dataType);
+
+    switch (dataType) {
+      case "POST": {
+        let [title, ...content] = item.split(itemSplitter);
+        parsed.title = title.replace(titleRegex, "");
+        parsed.content = content.join(contentRegex);
+        break;
+      }
+      case "DROP": {
+        let [title, content] = item.split(itemSplitter);
+        parsed.title = title.replace(titleRegex, "");
+        parsed.content = `${title} - ${content}`;
+        break;
+      }
+      case "TOBY": {
+        parsed.title = item.title;
+        parsed.url = item.url;
+        parsed.sourceInfo["collection"] = collection;
+        break;
+      }
+      default:
+        break;
+    }
+    return parsed;
+  };
+
   const processData = () => {
     if (!rawData) return;
 
-    const fileContent = rawData
-      .split(new RegExp(_.get(config, [dataType, "itemSeperator"])))
-      .map((item) => {
-        let { title = "", content = "" } = parseItem(item.trim(), dataType);
-        return {
-          tags,
-          type: dataType,
-          title,
-          content,
-          tempId: uuid(),
-          viewed: false,
-          fileName,
-        };
-      })
-      .filter((item) => item.title || item.content);
-    setUploadingData({ data: fileContent, status: "PROCESSED" });
+    const isCustomSource = _.includes(["POST", "DROP"], dataType);
+    let parsedContent = [];
+
+    if (isCustomSource) {
+      const dataSplit = rawData.split(
+        new RegExp(_.get(config, [dataType, "itemSeperator"]))
+      );
+      parsedContent = dataSplit.map((item) =>
+        parseItem(item.trim(), { isCustomSource })
+      );
+    } else {
+      const json = JSON.parse(rawData);
+      json.lists.forEach((collection) => {
+        const { title, cards } = collection;
+
+        const collectionParsed = cards.map((item) =>
+          parseItem(item, { isCustomSource, collection: title })
+        );
+        parsedContent.push(...collectionParsed);
+      });
+    }
+
+    setUploadingData({
+      data: parsedContent.filter((item) => item.title || item.content),
+      status: "PROCESSED",
+    });
     setRequireParsing(false);
   };
 
@@ -179,7 +205,7 @@ const UploadContent = ({
     try {
       setLoading(true);
       await addNote(data, collection);
-      message.success(`${data.length} notes added successfully.`);
+      message.success(`${data.length} items added.`);
     } catch (err) {
       console.log(err);
     } finally {
@@ -240,13 +266,20 @@ const UploadContent = ({
           <Select
             placeholder="Post type"
             value={dataType}
+            style={{ width: "100px" }}
             onChange={(value) => setUploadingData({ dataType: value })}
           >
-            {_.get(settings, "postTypes", []).map(({ label, value }) => (
-              <Option key={label} value={label}>
-                {label}
-              </Option>
-            ))}
+            <OptGroup label="Custom">
+              {_.get(settings, "postTypes", []).map(({ label, value }) => (
+                <Option key={label} value={label}>
+                  {label}
+                </Option>
+              ))}
+            </OptGroup>
+            <OptGroup label="External">
+              <Option value={"TOBY"}>TOBY</Option>
+              <Option value={"CHROME"}>CHROME</Option>
+            </OptGroup>
           </Select>
 
           {rawData ? (
