@@ -41,7 +41,7 @@ const StyledContainer = styled.div`
       .search-results {
         position: absolute;
         background: ${colors.bg};
-        border-radius: 4px;
+        border-radius: 2px;
         display: flex;
         z-index: 1000;
         flex-direction: column;
@@ -52,7 +52,7 @@ const StyledContainer = styled.div`
         width: 100%;
         overflow: auto;
         max-height: 150px;
-        border: 1px solid ${colors.iron};
+        border: 1px solid ${colors.strokeTwo};
         .empty {
           padding: 12px 0;
           text-align: center;

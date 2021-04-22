@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import {
   Radio,
   Switch,
@@ -43,7 +43,7 @@ const ControlsWrapper = styled.div`
     font-family: Cascadia-SemiBold;
   }
   .slug {
-    background: ${colors.iron};
+    background: ${colors.yellow};
     width: 100%;
     color: white;
     padding: 4px;
@@ -146,10 +146,6 @@ const Controls = ({
     chainedTo = [],
     socialPlatforms = [],
   } = note || {};
-  const allSocialHandlesSelected =
-    socialPlatformsList &&
-    socialPlatforms?.length === socialPlatformsList?.length;
-
   const [liveIdEditor, setLiveIdEditor] = useState(false);
   const [showCaptionModal, setShowCaptionModal] = useState(false);
   const [editCaptionId, setEditCaptionId] = useState(null);
@@ -159,7 +155,14 @@ const Controls = ({
   const [
     socialPlatformCaptionCheckAll,
     setSocialPlatformCaptionCheckAll,
-  ] = React.useState(allSocialHandlesSelected);
+  ] = React.useState();
+
+  useEffect(() => {
+    const allSocialHandlesSelected =
+      socialPlatformsList &&
+      socialPlatforms?.length === socialPlatformsList?.length;
+    setSocialPlatformCaptionCheckAll(allSocialHandlesSelected);
+  }, [note._id]);
 
   const updateProperties = async (update) =>
     await updateNote({ _id, liveId, ...update });
@@ -199,8 +202,8 @@ const Controls = ({
     updateProperties({ updatedChainedTo: value, chainedTo });
 
   const hashtags = tags.map((tag) => `#${tag}`).join(" ");
-  const rdySlug = `RDY${index}-${slug}_${suffix || ""}`;
-  const slugWithLiveId = `${liveId}-${slug}_${suffix || ""}`;
+  const rdySlug = `RDY${index}-${slug}${suffix ? `_${suffix}` : ""}`;
+  const slugWithLiveId = `${liveId}-${slug}${suffix ? `_${suffix}` : ""}`;
 
   const createdAtFormatted = moment(createdAt).format("DD MMM, YY");
   const updatedAtFormatted = moment(updatedAt).format("DD MMM, YY");

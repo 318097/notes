@@ -291,7 +291,7 @@ const NoteView = ({
           <Icon
             size={28}
             fill={colors.strokeThree}
-            className="prev"
+            className="prev icon"
             hover
             onClick={() => (appLoading ? null : navigateNote(-1))}
             type="caret-left"
@@ -428,7 +428,7 @@ const NoteView = ({
           <Icon
             size={28}
             fill={colors.strokeThree}
-            className="next"
+            className="next icon"
             hover
             onClick={() => (appLoading ? null : navigateNote(1))}
             type="caret-left"
