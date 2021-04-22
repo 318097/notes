@@ -57,8 +57,9 @@ const initialState = {
     rawData: null,
     data: [],
     dataType: "POST",
-    shouldProcessData: true,
+    status: "DEFAULT",
     fileName: null,
+    tags: [],
   },
   quickaddModalMeta: {
     visibility: false,

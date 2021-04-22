@@ -17,32 +17,32 @@ const DEFAULT_SETTING_STATE = {
   postTypes: [
     {
       label: "POST",
-      key: "post",
-      fields: ["title", "content"],
-      required: ["title", "content"],
+      value: "POST",
+      fields: ["TITLE", "CONTENT"],
+      required: ["TITLE", "CONTENT"],
     },
     {
       label: "DROP",
-      key: "drop",
-      required: ["title"],
+      value: "DROP",
+      required: ["TITLE"],
     },
   ],
   fields: [
     {
       label: "TITLE",
-      key: "title",
+      value: "TITLE",
       type: "TEXT",
       defaultValue: "",
     },
     {
       label: "CONTENT",
-      key: "content",
+      value: "CONTENT",
       type: "RICH_TEXT",
       defaultValue: "",
     },
     {
       label: "URL",
-      key: "url",
+      value: "URL",
       type: "TEXT",
       defaultValue: "",
     },
@@ -51,10 +51,6 @@ const DEFAULT_SETTING_STATE = {
     {
       label: "FB",
       value: "facebook",
-    },
-    {
-      label: "Medium",
-      value: "medium",
     },
     {
       label: "Instagram",

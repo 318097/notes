@@ -1,6 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef, Fragment } from "react";
-import { Button, message, Radio, Input, Tag, Select, Divider } from "antd";
+import {
+  Button,
+  message,
+  Radio,
+  Input,
+  Tag,
+  Select,
+  Divider,
+  Modal,
+} from "antd";
 import { Card, Icon } from "@codedrops/react-ui";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -10,6 +19,20 @@ import { MessageWrapper } from "../../styled";
 import SelectCollection from "../SelectCollection";
 import { setModalMeta, setUploadingData, addNote } from "../../store/actions";
 import { md } from "../../utils";
+
+const config = {
+  POST: {
+    itemSeperator: "---[\r\n]",
+    itemSplitter: "\n",
+    titleRegex: /###/gi,
+    contentRegex: "\n",
+  },
+  DROP: {
+    itemSeperator: "\n",
+    itemSplitter: "=>",
+    titleRegex: /-/,
+  },
+};
 
 const { Option } = Select;
 
@@ -51,31 +74,33 @@ const Wrapper = styled.div`
     }
     .index-number {
       position: absolute;
-      top: 7px;
-      left: 7px;
+      top: 6px;
+      left: 6px;
       text-decoration: underline;
       font-style: italics;
       font-size: 1rem;
     }
     .actions {
       position: absolute;
-      top: 10px;
-      right: 6px;
+      top: 4px;
+      right: 4px;
     }
   }
 `;
 
 const parseItem = (item, type = "POST") => {
   let title, content;
+  const { itemSplitter, titleRegex, contentRegex } = _.get(config, type);
+
   switch (type) {
     case "POST":
-      [title, ...content] = item.split("\n");
-      title = title.replace(/###/gi, "");
-      content = content.join("\n");
+      [title, ...content] = item.split(itemSplitter);
+      title = title.replace(titleRegex, "");
+      content = content.join(contentRegex);
       break;
     case "DROP":
-      [title, content] = item.split("=>");
-      title = title.replace(/-/, "");
+      [title, content] = item.split(itemSplitter);
+      title = title.replace(titleRegex, "");
       content = `${title} - ${content}`;
       break;
     default:
@@ -89,29 +114,28 @@ const parseItem = (item, type = "POST") => {
 
 const UploadContent = ({
   setModalMeta,
-  uploadingData: { rawData, data, dataType, shouldProcessData, fileName },
+  uploadingData: { rawData, data, dataType, status, fileName, tags },
   setUploadingData,
   addNote,
   activeCollection,
   settings,
 }) => {
-  const [loading, setLoading] = useState(false);
-  const [tags, setTags] = useState([]);
-  const [collection, setCollection] = useState(activeCollection);
-  const [fileParsing, setFileParsing] = useState("---[\r\n]");
-
   const inputEl = useRef(null);
+  const [viewRawData, setViewRawData] = useState(false);
+  const [requireParsing, setRequireParsing] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [collection, setCollection] = useState(activeCollection);
+  // const [fileParsing, setFileParsing] = useState();
 
   useEffect(() => {
-    if (dataType === "POST") setFileParsing("---[\r\n]");
-    else if (dataType === "DROP") setFileParsing("\n");
-  }, [dataType]);
+    if (status === "PROCESS_DATA") processData();
+  }, [status]);
 
   useEffect(() => {
-    if (shouldProcessData) processData();
-  }, [shouldProcessData]);
+    if (status === "PROCESSED") setRequireParsing(true);
+  }, [collection, tags, dataType]);
 
-  const handleUpload = (event) => {
+  const readFileContent = (event) => {
     const [document] = event.target.files;
 
     if (!document) return;
@@ -122,18 +146,18 @@ const UploadContent = ({
     reader.onload = () =>
       setUploadingData({
         rawData: reader.result,
-        shouldProcessData: true,
+        status: "PROCESS_DATA",
         fileName: document.name,
       });
 
-    event.target.value = null;
+    // event.target.value = null;
   };
 
   const processData = () => {
     if (!rawData) return;
 
     const fileContent = rawData
-      .split(new RegExp(fileParsing))
+      .split(new RegExp(_.get(config, [dataType, "itemSeperator"])))
       .map((item) => {
         let { title = "", content = "" } = parseItem(item.trim(), dataType);
         return {
@@ -147,7 +171,8 @@ const UploadContent = ({
         };
       })
       .filter((item) => item.title || item.content);
-    setUploadingData({ data: fileContent, shouldProcessData: false });
+    setUploadingData({ data: fileContent, status: "PROCESSED" });
+    setRequireParsing(false);
   };
 
   const addData = async () => {
@@ -159,7 +184,7 @@ const UploadContent = ({
       console.log(err);
     } finally {
       setLoading(false);
-      setUploadingData({ rawData: null, data: [] });
+      setUploadingData({ rawData: null, data: [], status: "DEFAULT" });
     }
   };
 
@@ -170,22 +195,30 @@ const UploadContent = ({
       visibility: true,
     });
 
-  const removeItem = (tempId) => () =>
+  const removeItem = (tempId) => (e) => {
+    e.stopPropagation();
     setUploadingData({ data: data.filter((item) => item.tempId !== tempId) });
+  };
 
-  const clearData = () => setUploadingData({ data: [], rawData: null });
+  const clearData = () =>
+    setUploadingData({ data: [], rawData: null, status: "DEFAULT" });
 
   return (
     <section>
       <StyledPageHeader>
         <h3>File Upload</h3>
         <div className="actions">
+          <SelectCollection
+            collection={collection}
+            setCollection={setCollection}
+          />
+
           <Select
             style={{ minWidth: "80px" }}
             mode="multiple"
             placeholder="Tags"
             value={tags}
-            onChange={(values) => setTags(values)}
+            onChange={(list) => setUploadingData({ tags: list })}
           >
             {_.get(settings, "tags", []).map(({ label }) => (
               <Option key={label} value={label}>
@@ -194,12 +227,7 @@ const UploadContent = ({
             ))}
           </Select>
 
-          <SelectCollection
-            collection={collection}
-            setCollection={setCollection}
-          />
-
-          <Input
+          {/* <Input
             key="file-splitter"
             style={{ width: "110px" }}
             placeholder="File splitter"
@@ -207,39 +235,42 @@ const UploadContent = ({
             onChange={({ target: { value } }) =>
               setFileParsing(JSON.parse(value))
             }
-          />
+          /> */}
 
-          <Radio.Group
-            key="data-type"
-            buttonStyle="solid"
+          <Select
+            placeholder="Post type"
             value={dataType}
-            onChange={({ target: { value } }) =>
-              setUploadingData({ dataType: value })
-            }
+            onChange={(value) => setUploadingData({ dataType: value })}
           >
-            <Radio.Button value="POST">POST</Radio.Button>
-            <Radio.Button value="DROP">DROP</Radio.Button>
-          </Radio.Group>
+            {_.get(settings, "postTypes", []).map(({ label, value }) => (
+              <Option key={label} value={label}>
+                {label}
+              </Option>
+            ))}
+          </Select>
 
           {rawData ? (
             <Fragment>
               <Divider type="vertical" />
-              <Button onClick={addData} loading={loading}>
-                {`Upload ${data.length} ${(dataType || "").toLowerCase()}`}
-              </Button>
-              <Divider type="vertical" />
               <Button
-                key="clear-button"
-                onClick={() => setUploadingData({ shouldProcessData: true })}
+                type={requireParsing ? "danger" : "default"}
+                onClick={() => setUploadingData({ status: "PROCESS_DATA" })}
               >
                 Parse
               </Button>
-              <Button
-                style={{ marginLeft: 2 }}
-                key="clear-button"
-                onClick={clearData}
-              >
+              <Button type="link" onClick={clearData}>
                 Clear
+              </Button>
+              <Divider type="vertical" />
+              <Button type="link" onClick={() => setViewRawData(true)}>
+                Raw
+              </Button>
+              <Button
+                onClick={addData}
+                loading={loading}
+                disabled={requireParsing}
+              >
+                {`Upload ${data.length} ${(dataType || "").toLowerCase()}`}
               </Button>
             </Fragment>
           ) : (
@@ -256,7 +287,7 @@ const UploadContent = ({
             const { title = "", content = "", tags = [], viewed } = item;
             return (
               <div
-                className={`card-wrapper ${viewed ? "viewed" : ""}`}
+                className={`card-wrapper${viewed ? " viewed" : ""}`}
                 key={item.tempId}
                 onClick={editItem(item)}
               >
@@ -276,15 +307,27 @@ const UploadContent = ({
                 <span className="index-number">#{i + 1}</span>
                 <div className="actions">
                   <Icon
+                    hover
                     size={12}
                     onClick={removeItem(item.tempId)}
-                    className="delete-icon"
+                    className="icon"
                     type="delete"
                   />
                 </div>
               </div>
             );
           })}
+          <Modal
+            title={"Raw data"}
+            centered={true}
+            // width={"50vw"}
+            wrapClassName="react-ui caption-modal"
+            visible={viewRawData}
+            footer={null}
+            onCancel={() => setViewRawData(false)}
+          >
+            <div dangerouslySetInnerHTML={{ __html: rawData }} />
+          </Modal>
         </Wrapper>
       ) : (
         <MessageWrapper>EMPTY</MessageWrapper>
@@ -293,7 +336,7 @@ const UploadContent = ({
         ref={inputEl}
         type="file"
         style={{ visibility: "hidden" }}
-        onChange={handleUpload}
+        onChange={readFileContent}
       />
     </section>
   );
