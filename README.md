@@ -36,6 +36,7 @@
 - [ ] Parse external data
   - [x] Toby
   - [ ] Chrome bookmarks
+- [x] Upload resources
 - [ ] Show resources for every post view
 - [ ] Dynamic template/config - Show JSON settings
   - [ ] Post types based on collection

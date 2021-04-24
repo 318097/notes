@@ -24,6 +24,15 @@ import {
   FETCH_CHAINS,
 } from "./constants";
 
+const initialUploadingDataState = {
+  rawData: null,
+  data: [],
+  dataType: "POST",
+  status: "DEFAULT",
+  fileName: null,
+  tags: [],
+};
+
 const initialState = {
   appLoading: false,
   modalMeta: {
@@ -53,14 +62,7 @@ const initialState = {
   settingsDrawerVisibility: false,
   stats: {},
   displayType: "CARD",
-  uploadingData: {
-    rawData: null,
-    data: [],
-    dataType: "POST",
-    status: "DEFAULT",
-    fileName: null,
-    tags: [],
-  },
+  uploadingData: initialUploadingDataState,
   quickaddModalMeta: {
     visibility: false,
   },
@@ -245,4 +247,4 @@ const reducer = (state = initialState, action) => {
 };
 
 export default reducer;
-export { initialState };
+export { initialState, initialUploadingDataState };

@@ -3,12 +3,11 @@ import React, { useState, useEffect, useRef, Fragment } from "react";
 import {
   Button,
   message,
-  Radio,
-  Input,
   Tag,
   Select,
   Divider,
   Modal,
+  Card as AntCard,
 } from "antd";
 import { Card, Icon } from "@codedrops/react-ui";
 import { connect } from "react-redux";
@@ -18,7 +17,9 @@ import _ from "lodash";
 import { MessageWrapper } from "../../styled";
 import SelectCollection from "../SelectCollection";
 import { setModalMeta, setUploadingData, addNote } from "../../store/actions";
+import { initialUploadingDataState } from "../../store/reducer";
 import { md } from "../../utils";
+import axios from "axios";
 
 const config = {
   POST: {
@@ -26,11 +27,19 @@ const config = {
     itemSplitter: "\n",
     titleRegex: /###/gi,
     contentRegex: "\n",
+    accept: ".md",
   },
   DROP: {
     itemSeperator: "\n",
     itemSplitter: "=>",
     titleRegex: /-/,
+    accept: ".md",
+  },
+  RESOURCES: {
+    accept: ".png",
+  },
+  TOBY: {
+    accept: ".json",
   },
 };
 
@@ -39,7 +48,7 @@ const { Option, OptGroup } = Select;
 const StyledPageHeader = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 8px 28px 12px;
   .actions {
     margin-left: 20px;
@@ -53,9 +62,8 @@ const StyledPageHeader = styled.div`
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, 300px);
-  column-gap: 6px;
-  justify-content: center;
-
+  gap: 12px;
+  padding: 0 28px;
   .card-wrapper {
     height: 300px;
     margin: 3px 0;
@@ -86,11 +94,28 @@ const Wrapper = styled.div`
       right: 4px;
     }
   }
+  .resource-wrapper {
+    display: flex;
+    height: 300px;
+    align-items: center;
+    justify-content: center;
+    img {
+      max-width: 100%;
+    }
+  }
 `;
 
 const UploadContent = ({
   setModalMeta,
-  uploadingData: { rawData, data, dataType, status, fileName, tags },
+  uploadingData: {
+    rawData,
+    data,
+    dataType,
+    status,
+    fileName,
+    tags,
+    sourceFiles,
+  },
   setUploadingData,
   addNote,
   activeCollection,
@@ -112,33 +137,54 @@ const UploadContent = ({
   }, [collection, tags, dataType]);
 
   const readFileContent = (event) => {
-    const [document] = event.target.files;
+    const { files } = event.target;
 
-    if (!document) return;
-
-    const reader = new FileReader();
-    reader.readAsText(document);
-
-    reader.onload = () =>
-      setUploadingData({
-        rawData: reader.result,
-        status: "PROCESS_DATA",
-        fileName: document.name,
+    const isImage = _.get(files, "0.type", "").startsWith("image/");
+    if (isImage) {
+      Promise.all(
+        Object.values(files).map((file) => {
+          return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve({ file, raw: reader.result });
+          });
+        })
+      ).then((result) => {
+        setUploadingData({
+          data: [...result, ...data],
+          sourceFiles: Object.values(files),
+        });
       });
+    } else {
+      const [document] = files;
 
-    // event.target.value = null;
+      if (!document) return;
+
+      const reader = new FileReader();
+      reader.readAsText(document);
+
+      reader.onload = () =>
+        setUploadingData({
+          rawData: reader.result,
+          status: "PROCESS_DATA",
+          fileName: document.name,
+          sourceFiles: [document],
+        });
+    }
+    event.target.value = null;
   };
 
   const parseItem = (item, { isCustomSource, collection } = {}) => {
     const parsed = {
       tags,
-      type: "QUICK_ADD",
+      type: "POST",
+      status: "QUICK_ADD",
       tempId: uuid(),
       viewed: false,
       sourceInfo: {
-        id: fileName, // cloudinary id
+        // cloudinary url is added later
         fileName,
-        type: isCustomSource ? "FILE" : dataType,
+        type: dataType,
       },
     };
 
@@ -204,13 +250,40 @@ const UploadContent = ({
   const addData = async () => {
     try {
       setLoading(true);
-      await addNote(data, collection);
+      const formData = new FormData();
+      formData.append("type", dataType);
+      formData.append(
+        "storeExactFileName",
+        dataType === "RESOURCES" ? "TRUE" : "FALSE"
+      );
+
+      for (let i = 0; i < sourceFiles.length; i++)
+        formData.append(`files`, sourceFiles[i]);
+
+      const transactionResponse = await axios.post("/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (dataType !== "RESOURCES") {
+        await addNote(
+          data.map((item) => ({
+            ...item,
+            sourceInfo: {
+              ...item.sourceInfo,
+              id: _.get(transactionResponse, "data.0.url"),
+            },
+          })),
+          collection
+        );
+      }
       message.success(`${data.length} items added.`);
     } catch (err) {
       console.log(err);
     } finally {
       setLoading(false);
-      setUploadingData({ rawData: null, data: [], status: "DEFAULT" });
+      setUploadingData(initialUploadingDataState);
     }
   };
 
@@ -229,11 +302,13 @@ const UploadContent = ({
   const clearData = () =>
     setUploadingData({ data: [], rawData: null, status: "DEFAULT" });
 
-  return (
-    <section>
-      <StyledPageHeader>
-        <h3>File Upload</h3>
-        <div className="actions">
+  const isResourceUpload = dataType === "RESOURCES";
+  const controls = [
+    {
+      id: "base",
+      visible: !isResourceUpload,
+      component: (
+        <Fragment>
           <SelectCollection
             collection={collection}
             setCollection={setCollection}
@@ -252,6 +327,96 @@ const UploadContent = ({
               </Option>
             ))}
           </Select>
+        </Fragment>
+      ),
+    },
+    {
+      id: "type",
+      visible: true,
+      component: (
+        <Select
+          placeholder="Post type"
+          value={dataType}
+          style={{ width: "100px" }}
+          onChange={(value) => setUploadingData({ dataType: value })}
+        >
+          <OptGroup label="Custom">
+            {_.get(settings, "postTypes", []).map(({ label, value }) => (
+              <Option key={label} value={label}>
+                {label}
+              </Option>
+            ))}
+          </OptGroup>
+          <OptGroup label="External">
+            <Option value={"TOBY"}>TOBY</Option>
+            <Option value={"CHROME"}>CHROME</Option>
+          </OptGroup>
+          <OptGroup label="Assets">
+            <Option value={"RESOURCES"}>RESOURCES</Option>
+          </OptGroup>
+        </Select>
+      ),
+    },
+    {
+      id: "action-files",
+      visible: !isResourceUpload,
+      component: rawData ? (
+        <Fragment>
+          <Divider type="vertical" />
+          <Button
+            type={requireParsing ? "danger" : "default"}
+            onClick={() => setUploadingData({ status: "PROCESS_DATA" })}
+          >
+            Parse
+          </Button>
+          <Button type="link" onClick={clearData}>
+            Clear
+          </Button>
+          <Divider type="vertical" />
+          <Button type="link" onClick={() => setViewRawData(true)}>
+            Raw
+          </Button>
+          <Button onClick={addData} loading={loading} disabled={requireParsing}>
+            {`Upload ${data.length} ${(dataType || "").toLowerCase()}`}
+          </Button>
+        </Fragment>
+      ) : (
+        <Button type="dashed" onClick={() => inputEl.current.click()}>
+          Select File
+        </Button>
+      ),
+    },
+    {
+      id: "action-resources",
+      visible: isResourceUpload,
+      component: (
+        <Fragment>
+          <Divider type="vertical" />
+          <Button type="dashed" onClick={() => inputEl.current.click()}>
+            Add files
+          </Button>
+          <Button type="link" onClick={clearData}>
+            Clear
+          </Button>
+          <Divider type="vertical" />
+          <Button onClick={addData} loading={loading}>
+            {`Upload ${data.length} ${(dataType || "").toLowerCase()}`}
+          </Button>
+        </Fragment>
+      ),
+    },
+  ];
+
+  return (
+    <section>
+      <StyledPageHeader>
+        <h3>File Upload</h3>
+        <div className="actions">
+          {controls
+            .filter((item) => item.visible)
+            .map((item) => (
+              <Fragment key={item.id}>{item.component}</Fragment>
+            ))}
 
           {/* <Input
             key="file-splitter"
@@ -262,61 +427,21 @@ const UploadContent = ({
               setFileParsing(JSON.parse(value))
             }
           /> */}
-
-          <Select
-            placeholder="Post type"
-            value={dataType}
-            style={{ width: "100px" }}
-            onChange={(value) => setUploadingData({ dataType: value })}
-          >
-            <OptGroup label="Custom">
-              {_.get(settings, "postTypes", []).map(({ label, value }) => (
-                <Option key={label} value={label}>
-                  {label}
-                </Option>
-              ))}
-            </OptGroup>
-            <OptGroup label="External">
-              <Option value={"TOBY"}>TOBY</Option>
-              <Option value={"CHROME"}>CHROME</Option>
-            </OptGroup>
-          </Select>
-
-          {rawData ? (
-            <Fragment>
-              <Divider type="vertical" />
-              <Button
-                type={requireParsing ? "danger" : "default"}
-                onClick={() => setUploadingData({ status: "PROCESS_DATA" })}
-              >
-                Parse
-              </Button>
-              <Button type="link" onClick={clearData}>
-                Clear
-              </Button>
-              <Divider type="vertical" />
-              <Button type="link" onClick={() => setViewRawData(true)}>
-                Raw
-              </Button>
-              <Button
-                onClick={addData}
-                loading={loading}
-                disabled={requireParsing}
-              >
-                {`Upload ${data.length} ${(dataType || "").toLowerCase()}`}
-              </Button>
-            </Fragment>
-          ) : (
-            <Button type="dashed" onClick={() => inputEl.current.click()}>
-              Select File
-            </Button>
-          )}
         </div>
       </StyledPageHeader>
 
       {data.length ? (
         <Wrapper>
           {data.map((item, i) => {
+            if (dataType === "RESOURCES") {
+              // const title = _.get(item, "file.name", "");
+              return (
+                <AntCard key={i} size="small" className="resource-wrapper">
+                  <img alt="resource" src={item.raw} />
+                </AntCard>
+              );
+            }
+
             const { title = "", content = "", tags = [], viewed } = item;
             return (
               <div
@@ -368,6 +493,8 @@ const UploadContent = ({
       <input
         ref={inputEl}
         type="file"
+        accept={_.get(config, [dataType, "accept"])}
+        multiple
         style={{ visibility: "hidden" }}
         onChange={readFileContent}
       />
