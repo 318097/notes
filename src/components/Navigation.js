@@ -33,7 +33,7 @@ const StyledNavigation = styled.div`
   nav {
     display: flex;
     flex-direction: column;
-    .ant-icon {
+    .icon.icon-bg {
       color: ${colors.chrome};
       font-size: 20px;
       margin: 10px 0 0 0;
@@ -41,8 +41,8 @@ const StyledNavigation = styled.div`
         color: ${colors.nbPink};
       }
       &:hover {
-        background: ${colors.nbPink};
-        color: ${colors.white};
+        background: ${colors.nbPink} !important;
+        color: ${colors.white} !important;
       }
     }
   }
@@ -128,7 +128,7 @@ const Navigation = ({
           if (type === "divider") return <Divider key={`divider-${idx}`} />;
           return (
             <AntIcon
-              className={`ant-icon ${activePage === key ? "active" : ""}`}
+              className={`icon icon-bg ${activePage === key ? "active" : ""}`}
               type={type}
               key={key}
               onClick={() => handleNavigation(key)}

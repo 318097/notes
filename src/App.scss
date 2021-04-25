@@ -138,17 +138,6 @@ body {
   }
 }
 
-.ant-icon {
-  padding: 6px;
-  margin: 2px;
-  border-radius: 0;
-  transition: 0.4s;
-  &:hover {
-    border-radius: 50%;
-    background: $strokeOne;
-  }
-}
-
 // tags checkgroup in add modal
 .ant-checkbox-group {
   .ant-checkbox-wrapper {
