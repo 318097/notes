@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Tag } from "antd";
+import { Tag, Input } from "antd";
 import _ from "lodash";
 import colors, { Card, Icon } from "@codedrops/react-ui";
 import Controls from "./Controls";
-import { getNoteById, setModalMeta } from "../../store/actions";
+import { getNoteById, setModalMeta, updateNote } from "../../store/actions";
 import { md, copyToClipboard } from "../../utils";
 import { fadeInDownAnimation } from "../../animations";
 import queryString from "query-string";
@@ -133,12 +133,14 @@ const Wrapper = styled.div`
         left: -4px;
       }
     }
-    .index {
+    .index-wrapper {
       position: absolute;
       top: 8px;
       right: 16px;
-      color: ${colors.strokeTwo};
-      font-size: 1rem;
+      .index {
+        color: ${colors.strokeTwo};
+        font-size: 1rem;
+      }
     }
     .canonical-url {
       position: absolute;
@@ -215,6 +217,7 @@ const NoteView = ({
   appLoading,
   viewNoteMeta,
 }) => {
+  const [indexEditor, setIndexEditor] = useState();
   const { nextNote, previousNote } = viewNoteMeta || {};
 
   useEffect(() => {
@@ -258,6 +261,16 @@ const NoteView = ({
   const goBack = () => {
     const parsed = queryString.parse(location.search);
     history.push(parsed.src ? `/note/${parsed.src}` : "/home");
+  };
+
+  const updateProperties = async (update) =>
+    await dispatch(updateNote({ _id, ...update }));
+
+  const updateIndex = (e) => {
+    const { value: id } = e.target;
+    if (!/^\d+$/.test(id)) return;
+    updateProperties({ index: id });
+    setIndexEditor(false);
   };
 
   const navigateNote = (newPosition) => {
@@ -407,7 +420,23 @@ const NoteView = ({
           hover
           type="edit"
         />
-        {!!index && <span className="index">{`#${index}`}</span>}
+        {!!index && (
+          <div className="index-wrapper">
+            {indexEditor ? (
+              <Input
+                style={{ width: "30px", height: "18px", fontSize: "1rem" }}
+                size="small"
+                defaultValue={index}
+                onBlur={updateIndex}
+              />
+            ) : (
+              <span
+                className="index"
+                onDoubleClick={() => setIndexEditor(true)}
+              >{`#${index}`}</span>
+            )}
+          </div>
+        )}
         {status === "POSTED" && (
           <div
             className="canonical-url"

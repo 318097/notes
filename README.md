@@ -44,7 +44,7 @@
   - [ ] Default filters
 - [ ] Auto deployment to Social handles
 - [ ] Create graphics for posts
-- [ ] Update index directly
+- [x] Update index directly
 - [x] Add social platform status
   - [x] Check all
 - [x] Add suffix for file names
