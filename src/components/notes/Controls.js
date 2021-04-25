@@ -102,7 +102,12 @@ const ControlsWrapper = styled.div`
       }
     }
   }
-
+  .resources-title {
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
   &.social-platforms {
     position: relative;
     .blocker {
@@ -126,6 +131,7 @@ const Controls = ({
   socialPlatforms: socialPlatformsList = [],
   saveSettings,
   updateNote,
+  session,
 }) => {
   const {
     tags = [],
@@ -148,6 +154,7 @@ const Controls = ({
   } = note || {};
   const [liveIdEditor, setLiveIdEditor] = useState(false);
   const [showCaptionModal, setShowCaptionModal] = useState(false);
+  const [showResourcesModal, setShowResourcesModal] = useState(false);
   const [editCaptionId, setEditCaptionId] = useState(null);
   const [suffix, setSuffix] = useState();
   const [personalNote, setPersonalNote] = useState("");
@@ -435,7 +442,12 @@ const Controls = ({
 
       <div className="divider"></div>
       <div className="header">
-        <h4>Resources</h4>
+        <h4
+          className="resources-title"
+          onClick={() => setShowResourcesModal(true)}
+        >
+          Resources
+        </h4>
         <Icon
           type="plus"
           hover
@@ -455,7 +467,6 @@ const Controls = ({
       {!!hashtags && (
         <Fragment>
           <div className="divider"></div>
-
           <div className="header">
             <h4>Hashtags</h4>
             <Icon
@@ -558,6 +569,27 @@ const Controls = ({
     },
   ];
 
+  const ResourcesModal = (
+    <Modal
+      title={"Resources"}
+      centered={true}
+      width={"50vw"}
+      wrapClassName="react-ui resource-modal"
+      visible={showResourcesModal}
+      footer={null}
+      onCancel={() => setShowResourcesModal(false)}
+    >
+      {resources.map((resource) => {
+        const url = `https://res.cloudinary.com/codedropstech/image/upload/v1619358326/staging/notes_app/${session._id}/${resource}.png`;
+        return (
+          <Card className="resource-wrapper">
+            <img src={url} />
+          </Card>
+        );
+      })}
+    </Modal>
+  );
+
   const CaptionModal = (
     <Modal
       title={"Social Plaform Captions"}
@@ -565,7 +597,6 @@ const Controls = ({
       width={"50vw"}
       wrapClassName="react-ui caption-modal"
       visible={showCaptionModal}
-      // visible={true}
       footer={null}
       onCancel={() => setShowCaptionModal(false)}
     >
@@ -626,10 +657,14 @@ const Controls = ({
           <Fragment key={item.id}>{item.component}</Fragment>
         ))}
       {CaptionModal}
+      {ResourcesModal}
     </div>
   );
 };
 
-const mapStateToProps = ({ settings }) => _.pick(settings, ["socialPlatforms"]);
+const mapStateToProps = ({ settings, session }) => ({
+  session,
+  ..._.pick(settings, ["socialPlatforms"]),
+});
 
 export default connect(mapStateToProps, { saveSettings, updateNote })(Controls);

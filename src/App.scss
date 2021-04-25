@@ -136,6 +136,20 @@ body {
       }
     }
   }
+  .resource-modal .ant-modal-body {
+    padding: 24px;
+    overflow: auto;
+    .resource-wrapper {
+      display: flex;
+      height: 300px;
+      align-items: center;
+      justify-content: center;
+      width: 50%;
+      img {
+        max-width: 100%;
+      }
+    }
+  }
 }
 
 // tags checkgroup in add modal
