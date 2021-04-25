@@ -132,7 +132,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
             {!!rating && (
-              <Tag color="steel">
+              <Tag>
                 {rating}
                 <AntIcon
                   type="star"
@@ -150,7 +150,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
               >{`${chainedItems.length} posts`}</Tag>
             )}
             {chainedTo && chainedTo.length ? (
-              <Tag color="steel">{`In ${chainedTo.length} chains`}</Tag>
+              <Tag>{`In ${chainedTo.length} chains`}</Tag>
             ) : null}
             {!visible && <AntIcon type="eye-invisible" />}
             {type === "DROP" && <Icon type="bulb" size={12} />}
@@ -165,8 +165,8 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
               : status.replace("_", " ")}
           </Tag>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <Tag color="steel">{createdTimeAgo}</Tag>
-            {index && <Tag color="steel">{`#${index}`}</Tag>}
+            <Tag>{createdTimeAgo}</Tag>
+            {index && <Tag>{`#${index}`}</Tag>}
           </div>
         </div>
       </Card>
