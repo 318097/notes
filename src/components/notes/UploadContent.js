@@ -139,10 +139,12 @@ const UploadContent = ({
   const readFileContent = (event) => {
     const { files } = event.target;
 
-    const isImage = _.get(files, "0.type", "").startsWith("image/");
-    if (isImage) {
+    // const isImage = _.get(files, "0.type", "").startsWith("image/");
+    if (dataType === "RESOURCES") {
+      const sourceFiles = Object.values(files);
+
       Promise.all(
-        Object.values(files).map((file) => {
+        sourceFiles.map((file) => {
           return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -152,7 +154,7 @@ const UploadContent = ({
       ).then((result) => {
         setUploadingData({
           data: [...result, ...data],
-          sourceFiles: Object.values(files),
+          sourceFiles,
         });
       });
     } else {
@@ -399,7 +401,7 @@ const UploadContent = ({
             Clear
           </Button>
           <Divider type="vertical" />
-          <Button onClick={addData} loading={loading}>
+          <Button onClick={addData} loading={loading} disabled={!data.length}>
             {`Upload ${data.length} ${(dataType || "").toLowerCase()}`}
           </Button>
         </Fragment>
