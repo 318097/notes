@@ -90,7 +90,10 @@ const QuickAdd = ({
     setLoading(true);
     try {
       const inputData = (activeTab === "TITLE_ONLY"
-        ? data
+        ? data.map((item) => ({
+            ...item,
+            status: "QUICK_ADD",
+          }))
         : input.slice(0, input.length - 1)
       ).map((item) => ({
         ...item,
