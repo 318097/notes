@@ -457,8 +457,8 @@ const Controls = ({
       </div>
 
       {resources.map((resource, index) => (
-        <Popover key={resource} placement="bottom" content={resource}>
-          <div className="resource-id" onClick={copy(resource)}>
+        <Popover key={resource} placement="bottom" content={resource.label}>
+          <div className="resource-id" onClick={copy(resource.label)}>
             {index + 1}
           </div>
         </Popover>
