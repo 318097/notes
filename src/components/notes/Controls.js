@@ -60,11 +60,6 @@ const ControlsWrapper = styled.div`
       background: ${colors.blue};
     }
   }
-  .empty {
-    opacity: 0.8;
-    text-align: center;
-    font-size: 1rem;
-  }
   .name-id {
     background: ${colors.strokeOne};
     border-radius: 50%;
@@ -296,15 +291,13 @@ const Controls = ({
         ) : null}
       </div>
       <div className="notes-container">
-        {personalNotes.length ? (
-          personalNotes.map((note, index) => (
+        <EmptyState input={personalNotes}>
+          {personalNotes.map((note, index) => (
             <div key={note._id} className="note">
               {`${index + 1}. ${note.content}`}
             </div>
-          ))
-        ) : (
-          <div className="empty">Empty</div>
-        )}
+          ))}
+        </EmptyState>
       </div>
       <div className="add-note-container">
         <TextArea
@@ -405,30 +398,33 @@ const Controls = ({
           </Tag>
         )}
       </div>
-      <Select
-        allowClear
-        size="small"
-        className="w-100 mb"
-        placeholder="Suffix Options"
-        value={suffix}
-        onChange={(value) => setSuffix(value)}
-      >
-        {socialPlatformsList.map(({ label, value }) => (
-          <Option key={label} value={value}>
-            {label}
-          </Option>
-        ))}
-      </Select>
+      <div className="fcc mb">
+        <Select
+          allowClear
+          size="small"
+          style={{ width: "50%" }}
+          className="mr"
+          placeholder="Suffix Options"
+          value={suffix}
+          onChange={(value) => setSuffix(value)}
+        >
+          {socialPlatformsList.map(({ label, value }) => (
+            <Option key={label} value={value}>
+              {label}
+            </Option>
+          ))}
+        </Select>
 
-      <Input
-        className="mb"
-        size="small"
-        allowClear
-        placeholder="Suffix"
-        value={suffix}
-        autoComplete={"off"}
-        onChange={updateSuffix}
-      />
+        <Input
+          style={{ width: "50%" }}
+          size="small"
+          allowClear
+          placeholder="Suffix"
+          value={suffix}
+          autoComplete={"off"}
+          onChange={updateSuffix}
+        />
+      </div>
       {/* <Popover placement="top" content={rdySlug}>
         <div className="slug" onClick={copy(rdySlug)}>
           {rdySlug}
@@ -494,19 +490,9 @@ const Controls = ({
           <div className="divider"></div>
           <div className="header">
             <h4>Hashtags</h4>
-            <Icon
-              type="copy"
-              hover
-              onClick={() => copyToClipboard(hashtags.join(" "))}
-            />
+            <Icon type="copy" hover onClick={() => copyToClipboard(hashtags)} />
           </div>
-          <div>
-            {hashtags ? (
-              <div className="hashtag">{hashtags}</div>
-            ) : (
-              <div className="empty">No Tags</div>
-            )}
-          </div>
+          <div className="hashtag">{hashtags}</div>
         </Fragment>
       )}
 

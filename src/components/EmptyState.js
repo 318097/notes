@@ -10,11 +10,13 @@ const StyledContainer = styled.div`
   color: lightgrey;
 `;
 
-const EmptyState = ({ input, children }) => {
+const EmptyState = ({ input, children, message }) => {
   const isEmpty = _.isEmpty(input); // matches falsy values, empty arrays & objects
 
   return isEmpty ? (
-    <StyledContainer className="empty-container">Empty</StyledContainer>
+    <StyledContainer className="empty-container">
+      {message ? message : "Empty"}
+    </StyledContainer>
   ) : (
     children
   );
