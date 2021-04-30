@@ -20,6 +20,7 @@ import { saveSettings, updateNote } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
 import short from "short-uuid";
 import { statusFilter } from "../../constants";
+import EmptyState from "../EmptyState";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -64,7 +65,7 @@ const ControlsWrapper = styled.div`
     text-align: center;
     font-size: 1rem;
   }
-  .resource-id {
+  .name-id {
     background: ${colors.strokeOne};
     border-radius: 50%;
     display: inline-flex;
@@ -143,6 +144,7 @@ const Controls = ({
     updatedAt,
     publishedAt,
     resources = [],
+    fileNames = [],
     visible,
     status,
     socialStatus,
@@ -209,7 +211,7 @@ const Controls = ({
     updateProperties({ updatedChainedTo: value, chainedTo });
 
   const hashtags = tags.map((tag) => `#${tag}`).join(" ");
-  const rdySlug = `RDY${index}-${slug}${suffix ? `_${suffix}` : ""}`;
+  // const rdySlug = `RDY${index}-${slug}${suffix ? `_${suffix}` : ""}`;
   const slugWithLiveId = `${liveId}-${slug}${suffix ? `_${suffix}` : ""}`;
 
   const createdAtFormatted = moment(createdAt).format("DD MMM, YY");
@@ -424,21 +426,14 @@ const Controls = ({
         allowClear
         placeholder="Suffix"
         value={suffix}
-        autoComplete={false}
+        autoComplete={"off"}
         onChange={updateSuffix}
       />
-      <Popover placement="top" content={rdySlug}>
+      {/* <Popover placement="top" content={rdySlug}>
         <div className="slug" onClick={copy(rdySlug)}>
           {rdySlug}
         </div>
-      </Popover>
-      {!!liveId && (
-        <Popover placement="bottom" content={slugWithLiveId}>
-          <div className="slug" onClick={copy(slugWithLiveId)}>
-            {slugWithLiveId}
-          </div>
-        </Popover>
-      )}
+      </Popover> */}
 
       <div className="divider"></div>
       <div className="header">
@@ -456,13 +451,43 @@ const Controls = ({
         />
       </div>
 
-      {resources.map((resource, index) => (
-        <Popover key={resource} placement="bottom" content={resource.label}>
-          <div className="resource-id" onClick={copy(resource.label)}>
-            {index + 1}
+      <EmptyState input={resources}>
+        {resources.map((resource, index) => (
+          <Popover
+            key={resource.label}
+            placement="bottom"
+            content={resource.label}
+          >
+            <div className="name-id" onClick={copy(resource.label)}>
+              {index + 1}
+            </div>
+          </Popover>
+        ))}
+      </EmptyState>
+
+      {!!liveId && (
+        <Fragment>
+          <div className="header">
+            <h4>File Names</h4>
+            <Icon
+              type="plus"
+              hover
+              size={10}
+              onClick={() => updateNote({ ...note, suffix }, "CREATE_FILENAME")}
+            />
           </div>
-        </Popover>
-      ))}
+
+          <EmptyState input={fileNames}>
+            {fileNames.map((item, index) => (
+              <Popover key={item.label} placement="bottom" content={item.label}>
+                <div className="name-id" onClick={copy(item.label)}>
+                  {index + 1}
+                </div>
+              </Popover>
+            ))}
+          </EmptyState>
+        </Fragment>
+      )}
 
       {!!hashtags && (
         <Fragment>
