@@ -11,17 +11,19 @@ import {
   Modal,
   Empty,
 } from "antd";
+import axios from "axios";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import moment from "moment";
 import _ from "lodash";
 import colors, { Icon, Tag } from "@codedrops/react-ui";
-import { saveSettings, updateNote } from "../../store/actions";
-import { copyToClipboard } from "../../utils";
+import { saveSettings, setAppLoading, updateNote } from "../../store/actions";
+import { copyToClipboard, generateFormData } from "../../utils";
 import short from "short-uuid";
 import { statusFilter } from "../../constants";
 import EmptyState from "../molecules/EmptyState";
 import ImageCard from "../molecules/ImageCard";
+import UploadButton from "../molecules/UploadButton";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -62,7 +64,8 @@ const ControlsWrapper = styled.div`
     }
   } */
   .name-id {
-    background: ${colors.strokeOne};
+    background: ${colors.strokeThree};
+    color: white;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
@@ -74,7 +77,7 @@ const ControlsWrapper = styled.div`
     cursor: pointer;
     transition: 0.4s;
     &:hover {
-      background: ${colors.strokeTwo};
+      background: ${colors.steel};
     }
   }
   .notes-container {
@@ -97,12 +100,6 @@ const ControlsWrapper = styled.div`
       &:hover {
         text-decoration: underline;
       }
-    }
-  }
-  .resources-title {
-    &:hover {
-      cursor: pointer;
-      text-decoration: underline;
     }
   }
   &.social-platforms {
@@ -128,7 +125,7 @@ const Controls = ({
   socialPlatforms: socialPlatformsList = [],
   saveSettings,
   updateNote,
-  session,
+  setAppLoading,
 }) => {
   const {
     tags = [],
@@ -141,12 +138,12 @@ const Controls = ({
     fileNames = [],
     visible,
     status,
-    socialStatus,
     rating,
     notes: personalNotes = [],
     type,
     chainedTo = [],
     socialPlatforms = [],
+    directUpload = [],
   } = note || {};
   const [liveIdEditor, setLiveIdEditor] = useState(false);
   const [showCaptionModal, setShowCaptionModal] = useState(false);
@@ -154,6 +151,7 @@ const Controls = ({
   const [editCaptionId, setEditCaptionId] = useState(null);
   const [suffix, setSuffix] = useState();
   const [personalNote, setPersonalNote] = useState("");
+  const [files, setFiles] = useState({});
   const [blockSocialPlatforms, setBlockSocialPlatforms] = useState(true);
   const [
     socialPlatformCaptionCheckAll,
@@ -170,7 +168,7 @@ const Controls = ({
   const updateProperties = async (update) =>
     await updateNote({ _id, liveId, ...update });
 
-  const copy = (text) => () => {
+  const copy = (text) => {
     copyToClipboard(text);
   };
 
@@ -238,6 +236,58 @@ const Controls = ({
   //     </Radio.Group>
   //   </ControlsWrapper>
   // );
+
+  const uploadFiles = async () => {
+    setAppLoading(true);
+    try {
+      const formData = generateFormData({
+        type: "RESOURCES",
+        storeExactFileName: "TRUE",
+        files: files.sourceFiles,
+      });
+
+      const transactionResponse = await axios.post("/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(transactionResponse);
+
+      const updatedData = {};
+
+      _.forEach(_.get(transactionResponse, "data"), (upload) => {
+        let resourceMatch = false;
+        updatedData["resources"] = resources.map((item) => {
+          if (item.label === upload.original_filename) {
+            resourceMatch = true;
+            return { ...item, media: upload };
+          } else return item;
+        });
+
+        if (!resourceMatch) {
+          updatedData["fileNames"] = fileNames.map((item) =>
+            item.label === upload.original_filename
+              ? { ...item, media: upload }
+              : item
+          );
+        }
+      });
+
+      updateProperties({
+        ...updatedData,
+        directUpload: [
+          ...directUpload,
+          ..._.get(transactionResponse, "data", []),
+        ],
+      });
+
+      setFiles({});
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setAppLoading(false);
+    }
+  };
 
   const Misc = (
     <ControlsWrapper>
@@ -350,13 +400,38 @@ const Controls = ({
 
   const Naming = (
     <ControlsWrapper className="naming">
-      <div className="header">
-        <h4>Naming/Suffix</h4>
+      <div className="fcc">
         {!_.isEmpty(socialPlatformsList) && (
           <Tag onClick={() => setShowCaptionModal(true)} color="nbPink">
             Caption
           </Tag>
         )}
+        <Tag color="nbOrange" onClick={() => setImagesModal(true)}>
+          Media
+        </Tag>
+        <UploadButton
+          accept={".png"}
+          onFileRead={setFiles}
+          customButton={({ openFileExplorer }) => {
+            const status = _.get(files, "data.length") ? "selected" : "empty";
+            return (
+              <Tag
+                color="green"
+                onClick={status === "selected" ? uploadFiles : openFileExplorer}
+              >
+                {status === "selected"
+                  ? `Upload ${_.get(files, "data.length", 0)} files`
+                  : "Select Files"}
+              </Tag>
+            );
+          }}
+        />
+      </div>
+
+      <div className="divider" />
+
+      <div className="header">
+        <h4>Naming/Suffix</h4>
       </div>
       <div className="fcc mb-4">
         <Select
@@ -387,9 +462,7 @@ const Controls = ({
       </div>
 
       <div className="header">
-        <h4 className="resources-title" onClick={() => setImagesModal(true)}>
-          Resources
-        </h4>
+        <h4>Resources</h4>
         <Icon
           type="plus"
           hover
@@ -399,17 +472,27 @@ const Controls = ({
       </div>
 
       <EmptyState input={resources}>
-        {resources.map((resource, index) => (
-          <Popover
-            key={resource.label}
-            placement="top"
-            content={resource.label}
-          >
-            <div className="name-id" onClick={copy(resource.label)}>
-              {index + 1}
-            </div>
-          </Popover>
-        ))}
+        {resources.map((resource, index) => {
+          const hasFile = _.get(resource, "media");
+
+          const styles = hasFile ? { background: colors.green } : {};
+
+          return (
+            <Popover
+              key={resource.label}
+              placement="top"
+              content={resource.label}
+            >
+              <div
+                className="name-id"
+                style={styles}
+                onClick={() => (hasFile ? null : copy(resource.label))}
+              >
+                {index + 1}
+              </div>
+            </Popover>
+          );
+        })}
       </EmptyState>
 
       {!!liveId && (
@@ -427,7 +510,7 @@ const Controls = ({
           <EmptyState input={fileNames}>
             {fileNames.map((item, index) => (
               <Popover key={item.label} placement="bottom" content={item.label}>
-                <div className="name-id" onClick={copy(item.label)}>
+                <div className="name-id" onClick={() => copy(item.label)}>
                   {index + 1}
                 </div>
               </Popover>
@@ -571,17 +654,18 @@ const Controls = ({
       footer={null}
       onCancel={() => setImagesModal(false)}
     >
-      {/* const url =
-      `https://res.cloudinary.com/codedropstech/image/upload/v1619358326/staging/notes_app/$
-      {session._id}/${resource}.png`; */}
-      <h3>Resources</h3>
-      {resources.map((item, i) => (
-        <ImageCard key={i} {...item} />
-      ))}
-      <h3>Files</h3>
-      {fileNames.map((item, i) => (
-        <ImageCard key={i} {...item} />
-      ))}
+      <h3 className="mb">Resources</h3>
+      {resources
+        .filter((item) => item.media)
+        .map((item, i) => (
+          <ImageCard key={i} {...item} />
+        ))}
+      <h3 className="mt mb">Files</h3>
+      {fileNames
+        .filter((item) => item.media)
+        .map((item, i) => (
+          <ImageCard key={i} {...item} />
+        ))}
     </Modal>
   );
 
@@ -657,9 +741,12 @@ const Controls = ({
   );
 };
 
-const mapStateToProps = ({ settings, session }) => ({
-  session,
+const mapStateToProps = ({ settings }) => ({
   ..._.pick(settings, ["socialPlatforms"]),
 });
 
-export default connect(mapStateToProps, { saveSettings, updateNote })(Controls);
+export default connect(mapStateToProps, {
+  saveSettings,
+  updateNote,
+  setAppLoading,
+})(Controls);

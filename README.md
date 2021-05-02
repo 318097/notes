@@ -44,9 +44,9 @@
   - [ ] Default filters
 - [ ] Auto deployment to Social handles
 - [x] Upload resources
-- [ ] Upload resources from a post
-- [ ] Show resources for every post view
-- [ ] Highlight resources & file names for which files are detected on cloudinary
+- [x] Upload resources from a post
+- [x] Show resources for every post view
+- [x] Highlight resources & file names for which files are detected on cloudinary
 - [ ] Parse external data
   - [x] Toby
   - [ ] Chrome bookmarks
