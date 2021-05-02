@@ -82,17 +82,17 @@ export const readFileContent = (event, { onFileRead } = {}) => {
   event.target.value = null;
 };
 
-// export const generateFormData = (data) => {
-//   const formData = new FormData();
+export const generateFormData = (data) => {
+  const formData = new FormData();
 
-//   for (const key in data) {
-//     if (key === "files") {
-//       for (let i = 0; i < data.files.length; i++)
-//         formData.append(`files`, data.files[i]);
-//     } else {
-//       formData.append(key, data[key]);
-//     }
-//   }
+  for (const key in data) {
+    if (key === "files") {
+      for (let i = 0; i < data.files.length; i++)
+        formData.append(`files`, data.files[i]);
+    } else {
+      formData.append(key, data[key]);
+    }
+  }
 
-//   return formData;
-// };
+  return formData;
+};

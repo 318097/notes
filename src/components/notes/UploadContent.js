@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Button, message, Tag, Select, Divider, Modal } from "antd";
 import { Card, Icon } from "@codedrops/react-ui";
 import { connect } from "react-redux";
@@ -10,9 +10,10 @@ import { MessageWrapper } from "../../styled";
 import SelectCollection from "../SelectCollection";
 import { setModalMeta, setUploadingData, addNote } from "../../store/actions";
 import { initialUploadingDataState } from "../../store/reducer";
-import { md, readFileContent } from "../../utils";
+import { md } from "../../utils";
 import axios from "axios";
 import ImageCard from "../molecules/ImageCard";
+import UploadButton from "../molecules/UploadButton";
 
 const config = {
   POST: {
@@ -105,7 +106,6 @@ const UploadContent = ({
   activeCollection,
   settings,
 }) => {
-  const inputEl = useRef(null);
   const [viewRawData, setViewRawData] = useState(false);
   const [requireParsing, setRequireParsing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -258,10 +258,6 @@ const UploadContent = ({
       });
   };
 
-  const onFileChange = (event) => {
-    readFileContent(event, { onFileRead });
-  };
-
   const clearData = () =>
     setUploadingData({ data: [], rawData: null, status: "DEFAULT" });
 
@@ -344,9 +340,11 @@ const UploadContent = ({
           </Button>
         </Fragment>
       ) : (
-        <Button type="dashed" onClick={() => inputEl.current.click()}>
-          Select File
-        </Button>
+        <UploadButton
+          label="Select File"
+          accept={_.get(config, [dataType, "accept"])}
+          onFileRead={onFileRead}
+        />
       ),
     },
     {
@@ -355,9 +353,12 @@ const UploadContent = ({
       component: (
         <Fragment>
           <Divider type="vertical" />
-          <Button type="dashed" onClick={() => inputEl.current.click()}>
-            Add files
-          </Button>
+          <UploadButton
+            label="Add files"
+            accept={_.get(config, [dataType, "accept"])}
+            onFileRead={onFileRead}
+          />
+
           <Button type="link" onClick={clearData}>
             Clear
           </Button>
@@ -449,14 +450,6 @@ const UploadContent = ({
       ) : (
         <MessageWrapper>EMPTY</MessageWrapper>
       )}
-      <input
-        ref={inputEl}
-        type="file"
-        accept={_.get(config, [dataType, "accept"])}
-        multiple
-        style={{ visibility: "hidden" }}
-        onChange={onFileChange}
-      />
     </section>
   );
 };
