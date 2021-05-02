@@ -27,30 +27,30 @@
 - [x] Find post by index, liveId
 - [x] Hide Next and back button when over
 - [x] Search for title before adding
+- [x] Update index directly
+- [x] Add social platform status
+- [x] Add suffix for file names
+- [x] Show/Edit Social Platform captions
+- [ ] Trash - show deleted notes
+- [ ] Create graphics for posts
 - [ ] Chaining posts
   - [x] Add post to a chain
   - [x] View chain
   - [ ] Create chain post
   - [ ] D&G
-- [ ] Trash - show deleted notes
-- [ ] Parse external data
-  - [x] Toby
-  - [ ] Chrome bookmarks
-- [x] Upload resources
-- [ ] Show resources for every post view
 - [ ] Dynamic template/config - Show JSON settings
   - [ ] Post types based on collection
   - [ ] Default values, Fields required based on type
   - [ ] Default filters
 - [ ] Auto deployment to Social handles
-- [ ] Create graphics for posts
-- [x] Update index directly
-- [x] Add social platform status
-  - [x] Check all
-- [x] Add suffix for file names
-  - [x] Add suffix for resources, show file name on hover
-- [x] Show Social Platform captions
-  - [x] Edit caption from modal
+- [x] Upload resources
+- [ ] Upload resources from a post
+- [ ] Show resources for every post view
+- [ ] Highlight resources & file names for which files are detected on cloudinary
+- [ ] Parse external data
+  - [x] Toby
+  - [ ] Chrome bookmarks
+- [x] Edit note JSON
 
 ### Bugs
 

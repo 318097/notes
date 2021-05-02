@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Drawer, Tag, Input, Button, message } from "antd";
+import { Drawer, Tag, Input, Button } from "antd";
 import { connect } from "react-redux";
 import _ from "lodash";
 import short from "short-uuid";
 import { toggleSettingsDrawer, saveSettings } from "../store/actions";
 import SelectCollection from "./SelectCollection";
+import JSONEditor from "./molecules/JSONEditor";
 
 const { TextArea } = Input;
 
@@ -129,8 +130,8 @@ const Settings = ({
         setShowJSON={setShowJSON}
       />
       {showJSON ? (
-        <JSONView
-          settingData={settingData}
+        <JSONEditor
+          data={settingData}
           handleSave={handleSave}
           loading={loading}
         />
@@ -171,42 +172,6 @@ const Header = ({
         </Button>
         <Button onClick={addNewCollection} icon="plus"></Button>
       </div>
-    </div>
-  );
-};
-
-const JSONView = ({ settingData, handleSave, loading }) => {
-  const [data, setData] = useState({});
-
-  useEffect(() => {
-    if (!settingData) return;
-    setData(JSON.stringify(settingData, undefined, 2));
-  }, [settingData]);
-
-  const validateJSON = () => {
-    try {
-      JSON.parse(data);
-    } catch (err) {
-      message.error("Invalid JSON");
-    }
-  };
-
-  return (
-    <div className="settings-content">
-      <TextArea
-        rows={24}
-        value={data}
-        onChange={(e) => setData(e.target.value)}
-        onBlur={validateJSON}
-      />
-      <Button
-        disabled={loading}
-        type="primary"
-        className="mt"
-        onClick={() => handleSave(JSON.parse(data))}
-      >
-        Save
-      </Button>
     </div>
   );
 };

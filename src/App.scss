@@ -150,6 +150,10 @@ body {
       }
     }
   }
+  .edit-json-modal .ant-modal-body {
+    padding: 24px;
+    height: auto;
+  }
 }
 
 // tags checkgroup in add modal

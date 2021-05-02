@@ -207,7 +207,7 @@ const Controls = ({
 
   const hashtags = tags.map((tag) => `#${tag}`).join(" ");
   // const rdySlug = `RDY${index}-${slug}${suffix ? `_${suffix}` : ""}`;
-  const slugWithLiveId = `${liveId}-${slug}${suffix ? `_${suffix}` : ""}`;
+  // const slugWithLiveId = `${liveId}-${slug}${suffix ? `_${suffix}` : ""}`;
 
   const createdAtFormatted = moment(createdAt).format("DD MMM, YY");
   const updatedAtFormatted = moment(updatedAt).format("DD MMM, YY");
@@ -451,7 +451,7 @@ const Controls = ({
         {resources.map((resource, index) => (
           <Popover
             key={resource.label}
-            placement="bottom"
+            placement="top"
             content={resource.label}
           >
             <div className="name-id" onClick={copy(resource.label)}>
@@ -464,7 +464,7 @@ const Controls = ({
       {!!liveId && (
         <Fragment>
           <div className="header">
-            <h4>File Names</h4>
+            <h4>Files</h4>
             <Icon
               type="plus"
               hover

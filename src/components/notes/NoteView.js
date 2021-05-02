@@ -3,14 +3,15 @@ import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Tag, Input } from "antd";
+import { Tag, Input, Modal } from "antd";
 import _ from "lodash";
+import queryString from "query-string";
 import colors, { Card, Icon } from "@codedrops/react-ui";
 import Controls from "./Controls";
 import { getNoteById, setModalMeta, updateNote } from "../../store/actions";
 import { md, copyToClipboard } from "../../utils";
 import { fadeInDownAnimation } from "../../animations";
-import queryString from "query-string";
+import JSONEditor from "../molecules/JSONEditor";
 
 const Wrapper = styled.div`
   padding-top: 20px;
@@ -116,7 +117,7 @@ const Wrapper = styled.div`
       left: 3px;
       z-index: 10;
     }
-    .edit-icon {
+    .edit-container {
       position: absolute;
       right: 8px;
       bottom: 6px;
@@ -218,6 +219,7 @@ const NoteView = ({
   viewNoteMeta,
 }) => {
   const [indexEditor, setIndexEditor] = useState();
+  const [editJSONVisibility, setEditJSONVisibility] = useState();
   const { nextNote, previousNote } = viewNoteMeta || {};
 
   useEffect(() => {
@@ -273,6 +275,8 @@ const NoteView = ({
     setIndexEditor(false);
   };
 
+  const editJSON = () => setEditJSONVisibility((prev) => !prev);
+
   const navigateNote = (newPosition) => {
     const newNoteId = newPosition > 0 ? nextNote : previousNote;
     if (newNoteId) history.push(`/note/${newNoteId}`);
@@ -297,6 +301,31 @@ const NoteView = ({
   } = viewNote || {};
 
   const canonicalURL = `https://www.codedrops.tech/posts/${slug}`;
+
+  const JSON = (
+    <Modal
+      title={"Edit Note"}
+      centered={true}
+      width={"50vw"}
+      wrapClassName="react-ui edit-json-modal"
+      visible={editJSONVisibility}
+      footer={null}
+      onCancel={() => editJSON()}
+    >
+      <JSONEditor
+        data={viewNote}
+        handleSave={(update) => {
+          delete update.createdAt;
+          delete update.updatedAt;
+          delete update._id;
+
+          updateProperties(update);
+          editJSON();
+        }}
+      />
+    </Modal>
+  );
+
   return (
     <Wrapper>
       {previousNote && (
@@ -413,13 +442,10 @@ const NoteView = ({
           size={14}
           fill={colors.strokeThree}
         />
-        <Icon
-          size={12}
-          onClick={handleEdit}
-          className="edit-icon icon"
-          hover
-          type="edit"
-        />
+        <div className="fcc edit-container">
+          <Icon size={12} onClick={editJSON} hover type="tag" />
+          <Icon size={12} onClick={handleEdit} hover type="edit" />
+        </div>
         {!!index && (
           <div className="index-wrapper">
             {indexEditor ? (
@@ -445,6 +471,7 @@ const NoteView = ({
             {canonicalURL}
           </div>
         )}
+        {JSON}
       </Card>
       <Controls
         note={viewNote}
