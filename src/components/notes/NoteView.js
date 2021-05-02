@@ -119,8 +119,8 @@ const Wrapper = styled.div`
     }
     .edit-container {
       position: absolute;
-      right: 8px;
-      bottom: 6px;
+      right: 10px;
+      bottom: 3px;
     }
     .copy-icon {
       position: absolute;

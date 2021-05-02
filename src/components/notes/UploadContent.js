@@ -94,7 +94,7 @@ const Wrapper = styled.div`
       right: 4px;
     }
   }
-  .resource-wrapper {
+  .image-wrapper {
     display: flex;
     height: 300px;
     align-items: center;
@@ -438,7 +438,7 @@ const UploadContent = ({
             if (dataType === "RESOURCES") {
               // const title = _.get(item, "file.name", "");
               return (
-                <AntCard key={i} size="small" className="resource-wrapper">
+                <AntCard key={i} size="small" className="image-wrapper">
                   <img alt="resource" src={item.raw} />
                 </AntCard>
               );

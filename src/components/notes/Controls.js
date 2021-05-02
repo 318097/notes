@@ -43,7 +43,7 @@ const ControlsWrapper = styled.div`
     font-size: 1rem;
     font-family: Cascadia-SemiBold;
   }
-  .slug {
+  /* .slug {
     background: ${colors.yellow};
     width: 100%;
     color: white;
@@ -59,7 +59,7 @@ const ControlsWrapper = styled.div`
     &:hover {
       background: ${colors.blue};
     }
-  }
+  } */
   .name-id {
     background: ${colors.strokeOne};
     border-radius: 50%;
@@ -133,8 +133,6 @@ const Controls = ({
     tags = [],
     _id,
     liveId,
-    slug = "",
-    index,
     createdAt,
     updatedAt,
     publishedAt,
@@ -151,7 +149,7 @@ const Controls = ({
   } = note || {};
   const [liveIdEditor, setLiveIdEditor] = useState(false);
   const [showCaptionModal, setShowCaptionModal] = useState(false);
-  const [showResourcesModal, setShowResourcesModal] = useState(false);
+  const [showImagesModal, setImagesModal] = useState(false);
   const [editCaptionId, setEditCaptionId] = useState(null);
   const [suffix, setSuffix] = useState();
   const [personalNote, setPersonalNote] = useState("");
@@ -206,8 +204,6 @@ const Controls = ({
     updateProperties({ updatedChainedTo: value, chainedTo });
 
   const hashtags = tags.map((tag) => `#${tag}`).join(" ");
-  // const rdySlug = `RDY${index}-${slug}${suffix ? `_${suffix}` : ""}`;
-  // const slugWithLiveId = `${liveId}-${slug}${suffix ? `_${suffix}` : ""}`;
 
   const createdAtFormatted = moment(createdAt).format("DD MMM, YY");
   const updatedAtFormatted = moment(updatedAt).format("DD MMM, YY");
@@ -272,16 +268,6 @@ const Controls = ({
     </ControlsWrapper>
   );
 
-  const Rating = (
-    <ControlsWrapper>
-      <h4>Rating</h4>
-      <Rate
-        value={rating || 0}
-        onChange={(value) => updateProperties({ rating: value })}
-      />
-    </ControlsWrapper>
-  );
-
   const Notes = (
     <ControlsWrapper>
       <div className="header">
@@ -311,8 +297,26 @@ const Controls = ({
     </ControlsWrapper>
   );
 
-  const Chain = (
+  const Misc = (
     <ControlsWrapper>
+      <div className="flex center">
+        <h4 className="mr">Visible</h4>
+        <Switch
+          checked={visible}
+          onChange={(value) => updateProperties({ visible: value })}
+        />
+      </div>
+      <div className="divider"></div>
+
+      <div className="flex center" style={{ alignItems: "baseline" }}>
+        <h4 className="m-0 pr">Rating</h4>
+        <Rate
+          value={rating || 0}
+          onChange={(value) => updateProperties({ rating: value })}
+        />
+      </div>
+      <div className="divider"></div>
+
       <div className="header">
         <h4>Chained In</h4>
       </div>
@@ -398,7 +402,7 @@ const Controls = ({
           </Tag>
         )}
       </div>
-      <div className="fcc mb">
+      <div className="fcc mb-4">
         <Select
           allowClear
           size="small"
@@ -425,18 +429,9 @@ const Controls = ({
           onChange={updateSuffix}
         />
       </div>
-      {/* <Popover placement="top" content={rdySlug}>
-        <div className="slug" onClick={copy(rdySlug)}>
-          {rdySlug}
-        </div>
-      </Popover> */}
 
-      <div className="divider"></div>
       <div className="header">
-        <h4
-          className="resources-title"
-          onClick={() => setShowResourcesModal(true)}
-        >
+        <h4 className="resources-title" onClick={() => setImagesModal(true)}>
           Resources
         </h4>
         <Icon
@@ -495,15 +490,6 @@ const Controls = ({
           <div className="hashtag">{hashtags}</div>
         </Fragment>
       )}
-
-      <div className="divider"></div>
-      <div className="flex center">
-        <span className="mr">Visible</span>
-        <Switch
-          checked={visible}
-          onChange={(value) => updateProperties({ visible: value })}
-        />
-      </div>
     </ControlsWrapper>
   );
 
@@ -530,23 +516,17 @@ const Controls = ({
   );
 
   const menuList = [
+    // {
+    //   view: "LEFT",
+    //   visible: false,
+    //   component: SocialStatus,
+    //   id: "SocialStatus",
+    // },
     {
       view: "LEFT",
-      visible: !_.isEmpty(socialPlatformsList),
-      component: SocialPlatforms,
-      id: "SocialPlatforms",
-    },
-    {
-      view: "LEFT",
-      visible: false,
-      component: SocialStatus,
-      id: "SocialStatus",
-    },
-    {
-      view: "LEFT",
-      visible: true,
-      component: Rating,
-      id: "Rating",
+      visible: type !== "CHAIN",
+      component: Misc,
+      id: "Misc",
     },
     {
       view: "LEFT",
@@ -556,15 +536,9 @@ const Controls = ({
     },
     {
       view: "LEFT",
-      visible: type !== "CHAIN",
-      component: Chain,
-      id: "Chain",
-    },
-    {
-      view: "RIGHT",
       visible: true,
-      component: Status,
-      id: "Status",
+      component: PublishDates,
+      id: "PublishDates",
     },
     {
       view: "RIGHT",
@@ -574,26 +548,43 @@ const Controls = ({
     },
     {
       view: "RIGHT",
+      visible: !_.isEmpty(socialPlatformsList),
+      component: SocialPlatforms,
+      id: "SocialPlatforms",
+    },
+    {
+      view: "RIGHT",
       visible: true,
-      component: PublishDates,
-      id: "PublishDates",
+      component: Status,
+      id: "Status",
     },
   ];
 
-  const ResourcesModal = (
+  const ImagesModal = (
     <Modal
       title={"Resources"}
       centered={true}
       width={"50vw"}
-      wrapClassName="react-ui resource-modal"
-      visible={showResourcesModal}
+      wrapClassName="react-ui images-modal"
+      visible={showImagesModal}
       footer={null}
-      onCancel={() => setShowResourcesModal(false)}
+      onCancel={() => setImagesModal(false)}
     >
+      <h3>Resources</h3>
       {resources.map((resource) => {
         const url = `https://res.cloudinary.com/codedropstech/image/upload/v1619358326/staging/notes_app/${session._id}/${resource}.png`;
         return (
-          <Card className="resource-wrapper">
+          <Card className="image-wrapper">
+            <img src={url} />
+          </Card>
+        );
+      })}
+
+      <h3>Files</h3>
+      {fileNames.map((resource) => {
+        const url = `https://res.cloudinary.com/codedropstech/image/upload/v1619358326/staging/notes_app/${session._id}/${resource}.png`;
+        return (
+          <Card className="image-wrapper">
             <img src={url} />
           </Card>
         );
@@ -668,7 +659,7 @@ const Controls = ({
           <Fragment key={item.id}>{item.component}</Fragment>
         ))}
       {CaptionModal}
-      {ResourcesModal}
+      {ImagesModal}
     </div>
   );
 };

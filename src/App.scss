@@ -1,13 +1,18 @@
 @import "./Common.scss";
 @import "@codedrops/react-ui/dist/styles/colors.scss";
 
-html body .spinner {
-  position: absolute;
-  right: 20px;
-  bottom: 16px;
-  top: unset;
-  left: unset;
-  z-index: 10000;
+html body #react-ui {
+  .spinner {
+    position: absolute;
+    right: 20px;
+    bottom: 16px;
+    top: unset;
+    left: unset;
+    z-index: 10000;
+  }
+  .divider {
+    background: $strokeOne;
+  }
 }
 
 pre,
@@ -136,10 +141,10 @@ body {
       }
     }
   }
-  .resource-modal .ant-modal-body {
+  .images-modal .ant-modal-body {
     padding: 24px;
     overflow: auto;
-    .resource-wrapper {
+    .image-wrapper {
       display: flex;
       height: 300px;
       align-items: center;
