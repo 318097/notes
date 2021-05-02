@@ -20,7 +20,7 @@ import { saveSettings, updateNote } from "../../store/actions";
 import { copyToClipboard } from "../../utils";
 import short from "short-uuid";
 import { statusFilter } from "../../constants";
-import EmptyState from "../EmptyState";
+import EmptyState from "../molecules/EmptyState";
 
 const { TextArea } = Input;
 const { Option } = Select;

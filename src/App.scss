@@ -1,4 +1,3 @@
-@import "./Common.scss";
 @import "@codedrops/react-ui/dist/styles/colors.scss";
 
 html body #react-ui {
@@ -13,6 +12,15 @@ html body #react-ui {
   .divider {
     background: $strokeOne;
   }
+}
+
+.form-field {
+  width: 90px;
+  margin: 2px;
+}
+
+.block {
+  display: block;
 }
 
 pre,

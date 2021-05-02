@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Icon as AntIcon } from "antd";
 import moment from "moment";
 import colors, { Card, Icon, Tag } from "@codedrops/react-ui";
-import Dropdown from "./Dropdown";
+// import Dropdown from "../molecules/Dropdown";
 import { md } from "../../utils";
 
 const StyledCard = styled.div`
@@ -93,7 +93,7 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
     chainedItems = [],
     chainedTo = [],
   } = note;
-  const [showDropdown, setShowDropdown] = useState(false);
+  // const [showDropdown, setShowDropdown] = useState(false);
   const isCreatedToday = moment().isSame(moment(createdAt), "day");
   const createdTimeAgo = moment(createdAt).fromNow();
 
@@ -114,12 +114,12 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
             dangerouslySetInnerHTML={{ __html: md.render(content) }}
           ></div>
         )}
-        <Dropdown
+        {/* <Dropdown
           showDropdown={showDropdown}
           setShowDropdown={setShowDropdown}
           onEdit={() => onEdit(_id)}
           onDelete={() => onDelete(_id)}
-        />
+        /> */}
       </Card>
       <Card className={`action-row${isCreatedToday ? " today" : ""}`}>
         <div className="status-row">
