@@ -33,7 +33,7 @@ const ControlsWrapper = styled.div`
   margin-bottom: 8px;
   width: 218px;
   padding: 14px 12px;
-  border-radius: 12px;
+  border-radius: 4px;
   border: 1px solid ${colors.shade2};
   box-shadow: 3px 3px 3px ${colors.shade2};
   .header {

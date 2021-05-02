@@ -30,7 +30,7 @@ const Wrapper = styled.div`
     grid-column: 4/10;
     display: flex;
     background: white;
-    border-radius: 15px;
+    border-radius: 4px;
     flex-direction: column;
     border: 1px solid ${colors.bg};
     box-shadow: ${colors.bg} 3px 3px 3px;
@@ -91,7 +91,7 @@ const Wrapper = styled.div`
       border: 1px solid ${colors.strokeTwo};
       margin: 0 20px 20px;
       padding: 10px;
-      border-radius: 4px;
+      border-radius: 2px;
       p {
         margin: 0;
       }

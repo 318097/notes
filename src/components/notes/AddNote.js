@@ -69,7 +69,7 @@ const StyledContainer = styled.div`
   }
   div.preview {
     background: ${colors.shade1};
-    border-radius: 5px;
+    border-radius: 4px;
     flex: 0 0 40%;
     padding: 8px;
     margin-left: 8px;
