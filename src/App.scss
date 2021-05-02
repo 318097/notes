@@ -152,16 +152,16 @@ body {
   .images-modal .ant-modal-body {
     padding: 24px;
     overflow: auto;
-    .image-wrapper {
-      display: flex;
-      height: 300px;
-      align-items: center;
-      justify-content: center;
-      width: 50%;
-      img {
-        max-width: 100%;
-      }
-    }
+    // .image-wrapper {
+    //   display: flex;
+    //   height: 300px;
+    //   align-items: center;
+    //   justify-content: center;
+    //   width: 50%;
+    //   img {
+    //     max-width: 100%;
+    //   }
+    // }
   }
   .edit-json-modal .ant-modal-body {
     padding: 24px;

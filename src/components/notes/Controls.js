@@ -21,6 +21,7 @@ import { copyToClipboard } from "../../utils";
 import short from "short-uuid";
 import { statusFilter } from "../../constants";
 import EmptyState from "../molecules/EmptyState";
+import ImageCard from "../molecules/ImageCard";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -218,84 +219,25 @@ const Controls = ({
     chain.chainedItems.includes(_id)
   );
 
-  const SocialPlatforms = (
-    <ControlsWrapper className="social-platforms">
-      <div className="header">
-        <h4>Social Platforms</h4>
-        <Checkbox
-          onChange={onCheckAllChange}
-          checked={socialPlatformCaptionCheckAll}
-        >
-          All
-        </Checkbox>
-      </div>
-      <Checkbox.Group
-        onChange={(list) => {
-          setSocialPlatformCaptionCheckAll(
-            list.length === socialPlatforms.length
-          );
-          updateProperties({ socialPlatforms: list });
-        }}
-        value={socialPlatforms}
-        options={socialPlatformsList}
-      />
-      {blockSocialPlatforms && (
-        <div
-          className="blocker"
-          onDoubleClick={() => setBlockSocialPlatforms(false)}
-        ></div>
-      )}
-    </ControlsWrapper>
-  );
-
-  const SocialStatus = (
-    <ControlsWrapper>
-      <div className="header">
-        <h4>Social status</h4>
-      </div>
-      <Radio.Group
-        onChange={({ target: { value } }) =>
-          updateProperties({ socialStatus: value })
-        }
-        value={socialStatus}
-      >
-        {["NONE", "READY", "POSTED"].map((state) => (
-          <Radio className="block" key={state} value={state}>
-            {state}
-          </Radio>
-        ))}
-      </Radio.Group>
-    </ControlsWrapper>
-  );
-
-  const Notes = (
-    <ControlsWrapper>
-      <div className="header">
-        <h4>Notes</h4>
-        {personalNotes.length ? (
-          <Tag>{`Total: ${personalNotes.length}`}</Tag>
-        ) : null}
-      </div>
-      <div className="notes-container">
-        <EmptyState input={personalNotes}>
-          {personalNotes.map((note, index) => (
-            <div key={note._id} className="note">
-              {`${index + 1}. ${note.content}`}
-            </div>
-          ))}
-        </EmptyState>
-      </div>
-      <div className="add-note-container">
-        <TextArea
-          rows={1}
-          placeholder="Add Note.."
-          value={personalNote}
-          onChange={({ target: { value } }) => setPersonalNote(value)}
-          onPressEnter={handleAddPersonalNote}
-        />
-      </div>
-    </ControlsWrapper>
-  );
+  // const SocialStatus = (
+  //   <ControlsWrapper>
+  //     <div className="header">
+  //       <h4>Social status</h4>
+  //     </div>
+  //     <Radio.Group
+  //       onChange={({ target: { value } }) =>
+  //         updateProperties({ socialStatus: value })
+  //       }
+  //       value={socialStatus}
+  //     >
+  //       {["NONE", "READY", "POSTED"].map((state) => (
+  //         <Radio className="block" key={state} value={state}>
+  //           {state}
+  //         </Radio>
+  //       ))}
+  //     </Radio.Group>
+  //   </ControlsWrapper>
+  // );
 
   const Misc = (
     <ControlsWrapper>
@@ -355,40 +297,54 @@ const Controls = ({
     </ControlsWrapper>
   );
 
-  const Status = (
+  const Notes = (
     <ControlsWrapper>
       <div className="header">
-        <h4>Status</h4>
-        {liveId && (
-          <Fragment>
-            {liveIdEditor ? (
-              <Input
-                style={{ width: "30px", height: "18px", fontSize: "1rem" }}
-                size="small"
-                defaultValue={liveId}
-                onBlur={updateLiveId}
-              />
-            ) : (
-              <Tag
-                color={colors.green}
-                onDoubleClick={() => setLiveIdEditor(true)}
-              >{`Live Id: ${liveId}`}</Tag>
-            )}
-          </Fragment>
-        )}
+        <h4>Notes</h4>
+        {personalNotes.length ? (
+          <Tag>{`Total: ${personalNotes.length}`}</Tag>
+        ) : null}
       </div>
-      <Radio.Group
-        onChange={({ target: { value } }) =>
-          updateProperties({ status: value })
-        }
-        value={status}
-      >
-        {statusFilter.map(({ label, value }) => (
-          <Radio className="block" key={value} value={value}>
-            {label}
-          </Radio>
-        ))}
-      </Radio.Group>
+      <div className="notes-container">
+        <EmptyState input={personalNotes}>
+          {personalNotes.map((note, index) => (
+            <div key={note._id} className="note">
+              {`${index + 1}. ${note.content}`}
+            </div>
+          ))}
+        </EmptyState>
+      </div>
+      <div className="add-note-container">
+        <TextArea
+          rows={1}
+          placeholder="Add Note.."
+          value={personalNote}
+          onChange={({ target: { value } }) => setPersonalNote(value)}
+          onPressEnter={handleAddPersonalNote}
+        />
+      </div>
+    </ControlsWrapper>
+  );
+
+  const PublishDates = (
+    <ControlsWrapper>
+      <div className="mb">
+        Added:
+        <span className="bold">{createdAtFormatted}</span>
+        <br />
+        <span>{createdTimeAgo}</span>
+      </div>
+      <div className="mb">
+        Last Updated:
+        <span className="bold">{updatedAtFormatted}</span>
+        <br />
+        <span>{updatedTimeAgo}</span>
+      </div>
+      {status === "POSTED" && (
+        <div>
+          Published: <span className="bold">{publishedOn}</span>
+        </div>
+      )}
     </ControlsWrapper>
   );
 
@@ -493,25 +449,70 @@ const Controls = ({
     </ControlsWrapper>
   );
 
-  const PublishDates = (
-    <ControlsWrapper>
-      <div className="mb">
-        Added:
-        <span className="bold">{createdAtFormatted}</span>
-        <br />
-        <span>{createdTimeAgo}</span>
+  const SocialPlatforms = (
+    <ControlsWrapper className="social-platforms">
+      <div className="header">
+        <h4>Social Platforms</h4>
+        <Checkbox
+          onChange={onCheckAllChange}
+          checked={socialPlatformCaptionCheckAll}
+        >
+          All
+        </Checkbox>
       </div>
-      <div className="mb">
-        Last Updated:
-        <span className="bold">{updatedAtFormatted}</span>
-        <br />
-        <span>{updatedTimeAgo}</span>
-      </div>
-      {status === "POSTED" && (
-        <div>
-          Published: <span className="bold">{publishedOn}</span>
-        </div>
+      <Checkbox.Group
+        onChange={(list) => {
+          setSocialPlatformCaptionCheckAll(
+            list.length === socialPlatforms.length
+          );
+          updateProperties({ socialPlatforms: list });
+        }}
+        value={socialPlatforms}
+        options={socialPlatformsList}
+      />
+      {blockSocialPlatforms && (
+        <div
+          className="blocker"
+          onDoubleClick={() => setBlockSocialPlatforms(false)}
+        ></div>
       )}
+    </ControlsWrapper>
+  );
+
+  const Status = (
+    <ControlsWrapper>
+      <div className="header">
+        <h4>Status</h4>
+        {liveId && (
+          <Fragment>
+            {liveIdEditor ? (
+              <Input
+                style={{ width: "30px", height: "18px", fontSize: "1rem" }}
+                size="small"
+                defaultValue={liveId}
+                onBlur={updateLiveId}
+              />
+            ) : (
+              <Tag
+                color={colors.green}
+                onDoubleClick={() => setLiveIdEditor(true)}
+              >{`Live Id: ${liveId}`}</Tag>
+            )}
+          </Fragment>
+        )}
+      </div>
+      <Radio.Group
+        onChange={({ target: { value } }) =>
+          updateProperties({ status: value })
+        }
+        value={status}
+      >
+        {statusFilter.map(({ label, value }) => (
+          <Radio className="block" key={value} value={value}>
+            {label}
+          </Radio>
+        ))}
+      </Radio.Group>
     </ControlsWrapper>
   );
 
@@ -570,25 +571,17 @@ const Controls = ({
       footer={null}
       onCancel={() => setImagesModal(false)}
     >
+      {/* const url =
+      `https://res.cloudinary.com/codedropstech/image/upload/v1619358326/staging/notes_app/$
+      {session._id}/${resource}.png`; */}
       <h3>Resources</h3>
-      {resources.map((resource) => {
-        const url = `https://res.cloudinary.com/codedropstech/image/upload/v1619358326/staging/notes_app/${session._id}/${resource}.png`;
-        return (
-          <Card className="image-wrapper">
-            <img src={url} />
-          </Card>
-        );
-      })}
-
+      {resources.map((item, i) => (
+        <ImageCard key={i} {...item} />
+      ))}
       <h3>Files</h3>
-      {fileNames.map((resource) => {
-        const url = `https://res.cloudinary.com/codedropstech/image/upload/v1619358326/staging/notes_app/${session._id}/${resource}.png`;
-        return (
-          <Card className="image-wrapper">
-            <img src={url} />
-          </Card>
-        );
-      })}
+      {fileNames.map((item, i) => (
+        <ImageCard key={i} {...item} />
+      ))}
     </Modal>
   );
 

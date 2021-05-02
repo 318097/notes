@@ -1,14 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef, Fragment } from "react";
-import {
-  Button,
-  message,
-  Tag,
-  Select,
-  Divider,
-  Modal,
-  Card as AntCard,
-} from "antd";
+import { Button, message, Tag, Select, Divider, Modal } from "antd";
 import { Card, Icon } from "@codedrops/react-ui";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -18,8 +10,9 @@ import { MessageWrapper } from "../../styled";
 import SelectCollection from "../SelectCollection";
 import { setModalMeta, setUploadingData, addNote } from "../../store/actions";
 import { initialUploadingDataState } from "../../store/reducer";
-import { md } from "../../utils";
+import { md, readFileContent } from "../../utils";
 import axios from "axios";
+import ImageCard from "../molecules/ImageCard";
 
 const config = {
   POST: {
@@ -94,15 +87,6 @@ const Wrapper = styled.div`
       right: 4px;
     }
   }
-  .image-wrapper {
-    display: flex;
-    height: 300px;
-    align-items: center;
-    justify-content: center;
-    img {
-      max-width: 100%;
-    }
-  }
 `;
 
 const UploadContent = ({
@@ -135,46 +119,6 @@ const UploadContent = ({
   useEffect(() => {
     if (status === "PROCESSED") setRequireParsing(true);
   }, [collection, tags, dataType]);
-
-  const readFileContent = (event) => {
-    const { files } = event.target;
-
-    // const isImage = _.get(files, "0.type", "").startsWith("image/");
-    if (dataType === "RESOURCES") {
-      const sourceFiles = Object.values(files);
-
-      Promise.all(
-        sourceFiles.map((file) => {
-          return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve({ file, raw: reader.result });
-          });
-        })
-      ).then((result) => {
-        setUploadingData({
-          data: [...result, ...data],
-          sourceFiles,
-        });
-      });
-    } else {
-      const [document] = files;
-
-      if (!document) return;
-
-      const reader = new FileReader();
-      reader.readAsText(document);
-
-      reader.onload = () =>
-        setUploadingData({
-          rawData: reader.result,
-          status: "PROCESS_DATA",
-          fileName: document.name,
-          sourceFiles: [document],
-        });
-    }
-    event.target.value = null;
-  };
 
   const parseItem = (item, { isCustomSource, collection } = {}) => {
     const parsed = {
@@ -299,6 +243,23 @@ const UploadContent = ({
   const removeItem = (tempId) => (e) => {
     e.stopPropagation();
     setUploadingData({ data: data.filter((item) => item.tempId !== tempId) });
+  };
+
+  const onFileRead = (files) => {
+    if (dataType === "RESOURCES")
+      setUploadingData({
+        ...files,
+        data: [...files.data, ...data],
+      });
+    else
+      setUploadingData({
+        ...files,
+        status: "PROCESS_DATA",
+      });
+  };
+
+  const onFileChange = (event) => {
+    readFileContent(event, { onFileRead });
   };
 
   const clearData = () =>
@@ -437,11 +398,7 @@ const UploadContent = ({
           {data.map((item, i) => {
             if (dataType === "RESOURCES") {
               // const title = _.get(item, "file.name", "");
-              return (
-                <AntCard key={i} size="small" className="image-wrapper">
-                  <img alt="resource" src={item.raw} />
-                </AntCard>
-              );
+              return <ImageCard key={i} {...item} />;
             }
 
             const { title = "", content = "", tags = [], viewed } = item;
@@ -498,7 +455,7 @@ const UploadContent = ({
         accept={_.get(config, [dataType, "accept"])}
         multiple
         style={{ visibility: "hidden" }}
-        onChange={readFileContent}
+        onChange={onFileChange}
       />
     </section>
   );
