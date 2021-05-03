@@ -82,7 +82,7 @@ const Notes = ({
     if (!scrollRef.current) return;
     const offset = sessionStorage.getItem("scroll");
     if (!offset) return;
-    scrollToPosition(scrollRef.current, offset + 300);
+    scrollToPosition(scrollRef.current, offset);
     sessionStorage.clear();
   }, [scrollRef]);
 
