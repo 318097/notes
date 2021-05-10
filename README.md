@@ -51,6 +51,8 @@
   - [x] Toby
   - [ ] Chrome bookmarks
 - [x] Edit note JSON
+- [ ] Add refresh button
+- [ ] `Status` should be multi select
 
 ### Bugs
 
