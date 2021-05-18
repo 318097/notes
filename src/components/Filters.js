@@ -21,7 +21,7 @@ const { Option } = Select;
 const RESET_FILTER = {
   tags: undefined,
   socialStatus: undefined,
-  status: undefined,
+  status: ["QUICK_ADD", "DRAFT"],
   search: undefined,
   rating: undefined,
   type: undefined,
@@ -62,9 +62,14 @@ const Filters = ({
     let extraFilters = {};
     if (props.length === 1) {
       const [key, value] = props[0];
-      if (key === "status" && value === "POSTED")
+      if (
+        key === "status" &&
+        value.length === 1 &&
+        _.includes(value, ["POSTED"])
+      )
         extraFilters = { sortFilter: "liveId", sortOrder: "DESC" };
-      else if (key === "status") extraFilters = { sortFilter: "createdAt" };
+      else if (key === "status")
+        extraFilters = { sortFilter: "createdAt", sortOrder: "DESC" };
     }
     dispatch(setFilter({ ...filter, ...extraFilters }));
   };
@@ -149,6 +154,8 @@ const Filters = ({
       className="form-field"
       placeholder="Status"
       value={filters.status}
+      mode="multiple"
+      style={{ minWidth: "100px", width: "auto" }}
       onChange={(value) => setFilterValues({ status: value })}
     >
       {statusFilter.map(({ label, value }) => (

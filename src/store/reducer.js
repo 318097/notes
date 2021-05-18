@@ -42,7 +42,7 @@ const initialState = {
   filters: {
     tags: undefined,
     socialStatus: undefined,
-    status: undefined,
+    status: ["QUICK_ADD", "DRAFT"],
     search: undefined,
     rating: undefined,
     type: undefined,

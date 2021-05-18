@@ -53,7 +53,7 @@
 - [x] Edit note JSON
 - [x] Add reload button & reload after adding data
 - [ ] Lazy loading
-- [ ] `Status` should be multi select
+- [x] `Status` should be multi select
 - [ ] Fix colors for charts
 
 ### Bugs
