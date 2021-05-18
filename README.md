@@ -51,8 +51,10 @@
   - [x] Toby
   - [ ] Chrome bookmarks
 - [x] Edit note JSON
-- [ ] Add refresh button
+- [x] Add reload button & reload after adding data
+- [ ] Lazy loading
 - [ ] `Status` should be multi select
+- [ ] Fix colors for charts
 
 ### Bugs
 

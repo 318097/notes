@@ -75,7 +75,7 @@ const Notes = ({
   const scrollRef = useRef();
 
   useEffect(() => {
-    dispatch(setFilter({}));
+    dispatch(setFilter());
   }, []);
 
   useEffect(() => {

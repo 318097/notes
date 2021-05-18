@@ -221,9 +221,9 @@ const Filters = ({
       showInMinimized: true,
     },
     {
-      id: "Tags",
-      component: Tags,
-      visible: !_.isEmpty(tags),
+      id: "Status",
+      component: Status,
+      visible: true,
       showInMinimized: true,
     },
     {
@@ -233,16 +233,16 @@ const Filters = ({
       showInMinimized: false,
     },
     {
+      id: "Tags",
+      component: Tags,
+      visible: !_.isEmpty(tags),
+      showInMinimized: false,
+    },
+    {
       id: "Ratings",
       component: Ratings,
       visible: true,
       showInMinimized: false,
-    },
-    {
-      id: "Status",
-      component: Status,
-      visible: true,
-      showInMinimized: true,
     },
     {
       id: "SocialStatus",
@@ -251,16 +251,16 @@ const Filters = ({
       showInMinimized: false,
     },
     {
-      id: "SortBy",
-      component: SortBy,
-      visible: true,
-      showInMinimized: true,
-    },
-    {
       id: "Visibility",
       component: Visibility,
       visible: true,
       showInMinimized: false,
+    },
+    {
+      id: "SortBy",
+      component: SortBy,
+      visible: true,
+      showInMinimized: true,
     },
   ];
 
@@ -305,6 +305,12 @@ const Filters = ({
             setKey({ displayType: displayType === "CARD" ? "TABLE" : "CARD" })
           )
         }
+      />
+
+      <Icon
+        type={"reload"}
+        className="icon icon-bg"
+        onClick={() => dispatch(setFilter())}
       />
 
       {_.get(meta, "count", 0) > 0 && (

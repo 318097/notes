@@ -9,7 +9,6 @@ import {
   UPDATE_FILTER,
   LOAD_NOTES,
   GET_NOTE_BY_ID,
-  ADD_NOTE,
   SET_NOTE_TO_EDIT,
   SET_MODAL_META,
   UPDATE_NOTE,
@@ -156,13 +155,6 @@ const reducer = (state = initialState, action) => {
         },
       };
     }
-    case ADD_NOTE:
-      const chainNotes = action.payload.filter((note) => note.type === "CHAIN");
-      return {
-        ...state,
-        notes: [...action.payload, ...state.notes],
-        chains: [...state.chains, ...chainNotes],
-      };
     case SET_NOTE_TO_EDIT: {
       const { selectedNote, mode } = action.payload;
       return {

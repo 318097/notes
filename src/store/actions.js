@@ -1,7 +1,6 @@
 import axios from "axios";
 import _ from "lodash";
 import { message } from "antd";
-
 import { getNextNote } from "../utils";
 import {
   SET_SESSION,
@@ -10,7 +9,6 @@ import {
   UPDATE_FILTER,
   LOAD_NOTES,
   GET_NOTE_BY_ID,
-  ADD_NOTE,
   SET_NOTE_TO_EDIT,
   SET_MODAL_META,
   UPDATE_NOTE,
@@ -25,7 +23,6 @@ import {
   SET_KEY,
   FETCH_CHAINS,
 } from "./constants";
-import { constants } from "short-uuid";
 
 export const setAppLoading = (status) => ({
   type: SET_APP_LOADING,
@@ -84,33 +81,27 @@ export const addNote = (notes, collection) => async (dispatch, getState) => {
     const addToCollection = collection || activeCollection;
 
     const data = [].concat(notes);
-    const {
-      data: { result },
-    } = await axios.post(`/posts?collectionId=${addToCollection}`, { data });
+    await axios.post(`/posts?collectionId=${addToCollection}`, { data });
     dispatch({
-      type: ADD_NOTE,
-      payload: activeCollection === addToCollection ? result : [],
+      type: UPDATE_FILTER,
     });
   } finally {
     dispatch(setAppLoading(false));
   }
 };
 
-export const setNoteToEdit = (noteId, mode = "edit") => async (
-  dispatch,
-  getState
-) => {
-  const {
-    notes = [],
-    uploadingData: { data: uploadingNotes = [] } = {},
-  } = getState();
-  const data = mode === "edit" ? notes : uploadingNotes;
-  const selectedNote = data.find((note) => note._id === noteId);
-  dispatch({
-    type: SET_NOTE_TO_EDIT,
-    payload: { selectedNote, mode },
-  });
-};
+export const setNoteToEdit =
+  (noteId, mode = "edit") =>
+  async (dispatch, getState) => {
+    const { notes = [], uploadingData: { data: uploadingNotes = [] } = {} } =
+      getState();
+    const data = mode === "edit" ? notes : uploadingNotes;
+    const selectedNote = data.find((note) => note._id === noteId);
+    dispatch({
+      type: SET_NOTE_TO_EDIT,
+      payload: { selectedNote, mode },
+    });
+  };
 
 export const updateNote = (note, action) => async (dispatch, getState) => {
   try {
@@ -159,36 +150,34 @@ export const updateUploadNote = (note) => async (dispatch, getState) => {
   dispatch({ type: UPDATE_UPLOAD_NOTE, payload: note });
 };
 
-export const setNextNoteForEditing = (currentNote) => async (
-  dispatch,
-  getState
-) => {
-  const {
-    notes = [],
-    modalMeta: { mode },
-    uploadingData: { data: uploadingNotes = [] } = {},
-  } = getState();
+export const setNextNoteForEditing =
+  (currentNote) => async (dispatch, getState) => {
+    const {
+      notes = [],
+      modalMeta: { mode },
+      uploadingData: { data: uploadingNotes = [] } = {},
+    } = getState();
 
-  let nextNote;
-  if (mode === "edit") {
-    nextNote = getNextNote({ data: notes, id: currentNote._id });
-    await dispatch(updateNote({ ...currentNote }));
-  } else {
-    nextNote = getNextNote({
-      data: uploadingNotes,
-      id: currentNote.tempId,
-      matchKey: "tempId",
-    });
-    await dispatch(updateUploadNote({ ...currentNote }));
-  }
-  dispatch(
-    setModalMeta({
-      selectedNote: nextNote || {},
-      mode,
-      visibility: !!nextNote,
-    })
-  );
-};
+    let nextNote;
+    if (mode === "edit") {
+      nextNote = getNextNote({ data: notes, id: currentNote._id });
+      await dispatch(updateNote({ ...currentNote }));
+    } else {
+      nextNote = getNextNote({
+        data: uploadingNotes,
+        id: currentNote.tempId,
+        matchKey: "tempId",
+      });
+      await dispatch(updateUploadNote({ ...currentNote }));
+    }
+    dispatch(
+      setModalMeta({
+        selectedNote: nextNote || {},
+        mode,
+        visibility: !!nextNote,
+      })
+    );
+  };
 
 export const setQuickAddModalMeta = ({ visibility = false } = {}) => ({
   type: SET_QUICK_ADD_MODAL_META,
@@ -230,41 +219,41 @@ export const setActiveCollection = (id) => async (dispatch) => {
   await dispatch(setFilter());
 };
 
-export const setSettings = (updatedSettings, updateOnServer = false) => async (
-  dispatch,
-  getState
-) => {
-  const { settings = {}, session } = getState();
+export const setSettings =
+  (updatedSettings, updateOnServer = false) =>
+  async (dispatch, getState) => {
+    const { settings = {}, session } = getState();
 
-  if (updateOnServer)
-    await axios.put(`/users/${session.userId}/settings`, updatedSettings);
+    if (updateOnServer)
+      await axios.put(`/users/${session.userId}/settings`, updatedSettings);
 
-  const newSettings = { ...settings, ...updatedSettings };
+    const newSettings = { ...settings, ...updatedSettings };
 
-  dispatch({
-    type: SET_SETTINGS,
-    payload: newSettings,
-  });
-};
+    dispatch({
+      type: SET_SETTINGS,
+      payload: newSettings,
+    });
+  };
 
 export const toggleSettingsDrawer = (status) => ({
   type: TOGGLE_SETTINGS_DRAWER,
   payload: status,
 });
 
-export const setFilter = (filterUpdate, resetPage = true) => async (
-  dispatch,
-  getState
-) => {
-  const { filters, retainPage } = getState();
-  if (retainPage)
-    return dispatch({ type: SET_KEY, payload: { retainPage: false } });
+export const setFilter =
+  (filterUpdate = {}, resetPage = true) =>
+  async (dispatch, getState) => {
+    const { filters, retainPage } = getState();
+    if (retainPage)
+      return dispatch({ type: SET_KEY, payload: { retainPage: false } });
 
-  const updatedFiters = { ...filters, ...filterUpdate };
-  if (resetPage) updatedFiters["page"] = 1;
-  dispatch({ type: UPDATE_FILTER, payload: updatedFiters });
-  dispatch(window.location.pathname === "/stats" ? fetchStats() : fetchNotes());
-};
+    const updatedFiters = { ...filters, ...filterUpdate };
+    if (resetPage) updatedFiters["page"] = 1;
+    dispatch({ type: UPDATE_FILTER, payload: updatedFiters });
+    dispatch(
+      window.location.pathname === "/stats" ? fetchStats() : fetchNotes()
+    );
+  };
 
 export const getChains = () => async (dispatch, getState) => {
   try {

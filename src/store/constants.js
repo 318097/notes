@@ -5,7 +5,6 @@ export const TOGGLE_SETTINGS_DRAWER = "TOGGLE_SETTINGS_DRAWER";
 export const LOAD_NOTES = "LOAD_NOTES";
 export const UPDATE_FILTER = "UPDATE_FILTER";
 export const GET_NOTE_BY_ID = "GET_NOTE_BY_ID";
-export const ADD_NOTE = "ADD_NOTE";
 export const SET_NOTE_TO_EDIT = "SET_NOTE_TO_EDIT";
 export const UPDATE_NOTE = "UPDATE_NOTE";
 export const DELETE_NOTE = "DELETE_NOTE";
