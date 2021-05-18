@@ -63,6 +63,16 @@ h3 code {
   background: $coffee;
 }
 
+.index-wrapper {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  .index {
+    color: $strokeTwo;
+    font-size: 1rem;
+  }
+}
+
 body {
   h1,
   h2,

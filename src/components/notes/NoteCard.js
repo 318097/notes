@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Icon as AntIcon } from "antd";
 import moment from "moment";
 import colors, { Card, Icon, Tag } from "@codedrops/react-ui";
+import _ from "lodash";
 // import Dropdown from "../molecules/Dropdown";
 import { md } from "../../utils";
 
@@ -114,6 +115,11 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
             dangerouslySetInnerHTML={{ __html: md.render(content) }}
           ></div>
         )}
+        {!!index && (
+          <div className="index-wrapper">
+            <span className="index">{`#${index}`}</span>
+          </div>
+        )}
         {/* <Dropdown
           showDropdown={showDropdown}
           setShowDropdown={setShowDropdown}
@@ -130,7 +136,16 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
               </Tag>
             ))}
           </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
+
+          <Tag color={status === "POSTED" ? "foBlue" : "nbOrange"}>
+            {status === "POSTED"
+              ? `Live Id: ${liveId}`
+              : status.replace("_", " ")}
+          </Tag>
+        </div>
+
+        <div className="status-row">
+          <div className="flex center">
             {!!rating && (
               <Tag>
                 {rating}
@@ -142,32 +157,26 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
                 />
               </Tag>
             )}
-            {type === "CHAIN" && (
+
+            {type === "CHAIN" ? (
               <Tag
                 color={
                   chainedItems.length !== chainedPosts.length ? "red" : "steel"
                 }
               >{`${chainedItems.length} posts`}</Tag>
-            )}
-            {chainedTo && chainedTo.length ? (
+            ) : !_.isEmpty(chainedTo) ? (
               <Tag>{`In ${chainedTo.length} chains`}</Tag>
             ) : null}
-            {!visible && <AntIcon type="eye-invisible" />}
-            {type === "DROP" && <Icon type="bulb" size={12} />}
-            {type === "CHAIN" && <AntIcon type="deployment-unit" size={12} />}
-          </div>
-        </div>
 
-        <div className="status-row">
-          <Tag color={status === "POSTED" ? "foBlue" : "nbOrange"}>
-            {status === "POSTED"
-              ? `Live Id: ${liveId}`
-              : status.replace("_", " ")}
-          </Tag>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <Tag>{createdTimeAgo}</Tag>
-            {index && <Tag>{`#${index}`}</Tag>}
+            {!visible && <AntIcon type="eye-invisible" />}
+            {type === "DROP" ? (
+              <Icon type="bulb" size={12} />
+            ) : type === "CHAIN" ? (
+              <AntIcon type="deployment-unit" size={12} />
+            ) : null}
           </div>
+
+          <Tag>{createdTimeAgo}</Tag>
         </div>
       </Card>
     </StyledCard>

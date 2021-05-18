@@ -134,15 +134,6 @@ const Wrapper = styled.div`
         left: -4px;
       }
     }
-    .index-wrapper {
-      position: absolute;
-      top: 8px;
-      right: 16px;
-      .index {
-        color: ${colors.strokeTwo};
-        font-size: 1rem;
-      }
-    }
     .canonical-url {
       position: absolute;
       bottom: 8px;
