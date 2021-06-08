@@ -10,6 +10,7 @@ import {
   Card,
   Modal,
   Empty,
+  Drawer,
 } from "antd";
 import axios from "axios";
 import styled from "styled-components";
@@ -146,17 +147,15 @@ const Controls = ({
     directUpload = [],
   } = note || {};
   const [liveIdEditor, setLiveIdEditor] = useState(false);
-  const [showCaptionModal, setShowCaptionModal] = useState(false);
+  const [showCaptionDrawer, setCaptionDrawerVisibility] = useState(false);
   const [showImagesModal, setImagesModal] = useState(false);
   const [editCaptionId, setEditCaptionId] = useState(null);
   const [suffix, setSuffix] = useState();
   const [personalNote, setPersonalNote] = useState("");
   const [files, setFiles] = useState({});
   const [blockSocialPlatforms, setBlockSocialPlatforms] = useState(true);
-  const [
-    socialPlatformCaptionCheckAll,
-    setSocialPlatformCaptionCheckAll,
-  ] = React.useState();
+  const [socialPlatformCaptionCheckAll, setSocialPlatformCaptionCheckAll] =
+    React.useState();
 
   useEffect(() => {
     const allSocialHandlesSelected =
@@ -402,7 +401,7 @@ const Controls = ({
     <ControlsWrapper className="naming">
       <div className="fcc">
         {!_.isEmpty(socialPlatformsList) && (
-          <Tag onClick={() => setShowCaptionModal(true)} color="nbPink">
+          <Tag onClick={() => setCaptionDrawerVisibility(true)} color="nbPink">
             Caption
           </Tag>
         )}
@@ -670,14 +669,13 @@ const Controls = ({
   );
 
   const CaptionModal = (
-    <Modal
+    <Drawer
       title={"Social Plaform Captions"}
-      centered={true}
-      width={"50vw"}
-      wrapClassName="react-ui caption-modal"
-      visible={showCaptionModal}
-      footer={null}
-      onCancel={() => setShowCaptionModal(false)}
+      width={400}
+      closable={true}
+      className="react-ui caption-drawer"
+      visible={showCaptionDrawer}
+      onClose={() => setCaptionDrawerVisibility(false)}
     >
       {_.isEmpty(socialPlatformsList) ? (
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
@@ -725,7 +723,7 @@ const Controls = ({
           ))}
         </div>
       )}
-    </Modal>
+    </Drawer>
   );
 
   return (

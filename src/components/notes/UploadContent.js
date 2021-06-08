@@ -439,7 +439,7 @@ const UploadContent = ({
             title={"Raw data"}
             centered={true}
             // width={"50vw"}
-            wrapClassName="react-ui caption-modal"
+            wrapClassName="react-ui"
             visible={viewRawData}
             footer={null}
             onCancel={() => setViewRawData(false)}

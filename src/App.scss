@@ -134,13 +134,12 @@ body {
     height: 80vh;
     overflow: hidden;
   }
-  .caption-modal .ant-modal-body {
-    padding: 24px;
+  .caption-drawer {
     overflow: auto;
     .social-platform-caption-container {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(300px, 1fr));
-      grid-gap: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
       .social-caption-item-wrapper {
         .ant-input {
           height: 100%;
