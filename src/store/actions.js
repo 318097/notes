@@ -85,6 +85,7 @@ export const addNote = (notes, collection) => async (dispatch, getState) => {
     dispatch({
       type: UPDATE_FILTER,
     });
+    message.success(`Success.`);
   } finally {
     dispatch(setAppLoading(false));
   }
@@ -115,6 +116,7 @@ export const updateNote = (note, action) => async (dispatch, getState) => {
     );
 
     dispatch({ type: UPDATE_NOTE, payload: result });
+    message.success(`Updated.`);
   } finally {
     dispatch(setAppLoading(false));
   }
@@ -127,6 +129,7 @@ export const deleteNote = (noteId) => async (dispatch, getState) => {
     await axios.delete(`/posts/${noteId}`);
 
     dispatch({ type: DELETE_NOTE, payload: noteId });
+    message.success(`Deleted.`);
   } finally {
     dispatch(setAppLoading(false));
   }
