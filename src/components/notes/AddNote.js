@@ -19,8 +19,6 @@ import { generateSlug } from "@bit/codedrops.lib.utils";
 import { noteType } from "../../constants";
 import axios from "axios";
 
-// const { TextArea } = Input;
-
 const StyledContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -88,7 +86,7 @@ const StyledContainer = styled.div`
   }
 `;
 
-const initialState = {
+const INITIAL_STATE = {
   type: "DROP",
   title: "",
   content: "```js\n\n```",
@@ -117,7 +115,7 @@ const AddNote = ({
   const [createAnotherPost, setCreateAnotherPost] = useState(true);
   const [previewMode, setPreviewMode] = useState("PREVIEW");
   const [collection, setCollection] = useState();
-  const [note, setNote] = useState(initialState);
+  const [note, setNote] = useState(INITIAL_STATE);
 
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -129,7 +127,6 @@ const AddNote = ({
   useEffect(() => {
     if (modalVisibility) {
       if (mode === "add") {
-        setNote({ ...initialState, tags: [] });
         setCollection(activeCollection);
       } else {
         const clone = { ...selectedNote };
@@ -142,9 +139,11 @@ const AddNote = ({
     }
   }, [mode, selectedNote, modalVisibility]);
 
+  const clear = () => setNote(INITIAL_STATE);
+
   const handleClose = async (srcEvent) => {
     if (createAnotherPost && mode === "add" && srcEvent === "add-event")
-      return setNote(initialState);
+      return clear();
 
     setModalMeta();
   };
@@ -221,44 +220,70 @@ const AddNote = ({
   };
 
   const footerItems = [
-    <Button
-      key="preview-button"
-      type="link"
-      onClick={() => setShowPreview((prev) => !prev)}
-    >
-      Preview
-    </Button>,
-    <Divider type="vertical" />,
-    <Button key="cancel-button" onClick={handleClose}>
-      Cancel
-    </Button>,
-    <Fragment key="update-and-next-button">
-      {mode !== "add" && (
-        <Button type="danger" onClick={handleUpdateAndNext}>
-          Update and next
+    {
+      visible: mode === "add",
+      comp: (
+        <Button key="clear" type="ghost" onClick={clear}>
+          Clear
         </Button>
-      )}
-    </Fragment>,
-    <Button
-      type="primary"
-      key="add-button"
-      onClick={handleOk}
-      disabled={appLoading || !note.title}
-    >
-      {mode === "add" ? "Add" : "Update"}
-    </Button>,
+      ),
+    },
+    {
+      visible: true,
+      comp: (
+        <Button
+          key="preview-button"
+          type="ghost"
+          onClick={() => setShowPreview((prev) => !prev)}
+        >
+          Preview
+        </Button>
+      ),
+    },
+    {
+      visible: mode === "add",
+      comp: (
+        <Fragment>
+          <Divider key="divider-1" type="vertical" />
+          <Checkbox
+            key={"create-another-post"}
+            checked={createAnotherPost}
+            onChange={(e) => setCreateAnotherPost(e.target.checked)}
+          >
+            Create another
+          </Checkbox>
+        </Fragment>
+      ),
+    },
+    {
+      visible: true,
+      comp: (
+        <Fragment>
+          <Divider key="divider-2" type="vertical" />,
+          <Button key="cancel-button" onClick={handleClose}>
+            Cancel
+          </Button>
+          {mode !== "add" && (
+            <Button
+              key="update-and-next-button"
+              type="danger"
+              onClick={handleUpdateAndNext}
+            >
+              Update and next
+            </Button>
+          )}
+          <Button
+            type="primary"
+            key="add-button"
+            onClick={handleOk}
+            disabled={appLoading || !note.title}
+          >
+            {mode === "add" ? "Add" : "Update"}
+          </Button>
+        </Fragment>
+      ),
+    },
   ];
-
-  if (mode === "add")
-    footerItems.unshift(
-      <Checkbox
-        key={"create-another-post"}
-        checked={createAnotherPost}
-        onChange={(e) => setCreateAnotherPost(e.target.checked)}
-      >
-        Create another
-      </Checkbox>
-    );
 
   return (
     <Modal
@@ -274,7 +299,9 @@ const AddNote = ({
       okText={mode === "add" ? "Add" : "Update"}
       onOk={handleOk}
       onCancel={handleClose}
-      footer={footerItems}
+      footer={footerItems
+        .filter((item) => item.visible)
+        .map((item) => item.comp)}
     >
       <StyledContainer>
         <div className="post-form">
