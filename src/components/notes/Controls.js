@@ -400,14 +400,6 @@ const Controls = ({
   const Naming = (
     <ControlsWrapper className="naming">
       <div className="fcc">
-        {!_.isEmpty(socialPlatformsList) && (
-          <Tag onClick={() => setCaptionDrawerVisibility(true)} color="nbPink">
-            Caption
-          </Tag>
-        )}
-        <Tag color="nbOrange" onClick={() => setImagesModal(true)}>
-          Media
-        </Tag>
         <UploadButton
           accept={".png"}
           onFileRead={setFiles}
@@ -425,6 +417,14 @@ const Controls = ({
             );
           }}
         />
+        <Tag color="nbOrange" onClick={() => setImagesModal(true)}>
+          Media
+        </Tag>
+        {!_.isEmpty(socialPlatformsList) && (
+          <Tag onClick={() => setCaptionDrawerVisibility(true)} color="nbPink">
+            Caption
+          </Tag>
+        )}
       </div>
 
       <div className="divider" />
