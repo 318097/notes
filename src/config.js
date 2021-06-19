@@ -2,15 +2,16 @@ const { REACT_APP_NODE_ENV, REACT_APP_SERVER_TYPE } = process.env;
 
 const isProd = REACT_APP_NODE_ENV === "production";
 
-const getServerURL = ({ isProd = false, serverType = "heroku" } = {}) => {
+const getServerURL = ({ isProd = false, serverType = "lambda" } = {}) => {
   const connectToLambda = serverType === "lambda";
+  const LAMBDA_PROD =
+    "https://bubblegum-lambda.netlify.app/.netlify/functions/api";
+  const HEROKU_PROD = "https://bubblegum-server.herokuapp.com/api";
+  const LOCAL_SERVER = "http://localhost:7000/api";
 
-  if (isProd)
-    return connectToLambda
-      ? null
-      : "https://bubblegum-server.herokuapp.com/api";
+  if (isProd) return connectToLambda ? LAMBDA_PROD : HEROKU_PROD;
 
-  return connectToLambda ? null : "http://localhost:7000/api";
+  return LOCAL_SERVER;
 };
 
 const config = {
