@@ -43,6 +43,12 @@
   - [ ] Default values, Fields required based on type
   - [ ] Default filters
 - [ ] Auto deployment to Social handles
+  - [ ] Dev.to/Codenewbies.to
+  - [ ] Hashnode
+  - [ ] FB
+  - [ ] Instagram
+  - [ ] Twitter
+  - [ ] Linkedin
 - [x] Upload resources
 - [x] Upload resources from a post
 - [x] Show resources for every post view
