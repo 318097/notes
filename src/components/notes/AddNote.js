@@ -121,7 +121,7 @@ const AddNote = ({
   const [showSearchResults, setShowSearchResults] = useState(false);
 
   useEffect(() => {
-    searchDbDebounced.current = _.debounce(searchDb, 2000);
+    searchDbDebounced.current = _.debounce(searchDb, 500);
   }, []);
 
   useEffect(() => {
