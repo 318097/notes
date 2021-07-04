@@ -10,7 +10,7 @@ import {
   setModalMeta,
   setQuickAddModalMeta,
 } from "./store/actions";
-import { Spinner } from "@codedrops/react-ui";
+import { Loading } from "@codedrops/react-ui";
 import ProtectedRoute from "./ProtectedRoute";
 import Header from "./components/Header";
 import Register from "./components/Register";
@@ -171,7 +171,7 @@ const App = ({
           <Settings />
         </Fragment>
       )}
-      {(appLoading || loading) && <Spinner type="dot-loader" />}
+      {(appLoading || loading) && <Loading type="dot-loader" />}
     </div>
   );
 };
