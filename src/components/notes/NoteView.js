@@ -40,7 +40,7 @@ const Wrapper = styled.div`
     }
     .title {
       text-align: center;
-      font-size: 2rem;
+      font-size: 1.8rem;
       line-height: 2.4rem;
       padding: 0 20px 20px;
       color: ${colors.steel};
@@ -323,12 +323,12 @@ const NoteView = ({
       {previousNote && (
         <div className="previous-icon">
           <Icon
-            size={28}
+            size={24}
             fill={colors.strokeThree}
             className="prev icon"
             hover
             onClick={() => (appLoading ? null : navigateNote(-1))}
-            type="caret-left"
+            type="caret"
           />
         </div>
       )}
@@ -486,12 +486,13 @@ const NoteView = ({
       {nextNote && (
         <div className="next-icon">
           <Icon
-            size={28}
+            size={24}
             fill={colors.strokeThree}
             className="next icon"
             hover
             onClick={() => (appLoading ? null : navigateNote(1))}
-            type="caret-left"
+            type="caret"
+            direction="right"
           />
         </div>
       )}

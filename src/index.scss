@@ -34,6 +34,9 @@ strong {
   font-family: Cascadia-Regular;
 }
 
+.ant-modal-title,
+.ant-drawer-title,
+#simplemde-editor-1-wrapper,
 .ant-input,
 .ant-btn,
 .ant-select-dropdown-menu-item,
@@ -43,4 +46,10 @@ strong {
 
 .anticon {
   font-size: 14px;
+}
+
+.ant-modal-title,
+.ant-drawer-title {
+  position: relative;
+  top: 2px; // modal title
 }

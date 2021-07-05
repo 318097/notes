@@ -259,7 +259,7 @@ const AddNote = ({
       visible: true,
       comp: (
         <Fragment>
-          <Divider key="divider-2" type="vertical" />,
+          <Divider key="divider-2" type="vertical" />
           <Button key="cancel-button" onClick={handleClose}>
             Cancel
           </Button>
@@ -287,7 +287,7 @@ const AddNote = ({
 
   return (
     <Modal
-      title={mode === "add" ? "ADD NOTE" : "EDIT NOTE"}
+      title={mode === "add" ? "Add Note" : "Edit Note"}
       centered={true}
       maskClosable={false}
       wrapClassName="react-ui"
