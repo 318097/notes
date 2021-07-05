@@ -590,8 +590,8 @@ const Controls = ({
         value={status}
       >
         {statusFilter.map(({ label, value }) => (
-          <Radio className="block" key={value} value={value}>
-            {label}
+          <Radio className="block status-tag" key={value} value={value}>
+            {label.toLowerCase()}
           </Radio>
         ))}
       </Radio.Group>

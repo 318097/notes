@@ -3,7 +3,7 @@ import _ from "lodash";
 import colors from "@codedrops/react-ui";
 import hljs from "highlight.js";
 import markdown from "markdown-it";
-import * as lib from "@bit/codedrops.lib.utils";
+import { copyToClipboard as _copyToClipboard } from "@codedrops/lib";
 
 export const md = markdown({
   highlight: function (str, lang) {
@@ -18,7 +18,7 @@ export const md = markdown({
 });
 
 export const copyToClipboard = (text) => {
-  lib.copyToClipboard(text);
+  _copyToClipboard(text);
   message.info(`Copied - ${text}`);
 };
 

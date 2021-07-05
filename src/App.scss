@@ -1,12 +1,10 @@
 @import "@codedrops/react-ui/dist/styles/colors.scss";
 
 html body #react-ui {
-  .spinner {
+  .loading {
     position: absolute;
     right: 20px;
     bottom: 16px;
-    top: unset;
-    left: unset;
     z-index: 10000;
   }
   .divider {
@@ -215,4 +213,9 @@ body {
       }
     }
   }
+}
+
+.status-tag {
+  // quick add, draft ..
+  text-transform: capitalize;
 }

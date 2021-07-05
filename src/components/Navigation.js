@@ -20,28 +20,25 @@ const StyledNavigation = styled.div`
   background: ${colors.bar};
   padding: 10px;
   .app-name {
-    color: ${colors.nbPink};
+    color: ${colors.green};
     font-size: 2.6rem;
     position: relative;
     top: -6px;
     left: 1px;
     transition: 0.6s;
-    /* &:hover {
-      color: ${colors.steel};
-    } */
   }
   nav {
     display: flex;
     flex-direction: column;
     .icon.icon-bg {
-      color: ${colors.chrome};
+      color: ${colors.white};
       font-size: 20px;
       margin: 10px 0 0 0;
       &.active {
-        color: ${colors.nbPink};
+        color: ${colors.green};
       }
       &:hover {
-        background: ${colors.nbPink} !important;
+        background: ${colors.green} !important;
         color: ${colors.white} !important;
       }
     }

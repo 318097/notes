@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@bit/codedrops.lib.utils": "0.0.1",
+    "@codedrops/lib": "^0.0.16",
     "@codedrops/react-ui": "^3.0.12",
     "antd": "^3.26.18",
     "axios": "^0.19.0",

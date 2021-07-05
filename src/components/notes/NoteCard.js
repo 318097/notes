@@ -19,7 +19,6 @@ const StyledCard = styled.div`
     box-shadow: ${colors.bg} 3px 3px 3px;
     position: relative;
     width: 100%;
-    height: auto;
     min-height: unset;
     overflow: visible;
     &:hover {
@@ -32,7 +31,7 @@ const StyledCard = styled.div`
     margin: 0 0 2px 0;
     cursor: pointer;
     font-size: 1rem;
-    padding: 20px 8px;
+    padding: 24px 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -63,13 +62,18 @@ const StyledCard = styled.div`
   .action-row {
     padding: 6px;
     top: 0px;
+    flex: 0 0 auto;
     &:hover {
       background: ${colors.white};
     }
     .status-row {
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      .status-tag {
+        text-transform: capitalize;
+      }
       .anticon {
         margin: 0 2px;
       }
@@ -132,15 +136,18 @@ const NoteCard = ({ note, handleClick, onEdit, onDelete, tagsCodes }) => {
           <div className="tags">
             {tags.map((tag) => (
               <Tag key={tag} color={tagsCodes[tag]}>
-                {tag.toUpperCase()}
+                {tag}
               </Tag>
             ))}
           </div>
 
-          <Tag color={status === "POSTED" ? "foBlue" : "nbOrange"}>
+          <Tag
+            className="status-tag"
+            color={status === "POSTED" ? "cdGreen" : "watermelon"}
+          >
             {status === "POSTED"
               ? `Live Id: ${liveId}`
-              : status.replace("_", " ")}
+              : status.replace("_", " ").toLowerCase()}
           </Tag>
         </div>
 

@@ -41,6 +41,7 @@ const Wrapper = styled.div`
     .title {
       text-align: center;
       font-size: 2rem;
+      line-height: 2.4rem;
       padding: 0 20px 20px;
       color: ${colors.steel};
     }
@@ -113,8 +114,8 @@ const Wrapper = styled.div`
     }
     .back-icon {
       position: absolute;
-      top: 2px;
-      left: 3px;
+      top: 4px;
+      left: 4px;
       z-index: 10;
     }
     .edit-container {
@@ -426,16 +427,28 @@ const NoteView = ({
         </div>
 
         <Icon
-          className="back-icon icon"
+          className="back-icon"
           hover
           onClick={goBack}
-          type="caret-left"
-          size={14}
+          type="caret"
+          size={12}
           fill={colors.strokeThree}
         />
         <div className="fcc edit-container">
-          <Icon size={12} onClick={editJSON} hover type="tag" />
-          <Icon size={12} onClick={handleEdit} hover type="edit" />
+          <Icon
+            size={12}
+            onClick={editJSON}
+            hover
+            type="tag"
+            fill={colors.steel}
+          />
+          <Icon
+            size={12}
+            onClick={handleEdit}
+            hover
+            type="edit"
+            fill={colors.steel}
+          />
         </div>
         {!!index && (
           <div className="index-wrapper">

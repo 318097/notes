@@ -28,7 +28,7 @@ const PageWrapper = styled.div`
       display: inline-block;
       position: relative;
       left: 20px;
-      background: ${colors.strokeTwo};
+      background: ${colors.iron};
       font-size: 1rem;
       color: white;
     }
@@ -40,7 +40,7 @@ const PageWrapper = styled.div`
       height: 1px;
       position: absolute;
       top: 50%;
-      background: ${colors.strokeTwo};
+      background: ${colors.iron};
     }
   }
   .notes-wrapper {
