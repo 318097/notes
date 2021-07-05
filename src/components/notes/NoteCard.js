@@ -41,7 +41,7 @@ const StyledCard = styled.div`
       text-align: center;
     }
     .post-title {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
     }
     .content {
       font-size: inherit;
